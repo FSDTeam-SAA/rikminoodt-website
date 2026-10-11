@@ -19,19 +19,19 @@ const Faq = () => {
   const sectionId = useId();
 
   return ( 
-    <section id="faq" aria-labelledby="faq-heading" className="overflow-hidden bg-[#fff7ee] py-14 sm:py-16 lg:py-[58px]">
+    <section id="faq" aria-labelledby="faq-heading" className="overflow-hidden py-14 sm:py-16 lg:mb-32 lg:py-0">
       <div className="container relative mx-auto px-5 sm:px-10 lg:px-0">
         <header className="text-center">
-          <h2 id="faq-heading" className="font-serif text-[clamp(2rem,3.5vw,2.55rem)] font-semibold leading-tight tracking-[-0.025em] text-[#2f292c]">
+          <h2 id="faq-heading" className="font-crimson text-[clamp(2.25rem,3.35vw,3rem)] font-semibold leading-[1.05] tracking-[-0.025em] text-[#2f292c]">
             Frequently asked questions
           </h2>
-          <p className="mx-auto mt-2 max-w-2xl text-xs leading-relaxed text-[#5c5559] sm:text-[13px]">
+          <p className="mx-auto mt-2 text-sm leading-relaxed text-[#5c5559] sm:text-base lg:text-base">
             Discover magical adventures, exciting themes, and heartwarming stories created to make every child the hero.
           </p>
         </header>
 
-        <div className="relative mt-8 lg:mt-8 lg:pr-[235px]">
-          <div className="space-y-2.5">
+        <div className="relative mt-8 lg:mt-12 lg:pr-[178px]">
+          <div className="space-y-4">
             {faqs.map((faq, index) => {
               const isOpen = openIndex === index;
               const panelId = `${sectionId}-panel-${index}`;
@@ -46,11 +46,11 @@ const Faq = () => {
                       aria-expanded={isOpen}
                       aria-controls={panelId}
                       onClick={() => setOpenIndex(isOpen ? null : index)}
-                      className="flex min-h-[43px] w-full items-center gap-2 px-4 py-2 text-left font-serif text-[15px] leading-snug text-[#514554] transition hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#987fc5] sm:min-h-[45px] sm:px-5 sm:text-[17px]"
+                      className="flex min-h-[54px] w-full items-center gap-3 px-4 py-2 text-left font-crimson text-lg leading-snug text-[#514554] transition hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#987fc5] sm:min-h-[58px] sm:px-5 sm:text-xl lg:min-h-[63px] lg:px-6 lg:text-2xl"
                     >
-                      <Image src="/images/faq_icon.png" alt="" width={20} height={28} className="h-5 w-auto shrink-0 sm:h-[22px]" />
+                      <Image src="/images/faq_icon.png" alt="" width={20} height={28} className="h-6 w-auto shrink-0 sm:h-[26px]" />
                       <span className="flex-1">{faq.question}</span>
-                      {isOpen ? <Minus aria-hidden="true" size={19} strokeWidth={1.8} /> : <Plus aria-hidden="true" size={19} strokeWidth={1.8} />}
+                      {isOpen ? <Minus aria-hidden="true" size={22} strokeWidth={1.8} /> : <Plus aria-hidden="true" size={22} strokeWidth={1.8} />}
                     </button>
                   </h3>
                   <div
@@ -60,7 +60,7 @@ const Faq = () => {
                     className={`grid transition-[grid-template-rows] duration-300 ease-out ${isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
                   >
                     <div className="overflow-hidden">
-                      <p className="border-t border-[#d9cddd] px-11 pb-4 pt-3 text-sm leading-relaxed text-[#5c5559] sm:px-12">
+                      <p className="border-t border-[#d9cddd] px-11 pb-4 pt-3 text-sm leading-relaxed text-[#5c5559] sm:px-12 lg:px-14 lg:text-base">
                         {faq.answer}
                       </p>
                     </div>
@@ -70,7 +70,7 @@ const Faq = () => {
             })}
           </div>
 
-          <Image src="/images/faq.png" alt="A curious child looking for answers" width={237} height={289} className="pointer-events-none absolute bottom-[58px] right-0 hidden h-auto w-[185px] lg:block" />
+          <Image src="/images/faq.png" alt="A curious child looking for answers" width={237} height={289} className="pointer-events-none absolute bottom-[97px] right-[-20px] hidden h-auto w-[229px] lg:block" />
         </div>
 
         <div className="mt-2 flex justify-center lg:hidden">

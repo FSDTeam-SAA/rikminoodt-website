@@ -6,10 +6,54 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef } from "react";
 
 const occasions = [
-  { title: "Birthday", image: "/images/birthday.png", color: "bg-[#fbdce2]", textColor: "text-[#f27643]" },
-  { title: "New Baby", image: "/images/new_baby.png", color: "bg-[#dcebfa]", textColor: "text-[#7c8d5a]" },
-  { title: "Valentines day", image: "/images/valentines_day.png", color: "bg-[#fbf3c9]", textColor: "text-[#f0604f]" },
-  { title: "Mothers day", image: "/images/mothers_day.png", color: "bg-[#e8d5fb]", textColor: "text-[#b55e43]" },
+  {
+    title: "Birthday",
+    image: "/images/birthday.png",
+    color: "bg-[#fbdce2]",
+    textColor: "text-[#f27643]",
+  },
+  {
+    title: "New Baby",
+    image: "/images/new_baby.png",
+    color: "bg-[#dcebfa]",
+    textColor: "text-[#7c8d5a]",
+  },
+  {
+    title: "Valentines day",
+    image: "/images/valentines_day.png",
+    color: "bg-[#fbf3c9]",
+    textColor: "text-[#f0604f]",
+  },
+  {
+    title: "Mothers day",
+    image: "/images/mothers_day.png",
+    color: "bg-[#e8d5fb]",
+    textColor: "text-[#b55e43]",
+  },
+    {
+    title: "Birthday",
+    image: "/images/birthday.png",
+    color: "bg-[#fbdce2]",
+    textColor: "text-[#f27643]",
+  },
+  {
+    title: "New Baby",
+    image: "/images/new_baby.png",
+    color: "bg-[#dcebfa]",
+    textColor: "text-[#7c8d5a]",
+  },
+  {
+    title: "Valentines day",
+    image: "/images/valentines_day.png",
+    color: "bg-[#fbf3c9]",
+    textColor: "text-[#f0604f]",
+  },
+  {
+    title: "Mothers day",
+    image: "/images/mothers_day.png",
+    color: "bg-[#e8d5fb]",
+    textColor: "text-[#b55e43]",
+  },
 ];
 
 const MakeAPersonalisedBook = () => {
@@ -19,31 +63,43 @@ const MakeAPersonalisedBook = () => {
     const track = trackRef.current;
     if (!track) return;
 
+    const card = track.firstElementChild as HTMLElement | null;
+    const gap = Number.parseFloat(window.getComputedStyle(track).columnGap) || 0;
+    const distance = card ? card.getBoundingClientRect().width + gap : 280;
+
     track.scrollBy({
-      left: (direction === "next" ? 1 : -1) * Math.max(track.clientWidth * 0.8, 220),
+      left: (direction === "next" ? 1 : -1) * distance,
       behavior: "smooth",
     });
   };
 
   return (
-    <section id="occasions" aria-labelledby="occasions-heading" className="bg-[#fff7ee] py-14 sm:py-16 lg:py-[51px]">
+    <section
+      id="occasions"
+      aria-labelledby="occasions-heading"
+      className=" py-14 sm:py-16 lg:mb-32 lg:py-0"
+    >
       <div className="container mx-auto px-5 sm:px-8 lg:px-0">
         <header className="text-center">
-          <h2 id="occasions-heading" className="font-serif text-[clamp(2rem,3.5vw,2.5rem)] font-semibold leading-tight tracking-[-0.025em] text-[#292528]">
+          <h2
+            id="occasions-heading"
+            className="font-crimson text-[clamp(2.25rem,3.35vw,3rem)] font-semibold leading-[1.05] tracking-[-0.025em] text-[#292528]"
+          >
             Make a personalised book for a specific Event
           </h2>
-          <p className="mx-auto mt-2 max-w-2xl text-xs leading-relaxed text-[#5c5559] sm:text-[13px]">
-            Discover powerful features that make every story more personal, engaging and memorable for your child.
+          <p className="mx-auto mt-2 max-w-3xl text-sm leading-relaxed text-[#5c5559] sm:text-base lg:text-lg">
+            Discover powerful features that make every story more personal,
+            engaging and memorable for your child.
           </p>
         </header>
 
-        <div className="relative mt-8 lg:mt-9">
+        <div className="relative mt-8 lg:mt-12">
           <button
             type="button"
             aria-label="Show previous occasions"
             aria-controls="occasion-cards"
             onClick={() => scrollOccasions("previous")}
-            className="absolute left-[-22px] top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#d6d2d2] bg-white text-[#7c7579] shadow-[0_2px_5px_rgba(78,64,72,0.18)] transition hover:bg-[#f8f4f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#987fc5] lg:left-[-25px]"
+            className="absolute left-[-22px] top-1/2 z-10 flex size-12 -translate-y-1/2 items-center justify-center rounded-full border border-[#d6d2d2] bg-white text-[#7c7579] shadow-[0_2px_5px_rgba(78,64,72,0.18)] transition hover:bg-[#f8f4f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#987fc5] lg:left-[-25px]"
           >
             <ChevronLeft aria-hidden="true" size={23} strokeWidth={1.6} />
           </button>
@@ -51,25 +107,27 @@ const MakeAPersonalisedBook = () => {
           <div
             id="occasion-cards"
             ref={trackRef}
-            className="grid snap-x snap-mandatory grid-flow-col auto-cols-[minmax(190px,78%)] gap-4 overflow-x-auto scroll-smooth px-1 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:auto-cols-[minmax(205px,45%)] sm:gap-[18px] lg:grid-flow-row lg:grid-cols-4 lg:overflow-visible lg:px-0 lg:pb-0"
+            className="grid snap-x snap-mandatory grid-flow-col auto-cols-[minmax(190px,78%)] gap-4 overflow-x-auto scroll-smooth px-1 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:auto-cols-[minmax(205px,45%)] sm:gap-[18px] md:auto-cols-[calc((100%_-_24px)/2)] md:gap-6 lg:auto-cols-[calc((100%_-_72px)/4)] lg:gap-6 lg:px-0 lg:pb-0"
           >
-            {occasions.map((occasion) => (
+            {occasions.map((occasion, index) => (
               <Link
-                key={occasion.title}
+                key={`${occasion.title}-${index}`}
                 href={`#${occasion.title.toLowerCase().replaceAll(" ", "-")}`}
-                className={`group flex min-h-[218px] snap-start flex-col rounded-xl p-4 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-[0_10px_22px_rgba(103,75,92,0.14)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#987fc5] focus-visible:ring-offset-3 lg:min-h-[222px] ${occasion.color}`}
+                className={`group flex min-h-[250px] snap-start flex-col rounded-2xl p-4 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-[0_10px_22px_rgba(103,75,92,0.14)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#987fc5] focus-visible:ring-offset-3 lg:h-[310px] lg:min-h-0 lg:p-6 ${occasion.color}`}
               >
-                <div className="flex flex-1 items-center justify-center rounded-lg bg-white/80 px-4 py-3">
+                <div className="flex flex-1 items-center justify-center rounded-xl bg-white/80 px-4 py-3">
                   <Image
                     src={occasion.image}
                     alt=""
                     width={180}
                     height={180}
-                    sizes="(max-width: 639px) 60vw, (max-width: 1023px) 32vw, 160px"
-                    className="max-h-[122px] w-auto max-w-full object-contain transition-transform duration-200 group-hover:scale-105"
+                    sizes="(max-width: 639px) 60vw, (max-width: 1023px) 32vw, 190px"
+                    className="max-h-[150px] w-auto max-w-full object-contain transition-transform duration-200 group-hover:scale-105 lg:max-h-[190px]"
                   />
                 </div>
-                <span className={`pt-3 text-center font-poppins text-base font-semibold leading-none sm:text-[17px] ${occasion.textColor}`}>
+                <span
+                  className={`pt-3 text-center font-sans text-lg font-semibold leading-none sm:text-xl lg:text-2xl ${occasion.textColor}`}
+                >
                   {occasion.title}
                 </span>
               </Link>
@@ -81,7 +139,7 @@ const MakeAPersonalisedBook = () => {
             aria-label="Show next occasions"
             aria-controls="occasion-cards"
             onClick={() => scrollOccasions("next")}
-            className="absolute right-[-22px] top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#d6d2d2] bg-white text-[#7c7579] shadow-[0_2px_5px_rgba(78,64,72,0.18)] transition hover:bg-[#f8f4f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#987fc5] lg:right-[-25px]"
+            className="absolute right-[-22px] top-1/2 z-10 flex size-12 -translate-y-1/2 items-center justify-center rounded-full border border-[#d6d2d2] bg-white text-[#7c7579] shadow-[0_2px_5px_rgba(78,64,72,0.18)] transition hover:bg-[#f8f4f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#987fc5] lg:right-[-25px]"
           >
             <ChevronRight aria-hidden="true" size={23} strokeWidth={1.6} />
           </button>

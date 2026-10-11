@@ -19,9 +19,9 @@ const toAnchor = (label: string) => `#${label.toLowerCase().replaceAll(" ", "-")
 
 const Footer = () => {
   return (
-      <footer className="bg-[#504557] text-white">
-        <div className="container px-6 py-11 sm:px-8 sm:py-12 lg:px-0 lg:py-11">
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[2.1fr_repeat(3,1fr)] lg:gap-8">
+      <footer className="bg-[#4a3f52] text-white">
+        <div className="container mx-auto px-6 py-11 sm:px-8 sm:py-12 lg:min-h-[407px] lg:px-0 lg:py-16">
+          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[396px_repeat(3,max-content)] lg:justify-between lg:gap-8">
             <section className="max-w-[310px]">
             <Link
               href="#"
@@ -33,11 +33,11 @@ const Footer = () => {
                   alt="Bookereillo"
                   width={180}
                   height={45}
-                  className="h-auto w-[138px]"
+                  className="h-auto w-[150px]"
               />
             </Link>
 
-              <p className="mt-4 text-xs leading-relaxed text-white/90 sm:text-[13px]">
+              <p className="mt-4 text-sm leading-relaxed text-white/90 lg:text-base">
                 Bookereillo personalized storybooks that turn your child&apos;s imagination into magical adventure.
             </p>
               <nav aria-label="Social media" className="mt-4 flex items-center gap-3">
@@ -51,11 +51,11 @@ const Footer = () => {
 
             {footerGroups.map((group) => (
               <nav key={group.title} aria-label={group.title}>
-                <h2 className="font-serif text-lg font-semibold">{group.title}</h2>
-                <ul className="mt-3 space-y-2">
+                <h2 className="font-crimson text-2xl font-semibold">{group.title}</h2>
+                <ul className="mt-3 space-y-3">
                   {group.links.map((link) => (
                     <li key={link}>
-                      <Link href={toAnchor(link)} className="group inline-flex items-center gap-1.5 text-xs text-white/90 transition hover:text-[#f6bdca] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eea0b4] sm:text-[13px]">
+                      <Link href={toAnchor(link)} className="group inline-flex items-center gap-1.5 text-sm text-white/90 transition hover:text-[#f6bdca] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eea0b4] lg:text-base">
                         <span aria-hidden="true" className="text-[9px] transition-transform group-hover:translate-x-0.5">▸</span>
                         {link}
                       </Link>
@@ -66,7 +66,7 @@ const Footer = () => {
           ))}
         </div>
 
-          <div className="mt-9 border-t border-white/30 pt-4 text-center text-xs text-white/90 sm:mt-11">
+          <div className="mt-9 border-t border-white/30 pt-5 text-center text-sm text-white/90 sm:mt-11 lg:mt-8 lg:text-base">
             © {new Date().getFullYear()} Bookereillo . All rights reserved
         </div>
       </div>

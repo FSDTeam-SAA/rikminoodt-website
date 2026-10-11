@@ -16,6 +16,7 @@ const navigation = [
 const Navbar = () => {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     setIsMenuOpen(false);
@@ -30,11 +31,27 @@ const Navbar = () => {
     return () => window.removeEventListener("keydown", closeMenu);
   }, []);
 
+  useEffect(() => {
+    const updateScrolledState = () => setIsScrolled(window.scrollY > 12);
+
+    updateScrolledState();
+    window.addEventListener("scroll", updateScrolledState, { passive: true });
+    return () => window.removeEventListener("scroll", updateScrolledState);
+  }, []);
+
   return (
     <header className="sticky top-0 z-50 h-0 pointer-events-none">
-      <div className="pointer-events-auto absolute inset-x-0 top-0 px-3 pt-3 sm:px-6 sm:pt-5 lg:px-10 lg:pt-10">
-        <div className="container mx-auto rounded-[32px] border border-white/70 bg-white/65 shadow-[0_10px_28px_rgba(100,78,111,0.13)] backdrop-blur-md">
-        <div className="flex min-h-[58px] items-center justify-between gap-3 px-4 sm:px-6 lg:min-h-[72px] lg:px-10">
+      <div
+        className={`pointer-events-auto absolute inset-x-0 top-0 px-3 transition-[padding] duration-300 sm:px-6 lg:px-0 ${
+          isScrolled ? "pt-2 sm:pt-3 lg:pt-4" : "pt-3 sm:pt-5 lg:pt-11"
+        }`}
+      >
+        <div
+          className={`container mx-auto max-w-[1280px] rounded-[105px] transition-[background-color,box-shadow] duration-300 lg:px-0 ${
+            isScrolled ? "bg-white/90 shadow-[0_8px_24px_rgba(74,63,82,0.16)]" : "bg-white/40"
+          }`}
+        >
+        <div className="flex min-h-[58px] items-center justify-between gap-3 px-4 sm:px-6 lg:min-h-[81px] lg:px-10">
           <Link
             href="/"
             aria-label="Bookereillo home"
@@ -43,14 +60,14 @@ const Navbar = () => {
             <Image
               src="/images/logo.png"
               alt="Bookereillo"
-              width={180}
-              height={45}
+              width={198}
+              height={57}
               priority
-              className="h-auto w-[126px] sm:w-[142px] lg:w-[170px]"
+              className="h-auto w-[126px] sm:w-[142px] lg:w-[198px]"
             />
           </Link>
 
-          <nav aria-label="Primary navigation" className="hidden items-center gap-7 lg:flex">
+          <nav aria-label="Primary navigation" className="hidden items-center gap-8 lg:flex">
             {navigation.map((item) => {
               const isActive = item.href === "/" && pathname === "/";
 
@@ -59,7 +76,7 @@ const Navbar = () => {
                   key={item.href}
                   href={item.href}
                   aria-current={isActive ? "page" : undefined}
-                  className={`relative py-2 font-serif text-[16px] transition-colors hover:text-[#e77f9a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf] ${
+                  className={`relative py-2 font-crimson text-xl font-semibold transition-colors hover:text-[#e77f9a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf] ${
                     isActive ? "text-[#e77f9a]" : "text-[#5d5059]"
                   }`}
                 >
@@ -74,7 +91,7 @@ const Navbar = () => {
             })}
           </nav>
 
-          <div className="hidden items-center gap-3 sm:flex">
+          <div className="hidden items-center gap-3 sm:flex lg:gap-6">
             <Image src="/images/flag.png" alt="United States" width={36} height={36} className="size-8 object-contain lg:size-9" />
             <Link
               href="#cart"
