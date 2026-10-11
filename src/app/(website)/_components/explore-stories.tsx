@@ -29,8 +29,12 @@ const ExploreStories = () => {
     const track = trackRef.current;
     if (!track) return;
 
+    const card = track.firstElementChild as HTMLElement | null;
+    const gap = Number.parseFloat(window.getComputedStyle(track).columnGap) || 0;
+    const distance = card ? card.getBoundingClientRect().width + gap : 280;
+
     track.scrollBy({
-      left: (direction === "next" ? 1 : -1) * Math.max(track.clientWidth * 0.82, 280),
+      left: (direction === "next" ? 1 : -1) * distance,
       behavior: "smooth",
     });
   };
@@ -48,13 +52,13 @@ const ExploreStories = () => {
         </header>
 
         <div className="relative mt-8 lg:mt-12">
-          <button type="button" aria-label="Show previous stories" aria-controls="story-cards" onClick={() => scrollStories("previous")} className="absolute left-[-25px] top-[50.3%] z-10 flex size-12 -translate-y-1/2 items-center justify-center rounded-full border border-[#d6d2d2] bg-white text-[#7c7579] shadow-[0_2px_5px_rgba(78,64,72,0.18)] transition hover:bg-[#f8f4f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#987fc5]">
+          <button type="button" aria-label="Show previous stories" aria-controls="story-cards" onClick={() => scrollStories("previous")} className="absolute left-3 top-[30%] z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#d6d2d2] bg-white/95 text-[#7c7579] shadow-[0_2px_5px_rgba(78,64,72,0.18)] transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#987fc5] lg:left-[-25px] lg:top-[50.3%] lg:size-12">
             <ChevronLeft aria-hidden="true" size={23} strokeWidth={1.6} />
           </button>
 
-          <div id="story-cards" ref={trackRef} className="grid snap-x snap-mandatory grid-flow-col auto-cols-[minmax(250px,82%)] gap-4 overflow-x-auto scroll-smooth px-1 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:auto-cols-[minmax(280px,46%)] sm:gap-5 lg:grid-flow-row lg:grid-cols-3 lg:gap-5 lg:overflow-visible lg:px-0 lg:pb-0">
+          <div id="story-cards" ref={trackRef} className="grid snap-x snap-mandatory grid-flow-col auto-cols-[calc(100%_-_1.5rem)] gap-4 overflow-x-auto scroll-smooth scroll-px-1 px-1 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:auto-cols-[minmax(280px,46%)] sm:gap-5 lg:grid-flow-row lg:grid-cols-3 lg:gap-5 lg:overflow-visible lg:px-0 lg:pb-0">
             {stories.map((story) => (
-              <article key={story.title} className="group relative flex min-h-[550px] snap-start flex-col overflow-hidden rounded-lg border border-[#ef92aa] bg-white transition duration-200 hover:-translate-y-1 hover:shadow-[0_10px_22px_rgba(103,75,92,0.14)] lg:h-[764px] lg:min-h-0">
+              <article key={story.title} className="group relative flex min-h-[550px] snap-start snap-always flex-col overflow-hidden rounded-lg border border-[#ef92aa] bg-white transition duration-200 hover:-translate-y-1 hover:shadow-[0_10px_22px_rgba(103,75,92,0.14)] lg:h-[764px] lg:min-h-0">
                 <div className="relative m-2 overflow-hidden">
                 <Image
                   src={story.image}
@@ -77,7 +81,7 @@ const ExploreStories = () => {
           ))}
           </div>
 
-          <button type="button" aria-label="Show next stories" aria-controls="story-cards" onClick={() => scrollStories("next")} className="absolute right-[-25px] top-[50.3%] z-10 flex size-12 -translate-y-1/2 items-center justify-center rounded-full border border-[#d6d2d2] bg-white text-[#7c7579] shadow-[0_2px_5px_rgba(78,64,72,0.18)] transition hover:bg-[#f8f4f7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#987fc5]">
+          <button type="button" aria-label="Show next stories" aria-controls="story-cards" onClick={() => scrollStories("next")} className="absolute right-3 top-[30%] z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#d6d2d2] bg-white/95 text-[#7c7579] shadow-[0_2px_5px_rgba(78,64,72,0.18)] transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#987fc5] lg:right-[-25px] lg:top-[50.3%] lg:size-12">
             <ChevronRight aria-hidden="true" size={23} strokeWidth={1.6} />
           </button>
         </div>

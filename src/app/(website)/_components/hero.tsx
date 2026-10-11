@@ -13,12 +13,12 @@ const Hero = () => {
             id="hero-heading"
             className="font-fredoka text-[clamp(2.5rem,4.45vw,4rem)] font-medium leading-[1.2]"
           >
-            <span className="block text-[#e0a94c]">Their Imagination.</span>
-            <span className="block text-[#e88da0]">Their Adventure.</span>
-            <span className="block text-[#9c81be]">Their Story.</span>
+            <span className="block text-[#E0A94C]">Their Imagination.</span>
+            <span className="block text-primary">Their Adventure.</span>
+            <span className="block text-secondary">Their Story.</span>
           </h1>
 
-          <p className="mt-6 max-w-[539px] text-base font-medium leading-[1.38] text-[#444] sm:text-lg">
+          <p className="mt-6 max-w-[539px] text-base font-medium leading-[1.38] text-white md:text-[#444] sm:text-lg">
             Create a one-of-a-kind storybook where your child becomes the main
             character in a world made just for them, fully personalised.
           </p>

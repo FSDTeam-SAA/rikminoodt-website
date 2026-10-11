@@ -72,10 +72,6 @@ const Faq = () => {
 
           <Image src="/images/faq.png" alt="A curious child looking for answers" width={237} height={289} className="pointer-events-none absolute bottom-[97px] right-[-20px] hidden h-auto w-[229px] lg:block" />
         </div>
-
-        <div className="mt-2 flex justify-center lg:hidden">
-          <Image src="/images/faq.png" alt="" width={237} height={289} className="h-auto w-[130px] sm:w-[150px]" />
-        </div>
       </div>
     </section>
   );
