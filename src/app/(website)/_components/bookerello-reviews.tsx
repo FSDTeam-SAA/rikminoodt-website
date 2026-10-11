@@ -31,7 +31,7 @@ const BookerelloReviews = () => {
           </div>
         </header>
 
-        <div className="mx-auto mt-8 grid max-w-[1140px] gap-4 sm:grid-cols-2 lg:mt-12 lg:grid-cols-4 lg:gap-x-3 lg:gap-y-8">
+        <div className="mx-auto mt-8 grid gap-4 sm:grid-cols-2 lg:mt-12 lg:grid-cols-4 lg:gap-x-3 lg:gap-y-8">
           {reviews.map((color, index) => (
             <article key={index} className={`relative min-h-[272px] overflow-hidden rounded-sm px-3 pb-4 pt-3 shadow-[0_1px_2px_rgba(92,76,84,0.08)] lg:h-[289px] lg:min-h-0 ${index % 2 === 1 ? "lg:translate-y-5" : ""} ${color}`}>
               <div className="relative overflow-hidden rounded-sm">
