@@ -1,4 +1,13 @@
 
+@import "@fontsource/nunito-sans/latin-400.css";
+@import "@fontsource/nunito-sans/latin-500.css";
+@import "@fontsource/nunito-sans/latin-600.css";
+@import "@fontsource/nunito-sans/latin-700.css";
+@import "@fontsource/crimson-text/latin-400.css";
+@import "@fontsource/crimson-text/latin-600.css";
+@import "@fontsource/crimson-text/latin-700.css";
+@import "@fontsource/fredoka-one/latin-400.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,14 +18,25 @@
   }
 }
 
-body{
-  @apply font-sans bg-[#FBF3EA];
+body {
+  /* Primary type: Nunito Sans, 18px, regular. */
+  @apply bg-[#FBF3EA] font-sans text-[18px] font-normal;
 }
+
+/*
+  Secondary title fonts are available as Tailwind utilities:
+  - font-crimson: Crimson Text — standard headings
+  - font-fredoka: Fredoka One — highlighted/playful headings
+*/
 
 
 
 @layer base {
   :root {
+    --font-nunito-sans: "Nunito Sans";
+    --font-crimson-text: "Crimson Text";
+    --font-fredoka: "Fredoka One";
+
     /* =========================
        Primary Base (#E88DA0)
     ========================== */

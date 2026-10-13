@@ -83,11 +83,11 @@ const MakeAPersonalisedBook = () => {
         <header className="text-center">
           <h2
             id="occasions-heading"
-            className="font-crimson text-[clamp(2.25rem,3.35vw,3rem)] font-semibold leading-[1.05] tracking-[-0.025em] text-[#292528]"
+            className="font-crimson text-[48px] font-semibold leading-none text-[#1E1E1E]"
           >
             Make a personalised book for a specific Event
           </h2>
-          <p className="mx-auto mt-2 max-w-3xl text-sm leading-relaxed text-[#5c5559] sm:text-base lg:text-lg">
+          <p className="mx-auto mt-2 max-w-3xl text-center font-sans text-[18px] font-normal leading-normal text-[#444444]">
             Discover powerful features that make every story more personal,
             engaging and memorable for your child.
           </p>
@@ -113,23 +113,25 @@ const MakeAPersonalisedBook = () => {
               <Link
                 key={`${occasion.title}-${index}`}
                 href={`#${occasion.title.toLowerCase().replaceAll(" ", "-")}`}
-                className={`group flex min-h-[250px] snap-start flex-col rounded-2xl p-4 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-[0_10px_22px_rgba(103,75,92,0.14)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#987fc5] focus-visible:ring-offset-3 lg:h-[310px] lg:min-h-0 lg:p-6 ${occasion.color}`}
+                className={`group flex min-h-[250px] snap-start flex-col rounded-2xl p-3 transition-[filter] duration-300 ease-out hover:brightness-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#987fc5] focus-visible:ring-offset-3 lg:h-[310px] lg:min-h-0 lg:p-4 ${occasion.color}`}
               >
-                <div className="flex flex-1 items-center justify-center rounded-xl bg-white/80 px-4 py-3">
-                  <Image
-                    src={occasion.image}
-                    alt=""
-                    width={180}
-                    height={180}
-                    sizes="(max-width: 639px) 60vw, (max-width: 1023px) 32vw, 190px"
-                    className="max-h-[150px] w-auto max-w-full object-contain transition-transform duration-200 group-hover:scale-105 lg:max-h-[190px]"
-                  />
+                <div className="flex flex-1 flex-col items-center rounded-xl bg-white/80 px-4 py-3">
+                  <div className="flex flex-1 items-center justify-center">
+                    <Image
+                      src={occasion.image}
+                      alt=""
+                      width={180}
+                      height={180}
+                      sizes="(max-width: 639px) 60vw, (max-width: 1023px) 32vw, 190px"
+                      className="max-h-[150px] w-auto max-w-full object-contain transition-transform duration-300 ease-out group-hover:scale-105 lg:max-h-[190px]"
+                    />
+                  </div>
+                  <span
+                    className={`mt-3 text-center font-sans text-lg font-semibold leading-none sm:text-xl lg:text-2xl ${occasion.textColor}`}
+                  >
+                    {occasion.title}
+                  </span>
                 </div>
-                <span
-                  className={`pt-3 text-center font-sans text-lg font-semibold leading-none sm:text-xl lg:text-2xl ${occasion.textColor}`}
-                >
-                  {occasion.title}
-                </span>
               </Link>
             ))}
           </div>

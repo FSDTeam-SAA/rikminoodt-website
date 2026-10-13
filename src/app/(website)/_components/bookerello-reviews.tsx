@@ -22,11 +22,11 @@ const BookerelloReviews = () => {
         <header className="text-center">
           <h2
             id="reviews-heading"
-            className="font-crimson text-[clamp(2.25rem,3.35vw,3rem)] font-semibold leading-[1.05] tracking-[-0.025em] text-[#292528]"
+            className="font-crimson text-[48px] font-semibold leading-none text-[#1E1E1E]"
           >
             Bookerello Reviews - Happy faces
           </h2>
-          <p className="mx-auto mt-2 max-w-4xl text-sm leading-relaxed text-[#5c5559] sm:text-base lg:text-lg">
+          <p className="mx-auto mt-2 max-w-4xl text-center font-sans text-[18px] font-normal leading-normal text-[#444444]">
             Over 24,522 personalised stories created. Every book is a new
             adventure, a bigger smile and a memory to treasure forever.
           </p>
@@ -54,9 +54,8 @@ const BookerelloReviews = () => {
           {reviews.map((color, index) => (
             <article
               key={index}
-              className={`relative overflow-hidden rounded-sm p-5 shadow-[0_1px_2px_rgba(92,76,84,0.08)]  sm:p-6 xl:h-[289px] xl:min-h-0 xl:px-[15px] xl:pb-4 xl:pt-[12px] ${index % 2 === 1 ? "xl:translate-y-5" : ""} ${color}`}
+              className={`relative overflow-hidden rounded-sm p-5 shadow-[0_1px_2px_rgba(92,76,84,0.08)] sm:p-6 xl:h-[289px] xl:min-h-0 xl:px-[15px] xl:pb-4 xl:pt-[12px] ${index % 2 === 1 ? "xl:translate-y-5" : ""} ${color}`}
             >
-              {/* after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-3 after:bg-[radial-gradient(circle_at_9px_0,#fbf3ea_0_8px,transparent_8.5px)] after:bg-[length:18px_12px] */}
               <div className="relative overflow-hidden rounded-sm">
                 <Image
                   src="/images/book_reveiew.jpg"

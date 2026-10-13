@@ -22,10 +22,10 @@ const Faq = () => {
     <section id="faq" aria-labelledby="faq-heading" className="overflow-hidden py-14 sm:py-16 lg:mb-32 lg:py-0">
       <div className="container relative mx-auto px-5 sm:px-10 lg:px-0">
         <header className="text-center">
-          <h2 id="faq-heading" className="font-crimson text-[clamp(2.25rem,3.35vw,3rem)] font-semibold leading-[1.05] tracking-[-0.025em] text-[#2f292c]">
+          <h2 id="faq-heading" className="font-crimson text-[48px] font-semibold leading-none text-[#1E1E1E]">
             Frequently asked questions
           </h2>
-          <p className="mx-auto mt-2 text-sm leading-relaxed text-[#5c5559] sm:text-base lg:text-base">
+          <p className="mx-auto mt-2 text-center font-sans text-[18px] font-normal leading-normal text-[#444444]">
             Discover magical adventures, exciting themes, and heartwarming stories created to make every child the hero.
           </p>
         </header>
