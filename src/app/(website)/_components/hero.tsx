@@ -24,7 +24,7 @@ const Hero = () => {
           </p>
 
           <Link
-            href="#create-your-book"
+            href="/book-builder/choose-age"
             className="mt-6 inline-flex h-14 items-center justify-center rounded-2xl bg-[#e88da0] px-4 font-sans text-xl font-medium text-white shadow-[0_8px_18px_rgba(213,113,143,0.24)] transition hover:bg-[#df7894] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf] focus-visible:ring-offset-2"
           >
             Create Your Book

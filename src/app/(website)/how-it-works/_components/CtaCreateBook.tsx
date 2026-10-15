@@ -11,7 +11,7 @@ const CtaCreateBook = () => {
           <p className="mx-auto mt-3 max-w-2xl font-sans text-sm leading-relaxed text-[#695E66] sm:text-base">
             Turn your child&apos;s name, photo, and imagination into a magical personalised storybook they&apos;ll treasure for years.
           </p>
-          <Link href="#create-your-book" className="mt-5 inline-flex h-11 items-center justify-center rounded-xl bg-[#E88DA0] px-5 font-sans text-base font-medium text-white transition-colors duration-300 hover:bg-[#DF7894] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf] focus-visible:ring-offset-2">
+          <Link href="/book-builder/choose-age" className="mt-5 inline-flex h-11 items-center justify-center rounded-xl bg-[#E88DA0] px-5 font-sans text-base font-medium text-white transition-colors duration-300 hover:bg-[#DF7894] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf] focus-visible:ring-offset-2">
             Create Your Book
           </Link>
         </div>

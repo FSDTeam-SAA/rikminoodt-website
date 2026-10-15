@@ -17,6 +17,7 @@ const Navbar = () => {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const overlaysPageContent = pathname === "/" || pathname.startsWith("/book-builder");
 
   useEffect(() => {
     setIsMenuOpen(false);
@@ -40,7 +41,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <header className={`sticky top-0 z-50 pointer-events-none ${pathname === "/" ? "h-0" : "h-[78px] sm:h-[88px] lg:h-[116px]"}`}>
+    <header className={`sticky top-0 z-50 pointer-events-none ${overlaysPageContent ? "h-0" : "h-[78px] sm:h-[88px] lg:h-[116px]"}`}>
       <div
         className={`pointer-events-auto absolute inset-x-0 top-0 transition-[padding] duration-300 ${
           isScrolled ? "pt-2 sm:pt-3 lg:pt-4" : "pt-3 sm:pt-5 lg:pt-11"
