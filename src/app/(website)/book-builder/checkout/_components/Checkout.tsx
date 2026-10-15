@@ -40,6 +40,8 @@ const stories = [
   {
     label: "Knights and dragons",
     image: "/images/story_3.png",
+
+    
     color: "#FFDDE4",
   },
   { label: "Wizard School", image: "/images/story_4.png", color: "#D1ECD9" },
