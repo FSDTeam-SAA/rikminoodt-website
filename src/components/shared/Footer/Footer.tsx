@@ -19,7 +19,7 @@ const toAnchor = (label: string) => `#${label.toLowerCase().replaceAll(" ", "-")
 
 const Footer = () => {
   return (
-      <footer className="bg-[#4A3F52] text-white">
+      <footer className="bg-[#4A3F52] font-sans text-white">
         <div className="container mx-auto px-6 py-11 sm:px-8 sm:py-12 lg:min-h-[407px] lg:px-0 lg:py-16">
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[396px_repeat(3,max-content)] lg:justify-between lg:gap-8">
             <section className="max-w-[310px]">

@@ -8,8 +8,8 @@ import { useEffect, useState } from "react";
 
 const navigation = [
   { label: "Home", href: "/" },
-  { label: "How It Works", href: "#how-it-works" },
-  { label: "Story Books", href: "#story-books" },
+  { label: "How It Works", href: "/how-it-works" },
+  { label: "Story Books", href: "/story-books" },
   { label: "Pricing", href: "#pricing" },
 ];
 
@@ -17,6 +17,7 @@ const Navbar = () => {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const overlaysPageContent = pathname === "/" || pathname.startsWith("/book-builder");
 
   useEffect(() => {
     setIsMenuOpen(false);
@@ -40,18 +41,19 @@ const Navbar = () => {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 h-0 pointer-events-none">
+    <header className={`sticky top-0 z-50 pointer-events-none ${overlaysPageContent ? "h-0" : "h-[78px] sm:h-[88px] lg:h-[116px]"}`}>
       <div
-        className={`pointer-events-auto absolute inset-x-0 top-0 px-3 transition-[padding] duration-300 sm:px-6 lg:px-0 ${
+        className={`pointer-events-auto absolute inset-x-0 top-0 transition-[padding] duration-300 ${
           isScrolled ? "pt-2 sm:pt-3 lg:pt-4" : "pt-3 sm:pt-5 lg:pt-11"
         }`}
       >
-        <div
-          className={`container mx-auto max-w-[1280px] rounded-[105px] transition-[background-color,box-shadow] duration-300 lg:px-0 ${
-            isScrolled ? "bg-white/90 shadow-[0_8px_24px_rgba(74,63,82,0.16)]" : "bg-white/40"
-          }`}
-        >
-        <div className="flex min-h-[58px] items-center justify-between gap-3 px-4 sm:px-6 lg:min-h-[81px] lg:px-10">
+        <div className="container mx-auto lg:px-0">
+          <div
+            className={`rounded-[105px] transition-[background-color,box-shadow] duration-300 ${
+              isScrolled ? "bg-white/90 shadow-[0_8px_24px_rgba(74,63,82,0.16)]" : "bg-white/40"
+            }`}
+          >
+        <div className="flex min-h-[54px] items-center justify-between gap-3 px-4 sm:min-h-[58px] sm:px-6 lg:min-h-[72px] lg:px-8">
           <Link
             href="/"
             aria-label="Bookereillo home"
@@ -69,14 +71,14 @@ const Navbar = () => {
 
           <nav aria-label="Primary navigation" className="hidden items-center gap-8 lg:flex">
             {navigation.map((item) => {
-              const isActive = item.href === "/" && pathname === "/";
+              const isActive = pathname === item.href;
 
               return (
                 <Link
                   key={item.href}
                   href={item.href}
                   aria-current={isActive ? "page" : undefined}
-                  className={`relative py-2 font-crimson text-xl font-semibold transition-colors hover:text-[#e77f9a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf] ${
+                  className={`relative py-2 font-fredoka text-lg font-normal transition-colors hover:text-[#e77f9a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf] ${
                     isActive ? "text-[#e77f9a]" : "text-[#5d5059]"
                   }`}
                 >
@@ -146,8 +148,9 @@ const Navbar = () => {
               </Link>
             </div>
           </nav>
+          </div>
         </div>
-        </div>
+      </div>
       </div>
     </header>
   );
