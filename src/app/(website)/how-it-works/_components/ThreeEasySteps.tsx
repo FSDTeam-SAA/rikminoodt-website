@@ -1,39 +1,41 @@
-import Image from "next/image";
+"use client";
 
-const steps = [
-  {
-    title: "Personalise the Characters",
-    description:
-      "Add your child's name, age and photo. You can also include siblings, family members, friends or pets in the story.",
-    details: ["Enter your child's name", "Add their age", "Upload a clear photo", "Add siblings or family members", "Include friends and a favourite pet"],
-    image: "/images/book1.png",
-  },
-  {
-    title: "Create Their Adventure",
-    description:
-      "Choose the story theme, occasion and illustration style, then add personal details that match your child's interests.",
-    details: ["Choose a story theme", "Select a special occasion", "Pick an illustration style", "Add your child's interests", "Include favourite activities"],
-    image: "/images/book2.png",
-  },
-  {
-    title: "Pay & Receive the Book",
-    description:
-      "Preview the story, select a digital or hardcover format, complete the payment and receive the personalised book.",
-    details: ["Preview the complete story", "Choose digital or hardcover", "Confirm your book details", "Complete secure payment", "Receive your personalised book"],
-    image: "/images/book3.png",
-  },
-];
+import Image from "next/image";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 const ThreeEasySteps = () => {
+  const { t } = useLanguage();
+
+  const steps = [
+    {
+      title: t.createMagicalBook.step1Title,
+      description: t.createMagicalBook.step1Desc,
+      details: t.howItWorksPage.step1Details,
+      image: "/images/book1.png",
+    },
+    {
+      title: t.createMagicalBook.step2Title,
+      description: t.createMagicalBook.step2Desc,
+      details: t.howItWorksPage.step2Details,
+      image: "/images/book2.png",
+    },
+    {
+      title: t.createMagicalBook.step3Title,
+      description: t.createMagicalBook.step3Desc,
+      details: t.howItWorksPage.step3Details,
+      image: "/images/book3.png",
+    },
+  ];
+
   return (
     <section className="py-14 sm:py-16 lg:py-20" aria-labelledby="easy-steps-heading">
       <div className="container mx-auto px-5 sm:px-8 lg:px-0">
         <header className="mx-auto max-w-4xl text-center">
           <h1 id="easy-steps-heading" className="font-crimson text-[clamp(2.25rem,4vw,3rem)] font-semibold leading-none text-[#1E1E1E]">
-            Create Magical Book in 3 Easy Steps
+            {t.howItWorksPage.title}
           </h1>
           <p className="mt-3 font-sans text-[18px] leading-normal text-[#444444]">
-            Bring your child&apos;s imagination to life by personalising the characters, creating their adventure, and receiving a storybook made just for them.
+            {t.howItWorksPage.subheading}
           </p>
         </header>
 

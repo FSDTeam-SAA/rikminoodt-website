@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import { Star } from "lucide-react";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 const reviews = [
   "bg-[#f8dfe0]",
@@ -13,6 +16,8 @@ const reviews = [
 ];
 
 const BookerelloReviews = () => {
+  const { t } = useLanguage();
+
   return (
     <section
       aria-labelledby="reviews-heading"
@@ -24,15 +29,14 @@ const BookerelloReviews = () => {
             id="reviews-heading"
             className="font-crimson text-[48px] font-semibold leading-none text-[#1E1E1E]"
           >
-            Bookerello Reviews - Happy faces
+            {t.reviews.title}
           </h2>
           <p className="mx-auto mt-2 max-w-4xl text-center font-sans text-[18px] font-normal leading-normal text-[#444444]">
-            Over 24,522 personalised stories created. Every book is a new
-            adventure, a bigger smile and a memory to treasure forever.
+            {t.reviews.subheading}
           </p>
           <div
             className="mt-2 flex items-center justify-center gap-2"
-            aria-label="Rated 4.8 out of 5 from 1,700 plus reviews"
+            aria-label={t.reviews.ratingAria}
           >
             <span className="flex gap-1 text-[#f6aa16]" aria-hidden="true">
               {Array.from({ length: 5 }).map((_, index) => (
@@ -45,7 +49,7 @@ const BookerelloReviews = () => {
               ))}
             </span>
             <span className="text-xs text-[#607cb2] lg:text-sm">
-              4.8/5 from 1,700+ reviews
+              {t.reviews.ratingText}
             </span>
           </div>
         </header>

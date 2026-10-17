@@ -1,0 +1,150 @@
+{
+  "nav": {
+    "home": "Home",
+    "howItWorks": "Hoe Het Werkt",
+    "storyBooks": "Verhalenboeken",
+    "pricing": "Prijzen",
+    "cart": "Winkelwagen",
+    "account": "Account",
+    "openMenu": "Navigatiemenu openen",
+    "closeMenu": "Navigatiemenu sluiten",
+    "homeAria": "Bookereillo home",
+    "cartAria": "Bekijk winkelwagen",
+    "accountAria": "Open je account"
+  },
+  "hero": {
+    "heading1": "Hun Verbeelding.",
+    "heading2": "Hun Avontuur.",
+    "heading3": "Hun Verhaal.",
+    "subheading": "Creëer een uniek verhalenboek waarin jouw kind de hoofdrol speelt in een wereld die speciaal voor hen is gemaakt, volledig gepersonaliseerd.",
+    "createBookBtn": "Maak Jouw Boek"
+  },
+  "chooseTheme": {
+    "title": "Kies Je Thema",
+    "subheading": "Kies een thema dat past bij de interesses, verbeelding en favoriete avonturen van je kind.",
+    "themes": {
+      "fairyTales": "Sprookjes",
+      "adventure": "Avontuur",
+      "activities": "Activiteiten",
+      "worlds": "Werelden",
+      "holidays": "Feestdagen",
+      "family": "Familie",
+      "educational": "Educatief",
+      "feelings": "Gevoelens"
+    }
+  },
+  "turningImaginations": {
+    "title": "Kleine Verbeelding Omzetten in Onvergetelijke Verhalen",
+    "description": "Bij Bookerello geloven we dat elk kind het verdient om de held van hun eigen avontuur te zijn. Ons platform helpt gezinnen gepersonaliseerde verhalenboeken te maken door thema's te kiezen, meerdere personages toe te voegen, speciale gelegenheden te vieren en betekenisvolle persoonlijke details op te nemen. Elk boek is met zorg gemaakt om lezen spannender, persoonlijker en gedenkwaardiger te maken.",
+    "discoverBtn": "Ontdek Hoe Het Werkt"
+  },
+  "createMagicalBook": {
+    "title": "Maak een Magisch Boek in 3 Eenvoudige Stappen",
+    "subheading": "Breng de verbeelding van je kind tot leven door personages te personaliseren, hun avontuur te creëren en een verhalenboek speciaal voor hen te ontvangen.",
+    "step1Title": "Personaliseer de Personages",
+    "step1Desc": "Voeg de naam, leeftijd en foto van je kind toe. Je kunt ook broers, zussen, familieleden, vrienden of huisdieren toevoegen.",
+    "step2Title": "Creëer Hun Avontuur",
+    "step2Desc": "Kies het verhaalthema, de gelegenheid en de illustratiestijl, en voeg persoonlijke details toe die aansluiten bij de interesses van je kind.",
+    "step3Title": "Betaal & Ontvang het Boek",
+    "step3Desc": "Bekijk een voorbeeld van het verhaal, kies een digitaal of hardcover formaat, voltooi de betaling en ontvang het gepersonaliseerde boek."
+  },
+  "exploreStories": {
+    "title": "Ontdek Verhalen",
+    "subheading": "Ontdek magische avonturen, spannende thema's en hartverwarmende verhalen waarin elk kind de held is.",
+    "previousAria": "Toon vorige verhalen",
+    "nextAria": "Toon volgende verhalen",
+    "ageBadge": "Leeftijd 3-4",
+    "adventureBadge": "Avontuur",
+    "viewDetails": "Bekijk details voor",
+    "story1Title": "Lisa's Kampeeravontuur",
+    "story1Desc": "Een hartverwarmend avontuur in de natuur.",
+    "story2Title": "Ben's Grote Droom",
+    "story2Desc": "Een hartverwarmend magisch kinderboek.",
+    "story3Title": "Mia's Magische Tuin",
+    "story3Desc": "Een magisch kinderboek."
+  },
+  "occasions": {
+    "title": "Maak een gepersonaliseerd boek voor een speciale Gelegenheid",
+    "subheading": "Ontdek geweldige functies die elk verhaal persoonlijker, boeiender en gedenkwaardiger maken voor je kind.",
+    "previousAria": "Toon vorige gelegenheden",
+    "nextAria": "Toon volgende gelegenheden",
+    "birthday": "Verjaardag",
+    "newBaby": "Pasgeboren Baby",
+    "valentinesDay": "Valentijnsdag",
+    "mothersDay": "Moederdag"
+  },
+  "reviews": {
+    "title": "Bookerello Reviews - Blije Gezichten",
+    "subheading": "Meer dan 24.522 gepersonaliseerde verhalen gemaakt. Elk boek is een nieuw avontuur, een grotere glimlach en een herinnering voor altijd.",
+    "ratingText": "4.8/5 uit 1.700+ reviews",
+    "ratingAria": "Beoordeeld met 4.8 van de 5 uit meer dan 1.700 reviews"
+  },
+  "faq": {
+    "title": "Veelgestelde Vragen",
+    "subheading": "Ontdek magische avonturen, spannende thema's en hartverwarmende verhalen gemaakt om elk kind de held te maken.",
+    "q1": "Wat is de Kinderboeken Generator?",
+    "a1": "Het is een eenvoudige manier om een magisch, gepersonaliseerd verhalenboek te maken waarin je kind de held is van zijn of haar eigen avontuur.",
+    "q2": "Hoe kan ik een gepersonaliseerd kinderboek maken?",
+    "a2": "Kies een verhaalthema, voeg de gegevens van je kind toe en personaliseer het avontuur in een paar vriendelijke stappen.",
+    "q3": "Kan ik de naam van mijn kind aan het verhaal toevoegen?",
+    "a3": "Ja. De naam van je kind wordt op een natuurlijke manier in het verhaal geweven, zodat elke pagina speciaal voor hen voelt.",
+    "q4": "Voor welke leeftijdsgroepen zijn de boeken geschikt?",
+    "a4": "Onze verhalenboeken zijn ontworpen voor nieuwsgierige jonge lezers en vormen een heerlijke voorleeservaring voor het hele gezin.",
+    "q5": "Kan ik het verhaalthema of de personages kiezen?",
+    "a5": "Ja. Kies het thema dat de verbeelding van je kind prikkelt en creëer een avontuur waar ze graag naar terugkeren.",
+    "q6": "Kan ik de illustraties aanpassen?",
+    "a6": "Je kunt belangrijke verhaaldetails personaliseren, zodat het voltooide boek echt uniek aanvoelt voor je kind.",
+    "q7": "Kan ik het boek downloaden of laten printen?",
+    "a7": "Je voltooide verhalenboek kan digitaal worden klaargezet of als prachtig hardcover boek worden besteld."
+  },
+  "howItWorksPage": {
+    "title": "Maak een Magisch Boek in 3 Eenvoudige Stappen",
+    "subheading": "Breng de verbeelding van je kind tot leven door personages te personaliseren, hun avontuur te creëren en een verhalenboek speciaal voor hen te ontvangen.",
+    "step1Details": ["Voer de naam van je kind in", "Voeg hun leeftijd toe", "Upload een duidelijke foto", "Voeg broers of zussen toe", "Voeg vrienden en een huisdier toe"],
+    "step2Details": ["Kies een verhaalthema", "Selecteer een speciale gelegenheid", "Kies een illustratiestijl", "Voeg interesses van je kind toe", "Kies favoriete activiteiten"],
+    "step3Details": ["Bekijk het complete verhaalvoorbeeld", "Kies digitaal of hardcover", "Bevestig je boekdetails", "Voltooi veilige betaling", "Ontvang je gepersonaliseerde boek"],
+    "ctaTitle": "Creëer een Verhaal Speciaal voor Jouw Kind",
+    "ctaDesc": "Verander de naam, foto en verbeelding van je kind in een magisch gepersonaliseerd verhalenboek dat ze jarenlang zullen koesteren.",
+    "ctaBtn": "Maak Jouw Boek",
+    "featuresTitle": "Alles Wat Jouw Verhaal Magisch Maakt",
+    "featuresSubheading": "Ontdek krachtige functies die elk verhaal persoonlijker, boeiender en gedenkwaardiger maken voor je kind.",
+    "feat1Title": "AI-Gedreven Verhalen",
+    "feat1Desc": "Verander de ideeën van je kind in unieke, hartverwarmende verhalen met de magie van AI.",
+    "feat2Title": "Consistente Personages",
+    "feat2Desc": "Houd het personage van je kind er hetzelfde uitziend gedurende het hele avontuur voor een écht persoonlijke ervaring.",
+    "feat3Title": "Magische Illustraties",
+    "feat3Desc": "Prachtige betoverende illustraties brengen elk verhaal op een bijzondere manier tot leven.",
+    "feat4Title": "Meerdere Talen",
+    "feat4Desc": "Maak verhalen in je voorkeurstaal en deel de magie met familie over de hele wereld.",
+    "feat5Title": "Interactieve Boekeditor",
+    "feat5Desc": "Personaliseer eenvoudig de tekst, afbeeldingen en details met een plezierige bewerkingservaring.",
+    "feat6Title": "Digitale & Gedrukte Boeken",
+    "feat6Desc": "Download direct een digitaal boek van hoge kwaliteit of bestel een prachtige hardcover herinnering bij je thuis bezorgd."
+  },
+  "footer": {
+    "about": "Bookereillo gepersonaliseerde verhalenboeken die de verbeelding van je kind omtoveren tot een magisch avontuur.",
+    "rights": "Alle rechten voorbehouden",
+    "groups": {
+      "discover": "Ontdek",
+      "occasions": "Gelegenheden",
+      "help": "Hulp"
+    },
+    "links": {
+      "bookThemes": "Boek Thema's",
+      "examples": "Voorbeelden",
+      "pricing": "Prijzen",
+      "howItWorks": "Hoe het werkt",
+      "createYourBook": "Maak jouw Boek",
+      "birthday": "Verjaardag",
+      "christmas": "Kerstmis",
+      "newBaby": "Pasgeboren Baby",
+      "firstDayOfSchool": "Eerste schooldag",
+      "justBecause": "Zomaar",
+      "faqs": "Veelgestelde Vragen",
+      "contactUs": "Contact",
+      "termsAndConditions": "Algemene Voorwaarden",
+      "privacyPolicy": "Privacybeleid"
+    }
+  }
+}
+

@@ -5,19 +5,22 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, ShoppingCart, X } from "lucide-react";
 import { useEffect, useState } from "react";
-
-const navigation = [
-  { label: "Home", href: "/" },
-  { label: "How It Works", href: "/how-it-works" },
-  { label: "Story Books", href: "/story-books" },
-  { label: "Pricing", href: "#pricing" },
-];
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 const Navbar = () => {
+  const { t } = useLanguage();
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const overlaysPageContent = pathname === "/" || pathname.startsWith("/book-builder");
+
+  const navigation = [
+    { label: t.nav.home, href: "/" },
+    { label: t.nav.howItWorks, href: "/how-it-works" },
+    { label: t.nav.storyBooks, href: "/story-books" },
+    { label: t.nav.pricing, href: "#pricing" },
+  ];
 
   useEffect(() => {
     setIsMenuOpen(false);
@@ -93,18 +96,18 @@ const Navbar = () => {
             })}
           </nav>
 
-          <div className="hidden items-center gap-3 sm:flex lg:gap-6">
-            <Image src="/images/flag.png" alt="United States" width={36} height={36} className="size-8 object-contain lg:size-9" />
+          <div className="hidden items-center gap-3 sm:flex lg:gap-5">
+            <LanguageSwitcher />
             <Link
               href="#cart"
-              aria-label="View shopping cart"
+              aria-label={t.nav.cartAria}
               className="flex size-9 items-center justify-center rounded-full text-[#5a5358] transition hover:bg-white/75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf] lg:size-10"
             >
               <ShoppingCart aria-hidden="true" size={26} strokeWidth={1.4} />
             </Link>
             <Link
               href="#account"
-              aria-label="Open your account"
+              aria-label={t.nav.accountAria}
               className="rounded-full transition hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf] focus-visible:ring-offset-2"
             >
               <Image src="/images/profile.png" alt="Your profile" width={40} height={40} className="size-8 rounded-full object-cover lg:size-9" />
@@ -113,7 +116,7 @@ const Navbar = () => {
 
           <button
             type="button"
-            aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-label={isMenuOpen ? t.nav.closeMenu : t.nav.openMenu}
             aria-expanded={isMenuOpen}
             aria-controls="mobile-navigation"
             onClick={() => setIsMenuOpen((open) => !open)}
@@ -126,7 +129,7 @@ const Navbar = () => {
         <div
           id="mobile-navigation"
           className={`overflow-hidden border-t border-[#876d7c]/10 transition-[max-height,opacity] duration-300 lg:hidden ${
-            isMenuOpen ? "max-h-[370px] opacity-100" : "pointer-events-none max-h-0 opacity-0"
+            isMenuOpen ? "max-h-[460px] opacity-100" : "pointer-events-none max-h-0 opacity-0"
           }`}
         >
           <nav aria-label="Mobile navigation" className="flex flex-col px-4 py-3 sm:px-6">
@@ -139,12 +142,13 @@ const Navbar = () => {
                 {item.label}
               </Link>
             ))}
+            <LanguageSwitcher isMobile className="mt-2 border-t border-[#876d7c]/10 pt-2" />
             <div className="mt-2 flex items-center gap-2 border-t border-[#876d7c]/10 pt-3 sm:hidden">
               <Link href="#cart" className="flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-white/75 text-sm font-medium text-[#5d5059]">
-                <ShoppingCart aria-hidden="true" size={18} /> Cart
+                <ShoppingCart aria-hidden="true" size={18} /> {t.nav.cart}
               </Link>
               <Link href="#account" className="flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-[#f8e6eb] px-3 text-sm font-medium text-[#a15971]">
-                <Image src="/images/profile.png" alt="" width={22} height={22} className="size-5 rounded-full" /> Account
+                <Image src="/images/profile.png" alt="" width={22} height={22} className="size-5 rounded-full" /> {t.nav.account}
               </Link>
             </div>
           </nav>

@@ -1,33 +1,38 @@
-import Image from "next/image";
+"use client";
 
-const steps = [
-  {
-    image: "/images/book1.png",
-    title: "Personalise the Characters",
-    description: "Add your child’s name, age and photo. You can also include siblings, family members, friends or pets in the story.",
-  },
-  {
-    image: "/images/book2.png",
-    title: "Create Their Adventure",
-    description: "Choose the story theme, occasion and illustration style, then add personal details that match your child’s interests.",
-  },
-  {
-    image: "/images/book3.png",
-    title: "Pay & Receive the Book",
-    description: "Preview the story, select a digital or hardcover format, complete the payment and receive the personalised book.",
-  },
-];
+import Image from "next/image";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 const CreateMagicalBook = () => {
+  const { t } = useLanguage();
+
+  const steps = [
+    {
+      image: "/images/book1.png",
+      title: t.createMagicalBook.step1Title,
+      description: t.createMagicalBook.step1Desc,
+    },
+    {
+      image: "/images/book2.png",
+      title: t.createMagicalBook.step2Title,
+      description: t.createMagicalBook.step2Desc,
+    },
+    {
+      image: "/images/book3.png",
+      title: t.createMagicalBook.step3Title,
+      description: t.createMagicalBook.step3Desc,
+    },
+  ];
+
   return (
     <section id="create-your-book" aria-labelledby="create-book-heading" className=" py-14 sm:py-16 lg:mb-32 lg:pb-[10px] lg:pt-0">
       <div className="container mx-auto px-5 sm:px-8 lg:px-0">
         <header className="text-center">
           <h2 id="create-book-heading" className="font-crimson text-[48px] font-semibold leading-none text-[#1E1E1E]">
-            Create Magical Book in 3 Easy Steps
+            {t.createMagicalBook.title}
           </h2>
           <p className="mx-auto mt-2 max-w-4xl text-center font-sans text-[18px] font-normal leading-normal text-[#444444]">
-            Bring your child&apos;s imagination to life by personalising the characters, creating their adventure, and receiving a storybook made just for them.
+            {t.createMagicalBook.subheading}
           </p>
         </header>
 
