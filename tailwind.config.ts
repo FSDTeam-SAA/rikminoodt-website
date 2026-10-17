@@ -102,6 +102,10 @@ const config: Config = {
       },
 
       keyframes: {
+        "hero-cloud": {
+          "0%, 100%": { transform: "translate3d(0, 0, 0)" },
+          "50%": { transform: "translate3d(12px, -6px, 0)" },
+        },
         "accordion-down": {
           from: {
             height: "0",
@@ -140,6 +144,7 @@ const config: Config = {
       },
 
       animation: {
+        "hero-cloud": "hero-cloud 12s ease-in-out infinite",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         moveBackground: "moveBackground 30s linear infinite alternate",

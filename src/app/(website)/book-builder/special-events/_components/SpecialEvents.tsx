@@ -131,6 +131,7 @@ export default function SpecialEvents() {
     selectedTheme,
     selectedStory,
     selectedMessage,
+    selectedIllustration,
     selectedFont,
     selectedLanguage,
   } = useBookBuilder();
@@ -140,6 +141,9 @@ export default function SpecialEvents() {
   const story = stories.find((item) => item.label === selectedStory);
   const message = messages.find((item) => item.label === selectedMessage);
   const font = fonts.find((item) => item.label === selectedFont);
+  const illustrationLabels = ["3d Animation", "Water Colour", "Geometric", "Claymation", "Sticker Art", "Comic Book", "Gouache", "Soft Anime"];
+  const illustrationIndex = illustrationLabels.indexOf(selectedIllustration ?? "");
+  const illustration = illustrationIndex >= 0 ? { label: illustrationLabels[illustrationIndex], image: `/images/ill_${illustrationIndex + 1}.png`, color: "#FFFFFF" } : undefined;
 
   return (
     <main className="min-h-screen bg-[#FEFAF4] px-4 pb-10 pt-[118px] sm:px-7 sm:pb-12 sm:pt-[136px] lg:px-[38px] lg:pb-20 lg:pt-[196px]">
@@ -194,6 +198,11 @@ export default function SpecialEvents() {
               href="/book-builder/personalize"
             />
             <ChoiceChip
+              label="Illustration"
+              choice={illustration}
+              href="/book-builder/illustration"
+            />
+            <ChoiceChip
               label="Font"
               choice={font}
               href="/book-builder/choose-font"
@@ -233,14 +242,14 @@ export default function SpecialEvents() {
               value={events}
               onChange={(event) => setEvents(event.target.value)}
               placeholder="e.g. birthday, holidays, favorite memories"
-              className="mt-3 min-h-[150px] w-full resize-y rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 py-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25 sm:min-h-[180px]"
+              className="mt-3 min-h-[150px] w-full resize-y rounded-[8px] border border-[#F4D7DD] bg-[#FFFCFA] px-3 py-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] hover:border-[#EDC7D0] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25 sm:min-h-[180px]"
             />
           </div>
 
           <div className="mt-7 flex justify-center">
             <Link
-              href="/book-builder/personal-details"
-              className="h-10 rounded-xl bg-[#E88DA0] px-7 font-sans text-sm font-semibold text-white shadow-[0_5px_12px_rgba(232,141,160,0.25)] transition hover:bg-[#DD7893] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2"
+              href="/book-builder/checkout"
+              className="inline-flex h-10 items-center justify-center rounded-xl bg-[#E88DA0] px-7 font-sans text-sm font-semibold text-white shadow-[0_5px_12px_rgba(232,141,160,0.25)] transition hover:bg-[#DD7893] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2"
             >
               Next Step
             </Link>

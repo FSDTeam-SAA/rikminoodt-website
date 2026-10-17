@@ -1,0 +1,153 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "examples": "Exemples",
+    "howItWorks": "Comment ça marche",
+    "storyBooks": "Livres d'histoires",
+    "pricing": "Tarifs",
+    "cart": "Panier",
+    "account": "Compte",
+    "settings": "Paramètres",
+    "logout": "Déconnexion",
+    "openMenu": "Ouvrir le menu de navigation",
+    "closeMenu": "Fermer le menu de navigation",
+    "homeAria": "Accueil Bookereillo",
+    "cartAria": "Voir le panier",
+    "accountAria": "Ouvrir votre compte"
+  },
+  "hero": {
+    "heading1": "Leur Imagination.",
+    "heading2": "Leur Aventure.",
+    "heading3": "Leur Histoire.",
+    "subheading": "Créez un livre d'histoire unique où votre enfant devient le héros d'un monde fait rien que pour lui, entièrement personnalisé.",
+    "createBookBtn": "Créez Votre Livre"
+  },
+  "chooseTheme": {
+    "title": "Choisissez Votre Thème",
+    "subheading": "Choisissez un thème qui correspond aux intérêts, à l'imagination et aux aventures préférées de votre enfant.",
+    "themes": {
+      "fairyTales": "Contes de fées",
+      "adventure": "Aventure",
+      "activities": "Activités",
+      "worlds": "Mondes",
+      "holidays": "Vacances & Fêtes",
+      "family": "Famille",
+      "educational": "Éducatif",
+      "feelings": "Émotions"
+    }
+  },
+  "turningImaginations": {
+    "title": "Transformer la Petite Imagination en Histoires Inoubliables",
+    "description": "Chez Bookerello, nous croyons que chaque enfant mérite de devenir le héros de sa propre aventure. Notre plateforme aide les familles à créer des livres d'histoires personnalisés en choisissant des thèmes, en ajoutant plusieurs personnages, en célébrant des occasions spéciales et en incluant des détails personnels précieux. Chaque livre est conçu avec soin pour rendre la lecture plus excitante, personnelle et mémorable.",
+    "discoverBtn": "Découvrez Comment Ça Marche"
+  },
+  "createMagicalBook": {
+    "title": "Créez un Livre Magique en 3 Étapes Faciles",
+    "subheading": "Donnez vie à l'imagination de votre enfant en personnalisant les personnages, en créant leur aventure et en recevant un livre d'histoire conçu spécialement pour eux.",
+    "step1Title": "Personnalisez les Personnages",
+    "step1Desc": "Ajoutez le prénom, l'âge et la photo de votre enfant. Vous pouvez également inclure des frères et sœurs, des membres de la famille, des amis ou des animaux.",
+    "step2Title": "Créez Leur Aventure",
+    "step2Desc": "Choisissez le thème de l'histoire, l'occasion et le style d'illustration, puis ajoutez des détails personnels qui correspondent aux intérêts de votre enfant.",
+    "step3Title": "Payez & Recevez le Livre",
+    "step3Desc": "Prévisualisez l'histoire, choisissez un format numérique ou relié, effectuez le paiement et recevez votre livre personnalisé."
+  },
+  "exploreStories": {
+    "title": "Explorez Nos Histoires",
+    "subheading": "Découvrez des aventures magiques, des thèmes passionnants et des histoires réconfortantes créées pour faire de chaque enfant le héros.",
+    "previousAria": "Afficher les histoires précédentes",
+    "nextAria": "Afficher les histoires suivantes",
+    "ageBadge": "Âges 3-4",
+    "adventureBadge": "Aventure",
+    "viewDetails": "Voir les détails de",
+    "story1Title": "L'Aventure Camping de Lisa",
+    "story1Desc": "Une aventure réconfortante en pleine nature.",
+    "story2Title": "Le Grand Rêve de Ben",
+    "story2Desc": "Un livre magique et touchant pour enfants.",
+    "story3Title": "Le Jardin Magique de Mia",
+    "story3Desc": "Un livre magique et féerique pour enfants."
+  },
+  "occasions": {
+    "title": "Créez un livre personnalisé pour un Événement Spécial",
+    "subheading": "Découvrez des fonctionnalités formidables qui rendent chaque histoire plus personnelle, captivante et mémorable pour votre enfant.",
+    "previousAria": "Afficher les occasions précédentes",
+    "nextAria": "Afficher les occasions suivantes",
+    "birthday": "Anniversaire",
+    "newBaby": "Nouveau Bébé",
+    "valentinesDay": "Saint-Valentin",
+    "mothersDay": "Fête des Mères"
+  },
+  "reviews": {
+    "title": "Avis Bookerello - Visages Heureux",
+    "subheading": "Plus de 24 522 histoires personnalisées créées. Chaque livre est une nouvelle aventure, un sourire plus grand et un souvenir inoubliable.",
+    "ratingText": "4.8/5 parmi plus de 1 700 avis",
+    "ratingAria": "Noté 4,8 sur 5 d'après plus de 1 700 avis"
+  },
+  "faq": {
+    "title": "Foire aux questions",
+    "subheading": "Découvrez des aventures magiques, des thèmes passionnants et des histoires chaleureuses conçues pour faire de chaque enfant le héros.",
+    "q1": "Qu'est-ce que le Générateur de Livres pour Enfants ?",
+    "a1": "C'est un moyen simple de créer un livre d'histoire personnalisé et magique où votre enfant est le héros de sa propre aventure.",
+    "q2": "Comment créer un livre personnalisé pour enfant ?",
+    "a2": "Choisissez un thème d'histoire, ajoutez les détails de votre enfant et personnalisez l'aventure en quelques étapes simples et conviviales.",
+    "q3": "Puis-je ajouter le prénom de mon enfant à l'histoire ?",
+    "a3": "Oui. Le prénom de votre enfant est tissé naturellement dans l'histoire pour que chaque page semble faite tout spécialement pour lui.",
+    "q4": "À quels groupes d'âge les livres conviennent-ils ?",
+    "a4": "Nos livres d'histoires sont conçus pour les jeunes lecteurs curieux et constituent une merveilleuse expérience de lecture partagée en famille.",
+    "q5": "Puis-je choisir le thème de l'histoire ou les personnages ?",
+    "a5": "Oui. Choisissez le thème qui stimule l'imagination de votre enfant et créez une aventure qu'il adorera relire.",
+    "q6": "Puis-je personnaliser les illustrations ?",
+    "a6": "Vous pouvez personnaliser des éléments clés de l'histoire pour que le livre terminé soit véritablement unique pour votre enfant.",
+    "q7": "Puis-je télécharger ou imprimer le livre ?",
+    "a7": "Votre livre d'histoire terminé peut être préparé au format numérique ou imprimé en un magnifique livre relié."
+  },
+  "howItWorksPage": {
+    "title": "Créez un Livre Magique en 3 Étapes Faciles",
+    "subheading": "Donnez vie à l'imagination de votre enfant en personnalisant les personnages, en créant leur aventure et en recevant un livre d'histoire conçu pour eux.",
+    "step1Details": ["Entrez le prénom de votre enfant", "Ajoutez son âge", "Téléchargez une photo nette", "Ajoutez des frères et sœurs ou la famille", "Incluez des amis et un animal préféré"],
+    "step2Details": ["Choisissez un thème d'histoire", "Sélectionnez une occasion spéciale", "Choisissez un style d'illustration", "Ajoutez les intérêts de votre enfant", "Incluez ses activités préférées"],
+    "step3Details": ["Prévisualisez l'histoire complète", "Choisissez numérique ou relié", "Confirmez les détails de votre livre", "Effectuez le paiement sécurisé", "Recevez votre livre personnalisé"],
+    "ctaTitle": "Créez une Histoire Conçue Rien que Pour Votre Enfant",
+    "ctaDesc": "Transformez le prénom, la photo et l'imagination de votre enfant en un livre d'histoire magique qu'il chérira pendant des années.",
+    "ctaBtn": "Créez Votre Livre",
+    "featuresTitle": "Tout ce qui Rend Votre Histoire Magique",
+    "featuresSubheading": "Découvrez des fonctionnalités puissantes qui rendent chaque histoire plus personnelle, captivante et inoubliable.",
+    "feat1Title": "Histoires Générées par IA",
+    "feat1Desc": "Transformez les idées de votre enfant en histoires uniques et émouvantes grâce à la magie de l'IA.",
+    "feat2Title": "Personnages Cohérents",
+    "feat2Desc": "Gardez l'apparence du personnage de votre enfant constante tout au long de l'aventure pour une expérience véritablement personnelle.",
+    "feat3Title": "Illustrations Féeriques",
+    "feat3Desc": "De superbes illustrations enchanteresses donnent vie à chaque histoire d'une manière exceptionnelle.",
+    "feat4Title": "Plusieurs Langues",
+    "feat4Desc": "Créez des histoires dans votre langue préférée et partagez la magie avec votre famille partout dans le monde.",
+    "feat5Title": "Éditeur de Livre Interactif",
+    "feat5Desc": "Personnalisez facilement le texte, les images et les détails avec une expérience d'édition simple et agréable.",
+    "feat6Title": "Livres Numériques & Imprimés",
+    "feat6Desc": "Téléchargez instantanément un livre numérique haute qualité ou commandez un magnifique livre relié livré chez vous."
+  },
+  "footer": {
+    "about": "Des livres d'histoires personnalisés Bookereillo qui transforment l'imagination de votre enfant en une aventure magique.",
+    "rights": "Tous droits réservés",
+    "groups": {
+      "discover": "Découvrir",
+      "occasions": "Occasions",
+      "help": "Aide"
+    },
+    "links": {
+      "bookThemes": "Thèmes de Livres",
+      "examples": "Exemples",
+      "pricing": "Tarifs",
+      "howItWorks": "Comment ça marche",
+      "createYourBook": "Créez votre Livre",
+      "birthday": "Anniversaire",
+      "christmas": "Noël",
+      "newBaby": "Nouveau Bébé",
+      "firstDayOfSchool": "Premier jour d'école",
+      "justBecause": "Pour le Plaisir",
+      "faqs": "FAQ",
+      "contactUs": "Contactez-nous",
+      "termsAndConditions": "Conditions Générales",
+      "privacyPolicy": "Politique de Confidentialité"
+    }
+  }
+}
+

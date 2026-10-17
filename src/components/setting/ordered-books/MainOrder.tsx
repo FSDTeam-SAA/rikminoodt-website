@@ -59,7 +59,7 @@ export default function OrderedBooksPage() {
   const [trackingOrder, setTrackingOrder] = useState<OrderDetails | null>(null);
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-6 md:p-8 h-full min-h-[600px]">
+    <div className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
       
       {/* Header */}
       <div className="mb-6">

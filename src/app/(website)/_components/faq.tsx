@@ -3,30 +3,32 @@
 import Image from "next/image";
 import { Minus, Plus } from "lucide-react";
 import { useId, useState } from "react";
-
-const faqs = [
-  { question: "What is the Kids Book Generator?", answer: "It is a simple way to create a magical, personalised storybook where your child is the hero of their very own adventure." },
-  { question: "How can I create a personalized kids book?", answer: "Choose a story theme, add your child's details, and personalise the adventure in just a few friendly steps." },
-  { question: "Can I add my child's name to the story?", answer: "Yes. Your child's name is woven naturally into the story to make every page feel made especially for them." },
-  { question: "What age groups are the books suitable for?", answer: "Our storybooks are designed for curious young readers and make a lovely shared reading experience for families." },
-  { question: "Can I choose the story theme or characters?", answer: "Yes. Pick the theme that sparks your child's imagination, then create an adventure they will love returning to." },
-  { question: "Can I customize the illustrations?", answer: "You can personalise key story details so the finished book feels truly unique to your child." },
-  { question: "Can I download or print the book?", answer: "Your completed storybook can be prepared for you to enjoy and share with your family." },
-];
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 const Faq = () => {
+  const { t } = useLanguage();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const sectionId = useId();
+
+  const faqs = [
+    { question: t.faq.q1, answer: t.faq.a1 },
+    { question: t.faq.q2, answer: t.faq.a2 },
+    { question: t.faq.q3, answer: t.faq.a3 },
+    { question: t.faq.q4, answer: t.faq.a4 },
+    { question: t.faq.q5, answer: t.faq.a5 },
+    { question: t.faq.q6, answer: t.faq.a6 },
+    { question: t.faq.q7, answer: t.faq.a7 },
+  ];
 
   return ( 
     <section id="faq" aria-labelledby="faq-heading" className="overflow-hidden py-14 sm:py-16 lg:mb-32 lg:py-0">
       <div className="container relative mx-auto px-5 sm:px-10 lg:px-0">
         <header className="text-center">
           <h2 id="faq-heading" className="font-crimson text-[48px] font-semibold leading-none text-[#1E1E1E]">
-            Frequently asked questions
+            {t.faq.title}
           </h2>
           <p className="mx-auto mt-2 text-center font-sans text-[18px] font-normal leading-normal text-[#444444]">
-            Discover magical adventures, exciting themes, and heartwarming stories created to make every child the hero.
+            {t.faq.subheading}
           </p>
         </header>
 

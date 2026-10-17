@@ -1,7 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 const TurningLittleImaginations = () => {
+  const { t } = useLanguage();
+
   return (
     <section
       id="how-it-works"
@@ -42,21 +47,16 @@ const TurningLittleImaginations = () => {
               id="imaginations-heading"
               className="font-crimson text-[48px] font-semibold leading-none text-[#1E1E1E]"
             >
-              Turning Little Imaginations into Unforgettable Stories
+              {t.turningImaginations.title}
             </h2>
             <p className="mt-5 max-w-[650px] text-left font-sans text-[18px] font-normal leading-normal text-[#444444]">
-              At Bookerello, we believe every child deserves to become the hero
-              of their own adventure. Our platform helps families create
-              personalised storybooks by choosing themes, adding multiple
-              characters, celebrating special occasions and including meaningful
-              personal details. Each book is thoughtfully created to make
-              reading more exciting, personal and memorable.
+              {t.turningImaginations.description}
             </p>
             <Link
               href="#how-it-works"
               className="mt-5 inline-flex h-14 items-center justify-center rounded-2xl bg-[#e88da0] px-4 font-sans text-xl font-medium text-white shadow-[0_8px_18px_rgba(213,113,143,0.24)] transition hover:bg-[#df7894] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf] focus-visible:ring-offset-2 focus-visible:ring-offset-[#fff0f1]"
             >
-              Discover How It Works
+              {t.turningImaginations.discoverBtn}
             </Link>
           </div>
         </div>

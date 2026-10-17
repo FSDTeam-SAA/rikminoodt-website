@@ -27,7 +27,7 @@ export default function CoverTab() {
           <input
             type="text"
             placeholder="Enter your Book title"
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#E3859A] focus:ring-1 focus:ring-[#E3859A]"
+            className="w-full border border-[#F3A8B7] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#E3859A] focus:ring-1 focus:ring-[#E3859A]"
           />
         </div>
         <div>
@@ -35,7 +35,7 @@ export default function CoverTab() {
           <input
             type="text"
             placeholder="Middle"
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#E3859A] focus:ring-1 focus:ring-[#E3859A]"
+            className="w-full border border-[#F3A8B7] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#E3859A] focus:ring-1 focus:ring-[#E3859A]"
           />
         </div>
         <div>
@@ -43,7 +43,7 @@ export default function CoverTab() {
           <input
             type="text"
             placeholder="Enter your full name"
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#E3859A] focus:ring-1 focus:ring-[#E3859A]"
+            className="w-full border border-[#F3A8B7] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#E3859A] focus:ring-1 focus:ring-[#E3859A]"
           />
         </div>
         <div>
@@ -52,7 +52,7 @@ export default function CoverTab() {
           <textarea
             rows={5}
             placeholder="Lorem ipsum dolor sit amet..."
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#E3859A] focus:ring-1 focus:ring-[#E3859A] resize-none text-gray-500"
+            className="w-full border border-[#F3A8B7] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#E3859A] focus:ring-1 focus:ring-[#E3859A] resize-none text-gray-500"
           ></textarea>
         </div>
       </div>

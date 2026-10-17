@@ -2,22 +2,34 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Menu, ShoppingCart, X } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { LogOut, Menu, Settings, ShoppingCart, X } from "lucide-react";
 import { useEffect, useState } from "react";
-
-const navigation = [
-  { label: "Home", href: "/" },
-  { label: "How It Works", href: "/how-it-works" },
-  { label: "Story Books", href: "/story-books" },
-  { label: "Pricing", href: "#pricing" },
-];
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useLanguage } from "@/components/providers/LanguageProvider";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
+  const { t } = useLanguage();
+  const router = useRouter();
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const overlaysPageContent = pathname === "/" || pathname.startsWith("/book-builder");
+
+  const navigation = [
+    { label: t.nav.home, href: "/" },
+    { label: t.nav.examples, href: "/examples" },
+    { label: t.nav.howItWorks, href: "/how-it-works" },
+    { label: t.nav.storyBooks, href: "/story-books" },
+    { label: t.nav.pricing, href: "#pricing" },
+  ];
 
   useEffect(() => {
     setIsMenuOpen(false);
@@ -93,27 +105,77 @@ const Navbar = () => {
             })}
           </nav>
 
-          <div className="hidden items-center gap-3 sm:flex lg:gap-6">
-            <Image src="/images/flag.png" alt="United States" width={36} height={36} className="size-8 object-contain lg:size-9" />
+          <div className="hidden items-center gap-3 sm:flex lg:gap-5">
+            <LanguageSwitcher />
             <Link
-              href="#cart"
-              aria-label="View shopping cart"
+              href="/cart"
+              aria-label={t.nav.cartAria}
               className="flex size-9 items-center justify-center rounded-full text-[#5a5358] transition hover:bg-white/75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf] lg:size-10"
             >
               <ShoppingCart aria-hidden="true" size={26} strokeWidth={1.4} />
             </Link>
-            <Link
-              href="/setting"
-              aria-label="Open your account"
-              className="rounded-full transition hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf] focus-visible:ring-offset-2"
-            >
-              <Image src="/images/profile.png" alt="Your profile" width={40} height={40} className="size-8 rounded-full object-cover lg:size-9" />
-            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                aria-label={t.nav.accountAria}
+                className="group flex size-9 items-center justify-center rounded-full transition hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf] focus-visible:ring-offset-2 lg:size-10"
+              >
+                <Image
+                  src="/images/profile.png"
+                  alt="Your profile"
+                  width={40}
+                  height={40}
+                  className="size-8 rounded-full object-cover shadow-[0_2px_6px_rgba(74,63,82,0.15)] transition-all group-hover:ring-2 group-hover:ring-[#e88da0]/50 lg:size-9"
+                />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="end"
+                sideOffset={8}
+                className="z-[110] min-w-[200px] overflow-hidden rounded-2xl border border-[#F3A8B7]/60 bg-white/95 p-1.5 shadow-[0_10px_25px_rgba(74,63,82,0.15)] backdrop-blur-md animate-in fade-in-50 zoom-in-95"
+              >
+                <div className="flex items-center gap-2.5 px-2.5 py-2">
+                  <div className="relative size-8 shrink-0 overflow-hidden rounded-full shadow-sm">
+                    <Image
+                      src="/images/profile.png"
+                      alt=""
+                      fill
+                      sizes="32px"
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="font-fredoka text-sm font-medium text-[#252025]">
+                      {t.nav.account}
+                    </span>
+                    <span className="text-[11px] text-[#876d7c]">user@example.com</span>
+                  </div>
+                </div>
+
+                <DropdownMenuSeparator className="my-1 bg-[#876d7c]/15" />
+
+                <DropdownMenuItem
+                  onClick={() => router.push("/setting")}
+                  className="flex cursor-pointer items-center gap-2.5 rounded-xl px-2.5 py-2 text-sm font-medium text-[#5d5059] transition-colors hover:bg-[#FFF0F3] hover:text-[#e77f9a]"
+                >
+                  <Settings size={16} strokeWidth={1.8} className="text-[#876d7c]" />
+                  <span>{t.nav.settings}</span>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem
+                  onClick={() => {
+                    // Logout functionality placeholder
+                  }}
+                  className="flex cursor-pointer items-center gap-2.5 rounded-xl px-2.5 py-2 text-sm font-medium text-[#d94868] transition-colors hover:bg-[#FFF0F3] hover:text-[#c43252]"
+                >
+                  <LogOut size={16} strokeWidth={1.8} className="text-[#d94868]" />
+                  <span>{t.nav.logout}</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           <button
             type="button"
-            aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-label={isMenuOpen ? t.nav.closeMenu : t.nav.openMenu}
             aria-expanded={isMenuOpen}
             aria-controls="mobile-navigation"
             onClick={() => setIsMenuOpen((open) => !open)}
@@ -126,7 +188,7 @@ const Navbar = () => {
         <div
           id="mobile-navigation"
           className={`overflow-hidden border-t border-[#876d7c]/10 transition-[max-height,opacity] duration-300 lg:hidden ${
-            isMenuOpen ? "max-h-[370px] opacity-100" : "pointer-events-none max-h-0 opacity-0"
+            isMenuOpen ? "max-h-[460px] opacity-100" : "pointer-events-none max-h-0 opacity-0"
           }`}
         >
           <nav aria-label="Mobile navigation" className="flex flex-col px-4 py-3 sm:px-6">
@@ -139,13 +201,44 @@ const Navbar = () => {
                 {item.label}
               </Link>
             ))}
+            <LanguageSwitcher isMobile className="mt-2 border-t border-[#876d7c]/10 pt-2" />
             <div className="mt-2 flex items-center gap-2 border-t border-[#876d7c]/10 pt-3 sm:hidden">
-              <Link href="#cart" className="flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-white/75 text-sm font-medium text-[#5d5059]">
-                <ShoppingCart aria-hidden="true" size={18} /> Cart
+              <Link href="/cart" className="flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-white/75 text-sm font-medium text-[#5d5059]">
+                <ShoppingCart aria-hidden="true" size={18} /> {t.nav.cart}
               </Link>
-              <Link href="/setting" className="flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-[#f8e6eb] px-3 text-sm font-medium text-[#a15971]">
-                <Image src="/images/profile.png" alt="" width={22} height={22} className="size-5 rounded-full" /> Account
-              </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  aria-label={t.nav.accountAria}
+                  className="flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-[#f8e6eb] px-3 text-sm font-medium text-[#a15971] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf]"
+                >
+                  <Image src="/images/profile.png" alt="" width={22} height={22} className="size-5 rounded-full" /> {t.nav.account}
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="end"
+                  sideOffset={6}
+                  className="z-[110] min-w-[190px] overflow-hidden rounded-2xl border border-[#F3A8B7]/60 bg-white/95 p-1.5 shadow-xl backdrop-blur-md"
+                >
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      router.push("/setting");
+                    }}
+                    className="flex cursor-pointer items-center gap-2.5 rounded-xl px-2.5 py-2 text-sm font-medium text-[#5d5059] hover:bg-[#FFF0F3] hover:text-[#e77f9a]"
+                  >
+                    <Settings size={16} strokeWidth={1.8} className="text-[#876d7c]" />
+                    <span>{t.nav.settings}</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                    }}
+                    className="flex cursor-pointer items-center gap-2.5 rounded-xl px-2.5 py-2 text-sm font-medium text-[#d94868] hover:bg-[#FFF0F3]"
+                  >
+                    <LogOut size={16} strokeWidth={1.8} className="text-[#d94868]" />
+                    <span>{t.nav.logout}</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </nav>
           </div>

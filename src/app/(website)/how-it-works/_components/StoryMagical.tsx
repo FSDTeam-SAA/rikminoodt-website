@@ -1,25 +1,30 @@
-import Image from "next/image";
+"use client";
 
-const features = [
-  { title: "AI-Powered Stories", description: "Turn your child's ideas into unique, heartwarming stories with the magic of AI.", image: "fairy_tales.png", color: "bg-[#FFF2E4]" },
-  { title: "Consistent Characters", description: "Keep your child's character looking the same throughout every adventure for a truly personal experience.", image: "family.png", color: "bg-[#EEF9FF]" },
-  { title: "Magical Illustrations", description: "Beautiful enchanting illustrations bring every story to life in a special way.", image: "worlds.png", color: "bg-[#F5F0FF]" },
-  { title: "Multiple Languages", description: "Create stories in your preferred language and share the magic with family around the world.", image: "feelings.png", color: "bg-[#F3FCEE]" },
-  { title: "Interactive Book Editor", description: "Easily personalise the text, images and details with a simple and enjoyable editing experience.", image: "activities.png", color: "bg-[#FFF1F3]" },
-  { title: "Digital & Printed Books", description: "Download a high-quality digital book instantly or order a beautiful hardcover keepsake delivered to your door.", image: "educational.png", color: "bg-[#FFF9ED]" },
-];
+import Image from "next/image";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 const StoryMagical = () => {
+  const { t } = useLanguage();
+
+  const features = [
+    { title: t.howItWorksPage.feat1Title, description: t.howItWorksPage.feat1Desc, image: "fairy_tales.png", color: "bg-[#FFF2E4]" },
+    { title: t.howItWorksPage.feat2Title, description: t.howItWorksPage.feat2Desc, image: "family.png", color: "bg-[#EEF9FF]" },
+    { title: t.howItWorksPage.feat3Title, description: t.howItWorksPage.feat3Desc, image: "worlds.png", color: "bg-[#F5F0FF]" },
+    { title: t.howItWorksPage.feat4Title, description: t.howItWorksPage.feat4Desc, image: "feelings.png", color: "bg-[#F3FCEE]" },
+    { title: t.howItWorksPage.feat5Title, description: t.howItWorksPage.feat5Desc, image: "activities.png", color: "bg-[#FFF1F3]" },
+    { title: t.howItWorksPage.feat6Title, description: t.howItWorksPage.feat6Desc, image: "educational.png", color: "bg-[#FFF9ED]" },
+  ];
+
   return (
     <section className="pb-16 sm:pb-20" aria-labelledby="story-magical-heading">
       <div className="container mx-auto px-5 sm:px-8 lg:px-0">
         <div className="rounded-2xl bg-white px-5 py-10 sm:px-8 sm:py-12 lg:px-10">
           <header className="mx-auto max-w-3xl text-center">
             <h2 id="story-magical-heading" className="font-crimson text-[clamp(2rem,3.5vw,3rem)] font-semibold leading-none text-[#1E1E1E]">
-              Everything That Makes Your Story Magical
+              {t.howItWorksPage.featuresTitle}
             </h2>
             <p className="mt-3 font-sans text-[18px] leading-normal text-[#444444]">
-              Discover powerful features that make every story more personal, engaging and memorable for your child.
+              {t.howItWorksPage.featuresSubheading}
             </p>
           </header>
 

@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Pencil } from "lucide-react";
-import { useMemo, useState } from "react";
 import { useBookBuilder } from "../../_components/BookBuilderProvider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -74,9 +73,8 @@ const fonts = [
 
 const variants: Record<string, string[]> = {
   English: ["Standard (British English)", "Standard (American English)", "Australian English"],
-  Spanish: ["Spain Spanish", "Latin American Spanish"],
+  Dutch: ["Standard Dutch", "Belgian Dutch"],
   French: ["France French", "Canadian French"],
-  German: ["Standard German"],
 };
 
 type Choice = { label: string; image: string; color?: string };
@@ -107,10 +105,10 @@ function ChoiceChip({ choice, href, label }: { choice: Choice | undefined; href:
 }
 
 export default function Language() {
-  const { selectedAge, selectedTheme, selectedStory, selectedMessage, selectedIllustration, selectedFont, selectedLanguage, setSelectedLanguage } = useBookBuilder();
-  const [language, setLanguage] = useState(selectedLanguage ?? "English");
-  const [variant, setVariant] = useState(variants.English[0]);
-  const availableVariants = useMemo(() => variants[language], [language]);
+  const { selectedAge, selectedTheme, selectedStory, selectedMessage, selectedIllustration, selectedFont, selectedLanguage, setSelectedLanguage, selectedVariant, setSelectedVariant } = useBookBuilder();
+  const language = selectedLanguage && variants[selectedLanguage] ? selectedLanguage : "English";
+  const availableVariants = variants[language];
+  const variant = selectedVariant && availableVariants.includes(selectedVariant) ? selectedVariant : availableVariants[0];
   const age = ages.find((item) => item.label === selectedAge);
   const theme = themes.find((item) => item.label === selectedTheme);
   const story = stories.find((item) => item.label === selectedStory);
@@ -119,9 +117,8 @@ export default function Language() {
   const font = fonts.find((item) => item.label === selectedFont);
 
   const changeLanguage = (nextLanguage: string) => {
-    setLanguage(nextLanguage);
     setSelectedLanguage(nextLanguage);
-    setVariant(variants[nextLanguage][0]);
+    setSelectedVariant(variants[nextLanguage][0]);
   };
 
   return (
@@ -180,7 +177,7 @@ export default function Language() {
             <Select
               value={variant}
               onValueChange={(value) => {
-                if (value) setVariant(value);
+                if (value) setSelectedVariant(value);
               }}
             >
               <SelectTrigger id="book-variant" className="mt-3 h-10 w-full rounded-[8px] border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] focus-visible:border-[#E88DA0] focus-visible:ring-[#E88DA0]/25 sm:text-base">
@@ -194,7 +191,7 @@ export default function Language() {
             </Select>
 
             <div className="mt-7 flex justify-center">
-              <Link onClick={() => setSelectedLanguage(language)} href="/book-builder/InformationAboutCharacters" className="inline-flex h-10 items-center rounded-xl bg-[#E88DA0] px-7 font-sans text-sm font-semibold text-white shadow-[0_5px_12px_rgba(232,141,160,0.25)] transition hover:bg-[#DD7893] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2">
+              <Link onClick={() => { setSelectedLanguage(language); setSelectedVariant(variant); }} href="/book-builder/InformationAboutCharacters" className="inline-flex h-10 items-center rounded-xl bg-[#E88DA0] px-7 font-sans text-sm font-semibold text-white shadow-[0_5px_12px_rgba(232,141,160,0.25)] transition hover:bg-[#DD7893] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2">
                 Next Step
               </Link>
             </div>

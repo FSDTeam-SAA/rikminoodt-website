@@ -2,95 +2,121 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRef } from "react";
+import { ArrowRight, CornerDownRight } from "lucide-react";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
-const stories = [
-  {
-    id: "lisas-camping-adventure",
-    title: "Lisa’s Camping Adventure",
-    description: "A heartwarming adventure in nature.",
-    image: "/images/story1.png",
+const labels = {
+  en: {
+    photos: "Photos used",
+    choices: "Story Choices",
+    title: "Title",
+    theme: "Theme",
+    subject: "Subject",
+    characters: "Number of characters",
+    seasons: "Seasons",
+    autumn: "Autumn adventures",
+    view: "View Example",
+    viewAll: "View Examples",
+    create: "Create Your Own Children's Book",
+    child: "Child playing with building blocks",
+    grandmother: "Grandmother in a garden",
   },
-  {
-    id: "bens-big-dream",
-    title: "Ben's Big Dream",
-    description: "A heartwarming magical Children's Book",
-    image: "/images/story2.png",
+  nl: {
+    photos: "Gebruikte foto's",
+    choices: "Verhaalkeuzes",
+    title: "Titel",
+    theme: "Thema",
+    subject: "Onderwerp",
+    characters: "Aantal personages",
+    seasons: "Seizoenen",
+    autumn: "Herfstavonturen",
+    view: "Bekijk voorbeeld",
+    viewAll: "Bekijk voorbeelden",
+    create: "Maak je eigen kinderboek",
+    child: "Kind speelt met blokken",
+    grandmother: "Oma in een tuin",
   },
-  {
-    id: "mias-magic-garden",
-    title: "Mia's Magic Garden",
-    description: "A Magical Children's Book",
-    image: "/images/story3.png",
+  fr: {
+    photos: "Photos utilisées",
+    choices: "Choix de l'histoire",
+    title: "Titre",
+    theme: "Thème",
+    subject: "Sujet",
+    characters: "Nombre de personnages",
+    seasons: "Saisons",
+    autumn: "Aventures d'automne",
+    view: "Voir l'exemple",
+    viewAll: "Voir les exemples",
+    create: "Créez votre livre pour enfants",
+    child: "Enfant jouant avec des cubes",
+    grandmother: "Grand-mère dans un jardin",
   },
-];
+};
 
-const ExploreStories = () => {
-  const trackRef = useRef<HTMLDivElement>(null);
+const cardColors = ["bg-[#FFF0D9]", "bg-[#F1EAF8]", "bg-[#E7F3EC]", "bg-[#FFF0F2]", "bg-[#EAF2F8]"];
 
-  const scrollStories = (direction: "previous" | "next") => {
-    const track = trackRef.current;
-    if (!track) return;
-
-    const card = track.firstElementChild as HTMLElement | null;
-    const gap = Number.parseFloat(window.getComputedStyle(track).columnGap) || 0;
-    const distance = card ? card.getBoundingClientRect().width + gap : 280;
-
-    track.scrollBy({
-      left: (direction === "next" ? 1 : -1) * distance,
-      behavior: "smooth",
-    });
-  };
+const ExploreStories = ({ showAll = false }: { showAll?: boolean }) => {
+  const { t, language } = useLanguage();
+  const copy = labels[language];
+  const title = "Max Sees the Seasons: Autumn Adventures";
 
   return (
-    <section id="examples" aria-labelledby="stories-heading" className=" py-14 sm:py-16 lg:mb-32 lg:py-0">
+    <section id="examples" aria-labelledby="stories-heading" className="bg-[#FBF3EA] pb-6 pt-14 sm:pt-16 lg:mb-16 lg:py-0">
       <div className="container mx-auto px-5 sm:px-8 lg:px-0">
         <header className="text-center">
           <h2 id="stories-heading" className="font-crimson text-[48px] font-semibold leading-none text-[#1E1E1E]">
-            Explore Stories
+            {t.exploreStories.title}
           </h2>
           <p className="mx-auto mt-2 max-w-3xl text-center font-sans text-[18px] font-normal leading-normal text-[#444444]">
-            Discover magical adventures, exciting themes, and heartwarming stories created to make every child the hero.
+            {t.exploreStories.subheading}
           </p>
         </header>
 
-        <div className="relative mt-8 lg:mt-12">
-          <button type="button" aria-label="Show previous stories" aria-controls="story-cards" onClick={() => scrollStories("previous")} className="absolute left-3 top-[30%] z-10 flex size-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-[#d6d2d2] bg-white/95 text-[#7c7579] shadow-[0_2px_5px_rgba(78,64,72,0.18)] transition-colors duration-300 ease-out hover:bg-white hover:text-[#9c81be] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#987fc5] lg:left-[-25px] lg:top-[50.3%] lg:size-12">
-            <ChevronLeft aria-hidden="true" size={23} strokeWidth={1.6} />
-          </button>
-
-          <div id="story-cards" ref={trackRef} className="grid snap-x snap-mandatory grid-flow-col auto-cols-[calc(100%_-_1.5rem)] gap-4 overflow-x-auto scroll-smooth scroll-px-1 px-1 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:auto-cols-[minmax(280px,46%)] sm:gap-5 lg:grid-flow-row lg:grid-cols-3 lg:gap-5 lg:overflow-visible lg:px-0 lg:pb-0">
-            {stories.map((story) => (
-              <Link key={story.id} href={`/story-books/book-details/${story.id}`} aria-label={`View details for ${story.title}`} className="block snap-start snap-always rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#987fc5] focus-visible:ring-offset-4">
-              <article className="group relative flex min-h-[550px] cursor-pointer flex-col overflow-hidden rounded-xl border border-[#ef92aa] bg-white transition-colors duration-300 ease-out hover:border-[#9c81be] hover:bg-[#fffcfd] lg:h-[764px] lg:min-h-0">
-                <div className="relative m-2 overflow-hidden">
-                <Image
-                  src={story.image}
-                  alt={`Cover of ${story.title}`}
-                  width={396}
-                  height={512}
-                  sizes="(max-width: 639px) 72vw, (max-width: 1023px) 42vw, 396px"
-                  className="h-[320px] w-full object-cover object-top transition-transform duration-300 group-hover:scale-[1.025] sm:h-[380px] lg:h-[458px]"
-                />
-              </div>
-              <div className="flex flex-1 flex-col px-3 pb-4 pt-2.5 lg:px-[18px] lg:pb-5 lg:pt-0">
-                <h3 className="min-h-[80px] font-fredoka text-[40px] font-normal leading-none text-[#9C81BE]">{story.title}</h3>
-                <div className="mt-5 grid grid-cols-2 gap-3 lg:mt-[29px] lg:gap-5">
-                  <span className="flex h-14 cursor-pointer items-center justify-center rounded-xl bg-[#9c81be] px-2 text-center text-sm font-medium text-white lg:text-lg">Ages 3-4</span>
-                  <span className="flex h-14 cursor-pointer items-center justify-center rounded-xl bg-[#e88da0] px-2 text-center text-sm font-medium text-white lg:text-lg">Adventure</span>
+        <div className="mt-8 space-y-6 lg:mt-12 lg:space-y-8">
+          {cardColors.slice(0, showAll ? 5 : 3).map((color) => (
+            <article key={color} className={`grid gap-5 rounded-[30px] p-5 sm:p-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1fr)_minmax(0,1fr)] lg:items-start lg:gap-6 lg:p-10 ${color}`}>
+              <div>
+                <div className="rounded-[20px] bg-[#FFE8D7] p-3">
+                  <h3 className="border-b border-dashed border-[#DCC6B8] pb-2 font-sans text-base font-bold text-[#292929]">{copy.photos}</h3>
+                  <div className="mt-3 grid grid-cols-2 gap-2">
+                    <Image src="/images/exp_u_1_1.png" alt={copy.child} width={654} height={357} sizes="(max-width: 1023px) 40vw, 140px" className="aspect-square w-full rounded-xl border-2 border-[#DDBB9F] object-cover" />
+                    <Image src="/images/exp_u_1_2.jpg" alt={copy.grandmother} width={328} height={179} sizes="(max-width: 1023px) 40vw, 140px" className="aspect-square w-full rounded-xl border-2 border-[#DDBB9F] object-cover" />
+                  </div>
                 </div>
-                <p className="mt-5 text-base leading-[1.5] text-[#756e73] lg:mt-[29px] lg:text-2xl lg:leading-[1.375]">{story.description}</p>
+                <CornerDownRight aria-hidden="true" size={38} strokeWidth={1.8} className="ml-auto mr-3 mt-3 hidden text-[#FF782C] lg:block" />
+              </div>
+
+              <div className="mx-auto w-full max-w-[400px] rounded-[20px] bg-[#FFE8D7] p-4">
+                <Image src="/images/exp_c_1.jpg" alt={`Cover: ${title}`} width={382} height={512} sizes="(max-width: 1023px) 80vw, 400px" className="h-auto w-full rounded-sm shadow-[0_8px_16px_rgba(67,46,34,0.2)]" />
+              </div>
+
+              <div className="space-y-3">
+                <div className="rounded-[20px] bg-[#FFE8D7] p-6 font-sans text-[#292929]">
+                  <h3 className="border-b border-dashed border-[#DCC6B8] pb-3 text-xl font-bold">{copy.choices}</h3>
+                  <dl className="mt-3 space-y-2 text-base leading-relaxed">
+                    <div><dt className="inline font-bold">{copy.title}: </dt><dd className="inline">{title}</dd></div>
+                    <div><dt className="inline font-bold">{copy.theme}: </dt><dd className="inline">{copy.seasons}</dd></div>
+                    <div><dt className="inline font-bold">{copy.subject}: </dt><dd className="inline">{copy.autumn}</dd></div>
+                    <div><dt className="inline font-bold">{copy.characters}: </dt><dd className="inline">2</dd></div>
+                  </dl>
+                </div>
+                <Link href="/story-books/book-details/max-sees-the-seasons" className="flex min-h-14 items-center gap-2 rounded-[20px] bg-[#FFE8D7] px-6 font-sans font-bold text-[#E65D00] transition-colors hover:bg-[#FFDDC4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E65D00]">
+                  {copy.view} <ArrowRight aria-hidden="true" size={19} />
+                </Link>
+                <Link href="/book-builder/choose-age" className="flex min-h-14 items-center gap-2 rounded-[20px] bg-[#FFE8D7] px-6 font-sans font-bold text-[#E65D00] transition-colors hover:bg-[#FFDDC4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E65D00]">
+                  {copy.create} <ArrowRight aria-hidden="true" size={19} />
+                </Link>
               </div>
             </article>
-            </Link>
           ))}
-          </div>
-
-          <button type="button" aria-label="Show next stories" aria-controls="story-cards" onClick={() => scrollStories("next")} className="absolute right-3 top-[30%] z-10 flex size-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-[#d6d2d2] bg-white/95 text-[#7c7579] shadow-[0_2px_5px_rgba(78,64,72,0.18)] transition-colors duration-300 ease-out hover:bg-white hover:text-[#9c81be] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#987fc5] lg:right-[-25px] lg:top-[50.3%] lg:size-12">
-            <ChevronRight aria-hidden="true" size={23} strokeWidth={1.6} />
-          </button>
         </div>
+        {!showAll && (
+          <div className="mt-8 text-center lg:mt-10">
+            <Link href="/examples" className="inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-[#e88da0] px-7 font-sans text-lg font-semibold text-white transition-colors hover:bg-[#df7894] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf] focus-visible:ring-offset-2">
+              {copy.viewAll} <ArrowRight aria-hidden="true" size={20} />
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );

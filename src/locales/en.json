@@ -1,0 +1,153 @@
+{
+  "nav": {
+    "home": "Home",
+    "examples": "Examples",
+    "howItWorks": "How It Works",
+    "storyBooks": "Story Books",
+    "pricing": "Pricing",
+    "cart": "Cart",
+    "account": "Account",
+    "settings": "Settings",
+    "logout": "Logout",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu",
+    "homeAria": "Bookereillo home",
+    "cartAria": "View shopping cart",
+    "accountAria": "Open your account"
+  },
+  "hero": {
+    "heading1": "Their Imagination.",
+    "heading2": "Their Adventure.",
+    "heading3": "Their Story.",
+    "subheading": "Create a one-of-a-kind storybook where your child becomes the main character in a world made just for them, fully personalised.",
+    "createBookBtn": "Create Your Book"
+  },
+  "chooseTheme": {
+    "title": "Choose Your Theme",
+    "subheading": "Choose a theme that matches your child's interests, imagination, and favorite adventures.",
+    "themes": {
+      "fairyTales": "Fairy Tales",
+      "adventure": "Adventure",
+      "activities": "Activities",
+      "worlds": "Worlds",
+      "holidays": "Holidays",
+      "family": "Family",
+      "educational": "Educational",
+      "feelings": "Feelings"
+    }
+  },
+  "turningImaginations": {
+    "title": "Turning Little Imaginations into Unforgettable Stories",
+    "description": "At Bookerello, we believe every child deserves to become the hero of their own adventure. Our platform helps families create personalised storybooks by choosing themes, adding multiple characters, celebrating special occasions and including meaningful personal details. Each book is thoughtfully created to make reading more exciting, personal and memorable.",
+    "discoverBtn": "Discover How It Works"
+  },
+  "createMagicalBook": {
+    "title": "Create Magical Book in 3 Easy Steps",
+    "subheading": "Bring your child's imagination to life by personalising the characters, creating their adventure, and receiving a storybook made just for them.",
+    "step1Title": "Personalise the Characters",
+    "step1Desc": "Add your child's name, age and photo. You can also include siblings, family members, friends or pets in the story.",
+    "step2Title": "Create Their Adventure",
+    "step2Desc": "Choose the story theme, occasion and illustration style, then add personal details that match your child's interests.",
+    "step3Title": "Pay & Receive the Book",
+    "step3Desc": "Preview the story, select a digital or hardcover format, complete the payment and receive the personalised book."
+  },
+  "exploreStories": {
+    "title": "Explore Stories",
+    "subheading": "Discover magical adventures, exciting themes, and heartwarming stories created to make every child the hero.",
+    "previousAria": "Show previous stories",
+    "nextAria": "Show next stories",
+    "ageBadge": "Ages 3-4",
+    "adventureBadge": "Adventure",
+    "viewDetails": "View details for",
+    "story1Title": "Lisa's Camping Adventure",
+    "story1Desc": "A heartwarming adventure in nature.",
+    "story2Title": "Ben's Big Dream",
+    "story2Desc": "A heartwarming magical Children's Book",
+    "story3Title": "Mia's Magic Garden",
+    "story3Desc": "A Magical Children's Book"
+  },
+  "occasions": {
+    "title": "Make a personalised book for a specific Event",
+    "subheading": "Discover powerful features that make every story more personal, engaging and memorable for your child.",
+    "previousAria": "Show previous occasions",
+    "nextAria": "Show next occasions",
+    "birthday": "Birthday",
+    "newBaby": "New Baby",
+    "valentinesDay": "Valentines day",
+    "mothersDay": "Mothers day"
+  },
+  "reviews": {
+    "title": "Bookerello Reviews - Happy faces",
+    "subheading": "Over 24,522 personalised stories created. Every book is a new adventure, a bigger smile and a memory to treasure forever.",
+    "ratingText": "4.8/5 from 1,700+ reviews",
+    "ratingAria": "Rated 4.8 out of 5 from 1,700 plus reviews"
+  },
+  "faq": {
+    "title": "Frequently asked questions",
+    "subheading": "Discover magical adventures, exciting themes, and heartwarming stories created to make every child the hero.",
+    "q1": "What is the Kids Book Generator?",
+    "a1": "It is a simple way to create a magical, personalised storybook where your child is the hero of their very own adventure.",
+    "q2": "How can I create a personalized kids book?",
+    "a2": "Choose a story theme, add your child's details, and personalise the adventure in just a few friendly steps.",
+    "q3": "Can I add my child's name to the story?",
+    "a3": "Yes. Your child's name is woven naturally into the story to make every page feel made especially for them.",
+    "q4": "What age groups are the books suitable for?",
+    "a4": "Our storybooks are designed for curious young readers and make a lovely shared reading experience for families.",
+    "q5": "Can I choose the story theme or characters?",
+    "a5": "Yes. Pick the theme that sparks your child's imagination, then create an adventure they will love returning to.",
+    "q6": "Can I customize the illustrations?",
+    "a6": "You can personalise key story details so the finished book feels truly unique to your child.",
+    "q7": "Can I download or print the book?",
+    "a7": "Your completed storybook can be prepared for you to enjoy and share with your family."
+  },
+  "howItWorksPage": {
+    "title": "Create Magical Book in 3 Easy Steps",
+    "subheading": "Bring your child's imagination to life by personalising the characters, creating their adventure, and receiving a storybook made just for them.",
+    "step1Details": ["Enter your child's name", "Add their age", "Upload a clear photo", "Add siblings or family members", "Include friends and a favourite pet"],
+    "step2Details": ["Choose a story theme", "Select a special occasion", "Pick an illustration style", "Add your child's interests", "Include favourite activities"],
+    "step3Details": ["Preview the complete story", "Choose digital or hardcover", "Confirm your book details", "Complete secure payment", "Receive your personalised book"],
+    "ctaTitle": "Create a Story Made Just for Your Child",
+    "ctaDesc": "Turn your child's name, photo, and imagination into a magical personalised storybook they'll treasure for years.",
+    "ctaBtn": "Create Your Book",
+    "featuresTitle": "Everything That Makes Your Story Magical",
+    "featuresSubheading": "Discover powerful features that make every story more personal, engaging and memorable for your child.",
+    "feat1Title": "AI-Powered Stories",
+    "feat1Desc": "Turn your child's ideas into unique, heartwarming stories with the magic of AI.",
+    "feat2Title": "Consistent Characters",
+    "feat2Desc": "Keep your child's character looking the same throughout every adventure for a truly personal experience.",
+    "feat3Title": "Magical Illustrations",
+    "feat3Desc": "Beautiful enchanting illustrations bring every story to life in a special way.",
+    "feat4Title": "Multiple Languages",
+    "feat4Desc": "Create stories in your preferred language and share the magic with family around the world.",
+    "feat5Title": "Interactive Book Editor",
+    "feat5Desc": "Easily personalise the text, images and details with a simple and enjoyable editing experience.",
+    "feat6Title": "Digital & Printed Books",
+    "feat6Desc": "Download a high-quality digital book instantly or order a beautiful hardcover keepsake delivered to your door."
+  },
+  "footer": {
+    "about": "Bookereillo personalized storybooks that turn your child's imagination into magical adventure.",
+    "rights": "All rights reserved",
+    "groups": {
+      "discover": "Discover",
+      "occasions": "Occasions",
+      "help": "Help"
+    },
+    "links": {
+      "bookThemes": "Book Themes",
+      "examples": "Examples",
+      "pricing": "Pricing",
+      "howItWorks": "How it works",
+      "createYourBook": "Create your Book",
+      "birthday": "Birthday",
+      "christmas": "Christmas",
+      "newBaby": "New Baby",
+      "firstDayOfSchool": "First day of school",
+      "justBecause": "Just Because",
+      "faqs": "FAQs",
+      "contactUs": "Contact Us",
+      "termsAndConditions": "Terms & Conditions",
+      "privacyPolicy": "Privacy Policy"
+    }
+  }
+}
+
