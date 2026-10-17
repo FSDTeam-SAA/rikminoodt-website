@@ -1,11 +1,14 @@
 {
   "nav": {
     "home": "Home",
+    "examples": "Voorbeelden",
     "howItWorks": "Hoe Het Werkt",
     "storyBooks": "Verhalenboeken",
     "pricing": "Prijzen",
     "cart": "Winkelwagen",
     "account": "Account",
+    "settings": "Instellingen",
+    "logout": "Uitloggen",
     "openMenu": "Navigatiemenu openen",
     "closeMenu": "Navigatiemenu sluiten",
     "homeAria": "Bookereillo home",

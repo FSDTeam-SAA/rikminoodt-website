@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, Pencil } from "lucide-react";
+import { Pencil } from "lucide-react";
 import { useBookBuilder } from "../../_components/BookBuilderProvider";
 
 const ages = [
@@ -76,6 +77,7 @@ function ChoiceChip({ choice, href, label }: { choice: Choice | undefined; href:
 }
 
 export default function Personalize() {
+  const router = useRouter();
   const { selectedAge, selectedTheme, selectedStory, selectedMessage, setSelectedMessage } = useBookBuilder();
   const age = ages.find((item) => item.label === selectedAge);
   const theme = themes.find((item) => item.label === selectedTheme);
@@ -117,7 +119,7 @@ export default function Personalize() {
                   type="button"
                   role="radio"
                   aria-checked={isSelected}
-                  onClick={() => setSelectedMessage(message.label)}
+                  onClick={() => { setSelectedMessage(message.label); router.push("/book-builder/illustration"); }}
                   className={`group flex aspect-[0.79] flex-col overflow-hidden rounded-lg border-2 px-1 pt-1 text-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2 sm:rounded-[10px] sm:px-2 sm:pt-2 ${
                     isSelected ? "border-[#F08BA1]" : "border-transparent hover:border-[#F4C2CE]"
                   }`}
@@ -141,17 +143,6 @@ export default function Personalize() {
             })}
           </div>
 
-          {selectedMessage && (
-            <div className="mt-7 flex justify-end">
-              <Link
-                href="/book-builder/illustration"
-                className="group inline-flex h-12 min-w-[130px] items-center justify-center gap-2 rounded-xl bg-[#E88DA0] px-5 font-sans text-base font-bold text-white shadow-[0_8px_18px_rgba(232,141,160,0.32)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#DD7893] hover:shadow-[0_12px_22px_rgba(232,141,160,0.38)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2 sm:h-14 sm:min-w-[148px] sm:gap-3 sm:px-6 sm:text-lg"
-              >
-                Next
-                <ArrowRight aria-hidden="true" size={21} strokeWidth={2.5} className="transition-transform duration-200 group-hover:translate-x-1" />
-              </Link>
-            </div>
-          )}
         </section>
       </section>
     </main>

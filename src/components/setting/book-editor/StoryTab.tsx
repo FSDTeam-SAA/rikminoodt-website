@@ -93,7 +93,7 @@ export default function StoryTab() {
 
       <div className="flex min-w-0 flex-1 flex-col justify-between">
         <textarea
-          className="h-56 w-full resize-none rounded-xl border border-gray-200 px-5 py-4 text-sm leading-relaxed text-gray-500 focus:border-[#E3859A] focus:outline-none focus:ring-1 focus:ring-[#E3859A] md:h-auto md:flex-1"
+          className="h-56 w-full resize-none rounded-xl border border-[#F3A8B7] px-5 py-4 text-sm leading-relaxed text-gray-500 focus:border-[#E3859A] focus:outline-none focus:ring-1 focus:ring-[#E3859A] md:h-auto md:flex-1"
           defaultValue="Lorem ipsum dolor sit amet consectetur. Commodo tortor blandit sit bibendum commodo adipiscing blandit at..."
         />
 

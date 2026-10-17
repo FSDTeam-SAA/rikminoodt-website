@@ -1,57 +1,107 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronRight, ChevronDown } from "lucide-react";
+import Image from "next/image";
+import { ChevronDown, Check } from "lucide-react";
+import {
+  useLanguage,
+  SUPPORTED_LANGUAGES,
+  LanguageCode,
+} from "@/components/providers/LanguageProvider";
 
 export default function LanguagePageSetting() {
-  // Dropdown open/close state
-  const [isOpen, setIsOpen] = useState(true); // by default open rakhlam chobir moto dekhate
-  // Selected language state
-  const [selectedLanguage, setSelectedLanguage] = useState("English");
+  const { language, setLanguage } = useLanguage();
+  const [isOpen, setIsOpen] = useState(true);
 
-  const languages = ["English", "French", "Dutch"];
+  // Currently active language object
+  const currentLanguage =
+    SUPPORTED_LANGUAGES.find((item) => item.code === language) ?? SUPPORTED_LANGUAGES[0];
+
+  const handleSelect = (code: LanguageCode) => {
+    setLanguage(code);
+  };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-8 h-full min-h-[500px]">
+    <div className="bg-white rounded-2xl shadow-sm p-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-serif text-gray-800 mb-2">Language</h1>
-        <p className="text-sm text-gray-500">
+        <h1 className="mb-2 font-crimson text-[24px] font-semibold text-[#1E1E1E]">Language</h1>
+        <p className="font-sans text-base font-normal text-[#444444]">
           Choose your preferred language for the website.
         </p>
       </div>
 
-      {/* Custom Select / Dropdown */}
-      <div className="max-w-3xl">
-        {/* Dropdown Trigger Box */}
+      {/* Select Field Container */}
+      <div className="w-full">
+        <label className="mb-2 block font-sans text-sm font-medium text-[#444444]">
+          Language
+        </label>
+
+        {/* Selected Field Box (Clickable Trigger) */}
         <button
+          type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full flex items-center justify-between px-5 py-3.5 bg-white border border-[#F2C2CB] rounded-xl transition-colors text-sm text-gray-400 font-medium focus:outline-none"
+          className="w-full flex items-center justify-between px-5 py-3.5 bg-white border border-[#F3A8B7] rounded-xl transition-all text-sm font-medium text-[#1E1E1E] focus:outline-none focus:ring-1 focus:ring-[#E88DA0]/30 hover:border-[#E88DA0]"
+          aria-haspopup="listbox"
+          aria-expanded={isOpen}
         >
-          <span>Language</span>
-          {isOpen ? (
-            <ChevronDown size={18} className="text-gray-400" />
-          ) : (
-            <ChevronRight size={18} className="text-gray-400" />
-          )}
+          <div className="flex items-center gap-3">
+            <div className="relative size-5 overflow-hidden rounded-full shadow-sm shrink-0 border border-gray-100">
+              <Image
+                src={currentLanguage.flag}
+                alt=""
+                fill
+                sizes="20px"
+                className="object-cover"
+              />
+            </div>
+            <span className="font-sans text-sm font-medium text-[#1E1E1E]">
+              {currentLanguage.label} <span className="text-gray-400 font-normal">({currentLanguage.nativeLabel})</span>
+            </span>
+          </div>
+          <ChevronDown
+            size={18}
+            className={`text-[#E88DA0] transition-transform duration-200 ${
+              isOpen ? "rotate-180" : ""
+            }`}
+          />
         </button>
 
-        {/* Dropdown Options List */}
+        {/* 3 Selectable Options */}
         {isOpen && (
-          <div className="mt-2 flex flex-col gap-1">
-            {languages.map((lang) => (
-              <button
-                key={lang}
-                onClick={() => setSelectedLanguage(lang)}
-                className={`w-full text-left px-5 py-3.5 rounded-xl transition-colors text-sm font-medium ${
-                  selectedLanguage === lang
-                    ? "bg-[#FFF0F2] text-gray-800" // Selected obosthay pinkish background
-                    : "bg-transparent text-gray-600 hover:bg-gray-50"
-                }`}
-              >
-                {lang}
-              </button>
-            ))}
+          <div className="mt-2.5 flex flex-col gap-1 rounded-xl border border-[#F3A8B7]/40 bg-white p-1.5 shadow-sm">
+            {SUPPORTED_LANGUAGES.map((item) => {
+              const isSelected = language === item.code;
+              return (
+                <button
+                  key={item.code}
+                  type="button"
+                  onClick={() => handleSelect(item.code)}
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors text-sm font-medium ${
+                    isSelected
+                      ? "bg-[#FFF0F2] text-[#E88DA0]"
+                      : "text-[#444444] hover:bg-gray-50"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="relative size-5 overflow-hidden rounded-full shadow-sm shrink-0 border border-gray-100">
+                      <Image
+                        src={item.flag}
+                        alt=""
+                        fill
+                        sizes="20px"
+                        className="object-cover"
+                      />
+                    </div>
+                    <span>{item.label}</span>
+                    <span className="text-xs text-gray-400">({item.nativeLabel})</span>
+                  </div>
+                  {isSelected && (
+                    <Check size={18} strokeWidth={2.4} className="text-[#E88DA0]" />
+                  )}
+                </button>
+              );
+            })}
           </div>
         )}
       </div>

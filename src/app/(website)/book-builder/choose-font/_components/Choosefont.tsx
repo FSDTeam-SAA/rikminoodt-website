@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, ChevronRight, Pencil, X } from "lucide-react";
+import { ChevronRight, Pencil, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useBookBuilder } from "../../_components/BookBuilderProvider";
 
@@ -99,6 +100,7 @@ function ChoiceChip({ choice, href, label }: { choice: Choice | undefined; href:
 }
 
 export default function Choosefont() {
+  const router = useRouter();
   const { selectedAge, selectedTheme, selectedStory, selectedMessage, selectedIllustration, selectedFont, setSelectedFont } = useBookBuilder();
   const [previewFont, setPreviewFont] = useState<(typeof fonts)[number] | null>(null);
   const age = ages.find((item) => item.label === selectedAge);
@@ -167,7 +169,7 @@ export default function Choosefont() {
                     type="button"
                     role="radio"
                     aria-checked={isSelected}
-                    onClick={() => setSelectedFont(font.label)}
+                    onClick={() => { setSelectedFont(font.label); router.push("/book-builder/language"); }}
                     className="block w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]"
                   >
                     <Image
@@ -182,7 +184,6 @@ export default function Choosefont() {
                   <button
                     type="button"
                     onClick={() => {
-                      setSelectedFont(font.label);
                       setPreviewFont(font);
                     }}
                     className="flex h-8 w-full items-center justify-center gap-0.5 border-t border-[#F7E7E8] font-sans text-xs font-medium text-[#EC8EA4] transition hover:bg-[#FFF3F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] sm:h-9 sm:text-sm"
@@ -194,17 +195,6 @@ export default function Choosefont() {
             })}
           </div>
 
-          {selectedFont && (
-            <div className="mt-8 flex justify-end">
-              <Link
-                href="/book-builder/language"
-                className="group inline-flex h-12 min-w-[130px] items-center justify-center gap-2 rounded-xl bg-[#E88DA0] px-5 font-sans text-base font-bold text-white shadow-[0_8px_18px_rgba(232,141,160,0.32)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#DD7893] hover:shadow-[0_12px_22px_rgba(232,141,160,0.38)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2 sm:h-14 sm:min-w-[148px] sm:gap-3 sm:px-6 sm:text-lg"
-              >
-                Next
-                <ArrowRight aria-hidden="true" size={21} strokeWidth={2.5} className="transition-transform duration-200 group-hover:translate-x-1" />
-              </Link>
-            </div>
-          )}
         </section>
       </section>
 

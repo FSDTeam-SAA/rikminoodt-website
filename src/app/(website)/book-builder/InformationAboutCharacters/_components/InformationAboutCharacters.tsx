@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Box, PawPrint, Pencil, Upload, UserRound } from "lucide-react";
-import { useState } from "react";
+import { Box, PawPrint, Pencil, Trash2, Upload, UserRound } from "lucide-react";
+import { useRef, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -145,11 +145,13 @@ function AddedCharacterForm({
   initialType,
   canAdd,
   onAdd,
+  onRemove,
 }: {
   number: number;
   initialType: CharacterType;
   canAdd: boolean;
   onAdd: (type: CharacterType) => void;
+  onRemove: () => void;
 }) {
   const [type, setType] = useState<CharacterType>(initialType);
   const [gender, setGender] = useState<string | null>(null);
@@ -158,9 +160,14 @@ function AddedCharacterForm({
 
   return (
     <>
-      <h4 className="mt-7 font-sans text-base font-semibold text-[#1E1E1E] sm:text-lg">
-        Character {number}
-      </h4>
+      <div className="mt-7 flex max-w-[1120px] items-center justify-between gap-3">
+        <h4 className="font-sans text-base font-semibold text-[#1E1E1E] sm:text-lg">
+          Character {number}
+        </h4>
+        <button type="button" onClick={onRemove} aria-label={`Remove character ${number}`} className="inline-flex size-9 items-center justify-center rounded-lg text-[#E88DA0] transition hover:bg-[#FFF3F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]">
+          <Trash2 aria-hidden="true" size={19} />
+        </button>
+      </div>
       <form
         className="mt-3 max-w-[1120px] rounded-[10px] border border-[#F3A8B7] bg-white/20 p-3 sm:p-5"
         onSubmit={(event) => event.preventDefault()}
@@ -253,6 +260,28 @@ function AddedCharacterForm({
                 />
               </div>
             </div>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <div>
+                <label className="block font-sans text-sm font-medium text-[#252025]" htmlFor={`${fieldId}-hobbies`}>
+                  Hobbies/ Interests <span className="font-normal">(optional)</span>
+                </label>
+                <input
+                  id={`${fieldId}-hobbies`}
+                  placeholder="e.g. drawing, cycling"
+                  className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
+                />
+              </div>
+              <div>
+                <label className="block font-sans text-sm font-medium text-[#252025]" htmlFor={`${fieldId}-food`}>
+                  Favorite food <span className="font-normal">(optional)</span>
+                </label>
+                <input
+                  id={`${fieldId}-food`}
+                  placeholder="e.g. pizza, ice-cream"
+                  className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
+                />
+              </div>
+            </div>
           </>
         ) : type === "Animal" ? (
           <>
@@ -334,6 +363,7 @@ export default function InformationAboutCharacters() {
     selectedTheme,
     selectedStory,
     selectedMessage,
+    selectedIllustration,
     selectedFont,
     selectedLanguage,
   } = useBookBuilder();
@@ -343,17 +373,22 @@ export default function InformationAboutCharacters() {
   const [additionalCharacters, setAdditionalCharacters] = useState<
     Array<{ id: number; type: CharacterType }>
   >([]);
+  const nextCharacterId = useRef(2);
   const age = ages.find((item) => item.label === selectedAge);
   const theme = themes.find((item) => item.label === selectedTheme);
   const story = stories.find((item) => item.label === selectedStory);
   const message = messages.find((item) => item.label === selectedMessage);
   const font = fonts.find((item) => item.label === selectedFont);
+  const illustrationLabels = ["3d Animation", "Water Colour", "Geometric", "Claymation", "Sticker Art", "Comic Book", "Gouache", "Soft Anime"];
+  const illustrationIndex = illustrationLabels.indexOf(selectedIllustration ?? "");
+  const illustration = illustrationIndex >= 0 ? { label: illustrationLabels[illustrationIndex], image: `/images/ill_${illustrationIndex + 1}.png`, color: "#FFFFFF" } : undefined;
 
   const addCharacter = (type: CharacterType) => {
+    const id = nextCharacterId.current++;
     setAdditionalCharacters((characters) =>
       characters.length >= 3
         ? characters
-        : [...characters, { id: characters.length + 2, type }],
+        : [...characters, { id, type }],
     );
   };
 
@@ -409,6 +444,11 @@ export default function InformationAboutCharacters() {
               label="Message"
               choice={message}
               href="/book-builder/personalize"
+            />
+            <ChoiceChip
+              label="Illustration"
+              choice={illustration}
+              href="/book-builder/illustration"
             />
             <ChoiceChip
               label="Font"
@@ -658,12 +698,13 @@ export default function InformationAboutCharacters() {
                 additionalCharacters.length < 3
               }
               onAdd={addCharacter}
+              onRemove={() => setAdditionalCharacters((characters) => characters.filter((item) => item.id !== character.id))}
             />
           ))}
 
           <div className="mt-7 flex justify-center">
             <Link
-              href="/book-builder/special-events"
+              href="/book-builder/personal-details"
               className="inline-flex h-10 items-center rounded-xl bg-[#E88DA0] px-7 font-sans text-sm font-semibold text-white shadow-[0_5px_12px_rgba(232,141,160,0.25)] transition hover:bg-[#DD7893] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2"
             >
               Next Step

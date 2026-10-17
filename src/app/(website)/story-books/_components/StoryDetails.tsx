@@ -12,7 +12,6 @@ import {
   Images,
   Maximize2,
   Minus,
-  Pencil,
   Plus,
   Printer,
 } from "lucide-react";
@@ -52,6 +51,15 @@ const photos = [
 
 const StoryDetails = ({ storyId }: { storyId: string }) => {
   const [isReaderOpen, setIsReaderOpen] = useState(false);
+  const isMaxStory = storyId === "max-sees-the-seasons";
+  const cover = isMaxStory ? "/images/exp_c_1.jpg" : story.cover;
+  const coverTitle = isMaxStory ? "Max Sees the Seasons: Autumn Adventures" : story.title;
+  const usedPhotos = isMaxStory
+    ? [
+        { name: "Child", role: "Main character", image: "/images/exp_u_1_1.png" },
+        { name: "Grandmother", role: "Family", image: "/images/exp_u_1_2.jpg" },
+      ]
+    : photos;
 
   return (
     <>
@@ -74,8 +82,8 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
           <div className="grid gap-7 md:grid-cols-[minmax(230px,0.76fr)_minmax(0,1.24fr)] md:items-start lg:gap-10">
             <div className="mx-auto w-full max-w-[290px] rounded-md bg-[#514256] p-1.5 shadow-[0_10px_20px_rgba(66,52,62,0.28)]">
               <Image
-                src={story.cover}
-                alt={`Cover of ${story.title}`}
+                src={cover}
+                alt={`Cover of ${coverTitle}`}
                 width={396}
                 height={512}
                 className="aspect-[0.76] w-full rounded-sm object-cover object-top"
@@ -93,12 +101,6 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
                   />
                   Story Details
                 </h2>
-                <button
-                  type="button"
-                  className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-[#F1C1CF] px-3 py-1.5 font-sans text-sm text-[#E88DA0] transition-colors hover:bg-[#FFF2F5]"
-                >
-                  Edit Book <Pencil size={14} aria-hidden="true" />
-                </button>
               </div>
 
               <dl className="mt-3 divide-y divide-[#EEE6DE] font-sans text-sm">
@@ -148,11 +150,11 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
                 type="button"
                 className="inline-flex cursor-pointer items-center gap-1.5 font-sans text-sm text-[#514256] transition-colors duration-200 hover:text-[#9C81BE]"
               >
-                <Grid2X2 size={15} aria-hidden="true" /> View All 4 Photos
+                <Grid2X2 size={15} aria-hidden="true" /> View All {usedPhotos.length} Photos
               </button>
             </div>
             <div className="mx-auto mt-6 grid max-w-[880px] grid-cols-2 gap-5 sm:grid-cols-4 sm:gap-6">
-              {photos.map((photo) => (
+              {usedPhotos.map((photo) => (
                 <article
                   key={photo.name}
                   className="overflow-hidden rounded-xl border border-[#F0E5D9] bg-white p-3 shadow-[0_7px_16px_rgba(92,76,84,0.13)] transition-transform duration-300 hover:-translate-y-1"
@@ -189,8 +191,8 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
           </h2>
           <div className="mx-auto mt-6 w-full max-w-[300px] rounded-md bg-[#514256] p-1.5 shadow-[0_12px_24px_rgba(66,52,62,0.28)]">
             <Image
-              src={story.cover}
-              alt={`Preview of ${story.title}`}
+              src={cover}
+              alt={`Preview of ${coverTitle}`}
               width={396}
               height={512}
               className="aspect-[0.76] w-full rounded-sm object-cover object-top"

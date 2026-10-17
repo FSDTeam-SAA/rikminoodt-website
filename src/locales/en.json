@@ -1,11 +1,14 @@
 {
   "nav": {
     "home": "Home",
+    "examples": "Examples",
     "howItWorks": "How It Works",
     "storyBooks": "Story Books",
     "pricing": "Pricing",
     "cart": "Cart",
     "account": "Account",
+    "settings": "Settings",
+    "logout": "Logout",
     "openMenu": "Open navigation menu",
     "closeMenu": "Close navigation menu",
     "homeAria": "Bookereillo home",

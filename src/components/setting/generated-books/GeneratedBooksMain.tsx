@@ -15,7 +15,7 @@ export default function GeneratedBooksMain() {
   ];
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-8 h-full min-h-[500px]">
+    <div className="bg-white rounded-2xl shadow-sm p-8">
       {/* Top Header Section */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div>

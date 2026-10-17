@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, Pencil, X } from "lucide-react";
+import { Pencil, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useBookBuilder } from "../../_components/BookBuilderProvider";
 
@@ -88,6 +89,7 @@ function ChoiceChip({ choice, href, label }: { choice: Choice | undefined; href:
 }
 
 export default function IllustrationStyle() {
+  const router = useRouter();
   const { selectedAge, selectedTheme, selectedStory, selectedMessage, selectedIllustration, setSelectedIllustration } = useBookBuilder();
   const [detailsStyle, setDetailsStyle] = useState<(typeof illustrationStyles)[number] | null>(null);
   const age = ages.find((item) => item.label === selectedAge);
@@ -148,7 +150,7 @@ export default function IllustrationStyle() {
                     type="button"
                     role="radio"
                     aria-checked={isSelected}
-                    onClick={() => setSelectedIllustration(style.label)}
+                    onClick={() => { setSelectedIllustration(style.label); router.push("/book-builder/choose-font"); }}
                     className="block w-full rounded-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]"
                   >
                     <Image
@@ -175,17 +177,6 @@ export default function IllustrationStyle() {
             })}
           </div>
 
-          {selectedIllustration && (
-            <div className="mt-8 flex justify-end">
-              <Link
-                href="/book-builder/choose-font"
-                className="group inline-flex h-12 min-w-[130px] items-center justify-center gap-2 rounded-xl bg-[#E88DA0] px-5 font-sans text-base font-bold text-white shadow-[0_8px_18px_rgba(232,141,160,0.32)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#DD7893] hover:shadow-[0_12px_22px_rgba(232,141,160,0.38)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2 sm:h-14 sm:min-w-[148px] sm:gap-3 sm:px-6 sm:text-lg"
-              >
-                Next
-                <ArrowRight aria-hidden="true" size={21} strokeWidth={2.5} className="transition-transform duration-200 group-hover:translate-x-1" />
-              </Link>
-            </div>
-          )}
         </section>
       </section>
 

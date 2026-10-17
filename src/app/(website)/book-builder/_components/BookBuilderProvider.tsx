@@ -17,6 +17,8 @@ type BookBuilderContextValue = {
   setSelectedFont: (font: string) => void;
   selectedLanguage: string | null;
   setSelectedLanguage: (language: string) => void;
+  selectedVariant: string | null;
+  setSelectedVariant: (variant: string) => void;
 };
 
 const BookBuilderContext = createContext<BookBuilderContextValue | null>(null);
@@ -30,6 +32,7 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
   const [selectedIllustration, setSelectedIllustration] = useState<string | null>(null);
   const [selectedFont, setSelectedFont] = useState<string | null>(null);
   const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
+  const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
   const [hasLoadedProgress, setHasLoadedProgress] = useState(false);
 
   useEffect(() => {
@@ -37,7 +40,7 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
 
     if (savedProgress) {
       try {
-        const progress = JSON.parse(savedProgress) as { selectedAge?: string; selectedTheme?: string; selectedStory?: string; selectedMessage?: string; selectedIllustration?: string; selectedFont?: string; selectedLanguage?: string };
+        const progress = JSON.parse(savedProgress) as { selectedAge?: string; selectedTheme?: string; selectedStory?: string; selectedMessage?: string; selectedIllustration?: string; selectedFont?: string; selectedLanguage?: string; selectedVariant?: string };
         setSelectedAge(progress.selectedAge ?? null);
         setSelectedTheme(progress.selectedTheme ?? null);
         setSelectedStory(progress.selectedStory ?? null);
@@ -45,6 +48,7 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
         setSelectedIllustration(progress.selectedIllustration ?? null);
         setSelectedFont(progress.selectedFont ?? null);
         setSelectedLanguage(progress.selectedLanguage ?? null);
+        setSelectedVariant(progress.selectedVariant ?? null);
       } catch {
         window.sessionStorage.removeItem(storageKey);
       }
@@ -56,11 +60,11 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!hasLoadedProgress) return;
 
-    window.sessionStorage.setItem(storageKey, JSON.stringify({ selectedAge, selectedTheme, selectedStory, selectedMessage, selectedIllustration, selectedFont, selectedLanguage }));
-  }, [hasLoadedProgress, selectedAge, selectedTheme, selectedStory, selectedMessage, selectedIllustration, selectedFont, selectedLanguage]);
+    window.sessionStorage.setItem(storageKey, JSON.stringify({ selectedAge, selectedTheme, selectedStory, selectedMessage, selectedIllustration, selectedFont, selectedLanguage, selectedVariant }));
+  }, [hasLoadedProgress, selectedAge, selectedTheme, selectedStory, selectedMessage, selectedIllustration, selectedFont, selectedLanguage, selectedVariant]);
 
   return (
-    <BookBuilderContext.Provider value={{ selectedAge, setSelectedAge, selectedTheme, setSelectedTheme, selectedStory, setSelectedStory, selectedMessage, setSelectedMessage, selectedIllustration, setSelectedIllustration, selectedFont, setSelectedFont, selectedLanguage, setSelectedLanguage }}>
+    <BookBuilderContext.Provider value={{ selectedAge, setSelectedAge, selectedTheme, setSelectedTheme, selectedStory, setSelectedStory, selectedMessage, setSelectedMessage, selectedIllustration, setSelectedIllustration, selectedFont, setSelectedFont, selectedLanguage, setSelectedLanguage, selectedVariant, setSelectedVariant }}>
       {children}
     </BookBuilderContext.Provider>
   );

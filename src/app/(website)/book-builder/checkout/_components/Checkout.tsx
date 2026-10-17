@@ -122,7 +122,7 @@ export default function Checkout() {
   } = useBookBuilder();
   const [paymentMethod, setPaymentMethod] =
     useState<(typeof paymentMethods)[number]>("Card");
-  const [showOtherPayments, setShowOtherPayments] = useState(false);
+  const [cardExpanded, setCardExpanded] = useState(false);
   const age = ages.find((item) => item.label === selectedAge);
   const theme = themes.find((item) => item.label === selectedTheme);
   const story = stories.find((item) => item.label === selectedStory);
@@ -130,7 +130,7 @@ export default function Checkout() {
   const font = fonts.find((item) => item.label === selectedFont);
 
   return (
-    <main className="relative overflow-hidden bg-[#FEF6EC] px-4 pb-0 pt-[105px] sm:px-8 lg:px-16 lg:pt-[150px]">
+    <main className="relative overflow-hidden bg-[#FEF6EC] px-4 pb-0 pt-[118px] sm:px-8 sm:pt-[136px] lg:px-16 lg:pt-[196px]">
       <Image
         src="/images/cloud.png"
         alt=""
@@ -277,7 +277,8 @@ export default function Checkout() {
               <div className="mt-6 space-y-2 text-left">
                 <button
                   type="button"
-                  onClick={() => setPaymentMethod("Card")}
+                  onClick={() => { setPaymentMethod("Card"); setCardExpanded(true); }}
+                  aria-expanded={cardExpanded}
                   className={`flex h-9 w-full items-center rounded-[9px] border px-3 font-sans text-xs transition ${paymentMethod === "Card" ? "border-[#FF9568] bg-[#FFF9F5] text-[#31445D]" : "border-[#E6E6E6] text-[#536278] hover:border-[#F4B69E]"}`}
                 >
                   <span
@@ -287,13 +288,14 @@ export default function Checkout() {
                       <Check size={9} strokeWidth={3} />
                     )}
                   </span>
-                  <CreditCard size={14} className="mr-1.5 text-[#FC5A00]" />
                   Card
-                  <span className="ml-auto text-[9px] font-semibold text-[#405DAD]">
-                    VISA&nbsp; • &nbsp;MC&nbsp; • &nbsp;AMEX
+                  <span aria-label="Visa, Mastercard and American Express" className="ml-auto flex items-center gap-1 text-[8px] font-bold text-white">
+                    <span className="rounded-sm bg-[#405DAD] px-1 py-0.5">VISA</span>
+                    <span className="rounded-sm bg-[#EF5350] px-1 py-0.5">●●</span>
+                    <span className="rounded-sm bg-[#5695ED] px-1 py-0.5">AMEX</span>
                   </span>
                 </button>
-                {paymentMethod === "Card" && (
+                {paymentMethod === "Card" && cardExpanded && (
                   <div className="space-y-2.5 px-1 pt-1">
                     <label className="block font-sans text-[10px] text-[#31445D]">
                       Cardholder Name
@@ -334,27 +336,25 @@ export default function Checkout() {
                     </div>
                     <button
                       type="button"
-                      onClick={() =>
-                        setShowOtherPayments((current) => !current)
-                      }
+                      onClick={() => setCardExpanded(false)}
                       className="flex w-full items-center justify-center gap-1 pt-1 font-sans text-[10px] text-[#63758D]"
                     >
                       Other payment methods{" "}
                       <ChevronDown
                         size={11}
-                        className={`transition ${showOtherPayments ? "rotate-180" : ""}`}
+                        className="transition"
                       />
                     </button>
                   </div>
                 )}
-                {(paymentMethod !== "Card" || showOtherPayments) &&
+                {!cardExpanded &&
                   paymentMethods
                     .filter((method) => method !== "Card")
                     .map((method) => (
                       <button
                         key={method}
                         type="button"
-                        onClick={() => setPaymentMethod(method)}
+                        onClick={() => { setPaymentMethod(method); setCardExpanded(false); }}
                         className={`flex h-9 w-full items-center rounded-[9px] border px-3 font-sans text-xs transition ${paymentMethod === method ? "border-[#FF9568] bg-[#FFF9F5] text-[#31445D]" : "border-[#E6E6E6] text-[#536278] hover:border-[#F4B69E]"}`}
                       >
                         <span

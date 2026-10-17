@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useBookBuilder } from "../../_components/BookBuilderProvider";
 
 const ageGroups = [
@@ -14,6 +13,7 @@ const ageGroups = [
 ];
 
 export default function ChooseAgeCategory() {
+  const router = useRouter();
   const { selectedAge, setSelectedAge } = useBookBuilder();
 
   return (
@@ -47,7 +47,7 @@ export default function ChooseAgeCategory() {
                   type="button"
                   role="radio"
                   aria-checked={isSelected}
-                  onClick={() => setSelectedAge(age.label)}
+                  onClick={() => { setSelectedAge(age.label); router.push("/book-builder/choose-theme"); }}
                   className={`group flex h-[290px] w-full max-w-[230px] flex-col justify-between overflow-hidden rounded-[10px] border-2 pt-3 text-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2 lg:w-[230px] ${
                     isSelected ? "border-[#E88DA0]" : "border-transparent hover:border-[#F4C2CE]"
                   }`}
@@ -69,18 +69,6 @@ export default function ChooseAgeCategory() {
             })}
           </div>
 
-          {selectedAge && (
-            <div className="mt-8 flex justify-end">
-              <Link
-                href="/book-builder/choose-theme"
-                aria-label="Continue to choose a theme"
-                className="group inline-flex h-14 min-w-[148px] items-center justify-center gap-3 rounded-xl bg-[#E88DA0] px-6 font-sans text-lg font-bold text-white shadow-[0_8px_18px_rgba(232,141,160,0.32)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#DD7893] hover:shadow-[0_12px_22px_rgba(232,141,160,0.38)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2"
-              >
-                Next
-                <ArrowRight aria-hidden="true" size={21} strokeWidth={2.5} className="transition-transform duration-200 group-hover:translate-x-1" />
-              </Link>
-            </div>
-          )}
         </section>
       </section>
     </main>

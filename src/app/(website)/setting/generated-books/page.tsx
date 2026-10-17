@@ -2,11 +2,7 @@ import GeneratedBooksMain from '@/components/setting/generated-books/GeneratedBo
 import React from 'react'
 
 const page = () => {
-  return (
-    <div>
-      <GeneratedBooksMain/>
-    </div>
-  )
+  return <GeneratedBooksMain />;
 }
 
 export default page

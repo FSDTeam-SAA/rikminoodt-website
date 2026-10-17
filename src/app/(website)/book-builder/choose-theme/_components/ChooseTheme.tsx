@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, Pencil } from "lucide-react";
+import { Pencil } from "lucide-react";
 import { useBookBuilder } from "../../_components/BookBuilderProvider";
 
 const themes = [
@@ -17,7 +18,10 @@ const themes = [
 ];
 
 export default function ChooseTheme() {
+  const router = useRouter();
   const { selectedAge, selectedTheme, setSelectedTheme } = useBookBuilder();
+  const ageOptions = ["0-2 Years", "3-5 Years", "5-9 Years", "10+ Years", "Adult"];
+  const ageIndex = ageOptions.indexOf(selectedAge ?? "");
 
   return (
     <main className="min-h-screen bg-[#FEFAF4] px-4 pb-10 pt-[118px] sm:px-7 sm:pb-12 sm:pt-[136px] lg:px-[38px] lg:pb-20 lg:pt-[196px]">
@@ -34,16 +38,16 @@ export default function ChooseTheme() {
             Build a Magical Story Just for Them
           </h2>
 
-          {selectedAge && (
+          {selectedAge && ageIndex >= 0 && (
             <div className="mt-4">
               <p className="font-sans text-lg font-normal leading-none text-[#444444] sm:text-[20px]">Your Choice</p>
-              <div className="mt-3 inline-flex h-10 items-center gap-2 rounded-full bg-[#DDEEFF] py-1 pl-2 pr-4 font-sans text-lg font-semibold leading-none text-[#4B4650] sm:h-[42px] sm:text-[20px]">
+              <Link href="/book-builder/choose-age" className="mt-3 inline-flex h-10 items-center gap-2 rounded-full bg-[#DDEEFF] py-1 pl-2 pr-4 font-sans text-lg font-semibold leading-none text-[#4B4650] sm:h-[42px] sm:text-[20px]">
                 <span className="relative size-7 overflow-hidden rounded-full bg-white/30">
-                  <Image src="/images/age_2.png" alt="" fill sizes="28px" className="object-contain object-bottom" />
+                  <Image src={`/images/age_${ageIndex + 1}.png`} alt="" fill sizes="28px" className="object-contain object-bottom" />
                 </span>
                 <span>{selectedAge}</span>
                 <Pencil aria-hidden="true" size={16} className="text-[#F5C63E]" />
-              </div>
+              </Link>
             </div>
           )}
 
@@ -61,7 +65,7 @@ export default function ChooseTheme() {
                   type="button"
                   role="radio"
                   aria-checked={isSelected}
-                  onClick={() => setSelectedTheme(theme.label)}
+                  onClick={() => { setSelectedTheme(theme.label); router.push("/book-builder/choose-story"); }}
                   className={`group flex aspect-[0.89] flex-col overflow-hidden rounded-[10px] border-2 pt-3 text-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2 ${
                     isSelected ? "border-[#EF8BA3]" : "border-transparent hover:border-[#F5C1CE]"
                   }`}
@@ -85,18 +89,6 @@ export default function ChooseTheme() {
             })}
           </div>
 
-          {selectedTheme && (
-            <div className="mt-8 flex justify-end">
-              <Link
-                href="/book-builder/choose-story"
-                aria-label="Continue to choose a story"
-                className="group inline-flex h-14 min-w-[148px] items-center justify-center gap-3 rounded-xl bg-[#E88DA0] px-6 font-sans text-lg font-bold text-white shadow-[0_8px_18px_rgba(232,141,160,0.32)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#DD7893] hover:shadow-[0_12px_22px_rgba(232,141,160,0.38)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2"
-              >
-                Next
-                <ArrowRight aria-hidden="true" size={21} strokeWidth={2.5} className="transition-transform duration-200 group-hover:translate-x-1" />
-              </Link>
-            </div>
-          )}
         </section>
       </section>
     </main>

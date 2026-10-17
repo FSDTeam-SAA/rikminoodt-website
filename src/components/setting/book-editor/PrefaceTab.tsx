@@ -18,7 +18,7 @@ export default function PrefaceTab() {
         <textarea
           rows={10}
           placeholder="Lorem ipsum dolor sit amet consectetur..."
-          className="w-full border border-gray-200 rounded-xl px-5 py-4 text-sm focus:outline-none focus:border-[#E3859A] focus:ring-1 focus:ring-[#E3859A] resize-none text-gray-500"
+          className="w-full border border-[#F3A8B7] rounded-xl px-5 py-4 text-sm focus:outline-none focus:border-[#E3859A] focus:ring-1 focus:ring-[#E3859A] resize-none text-gray-500"
           defaultValue="Lorem ipsum dolor sit amet consectetur. Dictum scelerisque turpis non mattis nisl nulla. Ipsum rhoncus facilisis mattis cursus libero. Tellus non tristique posuere tristique ac. Vitae tellus at amet iaculis eleifend viverra. Porta laoreet nunc iaculis risus a ut arcu scelerisque nisl."
         ></textarea>
       </div>

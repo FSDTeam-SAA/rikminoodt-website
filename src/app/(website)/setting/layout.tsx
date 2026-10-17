@@ -6,14 +6,14 @@ export default function SettingLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="container mx-auto flex min-h-screen gap-6 py-10">
+    <div className="container mx-auto flex flex-col gap-6 py-10 md:flex-row md:items-start">
       {/* Bam pasher fixed Sidebar */}
-      <aside className=" flex-shrink-0">
-        <Sidebar/> 
+      <aside className="w-full shrink-0 md:w-[280px]">
+        <Sidebar /> 
       </aside>
 
       {/* Dan pasher dynamic content */}
-      <main className="min-w-0 flex-grow">
+      <main className="min-w-0 flex-1">
         {children}
       </main>
     </div>

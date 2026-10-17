@@ -12,6 +12,41 @@ const Hero = () => {
       aria-labelledby="hero-heading"
       className="relative min-h-[100svh] overflow-hidden bg-[#f8eee8] bg-[url('/images/hero.png')] bg-cover bg-[position:62%_center] after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:z-[1] after:h-16 after:bg-gradient-to-b after:from-transparent after:to-[#FBF3EA] sm:bg-[position:60%_center] sm:after:h-24 lg:h-screen lg:bg-center lg:after:h-32"
     >
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden lg:block">
+        <Image
+          src="/images/cloud.png"
+          alt=""
+          width={1536}
+          height={1024}
+          sizes="150px"
+          className="absolute left-[3%] top-[14%] h-auto w-[150px] opacity-80 motion-safe:animate-hero-cloud"
+        />
+        <Image
+          src="/images/cloud.png"
+          alt=""
+          width={1536}
+          height={1024}
+          sizes="110px"
+          className="absolute left-[25%] top-[18%] h-auto w-[110px] opacity-70 motion-safe:animate-hero-cloud [animation-delay:-4s]"
+        />
+        <Image
+          src="/images/cloud.png"
+          alt=""
+          width={1536}
+          height={1024}
+          sizes="135px"
+          className="absolute bottom-[3%] left-[8%] h-auto w-[135px] opacity-70 motion-safe:animate-hero-cloud [animation-delay:-8s]"
+        />
+        <Image
+          src="/images/cloud.png"
+          alt=""
+          width={1536}
+          height={1024}
+          sizes="100px"
+          className="absolute left-[2%] top-[45%] h-auto w-[100px] opacity-70 motion-safe:animate-hero-cloud [animation-delay:-6s]"
+        />
+      </div>
+
       <div className="container relative z-10 mx-auto w-full pt-36 sm:pt-40 lg:px-0 lg:pt-[260px]">
         <div className="max-w-[577px]">
           <h1
