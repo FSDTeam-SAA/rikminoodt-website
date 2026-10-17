@@ -103,7 +103,7 @@ const Navbar = () => {
               <ShoppingCart aria-hidden="true" size={26} strokeWidth={1.4} />
             </Link>
             <Link
-              href="#account"
+              href="/setting"
               aria-label="Open your account"
               className="rounded-full transition hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf] focus-visible:ring-offset-2"
             >
@@ -143,7 +143,7 @@ const Navbar = () => {
               <Link href="#cart" className="flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-white/75 text-sm font-medium text-[#5d5059]">
                 <ShoppingCart aria-hidden="true" size={18} /> Cart
               </Link>
-              <Link href="#account" className="flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-[#f8e6eb] px-3 text-sm font-medium text-[#a15971]">
+              <Link href="/setting" className="flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-[#f8e6eb] px-3 text-sm font-medium text-[#a15971]">
                 <Image src="/images/profile.png" alt="" width={22} height={22} className="size-5 rounded-full" /> Account
               </Link>
             </div>
