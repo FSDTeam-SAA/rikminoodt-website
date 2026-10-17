@@ -56,7 +56,10 @@ export default function LanguagePageSetting() {
               />
             </div>
             <span className="font-sans text-sm font-medium text-[#1E1E1E]">
-              {currentLanguage.label} <span className="text-gray-400 font-normal">({currentLanguage.nativeLabel})</span>
+              {currentLanguage.label}
+              {currentLanguage.nativeLabel !== currentLanguage.label && (
+                <span className="text-gray-400 font-normal"> ({currentLanguage.nativeLabel})</span>
+              )}
             </span>
           </div>
           <ChevronDown
@@ -94,7 +97,9 @@ export default function LanguagePageSetting() {
                       />
                     </div>
                     <span>{item.label}</span>
-                    <span className="text-xs text-gray-400">({item.nativeLabel})</span>
+                    {item.nativeLabel !== item.label && (
+                      <span className="text-xs text-gray-400">({item.nativeLabel})</span>
+                    )}
                   </div>
                   {isSelected && (
                     <Check size={18} strokeWidth={2.4} className="text-[#E88DA0]" />

@@ -14,7 +14,7 @@ export interface LanguageOption {
 
 export const SUPPORTED_LANGUAGES: LanguageOption[] = [
   { code: "en", label: "English", nativeLabel: "English", flag: "/images/flags/en.png" },
-  { code: "nl", label: "Dutch", nativeLabel: "Nederlands", flag: "/images/flags/nl.svg" },
+  { code: "nl", label: "Dutch", nativeLabel: "Dutch", flag: "/images/flags/nl.svg" },
   { code: "fr", label: "French", nativeLabel: "Français", flag: "/images/flags/fr.svg" },
 ];
 
