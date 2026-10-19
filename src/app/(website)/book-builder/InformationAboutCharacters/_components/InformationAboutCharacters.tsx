@@ -553,7 +553,7 @@ export default function InformationAboutCharacters() {
     ];
 
     setCharacters(mapped);
-    router.push("/book-builder/personal-details");
+    router.push("/book-builder/special-events");
   };
 
   return (

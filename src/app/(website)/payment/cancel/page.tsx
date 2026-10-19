@@ -13,11 +13,11 @@ export default function PaymentCancelPage() {
             Payment Cancelled
           </h1>
           <p className="mt-2 font-sans text-sm text-[#66605F]">
-            Your payment was not completed and you have not been charged. You can return to your book order at any time.
+            Checkout was not completed. You can return to your book order and try payment again.
           </p>
           <div className="mt-6">
             <Link
-              href="/book-builder/checkout"
+              href="/book-builder/checkout?retry=1"
               className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#E88DA0] px-6 font-sans text-sm font-semibold text-white transition hover:bg-[#DD7893]"
             >
               <ArrowLeft size={16} />

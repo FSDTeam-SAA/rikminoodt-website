@@ -15,6 +15,7 @@ export type CharacterData = {
   objectName?: string;
   photo?: File | null;
   photoPreview?: string;
+  photoExpected?: boolean;
 };
 
 export type UserDetails = {
@@ -60,6 +61,7 @@ type BookBuilderContextValue = {
   setForewordMode: (mode: "write" | "voice") => void;
   voiceBlob: Blob | null;
   setVoiceBlob: (blob: Blob | null) => void;
+  voiceExpected: boolean;
   specialEvents: string;
   setSpecialEvents: (events: string) => void;
 
@@ -102,7 +104,9 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
   const [creatorName, setCreatorName] = useState<string>("Mum & Dad");
   const [foreword, setForeword] = useState<string>("");
   const [forewordMode, setForewordMode] = useState<"write" | "voice">("write");
-  const [voiceBlob, setVoiceBlob] = useState<Blob | null>(null);
+  const [voiceBlob, setVoiceBlobState] = useState<Blob | null>(null);
+  const [voiceExpected, setVoiceExpected] = useState(false);
+  const setVoiceBlob = (blob: Blob | null) => { setVoiceBlobState(blob); setVoiceExpected(Boolean(blob)); };
   const [specialEvents, setSpecialEvents] = useState<string>("");
 
   const [userDetails, setUserDetailsState] = useState<UserDetails>({
@@ -195,6 +199,8 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
         if (progress.characters && Array.isArray(progress.characters)) setCharacters(progress.characters);
         if (progress.creatorName) setCreatorName(progress.creatorName);
         if (progress.foreword) setForeword(progress.foreword);
+        if (progress.voiceExpected) setVoiceExpected(true);
+        if (progress.forewordMode === "write" || progress.forewordMode === "voice") setForewordMode(progress.forewordMode);
         if (progress.specialEvents) setSpecialEvents(progress.specialEvents);
         if (progress.userDetails) setUserDetailsState(progress.userDetails);
         if (progress.currentBookId) setCurrentBookId(progress.currentBookId);
@@ -211,6 +217,7 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
     try {
       const serializableCharacters = characters.map((c) => ({
         ...c,
+        photoExpected: Boolean(c.photo || c.photoExpected),
         photo: undefined, // Files can't be JSON serialized
       }));
 
@@ -228,8 +235,10 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
           characters: serializableCharacters,
           creatorName,
           foreword,
+          forewordMode,
           specialEvents,
-          userDetails,
+          userDetails: { ...userDetails, password: "" },
+          voiceExpected,
           currentBookId,
           retryCount,
         }),
@@ -248,8 +257,10 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
     selectedLanguage,
     selectedVariant,
     characters,
+    voiceExpected,
     creatorName,
     foreword,
+    forewordMode,
     specialEvents,
     userDetails,
     currentBookId,
@@ -285,6 +296,7 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
         setForewordMode,
         voiceBlob,
         setVoiceBlob,
+        voiceExpected,
         specialEvents,
         setSpecialEvents,
         userDetails,

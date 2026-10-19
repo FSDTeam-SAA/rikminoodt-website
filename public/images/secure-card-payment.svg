@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 190" role="img" aria-labelledby="title">
+<title id="title">Secure card payment powered by Stripe</title>
+<rect width="420" height="190" rx="28" fill="#fff7f4"/>
+<circle cx="103" cy="96" r="70" fill="#fce3e7"/><circle cx="328" cy="61" r="38" fill="#e9e2f7"/>
+<rect x="54" y="38" width="184" height="116" rx="15" fill="#604b7e" transform="rotate(-7 146 96)"/>
+<rect x="83" y="52" width="184" height="116" rx="15" fill="#e88da0"/>
+<rect x="102" y="75" width="33" height="24" rx="5" fill="#ffe1a9"/>
+<path d="M102 87h33M118.5 75v24" stroke="#c99a6c" stroke-width="2"/>
+<path d="M104 128h14m8 0h14m8 0h14" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".9"/>
+<circle cx="222" cy="138" r="13" fill="#fff" opacity=".65"/><circle cx="238" cy="138" r="13" fill="#fff" opacity=".85"/>
+<rect x="286" y="89" width="80" height="63" rx="13" fill="#fff" stroke="#e7d7ec" stroke-width="2"/>
+<path d="M311 91v-7a15 15 0 0 1 30 0v7" fill="none" stroke="#7c619b" stroke-width="6" stroke-linecap="round"/>
+<path d="M326 108v17" stroke="#7c619b" stroke-width="6" stroke-linecap="round"/>
+<text x="326" y="177" font-family="Arial,sans-serif" font-weight="700" font-size="16" text-anchor="middle" fill="#635bff">stripe</text>
+</svg>

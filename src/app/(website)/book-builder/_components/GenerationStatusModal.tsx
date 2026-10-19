@@ -13,6 +13,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { getApiBaseUrl } from "@/config/api";
+import { formatGenerationError } from "./generation-error";
 
 type GenerationStatusModalProps = {
   isOpen: boolean;
@@ -28,6 +29,7 @@ type BookData = {
   coverImageUrl?: string;
   pages?: Array<{ pageNumber: number; text: string; illustrationUrl?: string }>;
   generationError?: string;
+  failureMessage?: string;
 };
 
 const LOADING_MESSAGES = [
@@ -305,9 +307,7 @@ export default function GenerationStatusModal({
                   Generation Failed
                 </h3>
                 <p className="mx-auto mt-2 max-w-[420px] font-sans text-xs leading-relaxed text-[#B74760] sm:text-sm">
-                  {book?.generationError ||
-                    pollError ||
-                    "We encountered an unexpected issue while generating your storybook."}
+                  {formatGenerationError(book?.generationError || book?.failureMessage || pollError)}
                 </p>
 
                 {/* RETRY SECTION WITH 5 COUNT LIMIT */}

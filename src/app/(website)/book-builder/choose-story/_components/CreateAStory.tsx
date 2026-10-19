@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Pencil } from "lucide-react";
 import { useBookBuilder } from "../../_components/BookBuilderProvider";
+import { THEME_MAP, THEME_SUBJECT_MAP } from "../../_components/api-mappers";
 
 const ages = [
   { label: "0-2 Years", image: "/images/age_1.png", color: "#FDE1CF" },
@@ -74,6 +75,8 @@ export default function CreateAStory() {
   const { selectedAge, selectedTheme, selectedStory, setSelectedStory } = useBookBuilder();
   const age = ages.find((item) => item.label === selectedAge);
   const theme = themes.find((item) => item.label === selectedTheme);
+  const themeCode = selectedTheme ? THEME_MAP[selectedTheme] : undefined;
+  const availableSubjects = themeCode === "FAIRYTALES_AND_MAGIC" ? subjects.map((subject) => ({ ...subject, value: subject.label })) : (THEME_SUBJECT_MAP[themeCode ?? ""] ?? []).map((value, index) => ({ value, label: value.toLowerCase().split("_").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" "), image: theme?.image ?? "/images/theme_1.png", color: ["#FFE5D6", "#DDEEFF", "#FFDDE4", "#D1ECD9"][index % 4] }));
 
   return (
     <main className="min-h-screen bg-[#FEFAF4] px-4 pb-10 pt-[118px] sm:px-7 sm:pb-12 sm:pt-[136px] lg:px-[38px] lg:pb-20 lg:pt-[196px]">
@@ -101,8 +104,8 @@ export default function CreateAStory() {
           </h3>
 
           <div className="mt-4 grid grid-cols-2 gap-3 min-[440px]:grid-cols-4 sm:mt-5 sm:gap-4" role="radiogroup" aria-label="Choose a story subject">
-            {subjects.map((subject) => {
-              const isSelected = selectedStory === subject.label;
+            {availableSubjects.map((subject) => {
+              const isSelected = selectedStory === subject.value;
 
               return (
                 <button
@@ -110,7 +113,7 @@ export default function CreateAStory() {
                   type="button"
                   role="radio"
                   aria-checked={isSelected}
-                  onClick={() => { setSelectedStory(subject.label); router.push("/book-builder/personalize"); }}
+                  onClick={() => { setSelectedStory(subject.value); router.push("/book-builder/personalize"); }}
                   className={`group flex aspect-[0.79] flex-col overflow-hidden rounded-lg border-2 px-1 pt-1 text-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2 sm:rounded-[10px] sm:px-2 sm:pt-2 ${
                     isSelected ? "border-[#F08BA1]" : "border-transparent hover:border-[#F4C2CE]"
                   }`}
