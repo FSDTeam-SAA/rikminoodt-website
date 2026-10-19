@@ -9,6 +9,8 @@ type BookReaderModalProps = {
   isOpen: boolean;
   onClose: () => void;
   storyId: string;
+  title?: string;
+  pages?: Array<{ pageNumber?: number; text?: string; illustrationUrl?: string; image?: string; alt?: string }>;
 };
 
 type PageProps = {
@@ -25,7 +27,7 @@ const ReaderPage = forwardRef<HTMLDivElement, PageProps>(({ children }, ref) => 
 
 ReaderPage.displayName = "ReaderPage";
 
-const bookPages = [
+const defaultBookPages = [
   {
     image: "/images/story1.png",
     alt: "Noah exploring the ocean with friendly sea animals",
@@ -38,7 +40,16 @@ const bookPages = [
   },
 ];
 
-const BookReaderModal = ({ isOpen, onClose, storyId }: BookReaderModalProps) => {
+const BookReaderModal = ({ isOpen, onClose, storyId, title, pages }: BookReaderModalProps) => {
+  const displayTitle = title || "Lisa's Camping Adventure";
+  const activePages =
+    pages && pages.length > 0
+      ? pages.map((p, idx) => ({
+          image: p.illustrationUrl || p.image || "/images/story1.png",
+          alt: p.alt || `Illustration for page ${p.pageNumber || idx + 1}`,
+          text: p.text || "",
+        }))
+      : defaultBookPages;
   const stageRef = useRef<HTMLDivElement>(null);
   const [pageSize, setPageSize] = useState({ width: 360, height: 416 });
   const [isCompact, setIsCompact] = useState(false);
@@ -110,9 +121,9 @@ const BookReaderModal = ({ isOpen, onClose, storyId }: BookReaderModalProps) => 
       <div className="relative h-full w-full overflow-hidden bg-[#FFF8F0]">
         <header className="absolute inset-x-0 top-0 z-30 flex items-center justify-between border-b border-[#EADFD4] bg-[#FFF8F0]/95 px-4 py-3 backdrop-blur-sm sm:px-6">
           <p id="book-reader-title" className="font-crimson text-lg font-semibold text-[#514256] sm:text-xl">
-            Lisa&apos;s Camping Adventure
+            {displayTitle}
           </p>
-          <span className="font-sans text-sm text-[#8A8086]">Demo reader</span>
+          <span className="font-sans text-sm text-[#8A8086]">Book reader</span>
         </header>
 
         <div ref={stageRef} className="absolute inset-0 flex items-center justify-center overflow-hidden px-4 py-[68px] sm:px-7 sm:py-[80px]">
@@ -132,9 +143,9 @@ const BookReaderModal = ({ isOpen, onClose, storyId }: BookReaderModalProps) => 
               useKeyboard
               controls="none"
               lazyRadius={2}
-              aria-label="Lisa's Camping Adventure book reader"
+              aria-label={`${displayTitle} book reader`}
             >
-              {bookPages.flatMap((bookPage, index) => [
+              {activePages.flatMap((bookPage, index) => [
                 <ReaderPage key={`${index}-art`}>
                   <div className="relative h-full w-full bg-[#E8DDD1] p-2 sm:p-3">
                     <Image src={bookPage.image} alt={bookPage.alt} fill sizes="(max-width: 720px) 90vw, 45vw" className="object-contain" priority={index === 0} />
@@ -180,7 +191,7 @@ const BookReaderModal = ({ isOpen, onClose, storyId }: BookReaderModalProps) => 
           >
             <ChevronLeft size={21} strokeWidth={2.5} aria-hidden="true" />
           </button>
-          {bookPages.map((_, index) => {
+          {activePages.map((_, index) => {
             const spreadPage = index * 2;
             const pageNumber = index + 1;
             return (

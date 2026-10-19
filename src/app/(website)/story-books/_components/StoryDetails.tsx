@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BookReaderModal from "./BookReaderModal";
 import {
   BookOpen,
@@ -15,6 +15,7 @@ import {
   Plus,
   Printer,
 } from "lucide-react";
+import { getApiBaseUrl } from "@/config/api";
 
 const story = {
   title: "Lisa's Camping Adventure",
@@ -49,17 +50,79 @@ const photos = [
   },
 ];
 
+interface StoryCharacter {
+  name?: string;
+  animalName?: string;
+  objectName?: string;
+  type?: string;
+  photoUrl?: string;
+}
+
+interface FetchedBookData {
+  title?: string;
+  coverImageUrl?: string;
+  ageCategory?: string;
+  theme?: string;
+  illustrationStyle?: string;
+  language?: string;
+  foreword?: string;
+  characters?: StoryCharacter[];
+  pages?: Array<{ pageNumber?: number; text?: string; illustrationUrl?: string; image?: string; alt?: string }>;
+}
+
 const StoryDetails = ({ storyId }: { storyId: string }) => {
   const [isReaderOpen, setIsReaderOpen] = useState(false);
+  const [fetchedBook, setFetchedBook] = useState<FetchedBookData | null>(null);
+
+  useEffect(() => {
+    if (!storyId || storyId === "max-sees-the-seasons" || storyId === "lisa-camping") return;
+
+    const loadBook = async () => {
+      try {
+        const apiBase = getApiBaseUrl();
+        const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+        const headers: Record<string, string> = { "Content-Type": "application/json" };
+        if (token) headers["Authorization"] = `Bearer ${token}`;
+
+        const res = await fetch(`${apiBase}/books/${storyId}`, { headers });
+        if (!res.ok) return;
+        const json = await res.json();
+        if (json?.data) {
+          setFetchedBook(json.data);
+        }
+      } catch (e) {
+        console.error("Error loading story details:", e);
+      }
+    };
+
+    loadBook();
+  }, [storyId]);
+
   const isMaxStory = storyId === "max-sees-the-seasons";
-  const cover = isMaxStory ? "/images/exp_c_1.jpg" : story.cover;
-  const coverTitle = isMaxStory ? "Max Sees the Seasons: Autumn Adventures" : story.title;
+  const cover = fetchedBook?.coverImageUrl || (isMaxStory ? "/images/exp_c_1.jpg" : story.cover);
+  const coverTitle = fetchedBook?.title || (isMaxStory ? "Max Sees the Seasons: Autumn Adventures" : story.title);
+  const activeDetails = fetchedBook
+    ? [
+        ["Ages", `${fetchedBook.ageCategory || "3-5"} years`],
+        ["Characters", String(fetchedBook.characters?.length || 1)],
+        ["Theme", fetchedBook.theme ? String(fetchedBook.theme).replace(/_/g, " ") : "Adventure"],
+        ["Illustration", fetchedBook.illustrationStyle ? String(fetchedBook.illustrationStyle).replace(/_/g, " ") : "Animation 3D"],
+        ["Language", fetchedBook.language || "English"],
+      ]
+    : story.details;
+  const activeDescription = fetchedBook?.foreword || story.description;
   const usedPhotos = isMaxStory
     ? [
         { name: "Child", role: "Main character", image: "/images/exp_u_1_1.png" },
         { name: "Grandmother", role: "Family", image: "/images/exp_u_1_2.jpg" },
       ]
-    : photos;
+    : fetchedBook?.characters && fetchedBook.characters.some((c: StoryCharacter) => c.photoUrl)
+      ? fetchedBook.characters.map((c: StoryCharacter, i: number) => ({
+          name: c.name || c.animalName || c.objectName || `Character ${i + 1}`,
+          role: c.type || "Character",
+          image: c.photoUrl || "/images/profile.png",
+        }))
+      : photos;
 
   return (
     <>
@@ -104,7 +167,7 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
               </div>
 
               <dl className="mt-3 divide-y divide-[#EEE6DE] font-sans text-sm">
-                {story.details.map(([label, value]) => (
+                {activeDetails.map(([label, value]) => (
                   <div
                     key={label}
                     className="grid grid-cols-[105px_1fr] gap-3 py-2 text-[#514A4E]"
@@ -115,7 +178,7 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
                 ))}
                 <div className="grid grid-cols-[105px_1fr] gap-3 py-2 text-[#514A4E]">
                   <dt className="font-medium text-[#756E73]">Story</dt>
-                  <dd className="leading-relaxed">{story.description}</dd>
+                  <dd className="leading-relaxed">{activeDescription}</dd>
                 </div>
               </dl>
 
@@ -253,7 +316,13 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
       </div>
     </section>
 
-      <BookReaderModal isOpen={isReaderOpen} onClose={() => setIsReaderOpen(false)} storyId={storyId} />
+      <BookReaderModal
+        isOpen={isReaderOpen}
+        onClose={() => setIsReaderOpen(false)}
+        storyId={storyId}
+        title={coverTitle}
+        pages={fetchedBook?.pages}
+      />
     </>
   );
 };

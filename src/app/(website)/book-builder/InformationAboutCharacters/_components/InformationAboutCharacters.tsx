@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Box, PawPrint, Pencil, Trash2, Upload, UserRound } from "lucide-react";
 import { useRef, useState } from "react";
 import {
@@ -11,11 +12,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useBookBuilder } from "../../_components/BookBuilderProvider";
+import { useBookBuilder, type CharacterData } from "../../_components/BookBuilderProvider";
 
 const ages = [
   { label: "0-2 Years", image: "/images/age_1.png", color: "#FDE1CF" },
-  { label: "3-5 Years", image: "/images/age_2.png", color: "#DDEEFF" },
+  { label: "3-5 Years", image: "/images/age_2.png", color: "#E3F3FC" },
   { label: "5-9 Years", image: "/images/age_3.png", color: "#FADDE0" },
   { label: "10+ Years", image: "/images/age_4.png", color: "#D7EEE1" },
   { label: "Adult", image: "/images/age_5.png", color: "#E2D7F3" },
@@ -98,7 +99,7 @@ function ChoiceChip({
     return (
       <Link
         href={href}
-        className="rounded-full border border-dashed border-[#D8C8C2] px-3 py-2 text-sm text-[#856F77] transition hover:border-[#E88DA0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]"
+        className="rounded-full border border-dashed border-[#D8C8C2] px-3 py-2 text-sm text-[#856F77]"
       >
         Choose {label.toLowerCase()}
       </Link>
@@ -109,8 +110,8 @@ function ChoiceChip({
     <Link
       href={href}
       aria-label={`Edit ${label.toLowerCase()}: ${choice.label}`}
-      className="group inline-flex h-9 items-center gap-2 rounded-full px-2 pr-3 font-sans text-sm font-medium text-[#4B4650] transition hover:brightness-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2 sm:h-10 sm:text-base"
-      style={{ backgroundColor: choice.color ?? "#FFFFFF" }}
+      className="group inline-flex h-9 items-center gap-2 rounded-full px-2 pr-3 font-sans text-sm font-medium text-[#4B4650] transition hover:brightness-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2"
+      style={{ backgroundColor: choice.color }}
     >
       <span className="relative size-6 overflow-hidden rounded-full bg-white/45">
         <Image
@@ -140,22 +141,36 @@ const characterTypes = [
   { label: "Object" as const, icon: Box },
 ];
 
+type AdditionalCharState = {
+  id: number;
+  type: CharacterType;
+  name: string;
+  gender: string;
+  age: string;
+  hobbies: string;
+  food: string;
+  animalName: string;
+  animalSpecies: string;
+  objectName: string;
+  photo: File | null;
+  photoName: string;
+};
+
 function AddedCharacterForm({
   number,
-  initialType,
+  character,
   canAdd,
   onAdd,
   onRemove,
+  onChange,
 }: {
   number: number;
-  initialType: CharacterType;
+  character: AdditionalCharState;
   canAdd: boolean;
   onAdd: (type: CharacterType) => void;
   onRemove: () => void;
+  onChange: (updated: Partial<AdditionalCharState>) => void;
 }) {
-  const [type, setType] = useState<CharacterType>(initialType);
-  const [gender, setGender] = useState<string | null>(null);
-  const [photoName, setPhotoName] = useState("");
   const fieldId = `character-${number}`;
 
   return (
@@ -164,7 +179,12 @@ function AddedCharacterForm({
         <h4 className="font-sans text-base font-semibold text-[#1E1E1E] sm:text-lg">
           Character {number}
         </h4>
-        <button type="button" onClick={onRemove} aria-label={`Remove character ${number}`} className="inline-flex size-9 items-center justify-center rounded-lg text-[#E88DA0] transition hover:bg-[#FFF3F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]">
+        <button
+          type="button"
+          onClick={onRemove}
+          aria-label={`Remove character ${number}`}
+          className="inline-flex size-9 items-center justify-center rounded-lg text-[#E88DA0] transition hover:bg-[#FFF3F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]"
+        >
           <Trash2 aria-hidden="true" size={19} />
         </button>
       </div>
@@ -179,13 +199,17 @@ function AddedCharacterForm({
           <div className="mt-3 flex flex-wrap gap-2">
             {characterTypes.map((characterType) => {
               const Icon = characterType.icon;
-              const isSelected = type === characterType.label;
+              const isSelected = character.type === characterType.label;
               return (
                 <button
                   key={characterType.label}
                   type="button"
-                  onClick={() => setType(characterType.label)}
-                  className={`inline-flex h-10 items-center gap-2 rounded-xl border px-4 font-sans text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] ${isSelected ? "border-[#F3A8B7] bg-[#F5B0BE] text-white" : "border-[#F6C9D2] bg-white text-[#E88DA0] hover:bg-[#FFF3F5]"}`}
+                  onClick={() => onChange({ type: characterType.label })}
+                  className={`inline-flex h-10 items-center gap-2 rounded-xl border px-4 font-sans text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] ${
+                    isSelected
+                      ? "border-[#F3A8B7] bg-[#F5B0BE] text-white"
+                      : "border-[#F6C9D2] bg-white text-[#E88DA0] hover:bg-[#FFF3F5]"
+                  }`}
                 >
                   <Icon aria-hidden="true" size={16} />
                   {characterType.label}
@@ -195,16 +219,18 @@ function AddedCharacterForm({
           </div>
         </fieldset>
 
-        {type === "Person" ? (
+        {character.type === "Person" ? (
           <>
             <label
               className="mt-5 block font-sans text-sm font-medium text-[#252025]"
               htmlFor={`${fieldId}-name`}
             >
-              Main Character
+              Character Name
             </label>
             <input
               id={`${fieldId}-name`}
+              value={character.name}
+              onChange={(e) => onChange({ name: e.target.value })}
               placeholder="Enter the character's name"
               className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
             />
@@ -216,7 +242,10 @@ function AddedCharacterForm({
                 >
                   Gender
                 </label>
-                <Select value={gender} onValueChange={setGender}>
+                <Select
+                  value={character.gender}
+                  onValueChange={(val) => onChange({ gender: val ?? "" })}
+                >
                   <SelectTrigger
                     id={`${fieldId}-gender`}
                     className="mt-2 h-10 w-full rounded-[8px] border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] focus-visible:border-[#E88DA0] focus-visible:ring-[#E88DA0]/25"
@@ -255,6 +284,8 @@ function AddedCharacterForm({
                 <input
                   id={`${fieldId}-age`}
                   inputMode="numeric"
+                  value={character.age}
+                  onChange={(e) => onChange({ age: e.target.value })}
                   placeholder="e.g. 5"
                   className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
                 />
@@ -262,28 +293,38 @@ function AddedCharacterForm({
             </div>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="block font-sans text-sm font-medium text-[#252025]" htmlFor={`${fieldId}-hobbies`}>
+                <label
+                  className="block font-sans text-sm font-medium text-[#252025]"
+                  htmlFor={`${fieldId}-hobbies`}
+                >
                   Hobbies/ Interests <span className="font-normal">(optional)</span>
                 </label>
                 <input
                   id={`${fieldId}-hobbies`}
+                  value={character.hobbies}
+                  onChange={(e) => onChange({ hobbies: e.target.value })}
                   placeholder="e.g. drawing, cycling"
                   className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
                 />
               </div>
               <div>
-                <label className="block font-sans text-sm font-medium text-[#252025]" htmlFor={`${fieldId}-food`}>
+                <label
+                  className="block font-sans text-sm font-medium text-[#252025]"
+                  htmlFor={`${fieldId}-food`}
+                >
                   Favorite food <span className="font-normal">(optional)</span>
                 </label>
                 <input
                   id={`${fieldId}-food`}
+                  value={character.food}
+                  onChange={(e) => onChange({ food: e.target.value })}
                   placeholder="e.g. pizza, ice-cream"
                   className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
                 />
               </div>
             </div>
           </>
-        ) : type === "Animal" ? (
+        ) : character.type === "Animal" ? (
           <>
             <label
               className="mt-5 block font-sans text-sm font-medium text-[#252025]"
@@ -293,6 +334,8 @@ function AddedCharacterForm({
             </label>
             <input
               id={`${fieldId}-name`}
+              value={character.animalName}
+              onChange={(e) => onChange({ animalName: e.target.value })}
               placeholder="Enter the animal name"
               className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
             />
@@ -304,6 +347,8 @@ function AddedCharacterForm({
             </label>
             <input
               id={`${fieldId}-species`}
+              value={character.animalSpecies}
+              onChange={(e) => onChange({ animalSpecies: e.target.value })}
               placeholder="e.g. dog, cat, fish"
               className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
             />
@@ -318,6 +363,8 @@ function AddedCharacterForm({
             </label>
             <input
               id={`${fieldId}-name`}
+              value={character.objectName}
+              onChange={(e) => onChange({ objectName: e.target.value })}
               placeholder={"E.g. “Car”"}
               className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
             />
@@ -332,21 +379,25 @@ function AddedCharacterForm({
             className="text-[#B8B4B6]"
           />
           <span className="mt-2 font-sans text-sm text-[#B8B4B6]">
-            {photoName || "Add a photo as a basis for the illustrations"}
+            {character.photoName || "Add a photo as a basis for the illustrations"}
           </span>
           <input
             type="file"
             accept="image/*"
             className="sr-only"
-            onChange={(event) =>
-              setPhotoName(event.target.files?.[0]?.name ?? "")
-            }
+            onChange={(event) => {
+              const file = event.target.files?.[0] || null;
+              onChange({
+                photo: file,
+                photoName: file?.name || "",
+              });
+            }}
           />
         </label>
         {canAdd && (
           <button
             type="button"
-            onClick={() => onAdd(type)}
+            onClick={() => onAdd(character.type)}
             className="mt-3 inline-flex h-8 items-center gap-1.5 rounded-[7px] border border-[#F3A8B7] bg-white px-3 font-sans text-xs text-[#E88DA0] transition hover:bg-[#FFF3F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]"
           >
             <UserRound aria-hidden="true" size={13} /> Add Character (max 4)
@@ -358,6 +409,7 @@ function AddedCharacterForm({
 }
 
 export default function InformationAboutCharacters() {
+  const router = useRouter();
   const {
     selectedAge,
     selectedTheme,
@@ -366,30 +418,142 @@ export default function InformationAboutCharacters() {
     selectedIllustration,
     selectedFont,
     selectedLanguage,
+    characters: storedCharacters,
+    setCharacters,
   } = useBookBuilder();
+
+  // Character 1 state
   const [characterType, setCharacterType] = useState<CharacterType>("Person");
-  const [gender, setGender] = useState<string | null>(null);
-  const [photoName, setPhotoName] = useState("");
-  const [additionalCharacters, setAdditionalCharacters] = useState<
-    Array<{ id: number; type: CharacterType }>
-  >([]);
+  const [name, setName] = useState(storedCharacters[0]?.name || "Lily");
+  const [gender, setGender] = useState<string | null>(
+    storedCharacters[0]?.gender === "BOY"
+      ? "Male"
+      : storedCharacters[0]?.gender === "GIRL"
+        ? "Female"
+        : "Female"
+  );
+  const [ageValue, setAgeValue] = useState(
+    storedCharacters[0]?.age ? String(storedCharacters[0].age) : "4"
+  );
+  const [hobbies, setHobbies] = useState(storedCharacters[0]?.hobbies || "");
+  const [food, setFood] = useState(storedCharacters[0]?.favoriteFood || "");
+  const [animalName, setAnimalName] = useState(storedCharacters[0]?.animalName || "");
+  const [animalSpecies, setAnimalSpecies] = useState(
+    storedCharacters[0]?.animalSpecies || ""
+  );
+  const [objectName, setObjectName] = useState(storedCharacters[0]?.objectName || "");
+  const [photoFile, setPhotoFile] = useState<File | null>(storedCharacters[0]?.photo || null);
+  const [photoName, setPhotoName] = useState(storedCharacters[0]?.photo?.name || "");
+
+  const [additionalCharacters, setAdditionalCharacters] = useState<AdditionalCharState[]>([]);
   const nextCharacterId = useRef(2);
+
   const age = ages.find((item) => item.label === selectedAge);
   const theme = themes.find((item) => item.label === selectedTheme);
   const story = stories.find((item) => item.label === selectedStory);
   const message = messages.find((item) => item.label === selectedMessage);
   const font = fonts.find((item) => item.label === selectedFont);
-  const illustrationLabels = ["3d Animation", "Water Colour", "Geometric", "Claymation", "Sticker Art", "Comic Book", "Gouache", "Soft Anime"];
+  const illustrationLabels = [
+    "3d Animation",
+    "Water Colour",
+    "Geometric",
+    "Claymation",
+    "Sticker Art",
+    "Comic Book",
+    "Gouache",
+    "Soft Anime",
+  ];
   const illustrationIndex = illustrationLabels.indexOf(selectedIllustration ?? "");
-  const illustration = illustrationIndex >= 0 ? { label: illustrationLabels[illustrationIndex], image: `/images/ill_${illustrationIndex + 1}.png`, color: "#FFFFFF" } : undefined;
+  const illustration =
+    illustrationIndex >= 0
+      ? {
+          label: illustrationLabels[illustrationIndex],
+          image: `/images/ill_${illustrationIndex + 1}.png`,
+          color: "#FFFFFF",
+        }
+      : undefined;
 
   const addCharacter = (type: CharacterType) => {
     const id = nextCharacterId.current++;
-    setAdditionalCharacters((characters) =>
-      characters.length >= 3
-        ? characters
-        : [...characters, { id, type }],
+    setAdditionalCharacters((chars) =>
+      chars.length >= 3
+        ? chars
+        : [
+            ...chars,
+            {
+              id,
+              type,
+              name: "",
+              gender: "Female",
+              age: "4",
+              hobbies: "",
+              food: "",
+              animalName: "",
+              animalSpecies: "",
+              objectName: "",
+              photo: null,
+              photoName: "",
+            },
+          ]
     );
+  };
+
+  const updateAdditionalCharacter = (
+    id: number,
+    updated: Partial<AdditionalCharState>
+  ) => {
+    setAdditionalCharacters((chars) =>
+      chars.map((c) => (c.id === id ? { ...c, ...updated } : c))
+    );
+  };
+
+  const handleNextStep = () => {
+    const char1Gender =
+      gender === "Male" ? "BOY" : gender === "Female" ? "GIRL" : "OTHER";
+
+    const mapped: CharacterData[] = [
+      {
+        id: 1,
+        type: (characterType === "Person"
+          ? "PERSON"
+          : characterType === "Animal"
+            ? "ANIMAL"
+            : "OBJECT") as "PERSON" | "ANIMAL" | "OBJECT",
+        name: name || "Lily",
+        gender: char1Gender,
+        age: parseInt(ageValue, 10) || 4,
+        hobbies: hobbies || undefined,
+        favoriteFood: food || undefined,
+        animalName: animalName || undefined,
+        animalSpecies: animalSpecies || undefined,
+        objectName: objectName || undefined,
+        photo: photoFile,
+      },
+      ...additionalCharacters.map((c, i): CharacterData => {
+        const cGender: "BOY" | "GIRL" | "OTHER" =
+          c.gender === "Male" ? "BOY" : c.gender === "Female" ? "GIRL" : "OTHER";
+        return {
+          id: c.id,
+          type: (c.type === "Person"
+            ? "PERSON"
+            : c.type === "Animal"
+              ? "ANIMAL"
+              : "OBJECT") as "PERSON" | "ANIMAL" | "OBJECT",
+          name: c.name || `Character ${i + 2}`,
+          gender: cGender,
+          age: parseInt(c.age, 10) || 4,
+          hobbies: c.hobbies || undefined,
+          favoriteFood: c.food || undefined,
+          animalName: c.animalName || undefined,
+          animalSpecies: c.animalSpecies || undefined,
+          objectName: c.objectName || undefined,
+          photo: c.photo,
+        };
+      }),
+    ];
+
+    setCharacters(mapped);
+    router.push("/book-builder/personal-details");
   };
 
   return (
@@ -522,6 +686,8 @@ export default function InformationAboutCharacters() {
                 </label>
                 <input
                   id="character-name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   placeholder="Enter the character's name"
                   className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
                 />
@@ -534,7 +700,10 @@ export default function InformationAboutCharacters() {
                     >
                       Gender
                     </label>
-                    <Select value={gender} onValueChange={setGender}>
+                    <Select
+                      value={gender}
+                      onValueChange={(val) => setGender(val)}
+                    >
                       <SelectTrigger
                         id="character-gender"
                         className="mt-2 h-10 w-full rounded-[8px] border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] focus-visible:border-[#E88DA0] focus-visible:ring-[#E88DA0]/25"
@@ -579,6 +748,8 @@ export default function InformationAboutCharacters() {
                     <input
                       id="character-age"
                       inputMode="numeric"
+                      value={ageValue}
+                      onChange={(e) => setAgeValue(e.target.value)}
                       placeholder="e.g. 5"
                       className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
                     />
@@ -596,6 +767,8 @@ export default function InformationAboutCharacters() {
                     </label>
                     <input
                       id="character-hobbies"
+                      value={hobbies}
+                      onChange={(e) => setHobbies(e.target.value)}
                       placeholder="e.g. drawing, cycling"
                       className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
                     />
@@ -610,6 +783,8 @@ export default function InformationAboutCharacters() {
                     </label>
                     <input
                       id="character-food"
+                      value={food}
+                      onChange={(e) => setFood(e.target.value)}
                       placeholder="e.g. pizza, ice-cream"
                       className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
                     />
@@ -626,6 +801,8 @@ export default function InformationAboutCharacters() {
                 </label>
                 <input
                   id="animal-name"
+                  value={animalName}
+                  onChange={(e) => setAnimalName(e.target.value)}
                   placeholder="Enter the animal name"
                   className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
                 />
@@ -637,6 +814,8 @@ export default function InformationAboutCharacters() {
                 </label>
                 <input
                   id="animal-species"
+                  value={animalSpecies}
+                  onChange={(e) => setAnimalSpecies(e.target.value)}
                   placeholder="e.g. dog, cat, fish"
                   className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
                 />
@@ -651,6 +830,8 @@ export default function InformationAboutCharacters() {
                 </label>
                 <input
                   id="object-name"
+                  value={objectName}
+                  onChange={(e) => setObjectName(e.target.value)}
                   placeholder={"E.g. “Car”"}
                   className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
                 />
@@ -671,9 +852,11 @@ export default function InformationAboutCharacters() {
                 type="file"
                 accept="image/*"
                 className="sr-only"
-                onChange={(event) =>
-                  setPhotoName(event.target.files?.[0]?.name ?? "")
-                }
+                onChange={(event) => {
+                  const file = event.target.files?.[0] || null;
+                  setPhotoFile(file);
+                  setPhotoName(file?.name || "");
+                }}
               />
             </label>
 
@@ -692,23 +875,31 @@ export default function InformationAboutCharacters() {
             <AddedCharacterForm
               key={character.id}
               number={index + 2}
-              initialType={character.type}
+              character={character}
               canAdd={
                 index === additionalCharacters.length - 1 &&
                 additionalCharacters.length < 3
               }
               onAdd={addCharacter}
-              onRemove={() => setAdditionalCharacters((characters) => characters.filter((item) => item.id !== character.id))}
+              onRemove={() =>
+                setAdditionalCharacters((chars) =>
+                  chars.filter((item) => item.id !== character.id)
+                )
+              }
+              onChange={(updated) =>
+                updateAdditionalCharacter(character.id, updated)
+              }
             />
           ))}
 
           <div className="mt-7 flex justify-center">
-            <Link
-              href="/book-builder/personal-details"
+            <button
+              type="button"
+              onClick={handleNextStep}
               className="inline-flex h-10 items-center rounded-xl bg-[#E88DA0] px-7 font-sans text-sm font-semibold text-white shadow-[0_5px_12px_rgba(232,141,160,0.25)] transition hover:bg-[#DD7893] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2"
             >
               Next Step
-            </Link>
+            </button>
           </div>
         </section>
       </section>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { LogOut, Menu, Settings, ShoppingCart, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useSession, signOut } from "next-auth/react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useLanguage } from "@/components/providers/LanguageProvider";
 import {
@@ -16,6 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
+  const { data: session } = useSession();
   const { t } = useLanguage();
   const router = useRouter();
   const pathname = usePathname();
@@ -135,18 +137,20 @@ const Navbar = () => {
                 <div className="flex items-center gap-2.5 px-2.5 py-2">
                   <div className="relative size-8 shrink-0 overflow-hidden rounded-full shadow-sm">
                     <Image
-                      src="/images/profile.png"
-                      alt=""
+                      src={session?.user?.profileImage || "/images/profile.png"}
+                      alt={session?.user?.name || "Profile"}
                       fill
                       sizes="32px"
                       className="object-cover"
                     />
                   </div>
-                  <div className="flex flex-col">
-                    <span className="font-fredoka text-sm font-medium text-[#252025]">
-                      {t.nav.account}
+                  <div className="flex flex-col max-w-[140px] truncate">
+                    <span className="font-fredoka text-sm font-medium text-[#252025] truncate">
+                      {session?.user?.name || t.nav.account}
                     </span>
-                    <span className="text-[11px] text-[#876d7c]">user@example.com</span>
+                    <span className="text-[11px] text-[#876d7c] truncate">
+                      {session?.user?.email || "user@example.com"}
+                    </span>
                   </div>
                 </div>
 
@@ -161,8 +165,12 @@ const Navbar = () => {
                 </DropdownMenuItem>
 
                 <DropdownMenuItem
-                  onClick={() => {
-                    // Logout functionality placeholder
+                  onClick={async () => {
+                    if (typeof window !== "undefined") {
+                      localStorage.removeItem("token");
+                      localStorage.removeItem("accessToken");
+                    }
+                    await signOut({ callbackUrl: "/login" });
                   }}
                   className="flex cursor-pointer items-center gap-2.5 rounded-xl px-2.5 py-2 text-sm font-medium text-[#d94868] transition-colors hover:bg-[#FFF0F3] hover:text-[#c43252]"
                 >

@@ -134,8 +134,10 @@ export default function SpecialEvents() {
     selectedIllustration,
     selectedFont,
     selectedLanguage,
+    specialEvents: savedEvents,
+    setSpecialEvents,
   } = useBookBuilder();
-  const [events, setEvents] = useState("");
+  const [events, setEvents] = useState(savedEvents || "");
   const age = ages.find((item) => item.label === selectedAge);
   const theme = themes.find((item) => item.label === selectedTheme);
   const story = stories.find((item) => item.label === selectedStory);
@@ -249,6 +251,7 @@ export default function SpecialEvents() {
           <div className="mt-7 flex justify-center">
             <Link
               href="/book-builder/checkout"
+              onClick={() => setSpecialEvents(events)}
               className="inline-flex h-10 items-center justify-center rounded-xl bg-[#E88DA0] px-7 font-sans text-sm font-semibold text-white shadow-[0_5px_12px_rgba(232,141,160,0.25)] transition hover:bg-[#DD7893] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2"
             >
               Next Step
