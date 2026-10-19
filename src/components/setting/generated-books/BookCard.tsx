@@ -1,37 +1,66 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { Pencil } from "lucide-react";
+import { useState } from "react";
+import { BookOpen } from "lucide-react";
 
 interface BookCardProps {
+  id?: string;
   title: string;
-  imageSrc: string;
+  imageSrc?: string;
+  status: string;
 }
 
-export default function BookCard({ title, imageSrc }: BookCardProps) {
-  return (
-    <div className="flex flex-col items-center group cursor-pointer">
-      {/* Book Cover */}
-      <div className="relative w-full aspect-[3/4] rounded-sm overflow-hidden shadow-lg group-hover:-translate-y-2 transition-transform duration-300 z-10">
-        <Image
-          src={imageSrc}
-          alt={title}
-          fill
-          className="object-cover"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        />
-        {/* Book shadow/lighting effect overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/10 mix-blend-overlay"></div>
-        <Link
-          href="/setting/edit-book"
-          aria-label={`Edit ${title}`}
-          className="absolute right-3 top-3 z-10 flex size-9 items-center justify-center rounded-full bg-white/95 text-[#E3859A] shadow-md transition hover:scale-105 hover:bg-[#E3859A] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E3859A] focus-visible:ring-offset-2"
-        >
-          <Pencil size={16} aria-hidden="true" />
-        </Link>
+const statusLabels: Record<string, string> = {
+  DRAFT: "Draft",
+  PENDING_PAYMENT: "Awaiting payment",
+  SUBMITTED: "Submitted",
+  GENERATING: "Generating",
+  COMPLETED: "Completed",
+  FAILED: "Generation failed",
+};
+
+export default function BookCard({ id, title, imageSrc, status }: BookCardProps) {
+  const [imageFailed, setImageFailed] = useState(false);
+
+  const card = (
+    <article className="group flex min-w-0 flex-col items-center transition-transform duration-200 hover:-translate-y-1">
+      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-sm bg-[#f9edf0] shadow-lg transition-shadow duration-200 group-hover:shadow-xl">
+        {imageSrc && !imageFailed ? (
+          <Image
+            src={imageSrc}
+            alt={`Cover of ${title}`}
+            fill
+            unoptimized
+            onError={() => setImageFailed(true)}
+            className="object-cover"
+            sizes="(max-width: 767px) 45vw, (max-width: 1199px) 30vw, 20vw"
+          />
+        ) : (
+          <div className="flex h-full flex-col items-center justify-center gap-3 p-4 text-center text-[#a66b7e]">
+            <BookOpen size={36} aria-hidden="true" />
+            <span className="font-crimson text-lg font-semibold">{title}</span>
+          </div>
+        )}
       </div>
-      
-      {/* Wooden Shelf Underneath */}
-      <div className="w-[110%] h-3 bg-[#D29D59] rounded-b-md shadow-md mt-[-2px] border-t border-[#C08C4A] bg-[url('https://www.transparenttextures.com/patterns/wood-pattern.png')]"></div>
-    </div>
+      <div aria-hidden="true" className="-mt-0.5 h-3 w-[105%] rounded-b-md border-t border-[#C08C4A] bg-[#D29D59] shadow-md" />
+      <h2 className="mt-3 w-full break-words text-center text-sm font-semibold text-[#514256] transition-colors group-hover:text-[#E3859A]">
+        {title}
+      </h2>
+      <p className="mt-1 text-center text-xs text-[#81717a]">
+        {statusLabels[status] ?? status.toLowerCase().replaceAll("_", " ")}
+      </p>
+    </article>
   );
+
+  if (id) {
+    return (
+      <Link href={`/story-books/book-details/${id}`} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E3859A] rounded-md">
+        {card}
+      </Link>
+    );
+  }
+
+  return card;
 }

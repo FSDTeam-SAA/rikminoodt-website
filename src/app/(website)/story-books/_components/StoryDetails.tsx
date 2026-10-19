@@ -2,13 +2,13 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import BookReaderModal from "./BookReaderModal";
 import {
   BookOpen,
   ChevronLeft,
   ChevronRight,
   Download,
-  Grid2X2,
   Images,
   Maximize2,
   Minus,
@@ -59,32 +59,52 @@ interface StoryCharacter {
 }
 
 interface FetchedBookData {
+  _id?: string;
   title?: string;
   coverImageUrl?: string;
   ageCategory?: string;
   theme?: string;
+  subject?: string;
+  specialMessage?: string;
+  creatorName?: string;
   illustrationStyle?: string;
   language?: string;
   foreword?: string;
   characters?: StoryCharacter[];
-  pages?: Array<{ pageNumber?: number; text?: string; illustrationUrl?: string; image?: string; alt?: string }>;
+  pages?: Array<{
+    pageNumber?: number;
+    text?: string;
+    imageUrl?: string;
+    illustrationUrl?: string;
+    image?: string;
+    alt?: string;
+  }>;
 }
 
 const StoryDetails = ({ storyId }: { storyId: string }) => {
+  const { data: session, status: sessionStatus } = useSession();
   const [isReaderOpen, setIsReaderOpen] = useState(false);
   const [fetchedBook, setFetchedBook] = useState<FetchedBookData | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [currentPageIndex, setCurrentPageIndex] = useState(0);
+  const [previewZoom, setPreviewZoom] = useState(1);
 
   useEffect(() => {
     if (!storyId || storyId === "max-sees-the-seasons" || storyId === "lisa-camping") return;
+    if (sessionStatus === "loading") return;
 
     const loadBook = async () => {
+      setLoading(true);
       try {
         const apiBase = getApiBaseUrl();
-        const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+        const token = session?.user?.accessToken || (typeof window !== "undefined" ? localStorage.getItem("token") : null);
         const headers: Record<string, string> = { "Content-Type": "application/json" };
         if (token) headers["Authorization"] = `Bearer ${token}`;
 
-        const res = await fetch(`${apiBase}/books/${storyId}`, { headers });
+        const res = await fetch(`${apiBase}/books/${storyId}`, {
+          headers,
+          cache: "no-store",
+        });
         if (!res.ok) return;
         const json = await res.json();
         if (json?.data) {
@@ -92,11 +112,13 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
         }
       } catch (e) {
         console.error("Error loading story details:", e);
+      } finally {
+        setLoading(false);
       }
     };
 
     loadBook();
-  }, [storyId]);
+  }, [storyId, sessionStatus, session?.user?.accessToken]);
 
   const isMaxStory = storyId === "max-sees-the-seasons";
   const cover = fetchedBook?.coverImageUrl || (isMaxStory ? "/images/exp_c_1.jpg" : story.cover);
@@ -106,11 +128,17 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
         ["Ages", `${fetchedBook.ageCategory || "3-5"} years`],
         ["Characters", String(fetchedBook.characters?.length || 1)],
         ["Theme", fetchedBook.theme ? String(fetchedBook.theme).replace(/_/g, " ") : "Adventure"],
+        ...(fetchedBook.subject ? [["Subject", String(fetchedBook.subject).replace(/_/g, " ")]] : []),
+        ...(fetchedBook.specialMessage ? [["Message", String(fetchedBook.specialMessage).replace(/_/g, " ")]] : []),
         ["Illustration", fetchedBook.illustrationStyle ? String(fetchedBook.illustrationStyle).replace(/_/g, " ") : "Animation 3D"],
         ["Language", fetchedBook.language || "English"],
+        ...(fetchedBook.creatorName ? [["Creator", fetchedBook.creatorName]] : []),
       ]
     : story.details;
-  const activeDescription = fetchedBook?.foreword || story.description;
+  const activeDescription =
+    fetchedBook?.foreword ||
+    (fetchedBook?.pages && fetchedBook.pages.length > 0 ? fetchedBook.pages[0].text : "") ||
+    story.description;
   const usedPhotos = isMaxStory
     ? [
         { name: "Child", role: "Main character", image: "/images/exp_u_1_1.png" },
@@ -119,202 +147,265 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
     : fetchedBook?.characters && fetchedBook.characters.some((c: StoryCharacter) => c.photoUrl)
       ? fetchedBook.characters.map((c: StoryCharacter, i: number) => ({
           name: c.name || c.animalName || c.objectName || `Character ${i + 1}`,
-          role: c.type || "Character",
+          role: c.type ? c.type.charAt(0).toUpperCase() + c.type.slice(1).toLowerCase() : "Character",
           image: c.photoUrl || "/images/profile.png",
         }))
       : photos;
 
+  const rawPages = fetchedBook?.pages && fetchedBook.pages.length > 0 ? fetchedBook.pages : [];
+  const previewPages =
+    rawPages.length > 0
+      ? rawPages.map((p, idx) => ({
+          pageNumber: p.pageNumber || idx + 1,
+          image: p.imageUrl || p.illustrationUrl || p.image || cover,
+          text: p.text || "",
+        }))
+      : [
+          { pageNumber: 1, image: cover, text: "" },
+          { pageNumber: 2, image: "/images/story2.png", text: "" },
+        ];
+
+  const currentPreviewPage = previewPages[currentPageIndex] || previewPages[0];
+
   return (
     <>
       <section
-      className="pb-16 pt-10 sm:pb-20 lg:pt-14"
-      aria-labelledby="story-details-heading"
-    >
-      <div className="container mx-auto max-w-[1080px] px-5 sm:px-8 lg:px-0">
-        <h1
-          id="story-details-heading"
-          className="text-center font-fredoka text-[48px] font-normal leading-none text-[#1E1E1E]"
-        >
-          <span className="text-[#9C81BE]">Story</span>{" "}
-          <span className="text-[#55AA82]">
-            Personalised Children&apos;s Books
-          </span>
-        </h1>
+        className="pb-16 pt-10 sm:pb-20 lg:pt-14"
+        aria-labelledby="story-details-heading"
+      >
+        <div className="container mx-auto max-w-[1080px] px-5 sm:px-8 lg:px-0">
+          <h1
+            id="story-details-heading"
+            className="text-center font-fredoka text-[48px] font-normal leading-none text-[#1E1E1E]"
+          >
+            <span className="text-[#9C81BE]">Story</span>{" "}
+            <span className="text-[#55AA82]">
+              Personalised Children&apos;s Books
+            </span>
+          </h1>
 
-        <div className="relative mt-8 rounded-xl border border-[#FFAD79] bg-[#FFF9F3] p-4 sm:p-6 lg:p-8">
-          <div className="grid gap-7 md:grid-cols-[minmax(230px,0.76fr)_minmax(0,1.24fr)] md:items-start lg:gap-10">
-            <div className="mx-auto w-full max-w-[290px] rounded-md bg-[#514256] p-1.5 shadow-[0_10px_20px_rgba(66,52,62,0.28)]">
-              <Image
-                src={cover}
-                alt={`Cover of ${coverTitle}`}
-                width={396}
-                height={512}
-                className="aspect-[0.76] w-full rounded-sm object-cover object-top"
-                priority
-              />
-            </div>
-
-            <div className="rounded-xl bg-white p-5 shadow-[0_4px_14px_rgba(92,76,84,0.08)] sm:p-6">
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E9DFD6] pb-4">
-                <h2 className="flex items-center gap-2 font-sans text-lg font-semibold text-[#1E1E1E]">
-                  <BookOpen
-                    size={19}
-                    className="text-[#F27643]"
-                    aria-hidden="true"
-                  />
-                  Story Details
-                </h2>
-              </div>
-
-              <dl className="mt-3 divide-y divide-[#EEE6DE] font-sans text-sm">
-                {activeDetails.map(([label, value]) => (
-                  <div
-                    key={label}
-                    className="grid grid-cols-[105px_1fr] gap-3 py-2 text-[#514A4E]"
-                  >
-                    <dt className="font-medium text-[#756E73]">{label}</dt>
-                    <dd>{value}</dd>
-                  </div>
-                ))}
-                <div className="grid grid-cols-[105px_1fr] gap-3 py-2 text-[#514A4E]">
-                  <dt className="font-medium text-[#756E73]">Story</dt>
-                  <dd className="leading-relaxed">{activeDescription}</dd>
-                </div>
-              </dl>
-
-              <div className="mt-5 flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#9C81BE] px-4 font-sans text-sm font-medium text-white transition-colors hover:bg-[#8667AD]"
-                >
-                  <Download size={16} aria-hidden="true" /> Download PDF
-                </button>
-                <button
-                  type="button"
-                  className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#E88DA0] px-4 font-sans text-sm font-medium text-white transition-colors hover:bg-[#DF7894]"
-                >
-                  <Printer size={16} aria-hidden="true" /> Order Hardcopy
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-9 border-t border-[#F0E5D9] pt-6">
-            <div className="flex items-center justify-between gap-4 px-1">
-              <h2 className="inline-flex items-center gap-2 font-sans text-base font-semibold text-[#514256]">
-                <Images
-                  size={16}
-                  className="text-[#9C81BE]"
-                  aria-hidden="true"
-                />{" "}
-                Photos used
-              </h2>
-              <button
-                type="button"
-                className="inline-flex cursor-pointer items-center gap-1.5 font-sans text-sm text-[#514256] transition-colors duration-200 hover:text-[#9C81BE]"
-              >
-                <Grid2X2 size={15} aria-hidden="true" /> View All {usedPhotos.length} Photos
-              </button>
-            </div>
-            <div className="mx-auto mt-6 grid max-w-[880px] grid-cols-2 gap-5 sm:grid-cols-4 sm:gap-6">
-              {usedPhotos.map((photo) => (
-                <article
-                  key={photo.name}
-                  className="overflow-hidden rounded-xl border border-[#F0E5D9] bg-white p-3 shadow-[0_7px_16px_rgba(92,76,84,0.13)] transition-transform duration-300 hover:-translate-y-1"
-                >
+          {loading && !fetchedBook ? (
+            <p className="mt-8 text-center font-sans text-sm text-[#81717a]">
+              Loading story details…
+            </p>
+          ) : (
+            <div className="relative mt-8 rounded-xl border border-[#FFAD79] bg-[#FFF9F3] p-4 sm:p-6 lg:p-8">
+              <div className="grid gap-7 md:grid-cols-[minmax(230px,0.76fr)_minmax(0,1.24fr)] md:items-start lg:gap-10">
+                <div className="mx-auto w-full max-w-[290px] rounded-md bg-[#514256] p-1.5 shadow-[0_10px_20px_rgba(66,52,62,0.28)]">
                   <Image
-                    src={photo.image}
-                    alt={photo.name}
-                    width={190}
-                    height={190}
-                    className="aspect-square w-full rounded-lg object-cover object-center"
+                    src={cover}
+                    alt={`Cover of ${coverTitle}`}
+                    width={396}
+                    height={512}
+                    className="aspect-[0.76] w-full rounded-sm object-cover object-top"
+                    priority
+                    unoptimized
                   />
-                  <p className="mt-3 truncate text-center font-crimson text-sm font-semibold text-[#514256]">
-                    {photo.name}
-                  </p>
-                  <p className="mt-1 truncate text-center font-sans text-xs text-[#8A8086]">
-                    {photo.role}
-                  </p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </div>
+                </div>
 
-        <section
-          className="mt-8 rounded-xl bg-[#FFFCF9] px-5 py-9 text-center shadow-[0_4px_14px_rgba(92,76,84,0.05)] sm:px-8 sm:py-10"
-          aria-labelledby="read-book-heading"
-        >
-          <h2
-            id="read-book-heading"
-            className="font-fredoka text-[48px] font-normal leading-none"
+                <div className="rounded-xl bg-white p-5 shadow-[0_4px_14px_rgba(92,76,84,0.08)] sm:p-6">
+                  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E9DFD6] pb-4">
+                    <h2 className="flex items-center gap-2 font-sans text-lg font-semibold text-[#1E1E1E]">
+                      <BookOpen
+                        size={19}
+                        className="text-[#F27643]"
+                        aria-hidden="true"
+                      />
+                      Story Details
+                    </h2>
+                  </div>
+
+                  <dl className="mt-3 divide-y divide-[#EEE6DE] font-sans text-sm">
+                    <div className="grid grid-cols-[105px_1fr] gap-3 py-2 text-[#514A4E]">
+                      <dt className="font-medium text-[#756E73]">Title</dt>
+                      <dd className="font-semibold text-[#302735]">{coverTitle}</dd>
+                    </div>
+                    {activeDetails.map(([label, value]) => (
+                      <div
+                        key={label}
+                        className="grid grid-cols-[105px_1fr] gap-3 py-2 text-[#514A4E]"
+                      >
+                        <dt className="font-medium text-[#756E73]">{label}</dt>
+                        <dd>{value}</dd>
+                      </div>
+                    ))}
+                    <div className="grid grid-cols-[105px_1fr] gap-3 py-2 text-[#514A4E]">
+                      <dt className="font-medium text-[#756E73]">Story</dt>
+                      <dd className="leading-relaxed">{activeDescription}</dd>
+                    </div>
+                  </dl>
+
+                  <div className="mt-5 flex flex-wrap gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setIsReaderOpen(true)}
+                      className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#55AA82] px-4 font-sans text-sm font-medium text-white transition-colors hover:bg-[#47936f]"
+                    >
+                      <BookOpen size={16} aria-hidden="true" /> Read Story
+                    </button>
+                    <button
+                      type="button"
+                      className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#9C81BE] px-4 font-sans text-sm font-medium text-white transition-colors hover:bg-[#8667AD]"
+                    >
+                      <Download size={16} aria-hidden="true" /> Download PDF
+                    </button>
+                    <button
+                      type="button"
+                      className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#E88DA0] px-4 font-sans text-sm font-medium text-white transition-colors hover:bg-[#DF7894]"
+                    >
+                      <Printer size={16} aria-hidden="true" /> Order Hardcopy
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-9 border-t border-[#F0E5D9] pt-6">
+                <div className="flex items-center justify-between gap-4 px-1">
+                  <h2 className="inline-flex items-center gap-2 font-sans text-base font-semibold text-[#514256]">
+                    <Images
+                      size={16}
+                      className="text-[#9C81BE]"
+                      aria-hidden="true"
+                    />{" "}
+                    Photos used
+                  </h2>
+                  <span className="font-sans text-xs text-[#8A8086]">
+                    {usedPhotos.length} {usedPhotos.length === 1 ? "Character photo" : "Character photos"}
+                  </span>
+                </div>
+                <div className="mx-auto mt-6 grid max-w-[880px] grid-cols-2 gap-5 sm:grid-cols-4 sm:gap-6">
+                  {usedPhotos.map((photo, i) => (
+                    <article
+                      key={`${photo.name}-${i}`}
+                      className="overflow-hidden rounded-xl border border-[#F0E5D9] bg-white p-3 shadow-[0_7px_16px_rgba(92,76,84,0.13)] transition-transform duration-300 hover:-translate-y-1"
+                    >
+                      <Image
+                        src={photo.image}
+                        alt={photo.name}
+                        width={190}
+                        height={190}
+                        className="aspect-square w-full rounded-lg object-cover object-center"
+                        unoptimized
+                      />
+                      <p className="mt-3 truncate text-center font-crimson text-sm font-semibold text-[#514256]">
+                        {photo.name}
+                      </p>
+                      <p className="mt-1 truncate text-center font-sans text-xs text-[#8A8086]">
+                        {photo.role}
+                      </p>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          <section
+            className="mt-8 rounded-xl bg-[#FFFCF9] px-5 py-9 text-center shadow-[0_4px_14px_rgba(92,76,84,0.05)] sm:px-8 sm:py-10"
+            aria-labelledby="read-book-heading"
           >
-            <span className="text-[#55A7CF]">Read</span>{" "}
-            <span className="text-[#E0A94C]">the book</span>
-          </h2>
-          <div className="mx-auto mt-6 w-full max-w-[300px] rounded-md bg-[#514256] p-1.5 shadow-[0_12px_24px_rgba(66,52,62,0.28)]">
-            <Image
-              src={cover}
-              alt={`Preview of ${coverTitle}`}
-              width={396}
-              height={512}
-              className="aspect-[0.76] w-full rounded-sm object-cover object-top"
-            />
-          </div>
-          <div
-            className="mt-7 flex flex-wrap justify-center gap-2 sm:gap-3"
-            aria-label={`Page navigation for story ${storyId}`}
-          >
-            <button
-              type="button"
-              aria-label="Zoom in"
-              className="flex size-11 cursor-pointer items-center justify-center rounded-md border border-[#E8AA46] bg-white text-[#D89A38] shadow-sm transition-colors hover:bg-[#FFF5E2] sm:size-12"
+            <h2
+              id="read-book-heading"
+              className="font-fredoka text-[48px] font-normal leading-none"
             >
-              <Plus size={20} strokeWidth={2.5} aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              aria-label="Zoom out"
-              className="flex size-11 cursor-pointer items-center justify-center rounded-md border border-[#E8AA46] bg-white text-[#D89A38] shadow-sm transition-colors hover:bg-[#FFF5E2] sm:size-12"
-            >
-              <Minus size={20} strokeWidth={2.5} aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              aria-label="Previous page"
-              className="flex size-11 cursor-pointer items-center justify-center rounded-md border border-[#E8AA46] bg-white text-[#D89A38] shadow-sm transition-colors hover:bg-[#FFF5E2] sm:size-12"
-            >
-              <ChevronLeft size={25} strokeWidth={2.5} aria-hidden="true" />
-            </button>
-            {[1, 2].map((page) => (
-              <button
-                key={page}
-                type="button"
-                aria-label={`Go to page ${page}`}
-                className={`flex size-11 cursor-pointer items-center justify-center rounded-md border font-sans text-lg font-medium shadow-sm transition-colors sm:size-12 ${page === 1 ? "border-[#E0A94C] bg-[#E0A94C] text-white" : "border-[#E8AA46] bg-white text-[#D89A38] hover:bg-[#FFF5E2]"}`}
-              >
-                {page}
-              </button>
-            ))}
-            <button
-              type="button"
-              aria-label="Next page"
-              className="flex size-11 cursor-pointer items-center justify-center rounded-md border border-[#E8AA46] bg-white text-[#D89A38] shadow-sm transition-colors hover:bg-[#FFF5E2] sm:size-12"
-            >
-              <ChevronRight size={25} strokeWidth={2.5} aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              aria-label="View full screen"
+              <span className="text-[#55A7CF]">Read</span>{" "}
+              <span className="text-[#E0A94C]">the book</span>
+            </h2>
+
+            <div
               onClick={() => setIsReaderOpen(true)}
-              className="flex size-11 cursor-pointer items-center justify-center rounded-md border border-[#E8AA46] bg-white text-[#D89A38] shadow-sm transition-colors hover:bg-[#FFF5E2] sm:size-12"
+              className="group relative mx-auto mt-6 w-full max-w-[300px] cursor-pointer overflow-hidden rounded-md bg-[#514256] p-1.5 shadow-[0_12px_24px_rgba(66,52,62,0.28)] transition-transform duration-200 hover:scale-[1.02]"
+              title="Click to open interactive book reader"
             >
-              <Maximize2 size={21} strokeWidth={2.5} aria-hidden="true" />
-            </button>
-          </div>
-        </section>
-      </div>
-    </section>
+              <div className="overflow-hidden rounded-sm">
+                <Image
+                  src={currentPreviewPage.image}
+                  alt={`Page ${currentPreviewPage.pageNumber} of ${coverTitle}`}
+                  width={396}
+                  height={512}
+                  className="aspect-[0.76] w-full rounded-sm object-cover object-top transition-transform duration-200"
+                  style={{ transform: `scale(${previewZoom})` }}
+                  unoptimized
+                />
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center rounded-md bg-black/30 opacity-0 backdrop-blur-[1px] transition-opacity duration-200 group-hover:opacity-100">
+                <span className="flex items-center gap-2 rounded-full bg-[#E0A94C] px-4 py-2 font-sans text-xs font-semibold text-white shadow-md">
+                  <BookOpen size={16} /> Open Flipbook Reader
+                </span>
+              </div>
+            </div>
+
+            {currentPreviewPage.text && (
+              <p className="mx-auto mt-4 max-w-[550px] px-4 font-crimson text-base italic leading-relaxed text-[#514256] sm:text-lg">
+                &ldquo;{currentPreviewPage.text}&rdquo;
+              </p>
+            )}
+
+            <div
+              className="mt-7 flex flex-wrap justify-center gap-2 sm:gap-3"
+              aria-label={`Page navigation for story ${storyId}`}
+            >
+              <button
+                type="button"
+                aria-label="Zoom in"
+                onClick={() => setPreviewZoom((z) => Math.min(Number((z + 0.1).toFixed(1)), 1.4))}
+                className="flex size-11 cursor-pointer items-center justify-center rounded-md border border-[#E8AA46] bg-white text-[#D89A38] shadow-sm transition-colors hover:bg-[#FFF5E2] sm:size-12"
+              >
+                <Plus size={20} strokeWidth={2.5} aria-hidden="true" />
+              </button>
+              <button
+                type="button"
+                aria-label="Zoom out"
+                onClick={() => setPreviewZoom((z) => Math.max(Number((z - 0.1).toFixed(1)), 0.8))}
+                className="flex size-11 cursor-pointer items-center justify-center rounded-md border border-[#E8AA46] bg-white text-[#D89A38] shadow-sm transition-colors hover:bg-[#FFF5E2] sm:size-12"
+              >
+                <Minus size={20} strokeWidth={2.5} aria-hidden="true" />
+              </button>
+              <button
+                type="button"
+                aria-label="Previous page"
+                disabled={currentPageIndex === 0}
+                onClick={() => setCurrentPageIndex((p) => Math.max(0, p - 1))}
+                className="flex size-11 cursor-pointer items-center justify-center rounded-md border border-[#E8AA46] bg-white text-[#D89A38] shadow-sm transition-colors hover:bg-[#FFF5E2] disabled:cursor-not-allowed disabled:opacity-40 sm:size-12"
+              >
+                <ChevronLeft size={25} strokeWidth={2.5} aria-hidden="true" />
+              </button>
+              {previewPages.map((p, idx) => (
+                <button
+                  key={p.pageNumber}
+                  type="button"
+                  aria-label={`Go to page ${p.pageNumber}`}
+                  onClick={() => setCurrentPageIndex(idx)}
+                  className={`flex size-11 cursor-pointer items-center justify-center rounded-md border font-sans text-lg font-medium shadow-sm transition-colors sm:size-12 ${
+                    currentPageIndex === idx
+                      ? "border-[#E0A94C] bg-[#E0A94C] text-white"
+                      : "border-[#E8AA46] bg-white text-[#D89A38] hover:bg-[#FFF5E2]"
+                  }`}
+                >
+                  {p.pageNumber}
+                </button>
+              ))}
+              <button
+                type="button"
+                aria-label="Next page"
+                disabled={currentPageIndex === previewPages.length - 1}
+                onClick={() => setCurrentPageIndex((p) => Math.min(previewPages.length - 1, p + 1))}
+                className="flex size-11 cursor-pointer items-center justify-center rounded-md border border-[#E8AA46] bg-white text-[#D89A38] shadow-sm transition-colors hover:bg-[#FFF5E2] disabled:cursor-not-allowed disabled:opacity-40 sm:size-12"
+              >
+                <ChevronRight size={25} strokeWidth={2.5} aria-hidden="true" />
+              </button>
+              <button
+                type="button"
+                aria-label="View full screen"
+                onClick={() => setIsReaderOpen(true)}
+                className="flex size-11 cursor-pointer items-center justify-center rounded-md border border-[#E8AA46] bg-white text-[#D89A38] shadow-sm transition-colors hover:bg-[#FFF5E2] sm:size-12"
+              >
+                <Maximize2 size={21} strokeWidth={2.5} aria-hidden="true" />
+              </button>
+            </div>
+          </section>
+        </div>
+      </section>
 
       <BookReaderModal
         isOpen={isReaderOpen}

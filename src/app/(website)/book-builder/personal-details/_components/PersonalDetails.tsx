@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { Mic, Pencil, PencilLine, Sparkles, Square } from "lucide-react";
+import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useBookBuilder } from "../../_components/BookBuilderProvider";
 
 const ages = [
@@ -118,105 +118,13 @@ export default function PersonalDetails() {
     selectedLanguage,
     creatorName: initialCreatorName,
     setCreatorName,
-    foreword: initialForeword,
-    setForeword,
-    forewordMode: initialForewordMode,
-    setForewordMode,
-    setVoiceBlob,
     userDetails: initialUserDetails,
     setUserDetails,
   } = useBookBuilder();
 
   const [localCreatorName, setLocalCreatorName] = useState(initialCreatorName || "Mum & Dad");
-  const [localForeword, setLocalForeword] = useState(initialForeword || "");
-  const [forewordMode, setLocalForewordMode] = useState<"write" | "voice">(initialForewordMode || "write");
   const [localUser, setLocalUser] = useState(initialUserDetails);
   const [errorMessage, setErrorMessage] = useState("");
-
-  const [isRecording, setIsRecording] = useState(false);
-  const [seconds, setSeconds] = useState(0);
-  const [recordingUrl, setRecordingUrl] = useState<string | null>(null);
-  const [recordingError, setRecordingError] = useState("");
-  const recorderRef = useRef<MediaRecorder | null>(null);
-  const streamRef = useRef<MediaStream | null>(null);
-  const isMounted = useRef(true);
-  const requestingMic = useRef(false);
-  const voiceModeRef = useRef(false);
-  const audioUrlRef = useRef<string | null>(null);
-
-  useEffect(() => {
-    isMounted.current = true;
-    return () => {
-      isMounted.current = false;
-      if (recorderRef.current?.state === "recording") recorderRef.current.stop();
-      streamRef.current?.getTracks().forEach((track) => track.stop());
-      if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!isRecording) return;
-    const timer = window.setInterval(() => setSeconds((value) => value + 1), 1000);
-    return () => window.clearInterval(timer);
-  }, [isRecording]);
-
-  const startRecording = async () => {
-    if (requestingMic.current || isRecording) return;
-    if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === "undefined") {
-      setRecordingError("Voice recording is not supported in this browser.");
-      return;
-    }
-    requestingMic.current = true;
-    setRecordingError("");
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      if (!isMounted.current || !voiceModeRef.current) {
-        stream.getTracks().forEach((track) => track.stop());
-        return;
-      }
-      streamRef.current = stream;
-      const recorder = new MediaRecorder(stream);
-      const chunks: Blob[] = [];
-      recorderRef.current = recorder;
-      recorder.ondataavailable = (event) => {
-        if (event.data.size) chunks.push(event.data);
-      };
-      recorder.onstop = () => {
-        stream.getTracks().forEach((track) => track.stop());
-        if (streamRef.current === stream) streamRef.current = null;
-        if (!isMounted.current) return;
-        setIsRecording(false);
-        if (chunks.length) {
-          if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
-          const blob = new Blob(chunks, { type: recorder.mimeType || "audio/webm" });
-          const url = URL.createObjectURL(blob);
-          audioUrlRef.current = url;
-          setRecordingUrl(url);
-          setVoiceBlob(blob);
-        }
-      };
-      recorder.start();
-      setSeconds(0);
-      setIsRecording(true);
-    } catch {
-      streamRef.current?.getTracks().forEach((track) => track.stop());
-      streamRef.current = null;
-      if (isMounted.current)
-        setRecordingError("Unable to access your microphone. Please check your browser permissions.");
-    } finally {
-      requestingMic.current = false;
-    }
-  };
-
-  const stopRecording = () => {
-    if (recorderRef.current?.state === "recording") recorderRef.current.stop();
-  };
-
-  const handleAiHelp = () => {
-    setLocalForeword(
-      "May this magical story fill your heart with joy, courage, and endless wonder. Always believe in yourself and follow your dreams."
-    );
-  };
 
   const handleNextStep = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -233,10 +141,8 @@ export default function PersonalDetails() {
     }
 
     setCreatorName(localCreatorName);
-    setForeword(localForeword);
-    setForewordMode(forewordMode);
     setUserDetails(localUser);
-    router.push("/book-builder/special-events");
+    router.push("/book-builder/checkout");
   };
 
   const age = ages.find((item) => item.label === selectedAge);
@@ -311,104 +217,6 @@ export default function PersonalDetails() {
               value={localCreatorName}
               onChange={(e) => setLocalCreatorName(e.target.value)}
             />
-            <div className="mt-4 grid items-center gap-2 sm:grid-cols-[1fr_auto_1fr]">
-              <span className="font-sans text-sm font-medium text-[#252025]">Foreword in the book</span>
-              <div className="mx-auto flex w-fit items-center rounded-xl bg-[#FBE6EA] p-1.5 font-sans text-sm sm:text-base">
-                <button
-                  type="button"
-                  onClick={() => {
-                    voiceModeRef.current = false;
-                    stopRecording();
-                    setLocalForewordMode("write");
-                  }}
-                  className={`inline-flex h-10 items-center gap-2 rounded-xl px-4 transition ${
-                    forewordMode === "write" ? "bg-[#E88DA0] text-white shadow-sm" : "text-[#252025]"
-                  }`}
-                >
-                  <PencilLine aria-hidden="true" size={18} /> Write
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    voiceModeRef.current = true;
-                    setLocalForewordMode("voice");
-                  }}
-                  className={`inline-flex h-10 items-center gap-2 rounded-xl px-4 transition ${
-                    forewordMode === "voice" ? "bg-[#E88DA0] text-white shadow-sm" : "text-[#252025]"
-                  }`}
-                >
-                  <Mic aria-hidden="true" size={18} /> Voice
-                </button>
-              </div>
-              <button
-                type="button"
-                onClick={handleAiHelp}
-                className="inline-flex h-11 items-center gap-2 justify-self-start rounded-xl bg-[#FBE6EA] px-5 font-sans text-sm text-[#A06676] transition hover:bg-[#F8D8DF] sm:justify-self-end sm:text-base"
-              >
-                <Sparkles aria-hidden="true" size={18} /> Let AI help
-              </button>
-            </div>
-            <textarea
-              placeholder="Write an inspiring message"
-              hidden={forewordMode !== "write"}
-              value={localForeword}
-              onChange={(e) => setLocalForeword(e.target.value)}
-              className="mt-2 min-h-[150px] w-full resize-y rounded-[5px] border border-[#F3A8B7] bg-[#FFFCFA] px-2.5 py-2 font-sans text-[10px] text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/20 sm:min-h-[180px] sm:text-xs"
-            />
-            {forewordMode === "voice" && (
-              <div className="mt-3 flex min-h-[245px] flex-col items-center justify-center rounded-lg border border-[#F5CED7] bg-white px-4 py-8 text-center sm:min-h-[290px]">
-                {isRecording ? (
-                  <>
-                    <p className="font-sans text-xs text-[#E88DA0]"><span aria-hidden="true">●</span> Recording</p>
-                    <p className="mt-1 font-sans text-xl text-[#514256]" aria-label={`Recording time ${Math.floor(seconds / 60)} minutes ${seconds % 60} seconds`}>
-                      {String(Math.floor(seconds / 60)).padStart(2, "0")}:{String(seconds % 60).padStart(2, "0")}
-                    </p>
-                    <div aria-hidden="true" className="my-7 flex h-4 items-center gap-[3px]">
-                      {Array.from({ length: 24 }, (_, index) => (
-                        <span
-                          key={index}
-                          className="w-[3px] rounded-full bg-[#E88DA0]"
-                          style={{ height: `${index % 5 === 0 ? 12 : index % 3 === 0 ? 8 : 5}px` }}
-                        />
-                      ))}
-                    </div>
-                    <button
-                      type="button"
-                      onClick={stopRecording}
-                      aria-label="Stop recording"
-                      className="flex size-[106px] items-center justify-center rounded-full bg-[#FFE1E8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]"
-                    >
-                      <span className="flex size-14 items-center justify-center rounded-full bg-white text-[#E88DA0] shadow-[0_3px_14px_rgba(157,102,164,0.25)]">
-                        <Square aria-hidden="true" size={16} fill="currentColor" />
-                      </span>
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <p className="font-sans text-lg font-semibold text-[#514256]">What&apos;s your idea?</p>
-                    <p className="mt-1 font-sans text-sm text-[#AAA5A8]">Tap the mic and start speaking</p>
-                    <button
-                      type="button"
-                      onClick={startRecording}
-                      aria-label="Start recording"
-                      className="mt-7 flex size-[88px] items-center justify-center rounded-full bg-[#FBE4E9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]"
-                    >
-                      <span className="flex size-[72px] items-center justify-center rounded-full bg-[#F3B8C5]">
-                        <span className="flex size-[58px] items-center justify-center rounded-full bg-[#E88DA0] text-white">
-                          <Mic aria-hidden="true" size={21} />
-                        </span>
-                      </span>
-                    </button>
-                    {recordingUrl && (
-                      <audio controls src={recordingUrl} className="mt-5 max-w-full" aria-label="Play recorded foreword" />
-                    )}
-                    {recordingError && (
-                      <p role="alert" className="mt-4 font-sans text-sm text-[#B74760]">{recordingError}</p>
-                    )}
-                  </>
-                )}
-              </div>
-            )}
           </div>
 
           <div className="mt-5 sm:mt-7">

@@ -9,7 +9,6 @@ const ageGroups = [
   { label: "3-5 Years", image: "/images/age_2.png", color: "#E3F3FC" },
   { label: "5-9 Years", image: "/images/age_3.png", color: "#FADDE0" },
   { label: "10+ Years", image: "/images/age_4.png", color: "#D7EEE1" },
-  { label: "Adult", image: "/images/age_5.png", color: "#E2D7F3" },
 ];
 
 export default function ChooseAgeCategory() {
@@ -37,7 +36,7 @@ export default function ChooseAgeCategory() {
             Choose the age category
           </p>
 
-          <div className="mt-8 grid grid-cols-1 justify-items-center gap-4 min-[520px]:grid-cols-2 lg:grid-cols-5 lg:gap-4" role="radiogroup" aria-label="Choose the child age category">
+          <div className="mt-8 grid grid-cols-1 justify-items-center gap-4 min-[520px]:grid-cols-2 lg:grid-cols-4 lg:gap-4" role="radiogroup" aria-label="Choose the child age category">
             {ageGroups.map((age) => {
               const isSelected = selectedAge === age.label;
 

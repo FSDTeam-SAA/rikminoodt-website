@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import {
   Check,
   CircleHelp,
@@ -13,7 +14,6 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import BookerelloReviews from "../../../_components/bookerello-reviews";
 import { useBookBuilder } from "../../_components/BookBuilderProvider";
-import GenerationStatusModal from "../../_components/GenerationStatusModal";
 import { getApiBaseUrl } from "@/config/api";
 import {
   mapAge,
@@ -22,6 +22,7 @@ import {
   mapMessage,
   mapIllustration,
   mapFont,
+  THEME_MAP, SUBJECT_MAP, THEME_SUBJECT_MAP, MESSAGE_MAP, ILLUSTRATION_MAP, FONT_MAP,
 } from "../../_components/api-mappers";
 
 const ages = [
@@ -133,302 +134,102 @@ export default function Checkout() {
     characters,
     creatorName,
     foreword,
+    forewordMode,
     voiceBlob,
+    voiceExpected,
     userDetails,
-    cardDetails,
-    setCardDetails,
-    currentBookId,
     setCurrentBookId,
   } = useBookBuilder();
 
   const { data: session } = useSession();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
-  const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [createdBookId, setCreatedBookId] = useState<string | null>(currentBookId);
-  const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
+  const [savedBookId, setSavedBookId] = useState<string | null>(null);
 
   const age = ages.find((item) => item.label === selectedAge);
   const theme = themes.find((item) => item.label === selectedTheme);
-  const story = stories.find((item) => item.label === selectedStory);
+  const story = stories.find((item) => item.label === selectedStory) ?? (selectedStory ? { label: selectedStory.toLowerCase().replaceAll("_", " "), image: theme?.image ?? "/images/story_1.png", color: theme?.color ?? "#FFE5D6" } : undefined);
   const message = messages.find((item) => item.label === selectedMessage);
   const font = fonts.find((item) => item.label === selectedFont);
 
-  const handleCardholderNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCardDetails({ cardholderName: e.target.value });
-    if (fieldErrors.cardholderName) {
-      setFieldErrors((prev) => ({ ...prev, cardholderName: "" }));
-    }
-  };
-
-  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value.replace(/\D/g, "").slice(0, 19);
-    const formatted = raw.match(/.{1,4}/g)?.join(" ") || raw;
-    setCardDetails({ cardNumber: formatted });
-    if (fieldErrors.cardNumber) {
-      setFieldErrors((prev) => ({ ...prev, cardNumber: "" }));
-    }
-  };
-
-  const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let raw = e.target.value.replace(/\D/g, "").slice(0, 4);
-    if (raw.length >= 3) {
-      raw = `${raw.slice(0, 2)}/${raw.slice(2)}`;
-    }
-    setCardDetails({ expiryDate: raw });
-    if (fieldErrors.expiryDate) {
-      setFieldErrors((prev) => ({ ...prev, expiryDate: "" }));
-    }
-  };
-
-  const handleCvvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value.replace(/\D/g, "").slice(0, 4);
-    setCardDetails({ cvv: raw });
-    if (fieldErrors.cvv) {
-      setFieldErrors((prev) => ({ ...prev, cvv: "" }));
-    }
-  };
-
   const handleContinueWithCard = async () => {
+    if (isSubmitting) return;
     setSubmitError("");
-    const errors: { [key: string]: string } = {};
-
-    const cardholder = cardDetails?.cardholderName?.trim() || "";
-    const cardNumberClean = (cardDetails?.cardNumber || "").replace(/\D/g, "");
-    const expiry = (cardDetails?.expiryDate || "").trim();
-    const cvvClean = (cardDetails?.cvv || "").replace(/\D/g, "");
-
-    if (!cardholder) {
-      errors.cardholderName = "Please enter the cardholder name.";
-    }
-
-    if (!cardNumberClean || cardNumberClean.length < 13 || cardNumberClean.length > 19) {
-      errors.cardNumber = "Please enter a valid card number.";
-    }
-
-    if (!/^\d{2}\/\d{2}$/.test(expiry)) {
-      errors.expiryDate = "Enter expiry date as MM/YY.";
-    } else {
-      const [m] = expiry.split("/").map(Number);
-      if (m < 1 || m > 12) {
-        errors.expiryDate = "Enter a valid month (01-12).";
-      }
-    }
-
-    if (!cvvClean || cvvClean.length < 3 || cvvClean.length > 4) {
-      errors.cvv = "Enter 3 or 4 digits.";
-    }
-
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors);
-      setSubmitError("Please fill out all card fields correctly.");
-      return;
-    }
-    setFieldErrors({});
-
-    const existingToken =
-      session?.user?.accessToken ||
-      (typeof window !== "undefined" ? localStorage.getItem("token") : null);
-
-    // If guest user (not logged in), validate required user registration fields
-    if (!existingToken) {
-      const uEmail = userDetails?.email?.trim() || "";
-      const uConfirm = userDetails?.confirmEmail?.trim() || "";
-      const uPass = userDetails?.password?.trim() || "";
-      const uName = userDetails?.name?.trim() || "";
-
-      if (!uName) {
-        setSubmitError("Please enter your name in the Personal Details step, or log in first.");
-        return;
-      }
-
-      if (!uEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(uEmail)) {
-        setSubmitError("Please enter a valid email address in the Personal Details step, or log in first.");
-        return;
-      }
-
-      if (uEmail !== uConfirm) {
-        setSubmitError("Email and confirm email do not match in Personal Details.");
-        return;
-      }
-
-      if (!uPass || uPass.length < 8) {
-        setSubmitError("Password must be at least 8 characters in Personal Details.");
-        return;
-      }
-    }
-
     setIsSubmitting(true);
-
+    let bookSaved = false;
     try {
       const apiBase = getApiBaseUrl();
-
-      const mappedAge = mapAge(selectedAge);
-      const mappedTheme = mapTheme(selectedTheme);
-      const mappedSubject = mapSubject(selectedStory, mappedTheme);
-      const mappedMessage = mapMessage(selectedMessage);
-      const mappedIllustration = mapIllustration(selectedIllustration);
-      const mappedFont = mapFont(selectedFont);
-
-      // Map characters (guaranteeing non-empty array)
-      const mappedCharacters = (characters && characters.length > 0
-        ? characters
-        : [
-            {
-              id: 1,
-              type: "PERSON" as const,
-              name: "Lily",
-              gender: "GIRL" as const,
-              age: 4,
-              hobbies: "drawing",
-              favoriteFood: "pizza",
-            },
-          ]
-      ).map((c) => {
-        if (c.type === "ANIMAL") {
-          return {
-            type: "ANIMAL",
-            animalName: c.animalName || c.name || "Buddy",
-            animalSpecies: c.animalSpecies || "dog",
-          };
+      let token = session?.user?.accessToken || localStorage.getItem("token");
+      const retryBookId = savedBookId || (new URLSearchParams(window.location.search).get("retry") === "1" ? sessionStorage.getItem("current_book_id") : null);
+      if (retryBookId) {
+        if (!token) throw new Error("Please log in to resume payment for your saved book.");
+        const retryResponse = await fetch(`${apiBase}/payments/generation/checkout`, { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, body: JSON.stringify({ bookId: retryBookId }) });
+        const retryResult = await retryResponse.json().catch(() => null);
+        if (!retryResponse.ok || !retryResult?.data?.checkoutUrl) throw new Error(retryResult?.message || "Unable to restart checkout. Please try again.");
+        const url = new URL(retryResult.data.checkoutUrl);
+        if (url.protocol !== "https:" || url.hostname !== "checkout.stripe.com") throw new Error("Invalid payment address returned by the server.");
+        window.location.assign(url.href);
+        return;
+      }
+      const theme = selectedTheme && THEME_MAP[selectedTheme];
+      const subject = selectedStory && (SUBJECT_MAP[selectedStory] || selectedStory);
+      if (!selectedAge || !["0-2 Years", "3-5 Years", "5-9 Years", "3-9 Years", "10+ Years"].includes(selectedAge) || !theme || !subject || !THEME_SUBJECT_MAP[theme]?.includes(subject) || !selectedMessage || !MESSAGE_MAP[selectedMessage] || !selectedIllustration || !ILLUSTRATION_MAP[selectedIllustration] || !selectedFont || !FONT_MAP[selectedFont] || !selectedLanguage) throw new Error("Please complete your story choices and select a subject that matches your theme.");
+      if (!creatorName.trim()) throw new Error("Please enter the creator name in Personal Details.");
+      if (!characters.length || characters.some((c) => c.type === "PERSON" ? !c.name?.trim() || !c.gender || !Number.isInteger(c.age) || (c.age ?? -1) < 0 : c.type === "ANIMAL" ? !c.animalName?.trim() || !c.animalSpecies?.trim() : !c.objectName?.trim())) throw new Error("Please complete the required details for every character.");
+      const photos = characters.map((character) => character.photo);
+      if (photos.some(Boolean) && photos.some((photo) => !(photo instanceof File))) throw new Error("Please add a photo for every character, or remove all photos. The server needs photos in character order.");
+      if (characters.some((c) => c.photoExpected && !c.photo)) throw new Error("Please reselect your character photos after refreshing the page.");
+      if (forewordMode === "voice" && voiceExpected && !voiceBlob) throw new Error("Please record your voice message again after refreshing the page.");
+      const user = { name: userDetails.name.trim(), country: userDetails.country.trim(), email: userDetails.email.trim(), confirmEmail: userDetails.confirmEmail.trim(), password: userDetails.password };
+      const hasUserDetails = Boolean(user.name && user.country && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.email) && user.email === user.confirmEmail && user.password.length >= 8);
+      if (token) {
+        const authResponse = await fetch(`${apiBase}/user/me`, { headers: { Authorization: `Bearer ${token}` }, cache: "no-store" });
+        if (authResponse.status === 401) {
+          if (localStorage.getItem("token") === token) localStorage.removeItem("token");
+          token = null;
+        } else if (!authResponse.ok) {
+          throw new Error(authResponse.status === 403 ? "Your account cannot access this service. Please contact support." : "Unable to verify your sign-in. Please try again.");
         }
-        if (c.type === "OBJECT") {
-          return {
-            type: "OBJECT",
-            objectName: c.objectName || c.name || "Magic Wand",
-          };
-        }
-        return {
-          type: "PERSON",
-          name: c.name || "Lily",
-          gender: c.gender || "GIRL",
-          age: typeof c.age === "number" ? c.age : 4,
-          hobbies: c.hobbies || undefined,
-          favoriteFood: c.favoriteFood || undefined,
-        };
-      });
-
-      const userPayload = !existingToken
-        ? {
-            name: userDetails?.name?.trim() || "Book Creator",
-            country: userDetails?.country?.trim() || "United Kingdom",
-            email: userDetails?.email?.trim() || "",
-            confirmEmail:
-              userDetails?.confirmEmail?.trim() || userDetails?.email?.trim() || "",
-            password: userDetails?.password?.trim() || "",
-          }
-        : undefined;
-
-      const bookDto: Record<string, unknown> = {
-        ageCategory: mappedAge,
-        theme: mappedTheme,
-        subject: mappedSubject,
-        specialMessage: mappedMessage,
-        illustrationStyle: mappedIllustration,
-        font: mappedFont,
-        language: selectedLanguage || "English",
-        regionalVariant: selectedVariant || "Standard (Brits Engls)",
-        characters: mappedCharacters,
-        creatorName: creatorName || "Mum & Dad",
+      }
+      if (!token && !hasUserDetails) throw new Error("Your session has expired or you are not signed in. Please sign in again, or complete your name, country, matching email addresses and password in Personal Details.");
+      const dto = {
+        ageCategory: mapAge(selectedAge), theme: mapTheme(selectedTheme), subject: mapSubject(selectedStory, theme), specialMessage: mapMessage(selectedMessage), illustrationStyle: mapIllustration(selectedIllustration), font: mapFont(selectedFont), language: selectedLanguage,
+        ...(selectedVariant ? { regionalVariant: selectedVariant } : {}),
+        characters: characters.map((c) => c.type === "PERSON" ? { type: c.type, name: c.name?.trim(), gender: c.gender, age: c.age, ...(c.hobbies?.trim() ? { hobbies: c.hobbies.trim() } : {}), ...(c.favoriteFood?.trim() ? { favoriteFood: c.favoriteFood.trim() } : {}) } : c.type === "ANIMAL" ? { type: c.type, animalName: c.animalName?.trim(), animalSpecies: c.animalSpecies?.trim() } : { type: c.type, objectName: c.objectName?.trim() }),
+        creatorName: creatorName.trim(), ...(foreword.trim() ? { foreword: foreword.trim() } : {}),
+        ...(!token ? { user } : {}),
       };
-
-      if (userPayload) {
-        bookDto.user = userPayload;
+      const form = new FormData();
+      form.append("data", JSON.stringify(dto));
+      photos.forEach((photo) => { if (photo instanceof File) form.append("characterPhotos", photo, photo.name); });
+      if (forewordMode === "voice" && voiceBlob) form.append("voiceRecording", voiceBlob, voiceBlob.type.includes("mp4") ? "voice.m4a" : "voice.webm");
+      let response = await fetch(`${apiBase}/books`, { method: "POST", headers: token ? { Authorization: `Bearer ${token}` } : {}, body: form });
+      let result = await response.json().catch(() => null);
+      if (!response.ok && result?.message === "User registration details are required for new/guest users.") {
+        if (!token || !hasUserDetails) throw new Error("Your sign-in was not recognized. Please sign in again, or enter your name, country, email and password in Personal Details.");
+        // The backend rejected this request before creating a book. Retry as a guest with the supplied details.
+        form.set("data", JSON.stringify({ ...dto, user }));
+        response = await fetch(`${apiBase}/books`, { method: "POST", body: form });
+        result = await response.json().catch(() => null);
       }
-
-      if (foreword && foreword.trim()) {
-        bookDto.foreword = foreword.trim();
-      }
-
-      const formData = new FormData();
-      formData.append("data", JSON.stringify(bookDto));
-
-      // Handle photos: backend requires photos.length === characters.length if photos are passed
-      const hasAnyPhoto = characters.some((c) => c.photo instanceof File);
-      if (hasAnyPhoto) {
-        const emptyPng = new Blob(
-          [
-            new Uint8Array([
-              0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d, 0x49, 0x48,
-              0x44, 0x52, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x08, 0x06, 0x00, 0x00,
-              0x00, 0x1f, 0x15, 0xc4, 0x89, 0x00, 0x00, 0x00, 0x0a, 0x49, 0x44, 0x41, 0x54, 0x78,
-              0x9c, 0x63, 0x00, 0x01, 0x00, 0x00, 0x05, 0x00, 0x01, 0x0d, 0x0a, 0x2d, 0xb4, 0x00,
-              0x00, 0x00, 0x00, 0x49, 0x45, 0x4e, 0x44, 0xae, 0x42, 0x60, 0x82,
-            ]),
-          ],
-          { type: "image/png" }
-        );
-        mappedCharacters.forEach((_, idx) => {
-          const charPhoto = characters[idx]?.photo;
-          if (charPhoto instanceof File) {
-            formData.append("characterPhotos", charPhoto);
-          } else {
-            formData.append("characterPhotos", emptyPng, `placeholder-${idx}.png`);
-          }
-        });
-      }
-
-      if (voiceBlob) {
-        formData.append("voiceRecording", voiceBlob, "voice.webm");
-      }
-
-      const headers: Record<string, string> = {};
-      if (existingToken) headers["Authorization"] = `Bearer ${existingToken}`;
-
-      const response = await fetch(`${apiBase}/books`, {
-        method: "POST",
-        headers,
-        body: formData,
-      });
-
-      const resJson = await response.json().catch(() => null);
-      if (!response.ok) {
-        const errorMsg =
-          resJson?.message ||
-          (Array.isArray(resJson?.errorSources)
-            ? resJson.errorSources.map((e: { message?: string }) => e.message).join(", ")
-            : "Failed to create book order.");
-        throw new Error(errorMsg);
-      }
-
-      if (resJson?.data?.accessToken) {
-        localStorage.setItem("token", resJson.data.accessToken);
-      }
-      if (resJson?.data?.refreshToken) {
-        localStorage.setItem("refreshToken", resJson.data.refreshToken);
-      }
-
-      const createdBook = resJson?.data?.book;
-      const checkout = resJson?.data?.checkout;
-
-      if (createdBook?._id) {
-        setCurrentBookId(createdBook._id);
-        if (typeof window !== "undefined") {
-          sessionStorage.setItem("current_book_id", createdBook._id);
-        }
-        setCreatedBookId(createdBook._id);
-        setCheckoutUrl(checkout?.checkoutUrl || null);
-        setIsModalOpen(true);
-      }
-    } catch (err: unknown) {
-      let message = "An error occurred while creating your book. Please try again.";
-      if (err instanceof Error) {
-        if (
-          err.message.includes("Failed to fetch") ||
-          err.message.includes("NetworkError") ||
-          err.message.includes("Load failed")
-        ) {
-          message =
-            "Unable to connect to the server. The backend may be waking up, please wait a moment and try again.";
-        } else {
-          message = err.message;
-        }
-      }
-      setSubmitError(message);
-    } finally {
-      setIsSubmitting(false);
-    }
+      if (!response.ok) throw new Error(result?.message || "Unable to create your book order.");
+      const bookId = result?.data?.book?._id;
+      const accessToken = result?.data?.accessToken || token;
+      if (!bookId || !accessToken) throw new Error("The server did not return your saved book details. Please contact support before trying again.");
+      bookSaved = true;
+      localStorage.setItem("token", accessToken);
+      if (result.data.refreshToken) localStorage.setItem("refreshToken", result.data.refreshToken);
+      setCurrentBookId(bookId);
+      sessionStorage.setItem("current_book_id", bookId);
+      setSavedBookId(bookId);
+      const checkoutUrl = result.data.checkout?.checkoutUrl;
+      if (!checkoutUrl) throw new Error("Your book was saved, but checkout could not be started. Please try again.");
+      const url = new URL(checkoutUrl);
+      if (url.protocol !== "https:" || url.hostname !== "checkout.stripe.com") throw new Error("The server returned an invalid payment address.");
+      window.location.assign(url.href);
+    } catch (err) {
+      setSubmitError(err instanceof TypeError && !bookSaved ? "Could not confirm whether the book was saved. Please check your account or contact support before retrying." : err instanceof Error ? err.message : "Unable to start checkout.");
+    } finally { setIsSubmitting(false); }
   };
 
   return (
@@ -491,11 +292,9 @@ export default function Checkout() {
                     Your unique book creation
                   </h2>
                   <p className="mt-2 max-w-[530px] font-sans text-xs leading-[1.45] text-[#536278] sm:text-sm">
-                    Hooray! We&apos;re creating a magical book for your little
-                    one (4 years old). The story is about{" "}
-                    {story?.label ?? "a magical adventure"} within the theme{" "}
-                    {theme?.label ?? "Fairy Tales"}. Lovingly created by Papa en
-                    Mama.
+                    Your story is about{" "}
+                    {story?.label ?? selectedStory?.toLowerCase().replaceAll("_", " ") ?? "a magical adventure"} within the theme{" "}
+                    {theme?.label ?? "Fairy Tales"}. Created by {creatorName || "you"}.
                   </p>
                 </div>
               </div>
@@ -576,122 +375,17 @@ export default function Checkout() {
               <p className="mt-2 font-sans text-2xl font-bold text-[#0BA04B] sm:text-3xl">
                 €8.99
               </p>
-              <div className="mt-6 space-y-3 text-left">
-                <div
-                  className="flex h-11 w-full items-center rounded-[10px] border border-[#FF9568] bg-[#FFF9F5] px-3.5 font-sans text-xs sm:text-sm font-medium text-[#31445D]"
-                >
-                  <span
-                    className="mr-2.5 flex size-4 items-center justify-center rounded-full border border-[#FC5A00] bg-[#FC5A00] text-white"
-                  >
-                    <Check size={10} strokeWidth={3} />
-                  </span>
-                  Card
-                  <span aria-label="Visa, Mastercard and American Express" className="ml-auto flex items-center gap-1.5 text-[9px] font-bold text-white">
-                    <span className="rounded bg-[#405DAD] px-1.5 py-0.5 shadow-sm">VISA</span>
-                    <span className="rounded bg-[#EF5350] px-1.5 py-0.5 shadow-sm">●●</span>
-                    <span className="rounded bg-[#5695ED] px-1.5 py-0.5 shadow-sm">AMEX</span>
-                  </span>
-                </div>
-
-                <div className="space-y-3.5 px-0.5 pt-1">
-                  <div>
-                    <label className="block font-sans text-xs sm:text-[13px] font-medium text-[#31445D]">
-                      Cardholder Name
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter Cardholder Name"
-                      value={cardDetails?.cardholderName || ""}
-                      onChange={handleCardholderNameChange}
-                      className={`mt-1.5 h-10 sm:h-11 w-full rounded-[8px] sm:rounded-[10px] border ${
-                        fieldErrors.cardholderName ? "border-red-400 bg-red-50/20" : "border-[#F1ABBC] bg-[#FFFCFA]"
-                      } px-3 font-sans text-xs sm:text-sm text-[#2A2A2A] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/20 transition-all`}
-                    />
-                    {fieldErrors.cardholderName && (
-                      <span className="mt-1 block font-sans text-[11px] text-[#B74760]">
-                        {fieldErrors.cardholderName}
-                      </span>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block font-sans text-xs sm:text-[13px] font-medium text-[#31445D]">
-                      Card Number
-                    </label>
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      placeholder="1234 5678 9012 3456"
-                      value={cardDetails?.cardNumber || ""}
-                      onChange={handleCardNumberChange}
-                      className={`mt-1.5 h-10 sm:h-11 w-full rounded-[8px] sm:rounded-[10px] border ${
-                        fieldErrors.cardNumber ? "border-red-400 bg-red-50/20" : "border-[#F1ABBC] bg-[#FFFCFA]"
-                      } px-3 font-sans text-xs sm:text-sm text-[#2A2A2A] tracking-wider outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/20 transition-all`}
-                    />
-                    {fieldErrors.cardNumber && (
-                      <span className="mt-1 block font-sans text-[11px] text-[#B74760]">
-                        {fieldErrors.cardNumber}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
-                    <div>
-                      <label className="block font-sans text-xs sm:text-[13px] font-medium text-[#31445D]">
-                        Expiry Date
-                      </label>
-                      <span className="relative mt-1.5 block">
-                        <input
-                          type="text"
-                          inputMode="numeric"
-                          placeholder="MM/YY"
-                          maxLength={5}
-                          value={cardDetails?.expiryDate || ""}
-                          onChange={handleExpiryChange}
-                          className={`h-10 sm:h-11 w-full rounded-[8px] sm:rounded-[10px] border ${
-                            fieldErrors.expiryDate ? "border-red-400 bg-red-50/20" : "border-[#F1ABBC] bg-[#FFFCFA]"
-                          } pl-3 pr-8 font-sans text-xs sm:text-sm text-[#2A2A2A] tracking-wider outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/20 transition-all`}
-                        />
-                        <CreditCard
-                          size={15}
-                          className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#876D7C]"
-                        />
-                      </span>
-                      {fieldErrors.expiryDate && (
-                        <span className="mt-1 block font-sans text-[11px] text-[#B74760]">
-                          {fieldErrors.expiryDate}
-                        </span>
-                      )}
-                    </div>
-
-                    <div>
-                      <label className="block font-sans text-xs sm:text-[13px] font-medium text-[#31445D]">
-                        CVV / CVC
-                      </label>
-                      <input
-                        type="password"
-                        inputMode="numeric"
-                        placeholder="123"
-                        maxLength={4}
-                        value={cardDetails?.cvv || ""}
-                        onChange={handleCvvChange}
-                        className={`mt-1.5 h-10 sm:h-11 w-full rounded-[8px] sm:rounded-[10px] border ${
-                          fieldErrors.cvv ? "border-red-400 bg-red-50/20" : "border-[#F1ABBC] bg-[#FFFCFA]"
-                        } px-3 font-sans text-xs sm:text-sm text-[#2A2A2A] tracking-wider outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/20 transition-all`}
-                      />
-                      {fieldErrors.cvv && (
-                        <span className="mt-1 block font-sans text-[11px] text-[#B74760]">
-                          {fieldErrors.cvv}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
+              <div className="mt-6 rounded-2xl border border-[#f5dedf] bg-[#fff9f7] p-4">
+                <Image src="/images/secure-card-payment.svg" alt="Secure card payment powered by Stripe" width={420} height={190} className="mx-auto h-auto w-full max-w-[340px]" />
+                <div className="mt-3 flex items-center justify-center gap-2 text-sm font-semibold text-[#514256]"><CreditCard size={18} aria-hidden="true" /> Secure card payment</div>
+                <p className="mt-2 text-xs leading-relaxed text-[#73686d]">You&apos;ll enter your card details securely on Stripe&apos;s checkout page.</p>
               </div>
-
               {submitError && (
                 <div role="alert" className="mt-3.5 rounded-lg border border-[#F1ABBC] bg-[#FFF0F3] p-2.5 font-sans text-xs text-[#B74760]">
                   {submitError}
+                  {(submitError.includes("Personal Details") || submitError.includes("sign in")) && (
+                    <Link href="/book-builder/personal-details" className="mt-2 block font-semibold underline">Go to Personal Details</Link>
+                  )}
                 </div>
               )}
 
@@ -714,12 +408,7 @@ export default function Checkout() {
                 so it cannot be returned.
               </p>
 
-              <GenerationStatusModal
-                isOpen={isModalOpen}
-                bookId={createdBookId}
-                checkoutUrl={checkoutUrl}
-                onClose={() => setIsModalOpen(false)}
-              />
+
             </article>
           </div>
         </div>

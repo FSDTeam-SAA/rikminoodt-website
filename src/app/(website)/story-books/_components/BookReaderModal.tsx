@@ -10,7 +10,7 @@ type BookReaderModalProps = {
   onClose: () => void;
   storyId: string;
   title?: string;
-  pages?: Array<{ pageNumber?: number; text?: string; illustrationUrl?: string; image?: string; alt?: string }>;
+  pages?: Array<{ pageNumber?: number; text?: string; imageUrl?: string; illustrationUrl?: string; image?: string; alt?: string }>;
 };
 
 type PageProps = {
@@ -45,7 +45,7 @@ const BookReaderModal = ({ isOpen, onClose, storyId, title, pages }: BookReaderM
   const activePages =
     pages && pages.length > 0
       ? pages.map((p, idx) => ({
-          image: p.illustrationUrl || p.image || "/images/story1.png",
+          image: p.imageUrl || p.illustrationUrl || p.image || "/images/story1.png",
           alt: p.alt || `Illustration for page ${p.pageNumber || idx + 1}`,
           text: p.text || "",
         }))
@@ -148,7 +148,7 @@ const BookReaderModal = ({ isOpen, onClose, storyId, title, pages }: BookReaderM
               {activePages.flatMap((bookPage, index) => [
                 <ReaderPage key={`${index}-art`}>
                   <div className="relative h-full w-full bg-[#E8DDD1] p-2 sm:p-3">
-                    <Image src={bookPage.image} alt={bookPage.alt} fill sizes="(max-width: 720px) 90vw, 45vw" className="object-contain" priority={index === 0} />
+                    <Image src={bookPage.image} alt={bookPage.alt} fill sizes="(max-width: 720px) 90vw, 45vw" className="object-contain" priority={index === 0} unoptimized />
                   </div>
                 </ReaderPage>,
                 <ReaderPage key={`${index}-text`}>
