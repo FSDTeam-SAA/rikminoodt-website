@@ -3,6 +3,7 @@ import "./globals.css";
 import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
 import ScrollToTopComponent from "@/components/providers/ScrollToTop";
 import { LanguageProvider } from "@/components/providers/LanguageProvider";
+import NextAuthProvider from "@/components/providers/NextAuthProvider";
 
 export const metadata: Metadata = {
   title: "Boekerello",
@@ -17,12 +18,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <SmoothScrollProvider>
-          <LanguageProvider>
-            {children}
-            <ScrollToTopComponent />
-          </LanguageProvider>
-        </SmoothScrollProvider>
+        <NextAuthProvider>
+          <SmoothScrollProvider>
+            <LanguageProvider>
+              {children}
+              <ScrollToTopComponent />
+            </LanguageProvider>
+          </SmoothScrollProvider>
+        </NextAuthProvider>
       </body>
     </html>
   );
