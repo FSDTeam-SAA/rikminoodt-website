@@ -4,6 +4,7 @@ import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
 import ScrollToTopComponent from "@/components/providers/ScrollToTop";
 import { LanguageProvider } from "@/components/providers/LanguageProvider";
 import NextAuthProvider from "@/components/providers/NextAuthProvider";
+import ReactQueryProvider from "@/components/providers/ReactQueryProvider";
 
 export const metadata: Metadata = {
   title: "Boekerello",
@@ -19,12 +20,14 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <NextAuthProvider>
-          <SmoothScrollProvider>
-            <LanguageProvider>
-              {children}
-              <ScrollToTopComponent />
-            </LanguageProvider>
-          </SmoothScrollProvider>
+          <ReactQueryProvider>
+            <SmoothScrollProvider>
+              <LanguageProvider>
+                {children}
+                <ScrollToTopComponent />
+              </LanguageProvider>
+            </SmoothScrollProvider>
+          </ReactQueryProvider>
         </NextAuthProvider>
       </body>
     </html>
