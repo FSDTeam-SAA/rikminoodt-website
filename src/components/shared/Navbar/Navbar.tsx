@@ -52,24 +52,38 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    const updateScrolledState = () => setIsScrolled(window.scrollY > 12);
+    let frameId: number | null = null;
+
+    const updateScrolledState = () => {
+      if (frameId !== null) return;
+      frameId = window.requestAnimationFrame(() => {
+        const nextState = window.scrollY > 12;
+        setIsScrolled((currentState) =>
+          currentState === nextState ? currentState : nextState,
+        );
+        frameId = null;
+      });
+    };
 
     updateScrolledState();
     window.addEventListener("scroll", updateScrolledState, { passive: true });
-    return () => window.removeEventListener("scroll", updateScrolledState);
+    return () => {
+      window.removeEventListener("scroll", updateScrolledState);
+      if (frameId !== null) window.cancelAnimationFrame(frameId);
+    };
   }, []);
 
   return (
     <header className={`sticky top-0 z-50 pointer-events-none ${overlaysPageContent ? "h-0" : "h-[78px] sm:h-[88px] lg:h-[116px]"}`}>
       <div
-        className={`pointer-events-auto absolute inset-x-0 top-0 transition-[padding] duration-300 ${
-          isScrolled ? "pt-2 sm:pt-3 lg:pt-4" : "pt-3 sm:pt-5 lg:pt-11"
-        }`}
+        className="pointer-events-auto absolute inset-x-0 top-0 pt-3 sm:pt-5 lg:pt-11"
       >
-        <div className="container mx-auto lg:px-0">
+        <div className="container mx-auto px-3 sm:px-5 lg:px-0">
           <div
-            className={`rounded-[105px] transition-[background-color,box-shadow] duration-300 ${
-              isScrolled ? "bg-white/90 shadow-[0_8px_24px_rgba(74,63,82,0.16)]" : "bg-white/40"
+            className={`overflow-hidden rounded-[28px] border border-white/60 backdrop-blur-md transition-[background-color,box-shadow] duration-300 sm:rounded-[32px] ${
+              isScrolled || isMenuOpen
+                ? "bg-white/95 shadow-[0_8px_24px_rgba(74,63,82,0.16)]"
+                : "bg-white/80 shadow-[0_4px_16px_rgba(74,63,82,0.08)]"
             }`}
           >
         <div className="flex min-h-[54px] items-center justify-between gap-3 px-4 sm:min-h-[58px] sm:px-6 lg:min-h-[72px] lg:px-8">
@@ -200,20 +214,31 @@ const Navbar = () => {
 
         <div
           id="mobile-navigation"
-          className={`overflow-hidden border-t border-[#876d7c]/10 transition-[max-height,opacity] duration-300 lg:hidden ${
-            isMenuOpen ? "max-h-[460px] opacity-100" : "pointer-events-none max-h-0 opacity-0"
+          className={`border-t border-[#876d7c]/10 transition-[max-height,opacity] duration-300 lg:hidden ${
+            isMenuOpen
+              ? "max-h-[calc(100dvh-82px)] overflow-y-auto overscroll-contain opacity-100"
+              : "pointer-events-none max-h-0 overflow-hidden opacity-0"
           }`}
         >
           <nav aria-label="Mobile navigation" className="flex flex-col px-4 py-3 sm:px-6">
-            {navigation.map((item) => (
+            {navigation.map((item) => {
+              const isActive = pathname === item.href;
+
+              return (
               <Link
                 key={item.href}
                 href={item.href}
-                className="rounded-lg px-3 py-3 text-sm font-medium text-[#5d5059] transition hover:bg-white/75 hover:text-[#e77f9a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf]"
+                aria-current={isActive ? "page" : undefined}
+                className={`rounded-xl px-3 py-3 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf] ${
+                  isActive
+                    ? "bg-[#FFF0F3] text-[#e77f9a]"
+                    : "text-[#5d5059] hover:bg-white/75 hover:text-[#e77f9a]"
+                }`}
               >
                 {item.label}
               </Link>
-            ))}
+              );
+            })}
             <LanguageSwitcher isMobile className="mt-2 border-t border-[#876d7c]/10 pt-2" />
             <div className="mt-2 flex items-center gap-2 border-t border-[#876d7c]/10 pt-3 sm:hidden">
               <Link href="/cart" className="flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-white/75 text-sm font-medium text-[#5d5059]">
