@@ -39,7 +39,7 @@ type BookBuilderContextValue = {
   selectedTheme: string | null;
   setSelectedTheme: (theme: string) => void;
   selectedStory: string | null;
-  setSelectedStory: (story: string) => void;
+  setSelectedStory: (story: string | null) => void;
   selectedMessage: string | null;
   setSelectedMessage: (message: string) => void;
   selectedIllustration: string | null;

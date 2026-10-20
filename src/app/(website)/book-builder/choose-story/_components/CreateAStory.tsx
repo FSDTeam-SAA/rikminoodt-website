@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Pencil } from "lucide-react";
 import { useBookBuilder } from "../../_components/BookBuilderProvider";
-import { THEME_MAP, THEME_SUBJECT_MAP } from "../../_components/api-mappers";
+import { SUBJECT_OPTIONS } from "../../_components/subject-options";
 
 const ages = [
   { label: "0-2 Years", image: "/images/age_1.png", color: "#FDE1CF" },
@@ -24,19 +24,6 @@ const themes = [
   { label: "Family", image: "/images/theme_6.png", color: "#FFDFE4" },
   { label: "Educational", image: "/images/theme_7.png", color: "#FFE5D4" },
   { label: "Feelings", image: "/images/theme_8.png", color: "#DDEEFF" },
-];
-
-const subjects = [
-  { label: "Unicorns", image: "/images/story_1.png", color: "#FFE5D6" },
-  { label: "Princess & Princesses", image: "/images/story_2.png", color: "#DDEEFF" },
-  { label: "Knights and dragons", image: "/images/story_3.png", color: "#FFDDE4" },
-  { label: "Wizard School", image: "/images/story_4.png", color: "#D1ECD9" },
-  { label: "The Magic Forest", image: "/images/story_5.png", color: "#CFE9DA" },
-  { label: "Mermaids", image: "/images/story_6.png", color: "#FADDE1" },
-  { label: "Gnomes", image: "/images/story_7.png", color: "#FFE5D4" },
-  { label: "Fairies and Elves", image: "/images/story_8.png", color: "#DDEEFF" },
-  { label: "Witches and Spells", image: "/images/story_9.png", color: "#D4EBDD" },
-  { label: "Giants", image: "/images/story_10.png", color: "#F8DCE3" },
 ];
 
 type Choice = {
@@ -75,8 +62,7 @@ export default function CreateAStory() {
   const { selectedAge, selectedTheme, selectedStory, setSelectedStory } = useBookBuilder();
   const age = ages.find((item) => item.label === selectedAge);
   const theme = themes.find((item) => item.label === selectedTheme);
-  const themeCode = selectedTheme ? THEME_MAP[selectedTheme] : undefined;
-  const availableSubjects = themeCode === "FAIRYTALES_AND_MAGIC" ? subjects.map((subject) => ({ ...subject, value: subject.label })) : (THEME_SUBJECT_MAP[themeCode ?? ""] ?? []).map((value, index) => ({ value, label: value.toLowerCase().split("_").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" "), image: theme?.image ?? "/images/theme_1.png", color: ["#FFE5D6", "#DDEEFF", "#FFDDE4", "#D1ECD9"][index % 4] }));
+  const availableSubjects = selectedTheme ? SUBJECT_OPTIONS[selectedTheme] ?? [] : [];
 
   return (
     <main className="min-h-screen bg-[#FEFAF4] px-4 pb-10 pt-[118px] sm:px-7 sm:pb-12 sm:pt-[136px] lg:px-[38px] lg:pb-20 lg:pt-[196px]">
