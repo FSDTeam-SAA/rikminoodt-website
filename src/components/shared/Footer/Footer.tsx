@@ -11,7 +11,47 @@ const socialLinks = [
   { label: "TikTok", icon: FaTiktok },
 ];
 
-const toAnchor = (label: string) => `#${label.toLowerCase().replaceAll(" ", "-")}`;
+const getFooterHref = (label: string) => {
+  const lower = label.toLowerCase();
+  if (
+    lower.includes("pricing") ||
+    lower.includes("tarieven") ||
+    lower.includes("preise") ||
+    lower.includes("tarifs")
+  ) {
+    return "/pricing";
+  }
+  if (lower.includes("contact") || lower.includes("kontakt")) {
+    return "/contact";
+  }
+  if (
+    lower.includes("how it works") ||
+    lower.includes("hoe het werkt") ||
+    lower.includes("wie es funktioniert") ||
+    lower.includes("comment ça marche")
+  ) {
+    return "/how-it-works";
+  }
+  if (
+    lower.includes("examples") ||
+    lower.includes("voorbeelden") ||
+    lower.includes("beispiele") ||
+    lower.includes("exemples")
+  ) {
+    return "/examples";
+  }
+  if (
+    lower.includes("create") ||
+    lower.includes("maak") ||
+    lower.includes("erstellen") ||
+    lower.includes("créer") ||
+    lower.includes("themes") ||
+    lower.includes("thema")
+  ) {
+    return "/book-builder/choose-age";
+  }
+  return `#${lower.replaceAll(" ", "-")}`;
+};
 
 const Footer = () => {
   const { t } = useLanguage();
@@ -91,7 +131,7 @@ const Footer = () => {
                 {group.links.map((link) => (
                   <li key={link}>
                     <Link
-                      href={toAnchor(link)}
+                      href={getFooterHref(link)}
                       className="group inline-flex items-center gap-1.5 text-sm text-white/90 transition hover:text-[#f6bdca] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eea0b4] lg:text-base"
                     >
                       <span aria-hidden="true" className="text-[9px] transition-transform group-hover:translate-x-0.5">

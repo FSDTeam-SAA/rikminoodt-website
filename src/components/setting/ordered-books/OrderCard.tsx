@@ -9,7 +9,8 @@ export interface OrderDetails {
   quantity: number;
   amount: string;
   coverImage: string;
-  bgColor: string; // jemon: bg-[#EAF5FA] ba bg-[#F3EAFC]
+  bgColor: string;
+  rawStatus?: string;
 }
 
 interface OrderCardProps {
@@ -24,8 +25,15 @@ export default function OrderCard({ order, showTrackingButton, onTrackOrder, sho
     <div className={`w-full p-4 md:p-6 rounded-2xl flex flex-col md:flex-row gap-6 items-center ${order.bgColor}`}>
       {/* Left: Book Image with Shelf */}
       <div className="w-32 md:w-40 flex-shrink-0 flex flex-col items-center">
-        <div className="relative w-full aspect-[3/4] rounded-sm overflow-hidden shadow-lg z-10">
-          <Image src={order.coverImage} alt="Book Cover" fill className="object-cover" />
+        <div className="relative w-full aspect-[3/4] rounded-sm overflow-hidden shadow-lg z-10 bg-[#f9edf0]">
+          <Image
+            src={order.coverImage}
+            alt="Book Cover"
+            fill
+            unoptimized
+            className="object-cover"
+            sizes="(max-width: 768px) 128px, 160px"
+          />
           <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/10 mix-blend-overlay"></div>
         </div>
         {/* Wooden Shelf */}
@@ -37,7 +45,7 @@ export default function OrderCard({ order, showTrackingButton, onTrackOrder, sho
         <div className="space-y-4">
           <div className="flex justify-between items-center text-sm">
             <span className="text-gray-600 font-medium">Order ID:</span>
-            <span className="text-gray-500">{order.orderId}</span>
+            <span className="text-gray-500 font-mono text-xs sm:text-sm">{order.orderId}</span>
           </div>
           <div className="flex justify-between items-center text-sm">
             <span className="text-gray-600 font-medium">Order date:</span>
@@ -54,7 +62,7 @@ export default function OrderCard({ order, showTrackingButton, onTrackOrder, sho
 
           <div className="flex justify-between items-center text-sm">
             <span className="text-gray-600 font-medium">Delivery address:</span>
-            <span className="text-gray-500">{order.address}</span>
+            <span className="text-gray-500 text-right max-w-[200px] sm:max-w-none truncate">{order.address}</span>
           </div>
           <div className="flex justify-between items-center text-sm">
             <span className="text-gray-600 font-medium">Quantity:</span>
@@ -70,6 +78,7 @@ export default function OrderCard({ order, showTrackingButton, onTrackOrder, sho
         <div className="mt-6 flex justify-end">
           {showTrackingButton && (
             <button 
+              type="button"
               onClick={onTrackOrder}
               className="border border-[#E3859A] text-[#E3859A] hover:bg-[#FFF0F2] px-6 py-2 rounded-xl transition-colors text-sm font-medium"
             >
@@ -77,7 +86,10 @@ export default function OrderCard({ order, showTrackingButton, onTrackOrder, sho
             </button>
           )}
           {showCancelLink && (
-            <button className="text-red-500 hover:text-red-600 text-sm font-medium transition-colors underline decoration-red-300 underline-offset-4">
+            <button
+              type="button"
+              className="text-red-500 hover:text-red-600 text-sm font-medium transition-colors underline decoration-red-300 underline-offset-4"
+            >
               Cancel order
             </button>
           )}

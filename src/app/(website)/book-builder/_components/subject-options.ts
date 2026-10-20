@@ -154,3 +154,56 @@ export const SUBJECT_OPTIONS: Record<string, SubjectOption[]> = {
     ["Being Bullied", "BEING_BULLIED", "/fee_10.png"],
   ]),
 };
+
+export const ALL_SUBJECTS: SubjectOption[] = Object.values(SUBJECT_OPTIONS).flat();
+
+export function getStoryChoice(
+  selectedStory?: string | null,
+  selectedTheme?: string | null,
+): { label: string; image: string; color: string } | undefined {
+  if (!selectedStory) return undefined;
+
+  const normalized = selectedStory.trim().toLowerCase();
+
+  // 1. Try finding in the specific theme if selected
+  if (selectedTheme && SUBJECT_OPTIONS[selectedTheme]) {
+    const foundInTheme = SUBJECT_OPTIONS[selectedTheme].find(
+      (s) =>
+        s.value.toLowerCase() === normalized ||
+        s.label.toLowerCase() === normalized
+    );
+    if (foundInTheme) {
+      return {
+        label: foundInTheme.label,
+        image: foundInTheme.image,
+        color: foundInTheme.color,
+      };
+    }
+  }
+
+  // 2. Try finding across all subjects in all themes
+  const found = ALL_SUBJECTS.find(
+    (s) =>
+      s.value.toLowerCase() === normalized ||
+      s.label.toLowerCase() === normalized
+  );
+  if (found) {
+    return {
+      label: found.label,
+      image: found.image,
+      color: found.color,
+    };
+  }
+
+  // 3. Fallback: nicely format the value
+  const formattedLabel = selectedStory
+    .replace(/_/g, " ")
+    .toLowerCase()
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+
+  return {
+    label: formattedLabel,
+    image: "/images/story_1.png",
+    color: "#FFE5D6",
+  };
+}

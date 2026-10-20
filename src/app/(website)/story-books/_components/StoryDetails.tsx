@@ -1,15 +1,20 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import jsPDF from "jspdf";
 import BookReaderModal from "./BookReaderModal";
+import OrderHardcopyModal from "./OrderHardcopyModal";
+import StoryDetailsSkeleton from "./StoryDetailsSkeleton";
 import {
   BookOpen,
   ChevronLeft,
   ChevronRight,
   Download,
   Images,
+  Loader2,
   Maximize2,
   Minus,
   Plus,
@@ -62,6 +67,7 @@ interface FetchedBookData {
   _id?: string;
   title?: string;
   coverImageUrl?: string;
+  pdfUrl?: string;
   ageCategory?: string;
   theme?: string;
   subject?: string;
@@ -84,8 +90,12 @@ interface FetchedBookData {
 const StoryDetails = ({ storyId }: { storyId: string }) => {
   const { data: session, status: sessionStatus } = useSession();
   const [isReaderOpen, setIsReaderOpen] = useState(false);
+  const [isHardcopyModalOpen, setIsHardcopyModalOpen] = useState(false);
+  const [downloadingPdf, setDownloadingPdf] = useState(false);
   const [fetchedBook, setFetchedBook] = useState<FetchedBookData | null>(null);
-  const [loading, setLoading] = useState(false);
+  const isStaticStory = storyId === "max-sees-the-seasons" || storyId === "lisa-camping";
+  const [loading, setLoading] = useState(!isStaticStory);
+  const [notFound, setNotFound] = useState(false);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [previewZoom, setPreviewZoom] = useState(1);
 
@@ -95,6 +105,7 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
 
     const loadBook = async () => {
       setLoading(true);
+      setNotFound(false);
       try {
         const apiBase = getApiBaseUrl();
         const token = session?.user?.accessToken || (typeof window !== "undefined" ? localStorage.getItem("token") : null);
@@ -105,13 +116,19 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
           headers,
           cache: "no-store",
         });
-        if (!res.ok) return;
+        if (!res.ok) {
+          setNotFound(true);
+          return;
+        }
         const json = await res.json();
         if (json?.data) {
           setFetchedBook(json.data);
+        } else {
+          setNotFound(true);
         }
       } catch (e) {
         console.error("Error loading story details:", e);
+        setNotFound(true);
       } finally {
         setLoading(false);
       }
@@ -167,6 +184,132 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
 
   const currentPreviewPage = previewPages[currentPageIndex] || previewPages[0];
 
+  const handleDownloadPdf = async () => {
+    if (downloadingPdf) return;
+    setDownloadingPdf(true);
+    try {
+      if (fetchedBook?.pdfUrl) {
+        const link = document.createElement("a");
+        link.href = fetchedBook.pdfUrl;
+        link.target = "_blank";
+        link.download = `${coverTitle.replace(/[^a-zA-Z0-9_-]/g, "_")}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        return;
+      }
+
+      const loadImageDataUrl = async (url: string): Promise<string | null> => {
+        return new Promise((resolve) => {
+          const img = new window.Image();
+          img.crossOrigin = "anonymous";
+          img.onload = () => {
+            try {
+              const canvas = document.createElement("canvas");
+              canvas.width = img.naturalWidth || img.width || 800;
+              canvas.height = img.naturalHeight || img.height || 1000;
+              const ctx = canvas.getContext("2d");
+              if (!ctx) return resolve(null);
+              ctx.drawImage(img, 0, 0);
+              resolve(canvas.toDataURL("image/jpeg", 0.85));
+            } catch {
+              resolve(null);
+            }
+          };
+          img.onerror = () => resolve(null);
+          img.src = url;
+        });
+      };
+
+      const doc = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+      });
+
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+
+      // Cover Page
+      doc.setFillColor(254, 250, 244);
+      doc.rect(0, 0, pageWidth, pageHeight, "F");
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(22);
+      doc.setTextColor(30, 30, 30);
+      const splitTitle = doc.splitTextToSize(coverTitle, pageWidth - 40);
+      doc.text(splitTitle, pageWidth / 2, 35, { align: "center" });
+
+      if (cover) {
+        const coverData = await loadImageDataUrl(cover);
+        if (coverData) {
+          doc.addImage(coverData, "JPEG", 30, 50, pageWidth - 60, 150);
+        }
+      }
+
+      if (fetchedBook?.creatorName) {
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(13);
+        doc.setTextColor(100, 100, 100);
+        doc.text(`Created by ${fetchedBook.creatorName}`, pageWidth / 2, 225, { align: "center" });
+      }
+
+      // Inside Pages
+      for (let i = 0; i < previewPages.length; i++) {
+        const p = previewPages[i];
+        doc.addPage();
+        doc.setFillColor(255, 255, 255);
+        doc.rect(0, 0, pageWidth, pageHeight, "F");
+
+        if (p.image) {
+          const pageImgData = await loadImageDataUrl(p.image);
+          if (pageImgData) {
+            doc.addImage(pageImgData, "JPEG", 25, 25, pageWidth - 50, 140);
+          }
+        }
+
+        if (p.text) {
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(14);
+          doc.setTextColor(50, 40, 50);
+          const splitPageText = doc.splitTextToSize(p.text, pageWidth - 50);
+          doc.text(splitPageText, pageWidth / 2, 185, { align: "center" });
+        }
+
+        doc.setFontSize(10);
+        doc.setTextColor(150, 150, 150);
+        doc.text(String(p.pageNumber), pageWidth / 2, pageHeight - 15, { align: "center" });
+      }
+
+      const safeFileName = coverTitle.replace(/[^a-zA-Z0-9_-]/g, "_");
+      doc.save(`${safeFileName}.pdf`);
+    } catch (err) {
+      console.error("Failed to generate PDF:", err);
+    } finally {
+      setDownloadingPdf(false);
+    }
+  };
+
+  if (!isStaticStory && (loading || !fetchedBook)) {
+    if (notFound) {
+      return (
+        <main className="min-h-[60vh] bg-[#FEFAF4] px-4 py-20 text-center">
+          <h1 className="font-crimson text-3xl font-bold text-[#1E1E1E]">Storybook Not Found</h1>
+          <p className="mt-2 font-sans text-sm text-[#66605F]">The storybook you are looking for does not exist or has been removed.</p>
+          <div className="mt-6">
+            <Link
+              href="/story-books"
+              className="inline-flex rounded-xl bg-[#E88DA0] px-6 py-2.5 font-sans text-sm font-semibold text-white transition hover:bg-[#DD7893]"
+            >
+              Back to Storybooks
+            </Link>
+          </div>
+        </main>
+      );
+    }
+    return <StoryDetailsSkeleton />;
+  }
+
   return (
     <>
       <section
@@ -184,13 +327,8 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
             </span>
           </h1>
 
-          {loading && !fetchedBook ? (
-            <p className="mt-8 text-center font-sans text-sm text-[#81717a]">
-              Loading story details…
-            </p>
-          ) : (
-            <div className="relative mt-8 rounded-xl border border-[#FFAD79] bg-[#FFF9F3] p-4 sm:p-6 lg:p-8">
-              <div className="grid gap-7 md:grid-cols-[minmax(230px,0.76fr)_minmax(0,1.24fr)] md:items-start lg:gap-10">
+          <div className="relative mt-8 rounded-xl border border-[#FFAD79] bg-[#FFF9F3] p-4 sm:p-6 lg:p-8">
+            <div className="grid gap-7 md:grid-cols-[minmax(230px,0.76fr)_minmax(0,1.24fr)] md:items-start lg:gap-10">
                 <div className="mx-auto w-full max-w-[290px] rounded-md bg-[#514256] p-1.5 shadow-[0_10px_20px_rgba(66,52,62,0.28)]">
                   <Image
                     src={cover}
@@ -245,12 +383,25 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
                     </button>
                     <button
                       type="button"
-                      className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#9C81BE] px-4 font-sans text-sm font-medium text-white transition-colors hover:bg-[#8667AD]"
+                      disabled={downloadingPdf}
+                      onClick={handleDownloadPdf}
+                      className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#9C81BE] px-4 font-sans text-sm font-medium text-white transition-colors hover:bg-[#8667AD] disabled:cursor-not-allowed disabled:opacity-60"
                     >
-                      <Download size={16} aria-hidden="true" /> Download PDF
+                      {downloadingPdf ? (
+                        <>
+                          <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+                          <span>Generating PDF…</span>
+                        </>
+                      ) : (
+                        <>
+                          <Download size={16} aria-hidden="true" />
+                          <span>Download PDF</span>
+                        </>
+                      )}
                     </button>
                     <button
                       type="button"
+                      onClick={() => setIsHardcopyModalOpen(true)}
                       className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#E88DA0] px-4 font-sans text-sm font-medium text-white transition-colors hover:bg-[#DF7894]"
                     >
                       <Printer size={16} aria-hidden="true" /> Order Hardcopy
@@ -298,7 +449,6 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
                 </div>
               </div>
             </div>
-          )}
 
           <section
             className="mt-8 rounded-xl bg-[#FFFCF9] px-5 py-9 text-center shadow-[0_4px_14px_rgba(92,76,84,0.05)] sm:px-8 sm:py-10"
@@ -413,6 +563,14 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
         storyId={storyId}
         title={coverTitle}
         pages={fetchedBook?.pages}
+      />
+
+      <OrderHardcopyModal
+        isOpen={isHardcopyModalOpen}
+        onClose={() => setIsHardcopyModalOpen(false)}
+        bookId={storyId}
+        bookTitle={coverTitle}
+        coverImage={cover}
       />
     </>
   );

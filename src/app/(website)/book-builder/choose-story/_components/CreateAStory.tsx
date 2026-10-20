@@ -91,7 +91,11 @@ export default function CreateAStory() {
 
           <div className="mt-4 grid grid-cols-2 gap-3 min-[440px]:grid-cols-4 sm:mt-5 sm:gap-4" role="radiogroup" aria-label="Choose a story subject">
             {availableSubjects.map((subject) => {
-              const isSelected = selectedStory === subject.value;
+              const isSelected =
+                selectedStory === subject.value ||
+                selectedStory === subject.label ||
+                selectedStory?.toLowerCase() === subject.value.toLowerCase() ||
+                selectedStory?.toLowerCase() === subject.label.toLowerCase();
 
               return (
                 <button

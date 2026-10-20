@@ -14,6 +14,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import BookerelloReviews from "../../../_components/bookerello-reviews";
 import { useBookBuilder } from "../../_components/BookBuilderProvider";
+import { getStoryChoice } from "../../_components/subject-options";
 import { getApiBaseUrl } from "@/config/api";
 import {
   mapAge,
@@ -42,36 +43,7 @@ const themes = [
   { label: "Educational", image: "/images/theme_7.png", color: "#FFE5D4" },
   { label: "Feelings", image: "/images/theme_8.png", color: "#DDEEFF" },
 ];
-const stories = [
-  { label: "Unicorns", image: "/images/story_1.png", color: "#FFE5D6" },
-  {
-    label: "Princess & Princesses",
-    image: "/images/story_2.png",
-    color: "#DDEEFF",
-  },
-  {
-    label: "Knights and dragons",
-    image: "/images/story_3.png",
 
-    
-    color: "#FFDDE4",
-  },
-  { label: "Wizard School", image: "/images/story_4.png", color: "#D1ECD9" },
-  { label: "The Magic Forest", image: "/images/story_5.png", color: "#CFE9DA" },
-  { label: "Mermaids", image: "/images/story_6.png", color: "#FADDE1" },
-  { label: "Gnomes", image: "/images/story_7.png", color: "#FFE5D4" },
-  {
-    label: "Fairies and Elves",
-    image: "/images/story_8.png",
-    color: "#DDEEFF",
-  },
-  {
-    label: "Witches and Spells",
-    image: "/images/story_9.png",
-    color: "#D4EBDD",
-  },
-  { label: "Giants", image: "/images/story_10.png", color: "#F8DCE3" },
-];
 const messages = [
   { label: "Friendship", image: "/images/per_1.png", color: "#FFE5D6" },
   { label: "Courage", image: "/images/per_2.png", color: "#DDEEEF" },
@@ -148,7 +120,7 @@ export default function Checkout() {
 
   const age = ages.find((item) => item.label === selectedAge);
   const theme = themes.find((item) => item.label === selectedTheme);
-  const story = stories.find((item) => item.label === selectedStory) ?? (selectedStory ? { label: selectedStory.toLowerCase().replaceAll("_", " "), image: theme?.image ?? "/images/story_1.png", color: theme?.color ?? "#FFE5D6" } : undefined);
+  const story = getStoryChoice(selectedStory, selectedTheme);
   const message = messages.find((item) => item.label === selectedMessage);
   const font = fonts.find((item) => item.label === selectedFont);
 

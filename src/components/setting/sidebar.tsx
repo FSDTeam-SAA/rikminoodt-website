@@ -3,10 +3,88 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronRight, Camera } from "lucide-react";
+import { ChevronRight, Camera, Loader2 } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
+import { useEffect, useRef, useState } from "react";
+import { getApiBaseUrl } from "@/config/api";
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const { data: session } = useSession();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [userName, setUserName] = useState<string>(session?.user?.name || "Jack Khan");
+  const [userEmail, setUserEmail] = useState<string>(session?.user?.email || "jackkhan@gmail.com");
+  const [userAvatar, setUserAvatar] = useState<string>(session?.user?.profileImage || "https://github.com/shadcn.png");
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+
+  useEffect(() => {
+    const token = session?.user?.accessToken || (typeof window !== "undefined" ? localStorage.getItem("token") : null);
+    if (!token) return;
+
+    const fetchUserProfile = async () => {
+      try {
+        const res = await fetch(`${getApiBaseUrl()}/user/me`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          cache: "no-store",
+        });
+        if (!res.ok) return;
+        const result = await res.json();
+        if (result?.data) {
+          if (result.data.name) setUserName(result.data.name);
+          if (result.data.email) setUserEmail(result.data.email);
+          if (result.data.profileImage) setUserAvatar(result.data.profileImage);
+        }
+      } catch (err) {
+        console.error("Failed to load user profile in sidebar:", err);
+      }
+    };
+
+    void fetchUserProfile();
+  }, [session?.user?.accessToken]);
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const token = session?.user?.accessToken || (typeof window !== "undefined" ? localStorage.getItem("token") : null);
+    if (!token) return;
+
+    setUploadingAvatar(true);
+    try {
+      const formData = new FormData();
+      formData.append("profileImage", file);
+
+      const res = await fetch(`${getApiBaseUrl()}/user/upload-avatar`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (res.ok) {
+        const result = await res.json();
+        const newImageUrl = result?.data?.profileImage || URL.createObjectURL(file);
+        setUserAvatar(newImageUrl);
+      }
+    } catch (err) {
+      console.error("Avatar upload failed:", err);
+    } finally {
+      setUploadingAvatar(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const handleLogout = async () => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("token");
+      localStorage.removeItem("accessToken");
+    }
+    await signOut({ callbackUrl: "/login" });
+  };
 
   const menuItems = [
     { name: "Edit Profile", href: "/setting" },
@@ -21,22 +99,41 @@ export default function Sidebar() {
       <div className="flex w-full flex-col items-center">
         {/* Profile Section */}
         <div className="relative mb-4">
-          <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-gray-100">
+          <div className="relative w-24 h-24 rounded-full overflow-hidden border-2 border-gray-100">
             <Image
-              src="https://github.com/shadcn.png" // Ekhane apnar ashol image path diben
+              src={userAvatar}
               alt="Profile Picture"
               width={96}
               height={96}
-              className="object-cover"
+              unoptimized
+              className="object-cover w-full h-full"
             />
+            {uploadingAvatar && (
+              <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                <Loader2 size={22} className="animate-spin text-white" />
+              </div>
+            )}
           </div>
-          <button className="absolute bottom-0 right-0 bg-white p-1.5 rounded-full shadow-md border border-gray-100 text-gray-500 hover:text-gray-700">
+          <button
+            type="button"
+            aria-label="Upload profile image"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploadingAvatar}
+            className="absolute bottom-0 right-0 bg-white p-1.5 rounded-full shadow-md border border-gray-100 text-gray-500 hover:text-gray-700 transition"
+          >
             <Camera size={16} />
           </button>
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleAvatarChange}
+            accept="image/*"
+            className="hidden"
+          />
         </div>
 
-        <h2 className="text-center font-sans text-[24px] font-semibold text-[#1E1E1E]">Jack Khan</h2>
-        <p className="mb-8 text-center font-sans text-[14px] font-normal text-[#444444]">jackkhan@gmail.com</p>
+        <h2 className="text-center font-sans text-[24px] font-semibold text-[#1E1E1E]">{userName}</h2>
+        <p className="mb-8 text-center font-sans text-[14px] font-normal text-[#444444]">{userEmail}</p>
 
         {/* Navigation Menu */}
         <div className="w-full flex flex-col gap-1">
@@ -61,7 +158,11 @@ export default function Sidebar() {
       </div>
 
       {/* Logout Button */}
-      <button className="mt-8 flex w-full items-center justify-between px-4 py-3 rounded-xl transition-colors text-sm font-medium text-red-500 hover:bg-red-50">
+      <button
+        type="button"
+        onClick={handleLogout}
+        className="mt-8 flex w-full items-center justify-between px-4 py-3 rounded-xl transition-colors text-sm font-medium text-red-500 hover:bg-red-50"
+      >
         <span>Log out</span>
         <ChevronRight size={16} className="text-red-300" />
       </button>

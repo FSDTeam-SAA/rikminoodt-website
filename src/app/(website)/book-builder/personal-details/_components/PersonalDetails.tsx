@@ -3,8 +3,10 @@
 import Image from "next/image";
 import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import { useBookBuilder } from "../../_components/BookBuilderProvider";
+import { getStoryChoice } from "../../_components/subject-options";
 
 const ages = [
   { label: "0-2 Years", image: "/images/age_1.png", color: "#FDE1CF" },
@@ -23,19 +25,6 @@ const themes = [
   { label: "Family", image: "/images/theme_6.png", color: "#FFDFE4" },
   { label: "Educational", image: "/images/theme_7.png", color: "#FFE5D4" },
   { label: "Feelings", image: "/images/theme_8.png", color: "#DDEEFF" },
-];
-
-const stories = [
-  { label: "Unicorns", image: "/images/story_1.png", color: "#FFE5D6" },
-  { label: "Princess & Princesses", image: "/images/story_2.png", color: "#DDEEFF" },
-  { label: "Knights and dragons", image: "/images/story_3.png", color: "#FFDDE4" },
-  { label: "Wizard School", image: "/images/story_4.png", color: "#D1ECD9" },
-  { label: "The Magic Forest", image: "/images/story_5.png", color: "#CFE9DA" },
-  { label: "Mermaids", image: "/images/story_6.png", color: "#FADDE1" },
-  { label: "Gnomes", image: "/images/story_7.png", color: "#FFE5D4" },
-  { label: "Fairies and Elves", image: "/images/story_8.png", color: "#DDEEFF" },
-  { label: "Witches and Spells", image: "/images/story_9.png", color: "#D4EBDD" },
-  { label: "Giants", image: "/images/story_10.png", color: "#F8DCE3" },
 ];
 
 const messages = [
@@ -122,32 +111,43 @@ export default function PersonalDetails() {
     setUserDetails,
   } = useBookBuilder();
 
+  const { data: session, status: sessionStatus } = useSession();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [localCreatorName, setLocalCreatorName] = useState(initialCreatorName || "Mum & Dad");
   const [localUser, setLocalUser] = useState(initialUserDetails);
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    setIsLoggedIn(sessionStatus === "authenticated" || Boolean(session) || Boolean(token));
+  }, [sessionStatus, session]);
 
   const handleNextStep = (e: React.MouseEvent) => {
     e.preventDefault();
     setErrorMessage("");
 
-    if (localUser.email && localUser.confirmEmail && localUser.email !== localUser.confirmEmail) {
-      setErrorMessage("Emails do not match. Please verify your email address.");
-      return;
-    }
+    if (!isLoggedIn) {
+      if (localUser.email && localUser.confirmEmail && localUser.email !== localUser.confirmEmail) {
+        setErrorMessage("Emails do not match. Please verify your email address.");
+        return;
+      }
 
-    if (localUser.password && localUser.password.length < 8) {
-      setErrorMessage("Password must be at least 8 characters long.");
-      return;
+      if (localUser.password && localUser.password.length < 8) {
+        setErrorMessage("Password must be at least 8 characters long.");
+        return;
+      }
     }
 
     setCreatorName(localCreatorName);
-    setUserDetails(localUser);
+    if (!isLoggedIn) {
+      setUserDetails(localUser);
+    }
     router.push("/book-builder/checkout");
   };
 
   const age = ages.find((item) => item.label === selectedAge);
   const theme = themes.find((item) => item.label === selectedTheme);
-  const story = stories.find((item) => item.label === selectedStory);
+  const story = getStoryChoice(selectedStory, selectedTheme);
   const message = messages.find((item) => item.label === selectedMessage);
   const font = fonts.find((item) => item.label === selectedFont);
   const illustrationLabels = [
@@ -219,49 +219,53 @@ export default function PersonalDetails() {
             />
           </div>
 
-          <div className="mt-5 sm:mt-7">
-            <h3 className="font-sans text-sm font-semibold text-[#1E1E1E] sm:text-lg lg:text-[28px]">
-              Your details
-            </h3>
-            <p className="mt-1 font-sans text-[10px] text-[#66605F] sm:text-sm">
-              Fill in your details to create an account and save your book.
-            </p>
-          </div>
-          <div className="mt-3 space-y-4 rounded-[7px] border border-[#F3A8B7] bg-white/20 p-2 sm:mt-5 sm:space-y-5 sm:p-4">
-            <FormField
-              label="Name"
-              placeholder="Enter your full name"
-              value={localUser.name}
-              onChange={(e) => setLocalUser((prev) => ({ ...prev, name: e.target.value }))}
-            />
-            <FormField
-              label="Country"
-              placeholder="United Kingdom"
-              value={localUser.country}
-              onChange={(e) => setLocalUser((prev) => ({ ...prev, country: e.target.value }))}
-            />
-            <FormField
-              label="Email"
-              placeholder="you123@gmail.com"
-              type="email"
-              value={localUser.email}
-              onChange={(e) => setLocalUser((prev) => ({ ...prev, email: e.target.value }))}
-            />
-            <FormField
-              label="Confirm email"
-              placeholder="you123@gmail.com"
-              type="email"
-              value={localUser.confirmEmail}
-              onChange={(e) => setLocalUser((prev) => ({ ...prev, confirmEmail: e.target.value }))}
-            />
-            <FormField
-              label="Password (min 8 letters)"
-              placeholder="Choose strong password"
-              type="password"
-              value={localUser.password}
-              onChange={(e) => setLocalUser((prev) => ({ ...prev, password: e.target.value }))}
-            />
-          </div>
+          {!isLoggedIn && (
+            <>
+              <div className="mt-5 sm:mt-7">
+                <h3 className="font-sans text-sm font-semibold text-[#1E1E1E] sm:text-lg lg:text-[28px]">
+                  Your details
+                </h3>
+                <p className="mt-1 font-sans text-[10px] text-[#66605F] sm:text-sm">
+                  Fill in your details to create an account and save your book.
+                </p>
+              </div>
+              <div className="mt-3 space-y-4 rounded-[7px] border border-[#F3A8B7] bg-white/20 p-2 sm:mt-5 sm:space-y-5 sm:p-4">
+                <FormField
+                  label="Name"
+                  placeholder="Enter your full name"
+                  value={localUser.name}
+                  onChange={(e) => setLocalUser((prev) => ({ ...prev, name: e.target.value }))}
+                />
+                <FormField
+                  label="Country"
+                  placeholder="United Kingdom"
+                  value={localUser.country}
+                  onChange={(e) => setLocalUser((prev) => ({ ...prev, country: e.target.value }))}
+                />
+                <FormField
+                  label="Email"
+                  placeholder="you123@gmail.com"
+                  type="email"
+                  value={localUser.email}
+                  onChange={(e) => setLocalUser((prev) => ({ ...prev, email: e.target.value }))}
+                />
+                <FormField
+                  label="Confirm email"
+                  placeholder="you123@gmail.com"
+                  type="email"
+                  value={localUser.confirmEmail}
+                  onChange={(e) => setLocalUser((prev) => ({ ...prev, confirmEmail: e.target.value }))}
+                />
+                <FormField
+                  label="Password (min 8 letters)"
+                  placeholder="Choose strong password"
+                  type="password"
+                  value={localUser.password}
+                  onChange={(e) => setLocalUser((prev) => ({ ...prev, password: e.target.value }))}
+                />
+              </div>
+            </>
+          )}
 
           {errorMessage && (
             <p role="alert" className="mt-3 font-sans text-xs text-[#B74760]">{errorMessage}</p>
