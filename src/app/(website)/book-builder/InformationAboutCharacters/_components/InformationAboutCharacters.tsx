@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useBookBuilder, type CharacterData } from "../../_components/BookBuilderProvider";
+import { getStoryChoice } from "../../_components/subject-options";
 
 const ages = [
   { label: "0-2 Years", image: "/images/age_1.png", color: "#FDE1CF" },
@@ -31,35 +32,6 @@ const themes = [
   { label: "Family", image: "/images/theme_6.png", color: "#FFDFE4" },
   { label: "Educational", image: "/images/theme_7.png", color: "#FFE5D4" },
   { label: "Feelings", image: "/images/theme_8.png", color: "#DDEEFF" },
-];
-
-const stories = [
-  { label: "Unicorns", image: "/images/story_1.png", color: "#FFE5D6" },
-  {
-    label: "Princess & Princesses",
-    image: "/images/story_2.png",
-    color: "#DDEEFF",
-  },
-  {
-    label: "Knights and dragons",
-    image: "/images/story_3.png",
-    color: "#FFDDE4",
-  },
-  { label: "Wizard School", image: "/images/story_4.png", color: "#D1ECD9" },
-  { label: "The Magic Forest", image: "/images/story_5.png", color: "#CFE9DA" },
-  { label: "Mermaids", image: "/images/story_6.png", color: "#FADDE1" },
-  { label: "Gnomes", image: "/images/story_7.png", color: "#FFE5D4" },
-  {
-    label: "Fairies and Elves",
-    image: "/images/story_8.png",
-    color: "#DDEEFF",
-  },
-  {
-    label: "Witches and Spells",
-    image: "/images/story_9.png",
-    color: "#D4EBDD",
-  },
-  { label: "Giants", image: "/images/story_10.png", color: "#F8DCE3" },
 ];
 
 const messages = [
@@ -450,7 +422,7 @@ export default function InformationAboutCharacters() {
 
   const age = ages.find((item) => item.label === selectedAge);
   const theme = themes.find((item) => item.label === selectedTheme);
-  const story = stories.find((item) => item.label === selectedStory);
+  const story = getStoryChoice(selectedStory, selectedTheme);
   const message = messages.find((item) => item.label === selectedMessage);
   const font = fonts.find((item) => item.label === selectedFont);
   const illustrationLabels = [

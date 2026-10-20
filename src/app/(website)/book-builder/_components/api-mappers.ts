@@ -118,6 +118,9 @@ export const THEME_SUBJECT_MAP: Record<string, string[]> = {
     "EID_AL_ADHA",
     "HANUKKAH",
     "ST_PATRICKS_DAY",
+    "MOTHERS_DAY",
+    "FATHERS_DAY",
+    "GRANDPARENTS_DAY",
   ],
   FAMILY_AND_EVENTS: [
     "GRANDPARENTS_DAY",
@@ -136,7 +139,7 @@ export const THEME_SUBJECT_MAP: Record<string, string[]> = {
     "HOLIDAY",
   ],
   EDUCATIONAL_AND_DEVELOPMENT: [
-    "LEARNING_TO_RIDE_A_BIKE",
+    "LEARNING_TO_WALK",
     "PACIFIER_WEANING",
     "TOOTHBRUSHING",
     "TIDYING_UP",
@@ -149,7 +152,7 @@ export const THEME_SUBJECT_MAP: Record<string, string[]> = {
     "POTTY_TRAINING",
     "STOPPING_THUMB_SUCKING",
     "BODY_PARTS",
-    "LEARNING_TO_WRITE",
+    "LEARNING_TO_RIDE_A_BIKE",
     "LEARNING_TO_COUNT",
     "ALPHABET",
     "FIRST_WORDS",

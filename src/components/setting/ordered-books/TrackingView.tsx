@@ -1,3 +1,5 @@
+"use client";
+
 import { Check, ChevronLeft, PackageCheck, Truck, House } from "lucide-react";
 import OrderCard, { OrderDetails } from "./OrderCard";
 
@@ -13,9 +15,23 @@ const trackingSteps = [
   { label: "Delivered", description: "Enjoy your storybook", icon: House },
 ];
 
-const activeStep = 1;
-
 export default function TrackingView({ order, onBack }: TrackingViewProps) {
+  const getStepFromStatus = (status?: string): number => {
+    switch (status) {
+      case "PAYMENT_PENDING":
+        return 0;
+      case "PRINTING":
+        return 1;
+      case "SHIPPED":
+        return 2;
+      case "DELIVERED":
+        return 3;
+      default:
+        return 1;
+    }
+  };
+
+  const activeStep = getStepFromStatus(order.rawStatus);
   const completedLineWidth = (activeStep / (trackingSteps.length - 1)) * 75;
 
   return (
@@ -85,7 +101,7 @@ export default function TrackingView({ order, onBack }: TrackingViewProps) {
         </div>
       </section>
 
-      <OrderCard order={order} showCancelLink />
+      <OrderCard order={order} showCancelLink={activeStep <= 1} />
     </div>
   );
 }

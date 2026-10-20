@@ -19,7 +19,7 @@ const themes = [
 
 export default function ChooseTheme() {
   const router = useRouter();
-  const { selectedAge, selectedTheme, setSelectedTheme } = useBookBuilder();
+  const { selectedAge, selectedTheme, setSelectedTheme, setSelectedStory } = useBookBuilder();
   const ageOptions = ["0-2 Years", "3-5 Years", "5-9 Years", "10+ Years", "Adult"];
   const ageIndex = ageOptions.indexOf(selectedAge ?? "");
 
@@ -65,7 +65,11 @@ export default function ChooseTheme() {
                   type="button"
                   role="radio"
                   aria-checked={isSelected}
-                  onClick={() => { setSelectedTheme(theme.label); router.push("/book-builder/choose-story"); }}
+                  onClick={() => {
+                    setSelectedTheme(theme.label);
+                    setSelectedStory(null);
+                    router.push("/book-builder/choose-story");
+                  }}
                   className={`group flex aspect-[0.89] flex-col overflow-hidden rounded-[10px] border-2 pt-3 text-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2 ${
                     isSelected ? "border-[#EF8BA3]" : "border-transparent hover:border-[#F5C1CE]"
                   }`}

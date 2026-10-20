@@ -23,14 +23,19 @@ const Navbar = () => {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const overlaysPageContent = pathname === "/" || pathname.startsWith("/book-builder");
+  const overlaysPageContent =
+    pathname === "/" ||
+    pathname.startsWith("/book-builder") ||
+    pathname === "/pricing" ||
+    pathname === "/contact" ||
+    pathname === "/contact-us";
 
   const navigation = [
     { label: t.nav.home, href: "/" },
     { label: t.nav.examples, href: "/examples" },
     { label: t.nav.howItWorks, href: "/how-it-works" },
     { label: t.nav.storyBooks, href: "/story-books" },
-    { label: t.nav.pricing, href: "#pricing" },
+    { label: t.nav.pricing, href: "/pricing" },
   ];
 
   useEffect(() => {
@@ -237,8 +242,13 @@ const Navbar = () => {
                     <span>{t.nav.settings}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    onClick={() => {
+                    onClick={async () => {
                       setIsMenuOpen(false);
+                      if (typeof window !== "undefined") {
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("accessToken");
+                      }
+                      await signOut({ callbackUrl: "/login" });
                     }}
                     className="flex cursor-pointer items-center gap-2.5 rounded-xl px-2.5 py-2 text-sm font-medium text-[#d94868] hover:bg-[#FFF0F3]"
                   >
