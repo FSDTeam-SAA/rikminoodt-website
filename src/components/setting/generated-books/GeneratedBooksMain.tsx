@@ -78,7 +78,15 @@ export default function GeneratedBooksMain() {
       </div>
 
       {loading ? (
-        <p role="status" className="py-8 text-center text-sm text-gray-500">Loading your books…</p>
+        <div role="status" aria-label="Loading your books" className="mt-6 grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-8">
+          {Array.from({ length: 4 }, (_, index) => (
+            <div key={index} className="animate-pulse">
+              <div className="aspect-[3/4] rounded-2xl bg-[#F6EEF1]" />
+              <div className="mt-4 h-4 w-4/5 rounded-full bg-[#F3E7EB]" />
+              <div className="mt-2 h-3 w-3/5 rounded-full bg-[#F7EFF2]" />
+            </div>
+          ))}
+        </div>
       ) : needsLogin ? (
         <div className="py-8 text-center text-sm text-gray-600">
           <p>Please sign in to view your books.</p>

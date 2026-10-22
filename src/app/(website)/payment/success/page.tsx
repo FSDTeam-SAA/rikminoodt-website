@@ -24,6 +24,7 @@ type Book = {
   title?: string;
   generationError?: string;
   failureMessage?: string;
+  coverImageUrl?: string;
   pages?: Array<{ pageNumber: number; text: string }>;
 };
 
@@ -204,8 +205,11 @@ function BookGenerationPaymentSuccess({
   const failed = paid && book?.status === "FAILED";
 
   return (
-    <main className="min-h-[70vh] bg-[#FEF6EC] px-4 pb-16 pt-[120px] sm:px-8 sm:pt-[150px] lg:pt-[190px]">
-      <section className="mx-auto max-w-2xl rounded-3xl border border-[#f3dce2] bg-[#FEFAF4] p-6 text-center shadow-[0_12px_40px_rgba(80,40,50,0.08)] sm:p-10">
+    <main className="min-h-[70vh] bg-[radial-gradient(circle_at_top,_#FFF9F1,_#FEF6EC_52%,_#F8EEF5)] px-4 pb-16 pt-[120px] sm:px-8 sm:pt-[150px] lg:pt-[190px]">
+      <section className="relative mx-auto max-w-3xl overflow-hidden rounded-3xl border border-[#f3dce2] bg-[#FEFAF4] p-6 text-center shadow-[0_16px_44px_rgba(80,40,50,0.1)] sm:p-10">
+        <div className="pointer-events-none absolute -right-16 -top-16 size-48 rounded-full bg-[#FDE2E8]/60 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 -left-16 size-52 rounded-full bg-[#EDE5FB]/60 blur-3xl" />
+        <div className="relative">
         <div
           className={`mx-auto flex size-16 items-center justify-center rounded-2xl ${
             paid ? "bg-[#E6F7ED] text-[#18B56E]" : "bg-[#FDE9EE] text-[#E88DA0]"
@@ -256,25 +260,44 @@ function BookGenerationPaymentSuccess({
           </button>
         )}
         {completed && (
-          <div className="mt-7 rounded-2xl bg-[#FBF3EA] p-5 text-left">
-            <h2 className="font-crimson text-3xl text-[#514256]">
-              {book?.title || "Your storybook"}
-            </h2>
-            {book?.pages?.map((page) => (
-              <article key={page.pageNumber} className="mt-5">
-                <h3 className="text-sm font-bold text-[#a34f6d]">Page {page.pageNumber}</h3>
-                <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-[#514256]">
-                  {page.text}
+          <div className="mt-7 text-left">
+            <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
+              <div>
+                <p className="font-sans text-xs font-semibold uppercase tracking-[0.16em] text-[#C76B85]">
+                  Your story preview
                 </p>
-              </article>
-            ))}
+                <h2 className="mt-1 font-crimson text-3xl text-[#514256]">
+                  {book?.title || "Your storybook"}
+                </h2>
+              </div>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#E6F7ED] px-3 py-1.5 font-sans text-xs font-semibold text-[#18B56E]">
+                <CheckCircle2 size={14} /> Ready to read
+              </span>
+            </div>
+
+            <div className="mt-5 grid gap-4 sm:grid-cols-2">
+              {(book?.pages || []).slice(0, 2).map((page) => (
+                <article key={page.pageNumber} className="rounded-2xl border border-[#F0DFE4] bg-white/85 p-5 shadow-[0_5px_15px_rgba(90,57,68,0.06)]">
+                  <span className="inline-flex rounded-full bg-[#FDE9EE] px-2.5 py-1 font-sans text-[11px] font-semibold text-[#C75D78]">
+                    Page {page.pageNumber}
+                  </span>
+                  <p className="mt-3 whitespace-pre-wrap font-sans text-sm leading-relaxed text-[#514256]">
+                    {page.text}
+                  </p>
+                </article>
+              ))}
+            </div>
+
+            <Link
+              href="/setting/generated-books"
+              className="mt-7 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#E88DA0] px-6 font-sans text-sm font-semibold text-white shadow-[0_5px_15px_rgba(232,141,160,0.3)] transition hover:bg-[#DD7893] sm:w-auto"
+            >
+              <BookOpen size={17} />
+              Go to Generated Books
+            </Link>
           </div>
         )}
-        <p className="mt-7">
-          <Link href="/" className="text-sm text-[#a34f6d] underline">
-            Return home
-          </Link>
-        </p>
+        </div>
       </section>
 
       {/* Generation Status Modal - ONLY for Book Generation flow */}
@@ -328,11 +351,17 @@ function BookGenerationPaymentSuccess({
               </p>
             )}
             {!failed && (
-              <div
-                className="mt-6 h-2 overflow-hidden rounded-full bg-[#f4dce3]"
-                aria-label="Checking status"
-              >
-                <div className="h-full w-1/2 animate-pulse rounded-full bg-gradient-to-r from-[#e88da0] to-[#9c81be]" />
+              <div className="mt-7 flex flex-col items-center text-center">
+                <div className="relative flex size-16 items-center justify-center rounded-full bg-[#FDE9EE]">
+                  <span className="absolute inset-0 animate-ping rounded-full border border-[#E88DA0]/40" />
+                  <span className="absolute size-12 animate-spin rounded-full border-2 border-[#E88DA0]/20 border-t-[#9C81BE]" />
+                  <Sparkles size={22} className="relative animate-pulse text-[#E88DA0]" />
+                </div>
+                <div className="mt-4 flex items-center justify-center gap-2 text-xs font-semibold text-[#816F78]">
+                  <span>Adding the final magical touches…</span>
+                  <Loader2 size={14} className="animate-spin text-[#9C81BE]" />
+                </div>
+                <p className="mt-1.5 text-[11px] text-[#A09199]">This may take a moment.</p>
               </div>
             )}
             {error && (
