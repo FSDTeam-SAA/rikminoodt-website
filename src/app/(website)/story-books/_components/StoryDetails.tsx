@@ -313,13 +313,13 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
   return (
     <>
       <section
-        className="pb-16 pt-10 sm:pb-20 lg:pt-14"
+        className="pb-12 pt-7 sm:pb-16 sm:pt-10 lg:pb-20 lg:pt-14"
         aria-labelledby="story-details-heading"
       >
-        <div className="container mx-auto max-w-[1080px] px-5 sm:px-8 lg:px-0">
+        <div className="container mx-auto max-w-[1080px] px-4 sm:px-8 lg:px-0">
           <h1
             id="story-details-heading"
-            className="text-center font-fredoka text-[48px] font-normal leading-none text-[#1E1E1E]"
+            className="text-balance text-center font-fredoka text-[30px] font-normal leading-[1.12] text-[#1E1E1E] min-[420px]:text-[34px] sm:text-[40px] lg:text-[48px] lg:leading-none"
           >
             <span className="text-[#9C81BE]">Story</span>{" "}
             <span className="text-[#55AA82]">
@@ -327,9 +327,9 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
             </span>
           </h1>
 
-          <div className="relative mt-8 rounded-xl border border-[#FFAD79] bg-[#FFF9F3] p-4 sm:p-6 lg:p-8">
-            <div className="grid gap-7 md:grid-cols-[minmax(230px,0.76fr)_minmax(0,1.24fr)] md:items-start lg:gap-10">
-                <div className="mx-auto w-full max-w-[290px] rounded-md bg-[#514256] p-1.5 shadow-[0_10px_20px_rgba(66,52,62,0.28)]">
+          <div className="relative mt-6 rounded-xl border border-[#FFAD79] bg-[#FFF9F3] p-3.5 sm:mt-8 sm:p-6 lg:p-8">
+            <div className="grid gap-6 lg:grid-cols-[minmax(230px,0.76fr)_minmax(0,1.24fr)] lg:items-start lg:gap-10">
+                <div className="mx-auto w-full max-w-[240px] rounded-md bg-[#514256] p-1.5 shadow-[0_10px_20px_rgba(66,52,62,0.28)] sm:max-w-[290px]">
                   <Image
                     src={cover}
                     alt={`Cover of ${coverTitle}`}
@@ -341,7 +341,7 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
                   />
                 </div>
 
-                <div className="rounded-xl bg-white p-5 shadow-[0_4px_14px_rgba(92,76,84,0.08)] sm:p-6">
+                <div className="min-w-0 rounded-xl bg-white p-4 shadow-[0_4px_14px_rgba(92,76,84,0.08)] sm:p-6">
                   <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E9DFD6] pb-4">
                     <h2 className="flex items-center gap-2 font-sans text-lg font-semibold text-[#1E1E1E]">
                       <BookOpen
@@ -354,30 +354,30 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
                   </div>
 
                   <dl className="mt-3 divide-y divide-[#EEE6DE] font-sans text-sm">
-                    <div className="grid grid-cols-[105px_1fr] gap-3 py-2 text-[#514A4E]">
+                    <div className="grid grid-cols-1 gap-1 py-2 text-[#514A4E] min-[420px]:grid-cols-[100px_minmax(0,1fr)] min-[420px]:gap-3 sm:grid-cols-[105px_minmax(0,1fr)]">
                       <dt className="font-medium text-[#756E73]">Title</dt>
-                      <dd className="font-semibold text-[#302735]">{coverTitle}</dd>
+                      <dd className="break-words font-semibold text-[#302735]">{coverTitle}</dd>
                     </div>
                     {activeDetails.map(([label, value]) => (
                       <div
                         key={label}
-                        className="grid grid-cols-[105px_1fr] gap-3 py-2 text-[#514A4E]"
+                        className="grid grid-cols-1 gap-1 py-2 text-[#514A4E] min-[420px]:grid-cols-[100px_minmax(0,1fr)] min-[420px]:gap-3 sm:grid-cols-[105px_minmax(0,1fr)]"
                       >
                         <dt className="font-medium text-[#756E73]">{label}</dt>
-                        <dd>{value}</dd>
+                        <dd className="break-words">{value}</dd>
                       </div>
                     ))}
-                    <div className="grid grid-cols-[105px_1fr] gap-3 py-2 text-[#514A4E]">
+                    <div className="grid grid-cols-1 gap-1 py-2 text-[#514A4E] min-[420px]:grid-cols-[100px_minmax(0,1fr)] min-[420px]:gap-3 sm:grid-cols-[105px_minmax(0,1fr)]">
                       <dt className="font-medium text-[#756E73]">Story</dt>
                       <dd className="leading-relaxed">{activeDescription}</dd>
                     </div>
                   </dl>
 
-                  <div className="mt-5 flex flex-wrap gap-3">
+                  <div className="mt-5 flex flex-col gap-3 min-[480px]:flex-row min-[480px]:flex-wrap">
                     <button
                       type="button"
                       onClick={() => setIsReaderOpen(true)}
-                      className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#55AA82] px-4 font-sans text-sm font-medium text-white transition-colors hover:bg-[#47936f]"
+                      className="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#55AA82] px-4 font-sans text-sm font-medium text-white transition-colors hover:bg-[#47936f] min-[480px]:h-10 min-[480px]:w-auto"
                     >
                       <BookOpen size={16} aria-hidden="true" /> Read Story
                     </button>
@@ -385,7 +385,7 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
                       type="button"
                       disabled={downloadingPdf}
                       onClick={handleDownloadPdf}
-                      className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#9C81BE] px-4 font-sans text-sm font-medium text-white transition-colors hover:bg-[#8667AD] disabled:cursor-not-allowed disabled:opacity-60"
+                      className="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#9C81BE] px-4 font-sans text-sm font-medium text-white transition-colors hover:bg-[#8667AD] disabled:cursor-not-allowed disabled:opacity-60 min-[480px]:h-10 min-[480px]:w-auto"
                     >
                       {downloadingPdf ? (
                         <>
@@ -402,7 +402,7 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
                     <button
                       type="button"
                       onClick={() => setIsHardcopyModalOpen(true)}
-                      className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#E88DA0] px-4 font-sans text-sm font-medium text-white transition-colors hover:bg-[#DF7894]"
+                      className="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#E88DA0] px-4 font-sans text-sm font-medium text-white transition-colors hover:bg-[#DF7894] min-[480px]:h-10 min-[480px]:w-auto"
                     >
                       <Printer size={16} aria-hidden="true" /> Order Hardcopy
                     </button>
@@ -411,7 +411,7 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
               </div>
 
               <div className="mt-9 border-t border-[#F0E5D9] pt-6">
-                <div className="flex items-center justify-between gap-4 px-1">
+                <div className="flex flex-col items-start justify-between gap-1.5 px-1 min-[420px]:flex-row min-[420px]:items-center min-[420px]:gap-4">
                   <h2 className="inline-flex items-center gap-2 font-sans text-base font-semibold text-[#514256]">
                     <Images
                       size={16}
@@ -424,11 +424,11 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
                     {usedPhotos.length} {usedPhotos.length === 1 ? "Character photo" : "Character photos"}
                   </span>
                 </div>
-                <div className="mx-auto mt-6 grid max-w-[880px] grid-cols-2 gap-5 sm:grid-cols-4 sm:gap-6">
+                <div className="mx-auto mt-5 grid max-w-[880px] grid-cols-2 gap-3 sm:mt-6 sm:grid-cols-4 sm:gap-6">
                   {usedPhotos.map((photo, i) => (
                     <article
                       key={`${photo.name}-${i}`}
-                      className="overflow-hidden rounded-xl border border-[#F0E5D9] bg-white p-3 shadow-[0_7px_16px_rgba(92,76,84,0.13)] transition-transform duration-300 hover:-translate-y-1"
+                      className="min-w-0 overflow-hidden rounded-xl border border-[#F0E5D9] bg-white p-2.5 shadow-[0_7px_16px_rgba(92,76,84,0.13)] transition-transform duration-300 hover:-translate-y-1 sm:p-3"
                     >
                       <Image
                         src={photo.image}
@@ -451,12 +451,12 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
             </div>
 
           <section
-            className="mt-8 rounded-xl bg-[#FFFCF9] px-5 py-9 text-center shadow-[0_4px_14px_rgba(92,76,84,0.05)] sm:px-8 sm:py-10"
+            className="mt-6 rounded-xl bg-[#FFFCF9] px-3.5 py-7 text-center shadow-[0_4px_14px_rgba(92,76,84,0.05)] sm:mt-8 sm:px-8 sm:py-10"
             aria-labelledby="read-book-heading"
           >
             <h2
               id="read-book-heading"
-              className="font-fredoka text-[48px] font-normal leading-none"
+              className="font-fredoka text-[32px] font-normal leading-none sm:text-[40px] lg:text-[48px]"
             >
               <span className="text-[#55A7CF]">Read</span>{" "}
               <span className="text-[#E0A94C]">the book</span>
@@ -492,7 +492,7 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
             )}
 
             <div
-              className="mt-7 flex flex-wrap justify-center gap-2 sm:gap-3"
+              className="mt-6 flex flex-wrap justify-center gap-2 sm:mt-7 sm:gap-3"
               aria-label={`Page navigation for story ${storyId}`}
             >
               <button

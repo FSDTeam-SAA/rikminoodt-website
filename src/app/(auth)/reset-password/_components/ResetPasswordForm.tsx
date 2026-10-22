@@ -78,24 +78,24 @@ export default function ResetPasswordForm() {
   };
 
   return (
-    <main className="flex min-h-screen w-full items-center justify-center bg-white px-4 py-8 sm:px-6 lg:px-10">
-      <div className="mx-auto grid w-full max-w-[940px] items-center gap-8 lg:grid-cols-[1fr_1fr] lg:gap-14">
+    <main className="flex min-h-screen w-full items-center justify-center bg-white px-4 py-8 sm:px-6 lg:px-12">
+      <div className="mx-auto grid w-full max-w-[1160px] items-center gap-8 lg:grid-cols-[1.08fr_.92fr] lg:gap-20">
         {/* Left Side: Artwork Card */}
         <div className="flex w-full justify-center">
-          <div className="relative aspect-[385/542] w-full max-w-[400px] overflow-hidden rounded-[24px] shadow-[0_12px_36px_rgba(180,210,240,0.2)] transition-transform duration-300 sm:max-w-[440px] lg:max-w-none">
+          <div className="relative aspect-[385/542] w-full max-w-[400px] rounded-xl bg-[#F5F1FF] sm:max-w-[440px] lg:max-w-none">
             <Image
               src="/images/auth_4.png"
               alt="Boekerello Underwater Adventure"
               fill
               sizes="(max-width: 1024px) 90vw, 480px"
               priority
-              className="object-cover"
+              className="object-contain p-3 sm:p-5"
             />
           </div>
         </div>
 
         {/* Right Side: Form */}
-        <div className="mx-auto flex w-full max-w-[390px] flex-col justify-center">
+        <div className="mx-auto flex w-full max-w-[460px] flex-col justify-center">
           {/* Back to sign in */}
           <div>
             <Link
@@ -123,10 +123,10 @@ export default function ResetPasswordForm() {
 
           {/* Headings */}
           <div className="mt-7 text-center">
-            <h1 className="font-crimson text-[28px] font-bold text-[#1E1E1E] sm:text-[32px]">
+            <h1 className="font-crimson text-[30px] font-bold text-[#1E1E1E] sm:text-[34px]">
               Reset Password?
             </h1>
-            <p className="mx-auto mt-2 max-w-[320px] font-sans text-xs leading-relaxed text-[#5A6578]">
+            <p className="mx-auto mt-2 max-w-[360px] font-sans text-sm leading-relaxed text-[#5A6578]">
               Please enter a new password for your account. Use a strong password to keep your account secure.
             </p>
           </div>
@@ -135,18 +135,23 @@ export default function ResetPasswordForm() {
           <form onSubmit={handleSubmit} className="mt-7 space-y-4">
             {/* New Password */}
             <div>
-              <label className="mb-1.5 block font-sans text-xs font-medium text-[#252025]">
+              <label className="mb-1.5 block font-sans text-sm font-medium text-[#252025]">
                 New Password
               </label>
               <div className="relative">
                 <input
                   type={showNewPassword ? "text" : "password"}
-                  placeholder="****************"
+                  placeholder=""
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   required
-                  className="h-11 w-full rounded-[10px] border border-[#F3C5CF] bg-white px-3.5 pr-10 font-sans text-xs text-[#252025] outline-none placeholder:text-[#A0A8B4] transition focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/20 sm:text-sm"
+                  className="h-11 w-full rounded-[10px] border border-[#F3C5CF] bg-white px-3.5 pr-10 font-sans text-xs text-[#252025] outline-none transition focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/20 sm:text-sm"
                 />
+                {!newPassword && (
+                  <span aria-hidden="true" className="pointer-events-none absolute left-3.5 top-[calc(50%+2px)] -translate-y-1/2 font-sans text-xs text-[#A0A8B4] sm:text-sm">
+                    ****************
+                  </span>
+                )}
                 <button
                   type="button"
                   onClick={() => setShowNewPassword(!showNewPassword)}
@@ -160,18 +165,23 @@ export default function ResetPasswordForm() {
 
             {/* Confirm Password */}
             <div>
-              <label className="mb-1.5 block font-sans text-xs font-medium text-[#252025]">
+              <label className="mb-1.5 block font-sans text-sm font-medium text-[#252025]">
                 Confirm Password
               </label>
               <div className="relative">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
-                  placeholder="****************"
+                  placeholder=""
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
-                  className="h-11 w-full rounded-[10px] border border-[#F3C5CF] bg-white px-3.5 pr-10 font-sans text-xs text-[#252025] outline-none placeholder:text-[#A0A8B4] transition focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/20 sm:text-sm"
+                  className="h-11 w-full rounded-[10px] border border-[#F3C5CF] bg-white px-3.5 pr-10 font-sans text-xs text-[#252025] outline-none transition focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/20 sm:text-sm"
                 />
+                {!confirmPassword && (
+                  <span aria-hidden="true" className="pointer-events-none absolute left-3.5 top-[calc(50%+2px)] -translate-y-1/2 font-sans text-xs text-[#A0A8B4] sm:text-sm">
+                    ****************
+                  </span>
+                )}
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}

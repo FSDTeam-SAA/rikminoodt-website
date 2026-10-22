@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/select";
 import { useBookBuilder, type CharacterData } from "../../_components/BookBuilderProvider";
 import { getStoryChoice } from "../../_components/subject-options";
+import { getCharacterValidationError } from "../../_components/validation";
 
 const ages = [
   { label: "0-2 Years", image: "/images/age_1.png", color: "#FDE1CF" },
@@ -126,7 +127,68 @@ type AdditionalCharState = {
   objectName: string;
   photo: File | null;
   photoName: string;
+  photoPreview: string;
 };
+
+function PhotoUpload({
+  id,
+  photoName,
+  previewUrl,
+  onPhotoChange,
+}: {
+  id: string;
+  photoName: string;
+  previewUrl: string;
+  onPhotoChange: (file: File | null, previewUrl: string) => void;
+}) {
+  return (
+    <label
+      htmlFor={id}
+      className="mt-4 flex min-h-[160px] cursor-pointer flex-col items-center justify-center rounded-[8px] border border-dashed border-[#F4CDD5] bg-white/20 px-4 text-center transition hover:bg-white/45 focus-within:ring-2 focus-within:ring-[#E88DA0]"
+    >
+      {previewUrl ? (
+        <>
+          {/* A local object URL is used so the selected file can be shown before upload. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={previewUrl}
+            alt="Selected character preview"
+            className="size-24 rounded-lg border border-[#F3A8B7] bg-white object-cover shadow-sm"
+          />
+          <span className="mt-2 max-w-full truncate font-sans text-sm text-[#6B5B64]">
+            {photoName}
+          </span>
+          <span className="mt-1 font-sans text-xs text-[#B8B4B6]">
+            Click to change photo
+          </span>
+        </>
+      ) : (
+        <>
+          <Upload
+            aria-hidden="true"
+            size={26}
+            strokeWidth={1.5}
+            className="text-[#B8B4B6]"
+          />
+          <span className="mt-2 font-sans text-sm text-[#B8B4B6]">
+            Add a photo as a basis for the illustrations
+          </span>
+        </>
+      )}
+      <input
+        id={id}
+        type="file"
+        accept="image/*"
+        className="sr-only"
+        onChange={(event) => {
+          const file = event.target.files?.[0] || null;
+          onPhotoChange(file, file ? URL.createObjectURL(file) : "");
+          event.target.value = "";
+        }}
+      />
+    </label>
+  );
+}
 
 function AddedCharacterForm({
   number,
@@ -343,29 +405,18 @@ function AddedCharacterForm({
           </>
         )}
 
-        <label className="mt-4 flex min-h-[160px] cursor-pointer flex-col items-center justify-center rounded-[8px] border border-dashed border-[#F4CDD5] bg-white/20 px-4 text-center transition hover:bg-white/45 focus-within:ring-2 focus-within:ring-[#E88DA0]">
-          <Upload
-            aria-hidden="true"
-            size={26}
-            strokeWidth={1.5}
-            className="text-[#B8B4B6]"
-          />
-          <span className="mt-2 font-sans text-sm text-[#B8B4B6]">
-            {character.photoName || "Add a photo as a basis for the illustrations"}
-          </span>
-          <input
-            type="file"
-            accept="image/*"
-            className="sr-only"
-            onChange={(event) => {
-              const file = event.target.files?.[0] || null;
-              onChange({
-                photo: file,
-                photoName: file?.name || "",
-              });
-            }}
-          />
-        </label>
+        <PhotoUpload
+          id={`${fieldId}-photo`}
+          photoName={character.photoName}
+          previewUrl={character.photoPreview}
+          onPhotoChange={(photo, photoPreview) =>
+            onChange({
+              photo,
+              photoName: photo?.name || "",
+              photoPreview,
+            })
+          }
+        />
         {canAdd && (
           <button
             type="button"
@@ -416,6 +467,8 @@ export default function InformationAboutCharacters() {
   const [objectName, setObjectName] = useState(storedCharacters[0]?.objectName || "");
   const [photoFile, setPhotoFile] = useState<File | null>(storedCharacters[0]?.photo || null);
   const [photoName, setPhotoName] = useState(storedCharacters[0]?.photo?.name || "");
+  const [photoPreview, setPhotoPreview] = useState(storedCharacters[0]?.photoPreview || "");
+  const [validationError, setValidationError] = useState("");
 
   const [additionalCharacters, setAdditionalCharacters] = useState<AdditionalCharState[]>([]);
   const nextCharacterId = useRef(2);
@@ -465,6 +518,7 @@ export default function InformationAboutCharacters() {
               objectName: "",
               photo: null,
               photoName: "",
+              photoPreview: "",
             },
           ]
     );
@@ -480,6 +534,30 @@ export default function InformationAboutCharacters() {
   };
 
   const handleNextStep = () => {
+    const mainCharacterError = getCharacterValidationError({
+      type: characterType,
+      name,
+      gender: gender ?? undefined,
+      age: ageValue,
+      animalName,
+      animalSpecies,
+      objectName,
+    });
+    if (mainCharacterError) {
+      setValidationError(`Character 1: ${mainCharacterError}`);
+      return;
+    }
+
+    const additionalCharacterIndex = additionalCharacters.findIndex((character) =>
+      getCharacterValidationError(character),
+    );
+    if (additionalCharacterIndex >= 0) {
+      const message = getCharacterValidationError(additionalCharacters[additionalCharacterIndex]);
+      setValidationError(`Character ${additionalCharacterIndex + 2}: ${message}`);
+      return;
+    }
+
+    setValidationError("");
     const char1Gender =
       gender === "Male" ? "BOY" : gender === "Female" ? "GIRL" : "OTHER";
 
@@ -500,6 +578,7 @@ export default function InformationAboutCharacters() {
         animalSpecies: animalSpecies || undefined,
         objectName: objectName || undefined,
         photo: photoFile,
+        photoPreview: photoPreview || undefined,
       },
       ...additionalCharacters.map((c, i): CharacterData => {
         const cGender: "BOY" | "GIRL" | "OTHER" =
@@ -520,6 +599,7 @@ export default function InformationAboutCharacters() {
           animalSpecies: c.animalSpecies || undefined,
           objectName: c.objectName || undefined,
           photo: c.photo,
+          photoPreview: c.photoPreview || undefined,
         };
       }),
     ];
@@ -810,27 +890,16 @@ export default function InformationAboutCharacters() {
               </>
             )}
 
-            <label className="mt-4 flex min-h-[160px] cursor-pointer flex-col items-center justify-center rounded-[8px] border border-dashed border-[#F4CDD5] bg-white/20 px-4 text-center transition hover:bg-white/45 focus-within:ring-2 focus-within:ring-[#E88DA0]">
-              <Upload
-                aria-hidden="true"
-                size={26}
-                strokeWidth={1.5}
-                className="text-[#B8B4B6]"
-              />
-              <span className="mt-2 font-sans text-sm text-[#B8B4B6]">
-                {photoName || "Add a photo as a basis for the illustrations"}
-              </span>
-              <input
-                type="file"
-                accept="image/*"
-                className="sr-only"
-                onChange={(event) => {
-                  const file = event.target.files?.[0] || null;
-                  setPhotoFile(file);
-                  setPhotoName(file?.name || "");
-                }}
-              />
-            </label>
+            <PhotoUpload
+              id="character-1-photo"
+              photoName={photoName}
+              previewUrl={photoPreview}
+              onPhotoChange={(photo, previewUrl) => {
+                setPhotoFile(photo);
+                setPhotoName(photo?.name || "");
+                setPhotoPreview(previewUrl);
+              }}
+            />
 
             {additionalCharacters.length < 3 && (
               <button
@@ -865,6 +934,11 @@ export default function InformationAboutCharacters() {
           ))}
 
           <div className="mt-7 flex justify-center">
+            {validationError && (
+              <p role="alert" className="mr-4 self-center font-sans text-sm text-[#B74760]">
+                {validationError}
+              </p>
+            )}
             <button
               type="button"
               onClick={handleNextStep}

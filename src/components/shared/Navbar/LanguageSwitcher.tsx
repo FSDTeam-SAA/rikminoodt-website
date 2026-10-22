@@ -50,7 +50,7 @@ export default function LanguageSwitcher({ className = "", isMobile = false }: L
         <span className="text-xs font-semibold uppercase tracking-wider text-[#876d7c]">
           Language
         </span>
-        <div className="flex gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           {SUPPORTED_LANGUAGES.map((item) => {
             const isSelected = language === item.code;
             return (
@@ -58,7 +58,7 @@ export default function LanguageSwitcher({ className = "", isMobile = false }: L
                 key={item.code}
                 type="button"
                 onClick={() => setLanguage(item.code)}
-                className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg px-2.5 py-2 text-xs font-medium transition-all ${
+                className={`flex min-w-0 items-center justify-center gap-1.5 rounded-lg px-2.5 py-2 text-xs font-medium transition-all ${
                   isSelected
                     ? "bg-[#e88da0] text-white shadow-sm"
                     : "bg-white/70 text-[#5d5059] hover:bg-white"
@@ -73,7 +73,7 @@ export default function LanguageSwitcher({ className = "", isMobile = false }: L
                     className="object-cover"
                   />
                 </div>
-                <span>{item.label}</span>
+                <span className="truncate">{item.label}</span>
               </button>
             );
           })}
@@ -103,7 +103,7 @@ export default function LanguageSwitcher({ className = "", isMobile = false }: L
           />
         </div>
         <span className="font-fredoka text-sm font-medium uppercase text-[#5a5358] transition-colors group-hover:text-[#e77f9a]">
-          {current.code}
+          {current.label.slice(0, 2)}
         </span>
         <ChevronDown
           size={14}

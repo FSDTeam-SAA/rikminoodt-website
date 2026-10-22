@@ -52,24 +52,24 @@ export default function ForgotPasswordForm() {
   };
 
   return (
-    <main className="flex min-h-screen w-full items-center justify-center bg-white px-4 py-8 sm:px-6 lg:px-10">
-      <div className="mx-auto grid w-full max-w-[940px] items-center gap-8 lg:grid-cols-[1fr_1fr] lg:gap-14">
+    <main className="flex min-h-screen w-full items-center justify-center bg-white px-4 py-8 sm:px-6 lg:px-12">
+      <div className="mx-auto grid w-full max-w-[1160px] items-center gap-8 lg:grid-cols-[1.08fr_.92fr] lg:gap-20">
         {/* Left Side: Artwork Card */}
         <div className="flex w-full justify-center">
-          <div className="relative aspect-[385/542] w-full max-w-[400px] overflow-hidden rounded-[24px] shadow-[0_12px_36px_rgba(240,195,210,0.2)] transition-transform duration-300 sm:max-w-[440px] lg:max-w-none">
+          <div className="relative aspect-[385/542] w-full max-w-[400px] rounded-xl bg-[#FFF8ED] sm:max-w-[440px] lg:max-w-none">
             <Image
               src="/images/auth_2.png"
               alt="Boekerello Magical Adventure"
               fill
               sizes="(max-width: 1024px) 90vw, 480px"
               priority
-              className="object-cover"
+              className="object-contain p-3 sm:p-5"
             />
           </div>
         </div>
 
         {/* Right Side: Form */}
-        <div className="mx-auto flex w-full max-w-[390px] flex-col justify-center">
+        <div className="mx-auto flex w-full max-w-[460px] flex-col justify-center">
           {/* Back to sign in */}
           <div>
             <Link
@@ -97,10 +97,10 @@ export default function ForgotPasswordForm() {
 
           {/* Headings */}
           <div className="mt-7 text-center">
-            <h1 className="font-crimson text-[28px] font-bold text-[#1E1E1E] sm:text-[32px]">
+            <h1 className="font-crimson text-[30px] font-bold text-[#1E1E1E] sm:text-[34px]">
               Forgot Password?
             </h1>
-            <p className="mx-auto mt-2 max-w-[320px] font-sans text-xs leading-relaxed text-[#5A6578]">
+            <p className="mx-auto mt-2 max-w-[360px] font-sans text-sm leading-relaxed text-[#5A6578]">
               Enter your email and we&apos;ll send you a code to reset your password
             </p>
           </div>
@@ -109,7 +109,7 @@ export default function ForgotPasswordForm() {
           <form onSubmit={handleSubmit} className="mt-7 space-y-5">
             {/* Email Field */}
             <div>
-              <label className="mb-1.5 block font-sans text-xs font-medium text-[#252025]">
+              <label className="mb-1.5 block font-sans text-sm font-medium text-[#252025]">
                 Email
               </label>
               <input

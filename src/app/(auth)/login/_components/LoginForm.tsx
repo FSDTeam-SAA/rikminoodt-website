@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
 import { ArrowLeft, Eye, EyeOff, Loader2 } from "lucide-react";
 
@@ -15,6 +15,16 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    const rememberedEmail = localStorage.getItem("boekerello_remembered_email");
+    const shouldRemember = localStorage.getItem("boekerello_session_mode") === "persistent";
+
+    if (shouldRemember && rememberedEmail) {
+      setEmail(rememberedEmail);
+      setRememberMe(true);
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,6 +47,16 @@ export default function LoginForm() {
       if (result?.error) {
         setErrorMessage(result.error);
         return;
+      }
+
+      if (rememberMe) {
+        localStorage.setItem("boekerello_session_mode", "persistent");
+        localStorage.setItem("boekerello_remembered_email", email.trim());
+        sessionStorage.removeItem("boekerello_auth_session");
+      } else {
+        localStorage.setItem("boekerello_session_mode", "session");
+        localStorage.removeItem("boekerello_remembered_email");
+        sessionStorage.setItem("boekerello_auth_session", "active");
       }
 
       // Also sync accessToken to localStorage for direct REST API calls
@@ -65,24 +85,24 @@ export default function LoginForm() {
   };
 
   return (
-    <main className="flex min-h-screen w-full items-center justify-center bg-white px-4 py-8 sm:px-6 lg:px-10">
-      <div className="mx-auto grid w-full max-w-[940px] items-center gap-8 lg:grid-cols-[1fr_1fr] lg:gap-14">
+    <main className="flex min-h-screen w-full items-center justify-center bg-white px-4 py-8 sm:px-6 lg:px-12">
+      <div className="mx-auto grid w-full max-w-[1160px] items-center gap-8 lg:grid-cols-[1.08fr_.92fr] lg:gap-20">
         {/* Left Side: Artwork Card */}
         <div className="flex w-full justify-center">
-          <div className="relative aspect-[385/542] w-full max-w-[400px] overflow-hidden rounded-[24px] shadow-[0_12px_36px_rgba(235,185,150,0.18)] transition-transform duration-300 sm:max-w-[440px] lg:max-w-none">
+          <div className="relative aspect-[385/542] w-full max-w-[400px] rounded-xl bg-[#F7FBEF] sm:max-w-[440px] lg:max-w-none">
             <Image
               src="/images/auth_1.png"
               alt="Boekerello Space Adventure"
               fill
               sizes="(max-width: 1024px) 90vw, 480px"
               priority
-              className="object-cover"
+              className="object-contain p-3 sm:p-5"
             />
           </div>
         </div>
 
         {/* Right Side: Form */}
-        <div className="mx-auto flex w-full max-w-[390px] flex-col justify-center">
+        <div className="mx-auto flex w-full max-w-[460px] flex-col justify-center">
           {/* Back button */}
           <div>
             <Link
@@ -110,10 +130,10 @@ export default function LoginForm() {
 
           {/* Headings */}
           <div className="mt-6 text-center">
-            <h1 className="font-crimson text-[28px] font-bold text-[#1E1E1E] sm:text-[32px]">
+            <h1 className="font-crimson text-[30px] font-bold text-[#1E1E1E] sm:text-[34px]">
               Welcome back
             </h1>
-            <p className="mx-auto mt-2 max-w-[320px] font-sans text-xs leading-relaxed text-[#5A6578]">
+            <p className="mx-auto mt-2 max-w-[360px] font-sans text-sm leading-relaxed text-[#5A6578]">
               Please enter your email & password to access your account.
             </p>
           </div>
@@ -122,7 +142,7 @@ export default function LoginForm() {
           <form onSubmit={handleSubmit} className="mt-6 space-y-4 sm:mt-7">
             {/* Email Field */}
             <div>
-              <label className="mb-1.5 block font-sans text-xs font-medium text-[#252025]">
+              <label className="mb-1.5 block font-sans text-sm font-medium text-[#252025]">
                 Email
               </label>
               <input
@@ -137,18 +157,23 @@ export default function LoginForm() {
 
             {/* Password Field */}
             <div>
-              <label className="mb-1.5 block font-sans text-xs font-medium text-[#252025]">
+              <label className="mb-1.5 block font-sans text-sm font-medium text-[#252025]">
                 Password
               </label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
-                  placeholder="****************"
+                  placeholder=""
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="h-11 w-full rounded-[10px] border border-[#F3C5CF] bg-white px-3.5 pr-10 font-sans text-xs text-[#252025] outline-none placeholder:text-[#A0A8B4] transition focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/20 sm:text-sm"
+                  className="h-11 w-full rounded-[10px] border border-[#F3C5CF] bg-white px-3.5 pr-10 font-sans text-xs text-[#252025] outline-none transition focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/20 sm:text-sm"
                 />
+                {!password && (
+                  <span aria-hidden="true" className="pointer-events-none absolute left-3.5 top-[calc(50%+2px)] -translate-y-1/2 font-sans text-xs text-[#A0A8B4] sm:text-sm">
+                    ****************
+                  </span>
+                )}
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}

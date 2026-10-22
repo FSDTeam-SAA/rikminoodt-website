@@ -7,6 +7,10 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useBookBuilder } from "../../_components/BookBuilderProvider";
 import { getStoryChoice } from "../../_components/subject-options";
+import {
+  getGuestDetailsValidationError,
+  isValidCreatorName,
+} from "../../_components/validation";
 
 const ages = [
   { label: "0-2 Years", image: "/images/age_1.png", color: "#FDE1CF" },
@@ -126,21 +130,28 @@ export default function PersonalDetails() {
     e.preventDefault();
     setErrorMessage("");
 
-    if (!isLoggedIn) {
-      if (localUser.email && localUser.confirmEmail && localUser.email !== localUser.confirmEmail) {
-        setErrorMessage("Emails do not match. Please verify your email address.");
-        return;
-      }
+    if (!isValidCreatorName(localCreatorName)) {
+      setErrorMessage("Enter the creator name (2–100 characters).");
+      return;
+    }
 
-      if (localUser.password && localUser.password.length < 8) {
-        setErrorMessage("Password must be at least 8 characters long.");
+    if (!isLoggedIn) {
+      const guestDetailsError = getGuestDetailsValidationError(localUser);
+      if (guestDetailsError) {
+        setErrorMessage(guestDetailsError);
         return;
       }
     }
 
-    setCreatorName(localCreatorName);
+    setCreatorName(localCreatorName.trim());
     if (!isLoggedIn) {
-      setUserDetails(localUser);
+      setUserDetails({
+        name: localUser.name.trim(),
+        country: localUser.country.trim(),
+        email: localUser.email.trim(),
+        confirmEmail: localUser.confirmEmail.trim(),
+        password: localUser.password,
+      });
     }
     router.push("/book-builder/checkout");
   };

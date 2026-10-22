@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa";
 import { useLanguage } from "@/components/providers/LanguageProvider";
 
@@ -66,6 +67,20 @@ const getFooterHref = (label: string) => {
 
 const Footer = () => {
   const { t } = useLanguage();
+  const pathname = usePathname();
+
+  const scrollToSection = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    sectionId: "occasions" | "faq",
+  ) => {
+    if (pathname !== "/") return;
+
+    event.preventDefault();
+    document.getElementById(sectionId)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
 
   const footerGroups = [
     {
@@ -80,6 +95,7 @@ const Footer = () => {
     },
     {
       title: t.footer.groups.occasions,
+      href: "/?section=occasions",
       links: [
         t.footer.links.birthday,
         t.footer.links.christmas,
@@ -102,8 +118,8 @@ const Footer = () => {
   return (
     <footer className="bg-[#4A3F52] font-sans text-white">
       <div className="container mx-auto px-6 py-11 sm:px-8 sm:py-12 lg:min-h-[407px] lg:px-0 lg:py-16">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[396px_repeat(3,max-content)] lg:justify-between lg:gap-8">
-          <section className="max-w-[310px]">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-8 lg:grid-cols-[396px_repeat(3,max-content)] lg:justify-between lg:gap-8">
+          <section className="col-span-2 max-w-[310px] sm:col-span-1 lg:col-span-1">
             <Link
               href="/"
               aria-label={t.nav.homeAria}
@@ -135,23 +151,37 @@ const Footer = () => {
             </nav>
           </section>
 
-          {footerGroups.map((group) => (
-            <nav key={group.title} aria-label={group.title}>
+          {footerGroups.map((group, index) => (
+            <nav
+              key={group.title}
+              aria-label={group.title}
+              className={index === 2 ? "col-span-2 sm:col-span-1 lg:col-span-1" : undefined}
+            >
               <h2 className="font-crimson text-2xl font-semibold">{group.title}</h2>
               <ul className="mt-3 space-y-3">
-                {group.links.map((link) => (
-                  <li key={link}>
-                    <Link
-                      href={getFooterHref(link)}
-                      className="group inline-flex items-center gap-1.5 text-sm text-white/90 transition hover:text-[#f6bdca] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eea0b4] lg:text-base"
-                    >
-                      <span aria-hidden="true" className="text-[9px] transition-transform group-hover:translate-x-0.5">
-                        ▸
-                      </span>
-                      {link}
-                    </Link>
-                  </li>
-                ))}
+                {group.links.map((link) => {
+                  const sectionId = group.href
+                    ? "occasions"
+                    : link === t.footer.links.faqs
+                      ? "faq"
+                      : undefined;
+                  const href = sectionId ? `/?section=${sectionId}` : getFooterHref(link);
+
+                  return (
+                    <li key={link}>
+                      <Link
+                        href={href}
+                        onClick={sectionId ? (event) => scrollToSection(event, sectionId) : undefined}
+                        className="group inline-flex items-center gap-1.5 text-sm text-white/90 transition hover:text-[#f6bdca] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eea0b4] lg:text-base"
+                      >
+                        <span aria-hidden="true" className="text-[9px] transition-transform group-hover:translate-x-0.5">
+                          ▸
+                        </span>
+                        {link}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </nav>
           ))}

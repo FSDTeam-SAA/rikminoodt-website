@@ -2,13 +2,26 @@
 
 import Image from "next/image";
 import { Minus, Plus } from "lucide-react";
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { useLanguage } from "@/components/providers/LanguageProvider";
 
 const Faq = () => {
   const { t } = useLanguage();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const sectionId = useId();
+
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("section") !== "faq") return;
+
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById("faq")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
 
   const faqs = [
     { question: t.faq.q1, answer: t.faq.a1 },
