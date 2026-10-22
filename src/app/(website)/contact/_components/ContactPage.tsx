@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
-import PageHero from "../../_components/PageHero";
+import Image from "next/image";
+// import PageHero from "../../_components/PageHero";
 
 export default function ContactPage() {
   const [fullName, setFullName] = useState("");
