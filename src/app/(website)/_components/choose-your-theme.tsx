@@ -5,14 +5,14 @@ import Link from "next/link";
 import { useLanguage } from "@/components/providers/LanguageProvider";
 
 const themeList = [
-  { key: "fairyTales", image: "fairy_tales.png", color: "bg-[#ffe5d3]" },
-  { key: "adventure", image: "adventure.png", color: "bg-[#dceffc]" },
-  { key: "activities", image: "activities.png", color: "bg-[#fbdde1]" },
-  { key: "worlds", image: "worlds.png", color: "bg-[#d2e8db]" },
-  { key: "holidays", image: "holidays.png", color: "bg-[#d2e8db]" },
-  { key: "family", image: "family.png", color: "bg-[#fbdde1]" },
-  { key: "educational", image: "educational.png", color: "bg-[#ffe5d3]" },
-  { key: "feelings", image: "feelings.png", color: "bg-[#dceffc]" },
+  { key: "fairyTales", label: "Fairy Tales", image: "fairy_tales.png", color: "bg-[#ffe5d3]" },
+  { key: "adventure", label: "Adventure", image: "adventure.png", color: "bg-[#dceffc]" },
+  { key: "activities", label: "Activities", image: "activities.png", color: "bg-[#fbdde1]" },
+  { key: "worlds", label: "Worlds", image: "worlds.png", color: "bg-[#d2e8db]" },
+  { key: "holidays", label: "Holidays", image: "holidays.png", color: "bg-[#d2e8db]" },
+  { key: "family", label: "Family", image: "family.png", color: "bg-[#fbdde1]" },
+  { key: "educational", label: "Educational", image: "educational.png", color: "bg-[#ffe5d3]" },
+  { key: "feelings", label: "Feelings", image: "feelings.png", color: "bg-[#dceffc]" },
 ] as const;
 
 const ChooseYourTheme = () => {
@@ -37,7 +37,7 @@ const ChooseYourTheme = () => {
             return (
               <Link
                 key={theme.key}
-                href={`#${theme.key.toLowerCase()}`}
+                href={`/book-builder/choose-story?theme=${encodeURIComponent(theme.label)}`}
                 className={`group flex min-h-[220px] flex-col items-center justify-between rounded-2xl px-3 pb-4 pt-4 text-center shadow-sm transition duration-200 hover:shadow-[0_10px_22px_rgba(103,75,92,0.16)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#987fc5] focus-visible:ring-offset-4 sm:min-h-[286px] sm:px-4 sm:pb-5 sm:pt-5 lg:h-[330px] lg:min-h-0 lg:rounded-2xl lg:p-4 ${theme.color}`}
               >
                 <div className="relative flex flex-1 items-center justify-center self-stretch">

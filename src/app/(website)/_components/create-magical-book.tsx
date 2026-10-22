@@ -39,10 +39,10 @@ const CreateMagicalBook = () => {
         <ol className="mt-9 grid gap-5 sm:grid-cols-3 sm:gap-8 lg:mx-2.5 lg:mt-[58px] lg:gap-12">
           {steps.map((step) => (
             <li key={step.title}>
-              <article className="group flex h-full min-h-[300px] flex-col items-center rounded-2xl bg-white px-5 pb-5 pt-5 text-center shadow-[0_3px_8px_rgba(92,76,84,0.18)] transition duration-200 hover:shadow-[0_9px_18px_rgba(92,76,84,0.18)] sm:px-4 lg:h-[402px] lg:min-h-0 lg:px-6">
-                <Image src={step.image} alt="" width={300} height={224} className="h-[180px] w-auto max-w-full object-contain transition-transform duration-200 group-hover:scale-105 sm:h-[190px] lg:h-[224px]" />
-                <h3 className="mt-3 text-center font-crimson text-[24px] font-semibold leading-none text-[#82330d]">{step.title}</h3>
-                <p className="mt-2 max-w-[330px] text-center font-sans text-[18px] font-normal leading-[1.35] text-[#595257]">{step.description}</p>
+              <article className="group flex h-full min-h-[300px] flex-col items-center rounded-2xl bg-white px-5 pb-5 pt-5 text-center shadow-[0_3px_8px_rgba(92,76,84,0.18)] transition duration-200 hover:shadow-[0_9px_18px_rgba(92,76,84,0.18)] sm:px-4 lg:min-h-[415px] lg:px-6">
+                <Image src={step.image} alt="" width={300} height={224} className="h-[180px] w-auto max-w-full object-contain transition-transform duration-200 group-hover:scale-105 sm:h-[190px] lg:h-[210px]" />
+                <h3 className="mt-3 break-words text-center font-crimson text-[24px] font-semibold leading-none text-[#82330d]">{step.title}</h3>
+                <p className="mt-2 max-w-[330px] break-words text-center font-sans text-[18px] font-normal leading-[1.35] text-[#595257]">{step.description}</p>
               </article>
             </li>
           ))}

@@ -103,7 +103,7 @@ export default function LanguageSwitcher({ className = "", isMobile = false }: L
           />
         </div>
         <span className="font-fredoka text-sm font-medium uppercase text-[#5a5358] transition-colors group-hover:text-[#e77f9a]">
-          {current.code}
+          {current.label.slice(0, 2)}
         </span>
         <ChevronDown
           size={14}

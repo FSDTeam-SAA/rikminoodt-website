@@ -79,9 +79,20 @@ type BookBuilderContextValue = {
 
 const BookBuilderContext = createContext<BookBuilderContextValue | null>(null);
 const storageKey = "book-builder-progress";
+const defaultAge = "0-2 Years";
+const themeOptions = new Set([
+  "Fairy Tales",
+  "Adventure",
+  "Activities",
+  "Worlds",
+  "Holidays",
+  "Family",
+  "Educational",
+  "Feelings",
+]);
 
 export function BookBuilderProvider({ children }: { children: ReactNode }) {
-  const [selectedAge, setSelectedAge] = useState<string | null>(null);
+  const [selectedAge, setSelectedAge] = useState<string | null>(defaultAge);
   const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
   const [selectedStory, setSelectedStory] = useState<string | null>(null);
   const [selectedMessage, setSelectedMessage] = useState<string | null>(null);
@@ -137,7 +148,7 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
   };
 
   const resetBookBuilder = () => {
-    setSelectedAge(null);
+    setSelectedAge(defaultAge);
     setSelectedTheme(null);
     setSelectedStory(null);
     setSelectedMessage(null);
@@ -206,9 +217,18 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
         if (progress.currentBookId) setCurrentBookId(progress.currentBookId);
         if (typeof progress.retryCount === "number") setRetryCount(progress.retryCount);
       }
+
     } catch {
       window.sessionStorage.removeItem(storageKey);
     }
+
+    const selectedThemeFromHome = new URLSearchParams(window.location.search).get("theme");
+    if (selectedThemeFromHome && themeOptions.has(selectedThemeFromHome)) {
+      setSelectedAge(defaultAge);
+      setSelectedTheme(selectedThemeFromHome);
+      setSelectedStory(null);
+    }
+
     setHasLoadedProgress(true);
   }, []);
 

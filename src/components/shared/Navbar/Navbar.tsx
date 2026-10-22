@@ -16,6 +16,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+function getUserInitials(name?: string | null, email?: string | null) {
+  const displayName = name?.trim() || email?.split("@")[0]?.trim() || "User";
+  const words = displayName.split(/\s+/).filter(Boolean);
+
+  return words
+    .slice(0, 2)
+    .map((word) => word[0])
+    .join("")
+    .toUpperCase();
+}
+
 const Navbar = () => {
   const { data: session } = useSession();
   const { t } = useLanguage();
@@ -23,6 +34,8 @@ const Navbar = () => {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const user = session?.user;
+  const userInitials = getUserInitials(user?.name, user?.email);
   const overlaysPageContent =
     pathname === "/" ||
     pathname.startsWith("/book-builder") ||
@@ -76,11 +89,13 @@ const Navbar = () => {
   return (
     <header className={`sticky top-0 z-50 pointer-events-none ${overlaysPageContent ? "h-0" : "h-[78px] sm:h-[88px] lg:h-[116px]"}`}>
       <div
-        className="pointer-events-auto absolute inset-x-0 top-0 pt-3 sm:pt-5 lg:pt-11"
+        className={`pointer-events-auto absolute inset-x-0 top-0 transition-[padding] duration-300 ${
+          isScrolled ? "pt-2 sm:pt-3 lg:pt-4" : "pt-3 sm:pt-5 lg:pt-11"
+        }`}
       >
         <div className="container mx-auto px-3 sm:px-5 lg:px-0">
           <div
-            className={`overflow-hidden rounded-[28px] border border-white/60 backdrop-blur-md transition-[background-color,box-shadow] duration-300 sm:rounded-[32px] ${
+            className={`overflow-visible rounded-[28px] border border-white/60 backdrop-blur-md transition-[background-color,box-shadow] duration-300 sm:rounded-[32px] ${
               isScrolled || isMenuOpen
                 ? "bg-white/95 shadow-[0_8px_24px_rgba(74,63,82,0.16)]"
                 : "bg-white/80 shadow-[0_4px_16px_rgba(74,63,82,0.08)]"
@@ -135,43 +150,54 @@ const Navbar = () => {
             >
               <ShoppingCart aria-hidden="true" size={26} strokeWidth={1.4} />
             </Link>
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                aria-label={t.nav.accountAria}
-                className="group flex size-9 items-center justify-center rounded-full transition hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf] focus-visible:ring-offset-2 lg:size-10"
-              >
-                <Image
-                  src="/images/profile.png"
-                  alt="Your profile"
-                  width={40}
-                  height={40}
-                  className="size-8 rounded-full object-cover shadow-[0_2px_6px_rgba(74,63,82,0.15)] transition-all group-hover:ring-2 group-hover:ring-[#e88da0]/50 lg:size-9"
-                />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                sideOffset={8}
-                className="z-[110] min-w-[200px] overflow-hidden rounded-2xl border border-[#F3A8B7]/60 bg-white/95 p-1.5 shadow-[0_10px_25px_rgba(74,63,82,0.15)] backdrop-blur-md animate-in fade-in-50 zoom-in-95"
-              >
-                <div className="flex items-center gap-2.5 px-2.5 py-2">
-                  <div className="relative size-8 shrink-0 overflow-hidden rounded-full shadow-sm">
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  aria-label={t.nav.accountAria}
+                  className="group flex size-9 items-center justify-center rounded-full transition-colors duration-200 hover:bg-[#FFF0F3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf] focus-visible:ring-offset-2 lg:size-10"
+                >
+                  {user.profileImage ? (
                     <Image
-                      src={session?.user?.profileImage || "/images/profile.png"}
-                      alt={session?.user?.name || "Profile"}
-                      fill
-                      sizes="32px"
-                      className="object-cover"
+                      src={user.profileImage}
+                      alt={user.name || "Your profile"}
+                      width={40}
+                      height={40}
+                      className="size-8 rounded-full object-cover shadow-[0_2px_6px_rgba(74,63,82,0.15)] transition-shadow duration-200 group-hover:shadow-[0_3px_8px_rgba(232,141,160,0.3)] lg:size-9"
                     />
-                  </div>
-                  <div className="flex flex-col max-w-[140px] truncate">
-                    <span className="font-fredoka text-sm font-medium text-[#252025] truncate">
-                      {session?.user?.name || t.nav.account}
+                  ) : (
+                    <span className="flex size-8 items-center justify-center rounded-full bg-[#F8E6EB] font-fredoka text-xs text-[#A15971] shadow-[0_2px_6px_rgba(74,63,82,0.15)] transition-shadow duration-200 group-hover:shadow-[0_3px_8px_rgba(232,141,160,0.3)] lg:size-9 lg:text-sm">
+                      {userInitials}
                     </span>
-                    <span className="text-[11px] text-[#876d7c] truncate">
-                      {session?.user?.email || "user@example.com"}
-                    </span>
+                  )}
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="end"
+                  sideOffset={8}
+                  className="z-[110] min-w-[200px] overflow-hidden rounded-2xl border border-[#F3A8B7]/60 bg-white/95 p-1.5 shadow-[0_10px_25px_rgba(74,63,82,0.15)] backdrop-blur-md animate-in fade-in-50 zoom-in-95"
+                >
+                  <div className="flex items-center gap-2.5 px-2.5 py-2">
+                    <div className="relative flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#F8E6EB] font-fredoka text-xs text-[#A15971] shadow-sm">
+                      {user.profileImage ? (
+                        <Image
+                          src={user.profileImage}
+                          alt={user.name || "Profile"}
+                          fill
+                          sizes="32px"
+                          className="object-cover"
+                        />
+                      ) : (
+                        userInitials
+                      )}
+                    </div>
+                    <div className="flex max-w-[140px] flex-col truncate">
+                      <span className="truncate font-fredoka text-sm font-medium text-[#252025]">
+                        {user.name || t.nav.account}
+                      </span>
+                      <span className="truncate text-[11px] text-[#876d7c]">
+                        {user.email || ""}
+                      </span>
+                    </div>
                   </div>
-                </div>
 
                 <DropdownMenuSeparator className="my-1 bg-[#876d7c]/15" />
 
@@ -196,8 +222,16 @@ const Navbar = () => {
                   <LogOut size={16} strokeWidth={1.8} className="text-[#d94868]" />
                   <span>{t.nav.logout}</span>
                 </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link
+                href="/book-builder"
+                className="inline-flex h-9 items-center justify-center whitespace-nowrap rounded-full bg-[#E88DA0] px-4 font-fredoka text-sm text-white shadow-[0_3px_10px_rgba(232,141,160,0.3)] transition-colors hover:bg-[#DD7893] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf] focus-visible:ring-offset-2 lg:h-10 lg:px-5"
+              >
+                {t.hero.createBookBtn}
+              </Link>
+            )}
           </div>
 
           <button
@@ -244,12 +278,16 @@ const Navbar = () => {
               <Link href="/cart" className="flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-white/75 text-sm font-medium text-[#5d5059]">
                 <ShoppingCart aria-hidden="true" size={18} /> {t.nav.cart}
               </Link>
-              <DropdownMenu>
+              {user ? <DropdownMenu>
                 <DropdownMenuTrigger
                   aria-label={t.nav.accountAria}
                   className="flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-[#f8e6eb] px-3 text-sm font-medium text-[#a15971] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf]"
                 >
-                  <Image src="/images/profile.png" alt="" width={22} height={22} className="size-5 rounded-full" /> {t.nav.account}
+                  {user.profileImage ? (
+                    <Image src={user.profileImage} alt="" width={22} height={22} className="size-5 rounded-full object-cover" />
+                  ) : (
+                    <span className="flex size-5 items-center justify-center rounded-full bg-white font-fredoka text-[10px] text-[#A15971]">{userInitials}</span>
+                  )} {t.nav.account}
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                   align="end"
@@ -281,7 +319,14 @@ const Navbar = () => {
                     <span>{t.nav.logout}</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
-              </DropdownMenu>
+              </DropdownMenu> : (
+                <Link
+                  href="/book-builder"
+                  className="flex min-h-11 flex-1 items-center justify-center rounded-lg bg-[#E88DA0] px-3 text-sm font-semibold text-white shadow-[0_3px_10px_rgba(232,141,160,0.25)] transition-colors hover:bg-[#DD7893] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf]"
+                >
+                  {t.hero.createBookBtn}
+                </Link>
+              )}
             </div>
           </nav>
           </div>

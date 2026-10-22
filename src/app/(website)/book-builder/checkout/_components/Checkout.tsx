@@ -10,7 +10,7 @@ import {
   Pencil,
   Sparkles,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import BookerelloReviews from "../../../_components/bookerello-reviews";
 import { useBookBuilder } from "../../_components/BookBuilderProvider";
@@ -25,6 +25,12 @@ import {
   mapFont,
   THEME_MAP, SUBJECT_MAP, THEME_SUBJECT_MAP, MESSAGE_MAP, ILLUSTRATION_MAP, FONT_MAP,
 } from "../../_components/api-mappers";
+import {
+  getBookChoicesValidationError,
+  getCharacterValidationError,
+  getGuestDetailsValidationError,
+  isValidCreatorName,
+} from "../../_components/validation";
 
 const ages = [
   { label: "0-2 Years", image: "/images/age_1.png", color: "#FDE1CF" },
@@ -117,16 +123,57 @@ export default function Checkout() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [savedBookId, setSavedBookId] = useState<string | null>(null);
+  const [hasStoredToken, setHasStoredToken] = useState(false);
+
+  useEffect(() => {
+    setHasStoredToken(Boolean(localStorage.getItem("token")));
+  }, []);
 
   const age = ages.find((item) => item.label === selectedAge);
   const theme = themes.find((item) => item.label === selectedTheme);
   const story = getStoryChoice(selectedStory, selectedTheme);
   const message = messages.find((item) => item.label === selectedMessage);
   const font = fonts.find((item) => item.label === selectedFont);
+  const choicesValidationError = getBookChoicesValidationError({
+    age: selectedAge,
+    theme: selectedTheme,
+    story: selectedStory,
+    message: selectedMessage,
+    illustration: selectedIllustration,
+    font: selectedFont,
+    language: selectedLanguage,
+    variant: selectedVariant,
+  });
+  const invalidCharacterIndex = characters.findIndex((character) =>
+    getCharacterValidationError(character),
+  );
+  const isAuthenticated = Boolean(session?.user?.accessToken || session?.user?.id || hasStoredToken);
+  const guestDetailsError = isAuthenticated ? null : getGuestDetailsValidationError(userDetails);
+  const checkoutValidationError =
+    choicesValidationError ||
+    (!isValidCreatorName(creatorName) ? "Enter the creator name in Personal Details." : null) ||
+    (!characters.length ? "Add at least one character." : null) ||
+    (invalidCharacterIndex >= 0
+      ? `Character ${invalidCharacterIndex + 1}: ${getCharacterValidationError(characters[invalidCharacterIndex])}`
+      : null) ||
+    (characters.some((character) => character.photoExpected && !character.photo)
+      ? "Please reselect your character photos after refreshing the page."
+      : null) ||
+    (forewordMode === "voice" && voiceExpected && !voiceBlob
+      ? "Please record your voice message again after refreshing the page."
+      : null) ||
+    guestDetailsError;
+  const canCheckout = Boolean(savedBookId) || !checkoutValidationError;
 
   const handleContinueWithCard = async () => {
     if (isSubmitting) return;
     setSubmitError("");
+
+    if (checkoutValidationError && !savedBookId) {
+      setSubmitError(checkoutValidationError);
+      return;
+    }
+
     setIsSubmitting(true);
     let bookSaved = false;
     try {
@@ -145,9 +192,7 @@ export default function Checkout() {
       }
       const theme = selectedTheme && THEME_MAP[selectedTheme];
       const subject = selectedStory && (SUBJECT_MAP[selectedStory] || selectedStory);
-      if (!selectedAge || !["0-2 Years", "3-5 Years", "5-9 Years", "3-9 Years", "10+ Years"].includes(selectedAge) || !theme || !subject || !THEME_SUBJECT_MAP[theme]?.includes(subject) || !selectedMessage || !MESSAGE_MAP[selectedMessage] || !selectedIllustration || !ILLUSTRATION_MAP[selectedIllustration] || !selectedFont || !FONT_MAP[selectedFont] || !selectedLanguage) throw new Error("Please complete your story choices and select a subject that matches your theme.");
-      if (!creatorName.trim()) throw new Error("Please enter the creator name in Personal Details.");
-      if (!characters.length || characters.some((c) => c.type === "PERSON" ? !c.name?.trim() || !c.gender || !Number.isInteger(c.age) || (c.age ?? -1) < 0 : c.type === "ANIMAL" ? !c.animalName?.trim() || !c.animalSpecies?.trim() : !c.objectName?.trim())) throw new Error("Please complete the required details for every character.");
+      if (!selectedAge || !["0-2 Years", "3-5 Years", "5-9 Years", "10+ Years", "Adult"].includes(selectedAge) || !theme || !subject || !THEME_SUBJECT_MAP[theme]?.includes(subject) || !selectedMessage || !MESSAGE_MAP[selectedMessage] || !selectedIllustration || !ILLUSTRATION_MAP[selectedIllustration] || !selectedFont || !FONT_MAP[selectedFont] || !selectedLanguage) throw new Error("Please complete your story choices and select a subject that matches your theme.");
       const photos = characters.map((character) => character.photo);
       if (photos.some(Boolean) && photos.some((photo) => !(photo instanceof File))) throw new Error("Please add a photo for every character, or remove all photos. The server needs photos in character order.");
       if (characters.some((c) => c.photoExpected && !c.photo)) throw new Error("Please reselect your character photos after refreshing the page.");
@@ -363,8 +408,9 @@ export default function Checkout() {
 
               <button
                 type="button"
-                disabled={isSubmitting}
+                disabled={isSubmitting || !canCheckout}
                 onClick={handleContinueWithCard}
+                title={checkoutValidationError || undefined}
                 className="mt-4 flex h-11 sm:h-12 w-full items-center justify-center gap-2 rounded-[10px] bg-[#E88DA0] font-sans text-sm sm:text-base font-semibold text-white shadow-[0_4px_12px_rgba(232,141,160,0.25)] transition hover:bg-[#DD7893] active:scale-[0.99] disabled:opacity-60"
               >
                 {isSubmitting && <Loader2 size={17} className="animate-spin" />}

@@ -1,9 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useLanguage } from "@/components/providers/LanguageProvider";
 
 const occasionConfig = [
@@ -61,6 +60,19 @@ const MakeAPersonalisedBook = () => {
   const { t } = useLanguage();
   const trackRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("section") !== "occasions") return;
+
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById("occasions")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
   const scrollOccasions = (direction: "previous" | "next") => {
     const track = trackRef.current;
     if (!track) return;
@@ -113,10 +125,9 @@ const MakeAPersonalisedBook = () => {
             {occasionConfig.map((item, index) => {
               const title = t.occasions[item.key] ?? item.key;
               return (
-                <Link
+                <div
                   key={`${item.key}-${index}`}
-                  href={`#${item.key}`}
-                  className={`group flex min-h-[250px] snap-start flex-col rounded-2xl p-3 transition-[filter] duration-300 ease-out hover:brightness-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#987fc5] focus-visible:ring-offset-3 lg:h-[310px] lg:min-h-0 lg:p-4 ${item.color}`}
+                  className={`group flex min-h-[250px] snap-start flex-col rounded-2xl p-3 transition-[filter] duration-300 ease-out hover:brightness-[0.97] lg:h-[310px] lg:min-h-0 lg:p-4 ${item.color}`}
                 >
                   <div className="flex flex-1 flex-col items-center rounded-xl bg-white/80 px-4 py-3">
                     <div className="flex flex-1 items-center justify-center">
@@ -135,7 +146,7 @@ const MakeAPersonalisedBook = () => {
                       {title}
                     </span>
                   </div>
-                </Link>
+                </div>
               );
             })}
           </div>

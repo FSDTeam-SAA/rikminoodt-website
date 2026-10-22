@@ -114,6 +114,7 @@ export default function SpecialEvents() {
     setForeword,
     forewordMode: initialForewordMode,
     setForewordMode,
+    voiceBlob,
     setVoiceBlob,
   } = useBookBuilder();
 
@@ -124,6 +125,7 @@ export default function SpecialEvents() {
   const [seconds, setSeconds] = useState(0);
   const [recordingUrl, setRecordingUrl] = useState<string | null>(null);
   const [recordingError, setRecordingError] = useState("");
+  const [validationError, setValidationError] = useState("");
   const recorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const isMounted = useRef(true);
@@ -207,6 +209,11 @@ export default function SpecialEvents() {
 
   const handleNextStep = (e: React.MouseEvent) => {
     e.preventDefault();
+    if (forewordMode === "voice" && !voiceBlob) {
+      setValidationError("Record a voice message before continuing, or switch to Write.");
+      return;
+    }
+    setValidationError("");
     setSpecialEvents(localForeword);
     setForeword(localForeword);
     setForewordMode(forewordMode);
@@ -420,6 +427,11 @@ export default function SpecialEvents() {
               Next Step
             </button>
           </div>
+          {validationError && (
+            <p role="alert" className="mt-3 text-center font-sans text-sm text-[#B74760]">
+              {validationError}
+            </p>
+          )}
         </section>
       </section>
     </main>
