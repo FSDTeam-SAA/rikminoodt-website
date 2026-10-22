@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowLeft, XCircle } from "lucide-react";
 
 export default function PaymentCancelPage() {
+  
   return (
     <main className="min-h-screen bg-[#FEF6EC] px-4 pb-16 pt-[120px] sm:px-8 sm:pt-[150px] lg:px-16 lg:pt-[190px]">
       <section className="mx-auto max-w-md text-center">

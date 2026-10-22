@@ -28,7 +28,9 @@ const Navbar = () => {
     pathname.startsWith("/book-builder") ||
     pathname === "/pricing" ||
     pathname === "/contact" ||
-    pathname === "/contact-us";
+    pathname === "/contact-us" ||
+    pathname === "/privacy-policy" ||
+    pathname === "/terms-and-conditions";
 
   const navigation = [
     { label: t.nav.home, href: "/" },

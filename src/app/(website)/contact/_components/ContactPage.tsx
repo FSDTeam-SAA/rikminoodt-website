@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
+import PageHero from "../../_components/PageHero";
 
 export default function ContactPage() {
   const [fullName, setFullName] = useState("");
@@ -39,31 +39,11 @@ export default function ContactPage() {
 
   return (
     <main className="min-h-screen bg-[#FEFAF4] pb-20">
-      {/* Hero Banner Section */}
-      <section className="relative w-full overflow-hidden pb-12 pt-[120px] text-center sm:pb-16 sm:pt-[150px] lg:pt-[190px]">
-        {/* Background Image Banner */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/cont_pri_img.png"
-            alt="Hero background"
-            fill
-            priority
-            className="object-cover object-top opacity-90"
-          />
-          {/* Subtle gradient overlay to smoothly transition to page background */}
-          <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-[#FEFAF4]" />
-        </div>
-
-        {/* Hero Content */}
-        <div className="container relative z-10 mx-auto px-4">
-          <h1 className="font-crimson text-4xl font-bold leading-tight text-[#1E1E1E] sm:text-5xl lg:text-[56px]">
-            Contact Us
-          </h1>
-          <p className="mx-auto mt-3 max-w-xl font-sans text-base text-[#333333] sm:text-lg">
-            Enter your details and send us a message, our team will get back to you soon.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        title="Contact Us"
+        description="Enter your details and send us a message, our team will get back to you soon."
+        imageAlt="Contact us banner"
+      />
 
       {/* Form Section */}
       <section className="container mx-auto mt-2 px-4 sm:mt-6">
