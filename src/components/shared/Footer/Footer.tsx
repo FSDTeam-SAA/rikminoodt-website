@@ -26,6 +26,17 @@ const getFooterHref = (label: string) => {
     return "/contact";
   }
   if (
+    lower.includes("terms") ||
+    lower.includes("conditions") ||
+    lower.includes("voorwaarden") ||
+    lower.includes("générales")
+  ) {
+    return "/terms-and-conditions";
+  }
+  if (lower.includes("privacy") || lower.includes("privacybeleid") || lower.includes("confidentialité")) {
+    return "/privacy-policy";
+  }
+  if (
     lower.includes("how it works") ||
     lower.includes("hoe het werkt") ||
     lower.includes("wie es funktioniert") ||
