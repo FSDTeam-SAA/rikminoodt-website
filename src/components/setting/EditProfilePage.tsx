@@ -141,9 +141,19 @@ export default function EditProfilePage() {
         </div>
 
         {loading ? (
-          <div className="py-12 flex justify-center items-center text-sm text-gray-500 gap-2">
-            <Loader2 size={18} className="animate-spin text-[#E3859A]" />
-            <span>Loading profile...</span>
+          <div role="status" aria-label="Loading profile" className="animate-pulse space-y-5">
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+              {Array.from({ length: 6 }, (_, index) => (
+                <div key={index}>
+                  <div className="mb-2 h-4 w-24 rounded-full bg-[#F3E7EB]" />
+                  <div className="h-[46px] w-full rounded-xl bg-[#F8F0F2]" />
+                </div>
+              ))}
+            </div>
+            <div>
+              <div className="mb-2 h-4 w-14 rounded-full bg-[#F3E7EB]" />
+              <div className="h-24 w-full rounded-xl bg-[#F8F0F2]" />
+            </div>
           </div>
         ) : (
           <form className="w-full space-y-5" onSubmit={(e) => e.preventDefault()}>

@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { Loader2 } from "lucide-react";
 import OrderCard, { OrderDetails } from "./OrderCard";
 import TrackingView from "./TrackingView";
 import { getApiBaseUrl } from "@/config/api";
@@ -164,9 +163,20 @@ export default function OrderedBooksPage() {
           </div>
 
           {loading ? (
-            <div className="py-12 flex justify-center items-center text-sm text-gray-500 gap-2">
-              <Loader2 size={18} className="animate-spin text-[#E3859A]" />
-              <span>Loading ordered books...</span>
+            <div role="status" aria-label="Loading ordered books" className="animate-pulse space-y-6">
+              {Array.from({ length: 2 }, (_, index) => (
+                <div key={index} className="rounded-2xl border border-[#F2E9EC] bg-[#FFFDFD] p-5 sm:p-6">
+                  <div className="flex flex-col gap-5 sm:flex-row">
+                    <div className="h-28 w-24 shrink-0 rounded-xl bg-[#F6EEF1]" />
+                    <div className="flex-1 space-y-3">
+                      <div className="h-5 w-2/5 rounded-full bg-[#F3E7EB]" />
+                      <div className="h-4 w-3/5 rounded-full bg-[#F7EFF2]" />
+                      <div className="h-4 w-1/2 rounded-full bg-[#F7EFF2]" />
+                      <div className="mt-5 h-10 w-36 rounded-xl bg-[#F3E7EB]" />
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           ) : error ? (
             <div className="py-8 text-center text-sm text-red-500">
