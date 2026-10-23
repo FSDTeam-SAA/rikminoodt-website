@@ -6,7 +6,7 @@ export const getApiBaseUrl = (): string => {
   const url =
     process.env.NEXT_PUBLIC_BACKEND_API_URL ||
     process.env.NEXT_PUBLIC_API_BASE_URL ||
-    "https://rikminoodt-backend.onrender.com/api/v1";
+    "https://api.boekerello.com/api/v1";
 
   return url.replace(/\/+$/, "");
 };
