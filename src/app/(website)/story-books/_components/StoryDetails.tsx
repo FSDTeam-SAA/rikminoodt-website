@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import jsPDF from "jspdf";
 import BookReaderModal from "./BookReaderModal";
 import OrderHardcopyModal from "./OrderHardcopyModal";
 import StoryDetailsSkeleton from "./StoryDetailsSkeleton";
@@ -92,6 +91,7 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
   const [isReaderOpen, setIsReaderOpen] = useState(false);
   const [isHardcopyModalOpen, setIsHardcopyModalOpen] = useState(false);
   const [downloadingPdf, setDownloadingPdf] = useState(false);
+  const [downloadError, setDownloadError] = useState("");
   const [fetchedBook, setFetchedBook] = useState<FetchedBookData | null>(null);
   const isStaticStory = storyId === "max-sees-the-seasons" || storyId === "lisa-camping";
   const [loading, setLoading] = useState(!isStaticStory);
@@ -187,104 +187,31 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
   const handleDownloadPdf = async () => {
     if (downloadingPdf) return;
     setDownloadingPdf(true);
+    setDownloadError("");
     try {
-      if (fetchedBook?.pdfUrl) {
-        const link = document.createElement("a");
-        link.href = fetchedBook.pdfUrl;
-        link.target = "_blank";
-        link.download = `${coverTitle.replace(/[^a-zA-Z0-9_-]/g, "_")}.pdf`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        return;
-      }
+      const token = session?.user?.accessToken || localStorage.getItem("token");
+      if (!token) throw new Error("Please sign in to download your book.");
 
-      const loadImageDataUrl = async (url: string): Promise<string | null> => {
-        return new Promise((resolve) => {
-          const img = new window.Image();
-          img.crossOrigin = "anonymous";
-          img.onload = () => {
-            try {
-              const canvas = document.createElement("canvas");
-              canvas.width = img.naturalWidth || img.width || 800;
-              canvas.height = img.naturalHeight || img.height || 1000;
-              const ctx = canvas.getContext("2d");
-              if (!ctx) return resolve(null);
-              ctx.drawImage(img, 0, 0);
-              resolve(canvas.toDataURL("image/jpeg", 0.85));
-            } catch {
-              resolve(null);
-            }
-          };
-          img.onerror = () => resolve(null);
-          img.src = url;
-        });
-      };
-
-      const doc = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4",
+      const response = await fetch(`${getApiBaseUrl()}/books/${storyId}/download`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-
-      const pageWidth = doc.internal.pageSize.getWidth();
-      const pageHeight = doc.internal.pageSize.getHeight();
-
-      // Cover Page
-      doc.setFillColor(254, 250, 244);
-      doc.rect(0, 0, pageWidth, pageHeight, "F");
-
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(22);
-      doc.setTextColor(30, 30, 30);
-      const splitTitle = doc.splitTextToSize(coverTitle, pageWidth - 40);
-      doc.text(splitTitle, pageWidth / 2, 35, { align: "center" });
-
-      if (cover) {
-        const coverData = await loadImageDataUrl(cover);
-        if (coverData) {
-          doc.addImage(coverData, "JPEG", 30, 50, pageWidth - 60, 150);
-        }
+      if (!response.ok) {
+        const result = await response.json().catch(() => null);
+        throw new Error(result?.message || "Unable to prepare your PDF download.");
       }
 
-      if (fetchedBook?.creatorName) {
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(13);
-        doc.setTextColor(100, 100, 100);
-        doc.text(`Created by ${fetchedBook.creatorName}`, pageWidth / 2, 225, { align: "center" });
-      }
-
-      // Inside Pages
-      for (let i = 0; i < previewPages.length; i++) {
-        const p = previewPages[i];
-        doc.addPage();
-        doc.setFillColor(255, 255, 255);
-        doc.rect(0, 0, pageWidth, pageHeight, "F");
-
-        if (p.image) {
-          const pageImgData = await loadImageDataUrl(p.image);
-          if (pageImgData) {
-            doc.addImage(pageImgData, "JPEG", 25, 25, pageWidth - 50, 140);
-          }
-        }
-
-        if (p.text) {
-          doc.setFont("helvetica", "normal");
-          doc.setFontSize(14);
-          doc.setTextColor(50, 40, 50);
-          const splitPageText = doc.splitTextToSize(p.text, pageWidth - 50);
-          doc.text(splitPageText, pageWidth / 2, 185, { align: "center" });
-        }
-
-        doc.setFontSize(10);
-        doc.setTextColor(150, 150, 150);
-        doc.text(String(p.pageNumber), pageWidth / 2, pageHeight - 15, { align: "center" });
-      }
-
-      const safeFileName = coverTitle.replace(/[^a-zA-Z0-9_-]/g, "_");
-      doc.save(`${safeFileName}.pdf`);
+      const pdfBlob = await response.blob();
+      const objectUrl = URL.createObjectURL(pdfBlob);
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.download = `${coverTitle.replace(/[^a-zA-Z0-9_-]/g, "_") || "personalized-storybook"}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(objectUrl);
     } catch (err) {
       console.error("Failed to generate PDF:", err);
+      setDownloadError(err instanceof Error ? err.message : "Unable to prepare your PDF download.");
     } finally {
       setDownloadingPdf(false);
     }
@@ -407,6 +334,11 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
                       <Printer size={16} aria-hidden="true" /> Order Hardcopy
                     </button>
                   </div>
+                  {downloadError && (
+                    <p role="alert" className="mt-3 font-sans text-xs text-[#B74760]">
+                      {downloadError}
+                    </p>
+                  )}
                 </div>
               </div>
 
