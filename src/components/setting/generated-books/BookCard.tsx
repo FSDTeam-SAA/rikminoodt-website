@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { BookOpen } from "lucide-react";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 interface BookCardProps {
   id?: string;
@@ -12,17 +13,18 @@ interface BookCardProps {
   status: string;
 }
 
-const statusLabels: Record<string, string> = {
-  DRAFT: "Draft",
-  PENDING_PAYMENT: "Awaiting payment",
-  SUBMITTED: "Submitted",
-  GENERATING: "Generating",
-  COMPLETED: "Completed",
-  FAILED: "Generation failed",
-};
-
 export default function BookCard({ id, title, imageSrc, status }: BookCardProps) {
   const [imageFailed, setImageFailed] = useState(false);
+  const { t } = useLanguage();
+  const copy = t.settings.generated;
+  const statusLabels: Record<string, string> = {
+    DRAFT: copy.draft,
+    PENDING_PAYMENT: copy.awaitingPayment,
+    SUBMITTED: copy.submitted,
+    GENERATING: copy.generating,
+    COMPLETED: copy.completed,
+    FAILED: copy.generationFailed,
+  };
 
   const card = (
     <article className="group flex min-w-0 flex-col items-center transition-transform duration-200 hover:-translate-y-1">
@@ -30,7 +32,7 @@ export default function BookCard({ id, title, imageSrc, status }: BookCardProps)
         {imageSrc && !imageFailed ? (
           <Image
             src={imageSrc}
-            alt={`Cover of ${title}`}
+            alt={`${copy.coverOf} ${title}`}
             fill
             unoptimized
             onError={() => setImageFailed(true)}

@@ -7,6 +7,7 @@ import { Pencil, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useBookBuilder } from "../../_components/BookBuilderProvider";
 import { getStoryChoice } from "../../_components/subject-options";
+import { useBookBuilderTranslations } from "../../_components/useBookBuilderTranslations";
 
 const ages = [
   { label: "0-2 Years", image: "/images/age_1.png", color: "#FDE1CF" },
@@ -51,7 +52,7 @@ const illustrationStyles = [
 
 type Choice = { label: string; image: string; color: string };
 
-function ChoiceChip({ choice, href, label }: { choice: Choice | undefined; href: string; label: string }) {
+function ChoiceChip({ choice, href, label, displayLabel }: { choice: Choice | undefined; href: string; label: string; displayLabel?: string }) {
   if (!choice) {
     return (
       <Link href={href} className="rounded-full border border-dashed border-[#D8C8C2] px-3 py-2 text-sm text-[#856F77] transition hover:border-[#E88DA0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]">
@@ -70,7 +71,7 @@ function ChoiceChip({ choice, href, label }: { choice: Choice | undefined; href:
       <span className="relative size-6 overflow-hidden rounded-full bg-white/45">
         <Image src={choice.image} alt="" fill sizes="24px" className="object-contain object-bottom" />
       </span>
-      <span>{choice.label}</span>
+      <span>{displayLabel || choice.label}</span>
       <Pencil aria-hidden="true" size={14} strokeWidth={2.3} className="text-[#E5AF32] transition-transform group-hover:scale-110" />
     </Link>
   );
@@ -79,6 +80,7 @@ function ChoiceChip({ choice, href, label }: { choice: Choice | undefined; href:
 export default function IllustrationStyle() {
   const router = useRouter();
   const { selectedAge, selectedTheme, selectedStory, selectedMessage, selectedIllustration, setSelectedIllustration } = useBookBuilder();
+  const { bb, translateAge, translateTheme, translateMessage, translateIllustration } = useBookBuilderTranslations();
   const [detailsStyle, setDetailsStyle] = useState<(typeof illustrationStyles)[number] | null>(null);
   const age = ages.find((item) => item.label === selectedAge);
   const theme = themes.find((item) => item.label === selectedTheme);
@@ -100,27 +102,27 @@ export default function IllustrationStyle() {
     <main className="min-h-screen bg-[#FEFAF4] px-4 pb-10 pt-[118px] sm:px-7 sm:pb-12 sm:pt-[136px] lg:px-[38px] lg:pb-20 lg:pt-[196px]">
       <section className="mx-auto max-w-[1280px]" aria-labelledby="illustration-heading">
         <h1 id="illustration-heading" className="font-crimson text-4xl font-normal leading-none text-[#1E1E1E] sm:text-[48px]">
-          Create a Story as Unique as Your Child
+          {bb?.bannerTitle}
         </h1>
         <p className="mt-5 max-w-[1120px] font-sans text-lg font-normal leading-[1.4] text-[#444444] sm:text-[24px]">
-          Choose a theme, add their name and special details, and create a personalized eBook they&apos;ll love. Turn it into a beautiful hardcover keepsake to treasure forever.
+          {bb?.bannerDesc}
         </p>
 
         <section className="mt-10 rounded-[19px] bg-[#FBF3EA] px-4 py-5 sm:px-5 sm:py-6 lg:px-10 lg:py-10" aria-labelledby="illustration-options-heading">
           <h2 id="illustration-options-heading" className="font-fredoka text-base font-normal leading-none text-[#E88DA0] sm:text-[20px] lg:text-[32px]">
-            Build a Magical Story Just for Them
+            {bb?.buildStory}
           </h2>
-          <p className="mt-3 font-sans text-base font-normal leading-none text-[#444444] lg:mt-5 lg:text-[20px]">Your Choice</p>
+          <p className="mt-3 font-sans text-base font-normal leading-none text-[#444444] lg:mt-5 lg:text-[20px]">{bb?.yourChoice}</p>
 
           <div className="mt-3 flex flex-wrap gap-2 sm:gap-3">
-            <ChoiceChip label="Age" choice={age} href="/book-builder/choose-age" />
-            <ChoiceChip label="Theme" choice={theme} href="/book-builder/choose-theme" />
+            <ChoiceChip label="Age" displayLabel={translateAge(age?.label)} choice={age} href="/book-builder/choose-age" />
+            <ChoiceChip label="Theme" displayLabel={translateTheme(theme?.label)} choice={theme} href="/book-builder/choose-theme" />
             <ChoiceChip label="Subject" choice={story} href="/book-builder/choose-story" />
-            <ChoiceChip label="Message" choice={message} href="/book-builder/personalize" />
+            <ChoiceChip label="Message" displayLabel={translateMessage(message?.label)} choice={message} href="/book-builder/personalize" />
           </div>
 
           <h3 className="mt-7 font-sans text-lg font-semibold leading-none text-[#1E1E1E] lg:mt-10 lg:text-[28px]">
-            Choose an illustration style
+            {bb?.chooseIllustration || "Choose an illustration style"}
           </h3>
 
           <div className="mt-6 grid grid-cols-2 gap-3 min-[640px]:grid-cols-4 sm:gap-4" role="radiogroup" aria-label="Choose an illustration style">
@@ -151,14 +153,14 @@ export default function IllustrationStyle() {
                     />
                   </button>
                   <h4 className="mt-2 text-center font-sans text-base font-bold leading-tight text-[#414B5F] sm:mt-3 sm:text-[24px]">
-                    {style.label}
+                    {translateIllustration(style.label)}
                   </h4>
                   <button
                     type="button"
                     onClick={() => setDetailsStyle(style)}
                     className="mt-2 flex h-8 w-full items-center justify-center rounded-lg border border-[#F3A8B7] font-sans text-sm font-medium text-[#EC8EA4] transition hover:bg-[#FFF3F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2 sm:mt-3 sm:h-9 sm:text-base"
                   >
-                    View Details
+                    {bb?.viewDetails || "View Details"}
                   </button>
                 </article>
               );
@@ -190,12 +192,12 @@ export default function IllustrationStyle() {
               <X aria-hidden="true" size={20} />
             </button>
             <h2 id="illustration-modal-title" className="pr-10 font-sans text-2xl font-bold text-[#414B5F] sm:text-[28px]">
-              {detailsStyle.label}
+              {translateIllustration(detailsStyle.label)}
             </h2>
             <div className="mt-4 overflow-hidden rounded-xl bg-white p-2 sm:p-3">
               <Image
                 src={detailsStyle.image}
-                alt={`${detailsStyle.label} illustration style preview`}
+                alt={`${translateIllustration(detailsStyle.label)} illustration style preview`}
                 width={760}
                 height={760}
                 sizes="(max-width: 680px) 88vw, 620px"

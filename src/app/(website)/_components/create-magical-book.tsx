@@ -25,7 +25,7 @@ const CreateMagicalBook = () => {
   ];
 
   return (
-    <section id="create-your-book" aria-labelledby="create-book-heading" className=" py-14 sm:py-16 lg:mb-32 lg:pb-[10px] lg:pt-0">
+    <section id="create-your-book" aria-labelledby="create-book-heading" className="pt-14 pb-0 sm:pt-16 sm:pb-0 lg:pt-0 lg:pb-0 lg:mb-0">
       <div className="container mx-auto px-5 sm:px-8 lg:px-0">
         <header className="text-center">
           <h2 id="create-book-heading" className="font-crimson text-[48px] font-semibold leading-none text-[#1E1E1E]">
@@ -47,6 +47,7 @@ const CreateMagicalBook = () => {
             </li>
           ))}
         </ol>
+
       </div>
     </section>
   );

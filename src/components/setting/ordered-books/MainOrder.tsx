@@ -6,6 +6,7 @@ import Link from "next/link";
 import OrderCard, { OrderDetails } from "./OrderCard";
 import TrackingView from "./TrackingView";
 import { getApiBaseUrl } from "@/config/api";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 interface BackendPrintOrder {
   _id: string;
@@ -38,6 +39,8 @@ const bgColors = ["bg-[#F0F8FF]", "bg-[#F5F0FF]"];
 
 export default function OrderedBooksPage() {
   const { data: session, status: sessionStatus } = useSession();
+  const { t, language } = useLanguage();
+  const copy = t.settings.orders;
   const [activeTab, setActiveTab] = useState<"ongoing" | "completed">("ongoing");
   const [trackingOrder, setTrackingOrder] = useState<OrderDetails | null>(null);
   const [orders, setOrders] = useState<BackendPrintOrder[]>([]);
@@ -66,33 +69,34 @@ export default function OrderedBooksPage() {
 
         const json = await res.json().catch(() => null);
         if (!res.ok) {
-          throw new Error(json?.message || "Failed to load ordered books");
+          throw new Error(json?.message || copy.loadFailed);
         }
 
         if (Array.isArray(json?.data)) {
           setOrders(json.data);
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to load orders");
+        setError(err instanceof Error ? err.message : copy.ordersLoadFailed);
       } finally {
         setLoading(false);
       }
     };
 
     void fetchOrders();
-  }, [sessionStatus, session?.user?.accessToken]);
+  }, [copy.loadFailed, copy.ordersLoadFailed, sessionStatus, session?.user?.accessToken]);
 
   const formatAddress = (addr?: BackendPrintOrder["shippingAddress"]) => {
-    if (!addr) return "Standard delivery address";
+    if (!addr) return copy.standardAddress;
     const parts = [addr.line1, addr.city, addr.country].filter(Boolean);
-    return parts.join(", ") || "Standard delivery address";
+    return parts.join(", ") || copy.standardAddress;
   };
 
   const formatDate = (dateStr?: string) => {
-    if (!dateStr) return "N/A";
+    if (!dateStr) return copy.notAvailable;
     const d = new Date(dateStr);
     if (isNaN(d.getTime())) return dateStr;
-    return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+    const locale = language === "nl" ? "nl-NL" : language === "fr" ? "fr-FR" : "en-GB";
+    return d.toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" });
   };
 
   const ongoingOrders: OrderDetails[] = orders
@@ -128,9 +132,9 @@ export default function OrderedBooksPage() {
     <div className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-serif text-gray-800 mb-2">Ordered Books</h1>
+        <h1 className="text-2xl font-serif text-gray-800 mb-2">{t.settings.orderedBooks}</h1>
         <p className="text-sm text-gray-500">
-          View all your hardcopy storybooks.
+          {copy.description}
         </p>
       </div>
 
@@ -147,7 +151,7 @@ export default function OrderedBooksPage() {
                   : "border-transparent text-gray-400 hover:text-gray-600"
               }`}
             >
-              Ongoing Hardcopy Book {ongoingOrders.length > 0 && `(${ongoingOrders.length})`}
+              {copy.ongoing} {ongoingOrders.length > 0 && `(${ongoingOrders.length})`}
             </button>
             <button
               type="button"
@@ -158,12 +162,12 @@ export default function OrderedBooksPage() {
                   : "border-transparent text-gray-400 hover:text-gray-600"
               }`}
             >
-              Completed Hardcopy Book {completedOrders.length > 0 && `(${completedOrders.length})`}
+              {copy.completed} {completedOrders.length > 0 && `(${completedOrders.length})`}
             </button>
           </div>
 
           {loading ? (
-            <div role="status" aria-label="Loading ordered books" className="animate-pulse space-y-6">
+            <div role="status" aria-label={copy.loading} className="animate-pulse space-y-6">
               {Array.from({ length: 2 }, (_, index) => (
                 <div key={index} className="rounded-2xl border border-[#F2E9EC] bg-[#FFFDFD] p-5 sm:p-6">
                   <div className="flex flex-col gap-5 sm:flex-row">
@@ -197,12 +201,12 @@ export default function OrderedBooksPage() {
 
               {activeTab === "ongoing" && ongoingOrders.length === 0 && (
                 <div className="py-12 text-center text-sm text-gray-500">
-                  <p>You don&apos;t have any ongoing hardcopy book orders.</p>
+                  <p>{copy.noOngoing}</p>
                   <Link
                     href="/setting/generated-books"
                     className="mt-3 inline-block font-semibold text-[#E3859A] hover:underline"
                   >
-                    View your generated books
+                    {copy.viewGenerated}
                   </Link>
                 </div>
               )}
@@ -218,7 +222,7 @@ export default function OrderedBooksPage() {
 
               {activeTab === "completed" && completedOrders.length === 0 && (
                 <div className="py-12 text-center text-sm text-gray-500">
-                  <p>You don&apos;t have any completed hardcopy book orders yet.</p>
+                  <p>{copy.noCompleted}</p>
                 </div>
               )}
             </div>

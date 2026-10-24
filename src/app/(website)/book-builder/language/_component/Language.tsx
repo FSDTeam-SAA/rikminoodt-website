@@ -1,11 +1,14 @@
 "use client";
 
+import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Pencil } from "lucide-react";
 import { useBookBuilder } from "../../_components/BookBuilderProvider";
 import { getStoryChoice } from "../../_components/subject-options";
+import { useBookBuilderTranslations } from "../../_components/useBookBuilderTranslations";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 const ages = [
   { label: "0-2 Years", image: "/images/age_1.png", color: "#FDE1CF" },
@@ -65,13 +68,19 @@ const variants: Record<string, string[]> = {
   French: ["France French", "Canadian French"],
 };
 
+const bookLanguageBySiteLanguage = {
+  en: "English",
+  nl: "Dutch",
+  fr: "French",
+} as const;
+
 type Choice = { label: string; image: string; color?: string };
 
-function ChoiceChip({ choice, href, label }: { choice: Choice | undefined; href: string; label: string }) {
+function ChoiceChip({ choice, href, label, displayLabel, chooseLabel }: { choice: Choice | undefined; href: string; label: string; displayLabel?: string; chooseLabel: string }) {
   if (!choice) {
     return (
       <Link href={href} className="rounded-full border border-dashed border-[#D8C8C2] px-3 py-2 text-sm text-[#856F77] transition hover:border-[#E88DA0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]">
-        Choose {label.toLowerCase()}
+        {chooseLabel} {label.toLowerCase()}
       </Link>
     );
   }
@@ -86,7 +95,7 @@ function ChoiceChip({ choice, href, label }: { choice: Choice | undefined; href:
       <span className="relative size-6 overflow-hidden rounded-full bg-white/45">
         <Image src={choice.image} alt="" fill sizes="24px" className="object-contain object-bottom" />
       </span>
-      <span>{choice.label}</span>
+      <span>{displayLabel || choice.label}</span>
       <Pencil aria-hidden="true" size={14} strokeWidth={2.3} className="text-[#E5AF32] transition-transform group-hover:scale-110" />
     </Link>
   );
@@ -94,7 +103,16 @@ function ChoiceChip({ choice, href, label }: { choice: Choice | undefined; href:
 
 export default function Language() {
   const { selectedAge, selectedTheme, selectedStory, selectedMessage, selectedIllustration, selectedFont, selectedLanguage, setSelectedLanguage, selectedVariant, setSelectedVariant } = useBookBuilder();
-  const language = selectedLanguage && variants[selectedLanguage] ? selectedLanguage : "English";
+  const { bb, translateAge, translateTheme, translateMessage, translateIllustration, translateFont, translateLabel } = useBookBuilderTranslations();
+  const { language: siteLanguage } = useLanguage();
+  const defaultLanguage = bookLanguageBySiteLanguage[siteLanguage];
+
+  useEffect(() => {
+    setSelectedLanguage(defaultLanguage);
+    setSelectedVariant(variants[defaultLanguage][0]);
+  }, [defaultLanguage, setSelectedLanguage, setSelectedVariant]);
+
+  const language = selectedLanguage && variants[selectedLanguage] ? selectedLanguage : defaultLanguage;
   const availableVariants = variants[language];
   const variant = selectedVariant && availableVariants.includes(selectedVariant) ? selectedVariant : availableVariants[0];
   const age = ages.find((item) => item.label === selectedAge);
@@ -103,6 +121,7 @@ export default function Language() {
   const message = messages.find((item) => item.label === selectedMessage);
   const illustration = illustrations.find((item) => item.label === selectedIllustration);
   const font = fonts.find((item) => item.label === selectedFont);
+  const chooseLabel = bb?.choose ?? "Choose";
 
   const changeLanguage = (nextLanguage: string) => {
     setSelectedLanguage(nextLanguage);
@@ -113,35 +132,35 @@ export default function Language() {
     <main className="min-h-screen bg-[#FEFAF4] px-4 pb-10 pt-[118px] sm:px-7 sm:pb-12 sm:pt-[136px] lg:px-[38px] lg:pb-20 lg:pt-[196px]">
       <section className="mx-auto max-w-[1280px]" aria-labelledby="language-heading">
         <h1 id="language-heading" className="font-crimson text-4xl font-normal leading-none text-[#1E1E1E] sm:text-[48px]">
-          Create a Story as Unique as Your Child
+          {bb?.bannerTitle}
         </h1>
         <p className="mt-5 max-w-[1120px] font-sans text-lg font-normal leading-[1.4] text-[#444444] sm:text-[24px]">
-          Choose a theme, add their name and special details, and create a personalized eBook they&apos;ll love. Turn it into a beautiful hardcover keepsake to treasure forever.
+          {bb?.bannerDesc}
         </p>
 
         <section className="mt-10 rounded-[19px] bg-[#FBF3EA] px-4 py-5 sm:px-5 sm:py-6 lg:px-10 lg:py-10" aria-labelledby="language-options-heading">
           <h2 id="language-options-heading" className="font-fredoka text-base font-normal leading-none text-[#E88DA0] sm:text-[20px] lg:text-[32px]">
-            Build a Magical Story Just for Them
+            {bb?.buildStory}
           </h2>
-          <p className="mt-3 font-sans text-base font-normal leading-none text-[#444444] lg:mt-5 lg:text-[20px]">Your Choice</p>
+          <p className="mt-3 font-sans text-base font-normal leading-none text-[#444444] lg:mt-5 lg:text-[20px]">{bb?.yourChoice}</p>
 
           <div className="mt-3 flex flex-wrap gap-2 sm:gap-3">
-            <ChoiceChip label="Age" choice={age} href="/book-builder/choose-age" />
-            <ChoiceChip label="Theme" choice={theme} href="/book-builder/choose-theme" />
-            <ChoiceChip label="Subject" choice={story} href="/book-builder/choose-story" />
-            <ChoiceChip label="Message" choice={message} href="/book-builder/personalize" />
-            <ChoiceChip label="Illustration" choice={illustration} href="/book-builder/illustration" />
-            <ChoiceChip label="Font" choice={font} href="/book-builder/choose-font" />
+            <ChoiceChip label={translateLabel("Age")} displayLabel={translateAge(age?.label)} choice={age} href="/book-builder/choose-age" chooseLabel={chooseLabel} />
+            <ChoiceChip label={translateLabel("Theme")} displayLabel={translateTheme(theme?.label)} choice={theme} href="/book-builder/choose-theme" chooseLabel={chooseLabel} />
+            <ChoiceChip label={translateLabel("Subject")} choice={story} href="/book-builder/choose-story" chooseLabel={chooseLabel} />
+            <ChoiceChip label={translateLabel("Message")} displayLabel={translateMessage(message?.label)} choice={message} href="/book-builder/personalize" chooseLabel={chooseLabel} />
+            <ChoiceChip label={translateLabel("Illustration")} displayLabel={translateIllustration(illustration?.label)} choice={illustration} href="/book-builder/illustration" chooseLabel={chooseLabel} />
+            <ChoiceChip label={translateLabel("Font")} displayLabel={translateFont(font?.label)} choice={font} href="/book-builder/choose-font" chooseLabel={chooseLabel} />
           </div>
 
           <h3 className="mt-8 font-sans text-lg font-semibold leading-none text-[#1E1E1E] lg:mt-10 lg:text-[28px]">
-            Information about the book
+            {bb?.bookInfoTitle}
           </h3>
-          <p className="mt-2 font-sans text-sm text-[#444444] sm:text-base">How should the book look?</p>
+          <p className="mt-2 font-sans text-sm text-[#444444] sm:text-base">{bb?.bookInfoDescription}</p>
 
           <form className="mt-7 max-w-[1120px] rounded-xl border border-[#F3A8B7] bg-white/20 p-3 sm:p-5" onSubmit={(event) => event.preventDefault()}>
             <label className="block font-sans text-sm font-medium text-[#252025] sm:text-base" htmlFor="book-language">
-              In which language should the book be written?
+              {bb?.bookLanguageLabel}
             </label>
             <Select
               value={language}
@@ -160,7 +179,7 @@ export default function Language() {
             </Select>
 
             <label className="mt-5 block font-sans text-sm font-medium text-[#252025] sm:text-base" htmlFor="book-variant">
-              Regional language/ Variant
+              {bb?.regionalVariantLabel}
             </label>
             <Select
               value={variant}
@@ -180,7 +199,7 @@ export default function Language() {
 
             <div className="mt-7 flex justify-center">
               <Link onClick={() => { setSelectedLanguage(language); setSelectedVariant(variant); }} href="/book-builder/InformationAboutCharacters" className="inline-flex h-10 items-center rounded-xl bg-[#E88DA0] px-7 font-sans text-sm font-semibold text-white shadow-[0_5px_12px_rgba(232,141,160,0.25)] transition hover:bg-[#DD7893] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2">
-                Next Step
+                {bb?.nextStep || "Next Step"}
               </Link>
             </div>
           </form>

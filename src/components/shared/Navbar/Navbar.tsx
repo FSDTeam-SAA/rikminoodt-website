@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useSession, signOut } from "next-auth/react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useLanguage } from "@/components/providers/LanguageProvider";
+import LogoutConfirmationModal from "@/components/shared/LogoutConfirmationModal";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,6 +35,8 @@ const Navbar = () => {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [logoutModalOpen, setLogoutModalOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const user = session?.user;
   const userInitials = getUserInitials(user?.name, user?.email);
   const overlaysPageContent =
@@ -88,7 +91,17 @@ const Navbar = () => {
     };
   }, []);
 
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("token");
+      localStorage.removeItem("accessToken");
+    }
+    await signOut({ callbackUrl: "/login" });
+  };
+
   return (
+    <>
     <header className={`sticky top-0 z-50 pointer-events-none ${overlaysPageContent ? "h-0" : "h-[78px] sm:h-[88px] lg:h-[116px]"}`}>
       <div
         className={`pointer-events-auto absolute inset-x-0 top-0 transition-[padding] duration-300 ${
@@ -212,13 +225,7 @@ const Navbar = () => {
                 </DropdownMenuItem>
 
                 <DropdownMenuItem
-                  onClick={async () => {
-                    if (typeof window !== "undefined") {
-                      localStorage.removeItem("token");
-                      localStorage.removeItem("accessToken");
-                    }
-                    await signOut({ callbackUrl: "/login" });
-                  }}
+                  onClick={() => setLogoutModalOpen(true)}
                   className="flex cursor-pointer items-center gap-2.5 rounded-xl px-2.5 py-2 text-sm font-medium text-[#d94868] transition-colors hover:bg-[#FFF0F3] hover:text-[#c43252]"
                 >
                   <LogOut size={16} strokeWidth={1.8} className="text-[#d94868]" />
@@ -307,13 +314,9 @@ const Navbar = () => {
                     <span>{t.nav.settings}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    onClick={async () => {
+                    onClick={() => {
                       setIsMenuOpen(false);
-                      if (typeof window !== "undefined") {
-                        localStorage.removeItem("token");
-                        localStorage.removeItem("accessToken");
-                      }
-                      await signOut({ callbackUrl: "/login" });
+                      setLogoutModalOpen(true);
                     }}
                     className="flex cursor-pointer items-center gap-2.5 rounded-xl px-2.5 py-2 text-sm font-medium text-[#d94868] hover:bg-[#FFF0F3]"
                   >
@@ -336,6 +339,13 @@ const Navbar = () => {
       </div>
       </div>
     </header>
+    <LogoutConfirmationModal
+      open={logoutModalOpen}
+      isLoggingOut={isLoggingOut}
+      onClose={() => setLogoutModalOpen(false)}
+      onConfirm={handleLogout}
+    />
+    </>
   );
 };
 

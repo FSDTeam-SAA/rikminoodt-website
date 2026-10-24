@@ -86,6 +86,7 @@ const ThreeEasySteps = () => {
             );
           })}
         </ol>
+
       </div>
     </section>
   );

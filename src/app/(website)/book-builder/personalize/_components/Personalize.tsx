@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Pencil } from "lucide-react";
 import { useBookBuilder } from "../../_components/BookBuilderProvider";
 import { getStoryChoice } from "../../_components/subject-options";
+import { useBookBuilderTranslations } from "../../_components/useBookBuilderTranslations";
 
 const ages = [
   { label: "0-2 Years", image: "/images/age_1.png", color: "#FDE1CF" },
@@ -39,7 +40,7 @@ const messages = [
 
 type Choice = { label: string; image: string; color: string };
 
-function ChoiceChip({ choice, href, label }: { choice: Choice | undefined; href: string; label: string }) {
+function ChoiceChip({ choice, href, label, displayLabel }: { choice: Choice | undefined; href: string; label: string; displayLabel?: string }) {
   if (!choice) {
     return (
       <Link href={href} className="rounded-full border border-dashed border-[#D8C8C2] px-3 py-2 text-sm text-[#856F77] transition hover:border-[#E88DA0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]">
@@ -58,7 +59,7 @@ function ChoiceChip({ choice, href, label }: { choice: Choice | undefined; href:
       <span className="relative size-6 overflow-hidden rounded-full bg-white/45">
         <Image src={choice.image} alt="" fill sizes="24px" className="object-contain object-bottom" />
       </span>
-      <span>{choice.label}</span>
+      <span>{displayLabel || choice.label}</span>
       <Pencil aria-hidden="true" size={14} strokeWidth={2.3} className="text-[#E5AF32] transition-transform group-hover:scale-110" />
     </Link>
   );
@@ -67,6 +68,7 @@ function ChoiceChip({ choice, href, label }: { choice: Choice | undefined; href:
 export default function Personalize() {
   const router = useRouter();
   const { selectedAge, selectedTheme, selectedStory, selectedMessage, setSelectedMessage } = useBookBuilder();
+  const { bb, translateAge, translateTheme, translateMessage } = useBookBuilderTranslations();
   const age = ages.find((item) => item.label === selectedAge);
   const theme = themes.find((item) => item.label === selectedTheme);
   const story = getStoryChoice(selectedStory, selectedTheme);
@@ -75,26 +77,26 @@ export default function Personalize() {
     <main className="min-h-screen bg-[#FEFAF4] px-4 pb-10 pt-[118px] sm:px-7 sm:pb-12 sm:pt-[136px] lg:px-[38px] lg:pb-20 lg:pt-[196px]">
       <section className="mx-auto max-w-[1280px]" aria-labelledby="personalize-heading">
         <h1 id="personalize-heading" className="font-crimson text-4xl font-normal leading-none text-[#1E1E1E] sm:text-[48px]">
-          Create a Story as Unique as Your Child
+          {bb?.bannerTitle}
         </h1>
         <p className="mt-5 max-w-[1120px] font-sans text-lg font-normal leading-[1.4] text-[#444444] sm:text-[24px]">
-          Choose a theme, add their name and special details, and create a personalized eBook they&apos;ll love. Turn it into a beautiful hardcover keepsake to treasure forever.
+          {bb?.bannerDesc}
         </p>
 
         <section className="mt-10 rounded-[19px] bg-[#FBF3EA] px-3 py-4 sm:px-5 sm:py-5 lg:px-10 lg:py-10" aria-labelledby="message-heading">
           <h2 id="message-heading" className="font-fredoka text-base font-normal leading-none text-[#E88DA0] sm:text-[20px] lg:text-[32px]">
-            Build a Magical Story Just for Them
+            {bb?.buildStory}
           </h2>
-          <p className="mt-3 font-sans text-sm font-normal leading-none text-[#444444] sm:text-base lg:mt-5 lg:text-[20px]">Your Choice</p>
+          <p className="mt-3 font-sans text-sm font-normal leading-none text-[#444444] sm:text-base lg:mt-5 lg:text-[20px]">{bb?.yourChoice}</p>
 
           <div className="mt-3 flex flex-wrap gap-2 sm:gap-3">
-            <ChoiceChip label="Age" choice={age} href="/book-builder/choose-age" />
-            <ChoiceChip label="Theme" choice={theme} href="/book-builder/choose-theme" />
+            <ChoiceChip label="Age" displayLabel={translateAge(age?.label)} choice={age} href="/book-builder/choose-age" />
+            <ChoiceChip label="Theme" displayLabel={translateTheme(theme?.label)} choice={theme} href="/book-builder/choose-theme" />
             <ChoiceChip label="Subject" choice={story} href="/book-builder/choose-story" />
           </div>
 
           <h3 className="mt-6 font-sans text-base font-semibold leading-none text-[#1E1E1E] sm:text-lg lg:mt-8 lg:text-[28px]">
-            Choose a central message
+            {bb?.chooseMessage || "Choose a central message"}
           </h3>
 
           <div className="mt-4 grid grid-cols-2 gap-3 min-[440px]:grid-cols-4 sm:mt-5 sm:gap-4" role="radiogroup" aria-label="Choose a central message">
@@ -124,7 +126,7 @@ export default function Personalize() {
                     />
                   </span>
                   <span className="flex min-h-9 items-center justify-center px-1 pb-1 pt-1 font-sans text-xs font-medium leading-[1.15] text-[#1E1E1E] sm:min-h-11 sm:text-sm lg:text-base">
-                    {message.label}
+                    {translateMessage(message.label)}
                   </span>
                 </button>
               );

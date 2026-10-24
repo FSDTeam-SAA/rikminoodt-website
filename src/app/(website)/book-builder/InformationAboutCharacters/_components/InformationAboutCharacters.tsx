@@ -15,6 +15,8 @@ import {
 import { useBookBuilder, type CharacterData } from "../../_components/BookBuilderProvider";
 import { getStoryChoice } from "../../_components/subject-options";
 import { getCharacterValidationError } from "../../_components/validation";
+import { useBookBuilderTranslations } from "../../_components/useBookBuilderTranslations";
+import { useBookBuilderPageCopy } from "../../_components/useBookBuilderPageCopy";
 
 const ages = [
   { label: "0-2 Years", image: "/images/age_1.png", color: "#FDE1CF" },
@@ -63,10 +65,12 @@ function ChoiceChip({
   choice,
   href,
   label,
+  displayLabel,
 }: {
   choice: Choice | undefined;
   href: string;
   label: string;
+  displayLabel?: string;
 }) {
   if (!choice) {
     return (
@@ -95,7 +99,7 @@ function ChoiceChip({
           className="object-contain object-bottom"
         />
       </span>
-      <span>{choice.label}</span>
+      <span>{displayLabel || choice.label}</span>
       <Pencil
         aria-hidden="true"
         size={14}
@@ -444,6 +448,8 @@ export default function InformationAboutCharacters() {
     characters: storedCharacters,
     setCharacters,
   } = useBookBuilder();
+  const { bb, translateAge, translateTheme, translateMessage, translateIllustration, translateFont } = useBookBuilderTranslations();
+  const copy = useBookBuilderPageCopy();
 
   // Character 1 state
   const [characterType, setCharacterType] = useState<CharacterType>("Person");
@@ -618,12 +624,10 @@ export default function InformationAboutCharacters() {
           id="character-heading"
           className="font-crimson text-4xl font-normal leading-none text-[#1E1E1E] sm:text-[48px]"
         >
-          Create a Story as Unique as Your Child
+          {bb?.bannerTitle}
         </h1>
         <p className="mt-5 max-w-[1120px] font-sans text-lg font-normal leading-[1.4] text-[#444444] sm:text-[24px]">
-          Choose a theme, add their name and special details, and create a
-          personalized eBook they&apos;ll love. Turn it into a beautiful
-          hardcover keepsake to treasure forever.
+          {bb?.bannerDesc}
         </p>
 
         <section
@@ -634,20 +638,22 @@ export default function InformationAboutCharacters() {
             id="character-options-heading"
             className="font-fredoka text-base font-normal leading-none text-[#E88DA0] sm:text-[20px] lg:text-[32px]"
           >
-            Build a Magical Story Just for Them
+            {bb?.buildStory}
           </h2>
           <p className="mt-3 font-sans text-sm font-normal leading-none text-[#444444] sm:text-base lg:mt-5 lg:text-[20px]">
-            Your Choice
+            {bb?.yourChoice}
           </p>
 
           <div className="mt-3 flex flex-wrap gap-2 sm:gap-3">
             <ChoiceChip
               label="Age"
+              displayLabel={translateAge(age?.label)}
               choice={age}
               href="/book-builder/choose-age"
             />
             <ChoiceChip
               label="Theme"
+              displayLabel={translateTheme(theme?.label)}
               choice={theme}
               href="/book-builder/choose-theme"
             />
@@ -658,16 +664,19 @@ export default function InformationAboutCharacters() {
             />
             <ChoiceChip
               label="Message"
+              displayLabel={translateMessage(message?.label)}
               choice={message}
               href="/book-builder/personalize"
             />
             <ChoiceChip
               label="Illustration"
+              displayLabel={translateIllustration(illustration?.label)}
               choice={illustration}
               href="/book-builder/illustration"
             />
             <ChoiceChip
               label="Font"
+              displayLabel={translateFont(font?.label)}
               choice={font}
               href="/book-builder/choose-font"
             />
@@ -687,14 +696,13 @@ export default function InformationAboutCharacters() {
           </div>
 
           <h3 className="mt-8 font-sans text-lg font-semibold leading-none text-[#1E1E1E] lg:mt-10 lg:text-[28px]">
-            Information about the Characters
+            {copy.characterInfo}
           </h3>
           <p className="mt-2 font-sans text-sm text-[#444444] sm:text-base">
-            Add one or more characters for your story. These can be people,
-            animals or objects.
+            {copy.characterDescription}
           </p>
           <h4 className="mt-7 font-sans text-base font-semibold text-[#1E1E1E] sm:text-lg">
-            Character 1
+            {copy.character} 1
           </h4>
 
           <form
@@ -703,7 +711,7 @@ export default function InformationAboutCharacters() {
           >
             <fieldset>
               <legend className="font-sans text-sm font-medium text-[#252025]">
-                Choose the type of character
+                {copy.chooseCharacterType}
               </legend>
               <div className="mt-3 flex flex-wrap gap-2">
                 {characterTypes.map((type) => {
@@ -721,7 +729,7 @@ export default function InformationAboutCharacters() {
                       }`}
                     >
                       <Icon aria-hidden="true" size={16} />
-                      {type.label}
+                      {type.label === "Person" ? copy.person : type.label === "Animal" ? copy.animal : copy.object}
                     </button>
                   );
                 })}
@@ -734,13 +742,13 @@ export default function InformationAboutCharacters() {
                   className="mt-5 block font-sans text-sm font-medium text-[#252025]"
                   htmlFor="character-name"
                 >
-                  Main Character
+                  {copy.mainCharacter}
                 </label>
                 <input
                   id="character-name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter the character's name"
+                  placeholder={copy.enterCharacterName}
                   className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
                 />
 
@@ -750,7 +758,7 @@ export default function InformationAboutCharacters() {
                       className="block font-sans text-sm font-medium text-[#252025]"
                       htmlFor="character-gender"
                     >
-                      Gender
+                      {copy.gender}
                     </label>
                     <Select
                       value={gender}
@@ -760,32 +768,32 @@ export default function InformationAboutCharacters() {
                         id="character-gender"
                         className="mt-2 h-10 w-full rounded-[8px] border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] focus-visible:border-[#E88DA0] focus-visible:ring-[#E88DA0]/25"
                       >
-                        <SelectValue placeholder="Select gender" />
+                        <SelectValue placeholder={copy.selectGender} />
                       </SelectTrigger>
                       <SelectContent className="z-[100] border border-[#F3A8B7] bg-white text-[#4B4650] shadow-[0_10px_24px_rgba(91,69,78,0.16)]">
                         <SelectItem
                           className="cursor-pointer py-2 text-[#4B4650] focus:bg-[#FFF3F5] focus:text-[#4B4650]"
                           value="Female"
                         >
-                          Female
+                          {copy.female}
                         </SelectItem>
                         <SelectItem
                           className="cursor-pointer py-2 text-[#4B4650] focus:bg-[#FFF3F5] focus:text-[#4B4650]"
                           value="Male"
                         >
-                          Male
+                          {copy.male}
                         </SelectItem>
                         <SelectItem
                           className="cursor-pointer py-2 text-[#4B4650] focus:bg-[#FFF3F5] focus:text-[#4B4650]"
                           value="Non-binary"
                         >
-                          Non-binary
+                          {copy.nonBinary}
                         </SelectItem>
                         <SelectItem
                           className="cursor-pointer py-2 text-[#4B4650] focus:bg-[#FFF3F5] focus:text-[#4B4650]"
                           value="Prefer not to say"
                         >
-                          Prefer not to say
+                          {copy.preferNotToSay}
                         </SelectItem>
                       </SelectContent>
                     </Select>
@@ -795,7 +803,7 @@ export default function InformationAboutCharacters() {
                       className="block font-sans text-sm font-medium text-[#252025]"
                       htmlFor="character-age"
                     >
-                      Age
+                      {copy.age}
                     </label>
                     <input
                       id="character-age"
@@ -814,8 +822,8 @@ export default function InformationAboutCharacters() {
                       className="block font-sans text-sm font-medium text-[#252025]"
                       htmlFor="character-hobbies"
                     >
-                      Hobbies/ Interests{" "}
-                      <span className="font-normal">(optional)</span>
+                      {copy.hobbies}{" "}
+                      <span className="font-normal">{copy.optional}</span>
                     </label>
                     <input
                       id="character-hobbies"
@@ -830,8 +838,8 @@ export default function InformationAboutCharacters() {
                       className="block font-sans text-sm font-medium text-[#252025]"
                       htmlFor="character-food"
                     >
-                      Favorite food{" "}
-                      <span className="font-normal">(optional)</span>
+                      {copy.favoriteFood}{" "}
+                      <span className="font-normal">{copy.optional}</span>
                     </label>
                     <input
                       id="character-food"
@@ -849,7 +857,7 @@ export default function InformationAboutCharacters() {
                   className="mt-5 block font-sans text-sm font-medium text-[#252025]"
                   htmlFor="animal-name"
                 >
-                  Animal Name
+                  {copy.animalName}
                 </label>
                 <input
                   id="animal-name"
@@ -862,7 +870,7 @@ export default function InformationAboutCharacters() {
                   className="mt-4 block font-sans text-sm font-medium text-[#252025]"
                   htmlFor="animal-species"
                 >
-                  Animal species
+                  {copy.animalSpecies}
                 </label>
                 <input
                   id="animal-species"
@@ -878,7 +886,7 @@ export default function InformationAboutCharacters() {
                   className="mt-5 block font-sans text-sm font-medium text-[#252025]"
                   htmlFor="object-name"
                 >
-                  Name of object
+                  {copy.objectName}
                 </label>
                 <input
                   id="object-name"
@@ -907,7 +915,7 @@ export default function InformationAboutCharacters() {
                 onClick={() => addCharacter(characterType)}
                 className="mt-3 inline-flex h-8 items-center gap-1.5 rounded-[7px] border border-[#F3A8B7] bg-white px-3 font-sans text-xs text-[#E88DA0] transition hover:bg-[#FFF3F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]"
               >
-                <UserRound aria-hidden="true" size={13} /> Add Character (max 4)
+                <UserRound aria-hidden="true" size={13} /> {copy.addCharacter}
               </button>
             )}
           </form>
@@ -944,7 +952,7 @@ export default function InformationAboutCharacters() {
               onClick={handleNextStep}
               className="inline-flex h-10 items-center rounded-xl bg-[#E88DA0] px-7 font-sans text-sm font-semibold text-white shadow-[0_5px_12px_rgba(232,141,160,0.25)] transition hover:bg-[#DD7893] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2"
             >
-              Next Step
+              {bb?.nextStep || "Next Step"}
             </button>
           </div>
         </section>

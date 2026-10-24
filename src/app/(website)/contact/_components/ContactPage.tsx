@@ -3,9 +3,28 @@
 import { useState } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import Image from "next/image";
-// import PageHero from "../../_components/PageHero";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function ContactPage() {
+  const { t } = useLanguage();
+  const contact = t.contact || {
+    title: "Contact Us",
+    subheading: "Enter your details and send us a message, our team will get back to you soon.",
+    fullName: "Full Name",
+    fullNamePlaceholder: "Enter your full name",
+    email: "Email",
+    emailPlaceholder: "Enter your email",
+    message: "Message",
+    messagePlaceholder: "Write your message",
+    send: "Send",
+    sending: "Sending...",
+    successTitle: "Message Sent!",
+    successMessage: "Thank you for reaching out. We will get back to you shortly.",
+    sendAnother: "Send another message",
+    errorRequired: "Please fill in all fields.",
+    errorEmail: "Please enter a valid email address.",
+  };
+
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -18,12 +37,12 @@ export default function ContactPage() {
     setError("");
 
     if (!fullName.trim() || !email.trim() || !message.trim()) {
-      setError("Please fill in all fields.");
+      setError(contact.errorRequired);
       return;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setError("Please enter a valid email address.");
+      setError(contact.errorEmail);
       return;
     }
 
@@ -58,10 +77,10 @@ export default function ContactPage() {
         {/* Hero Content */}
         <div className="container relative z-10 mx-auto px-4">
           <h1 className="font-crimson text-[38px] font-bold leading-none text-[#1E1E1E] sm:text-[44px] lg:text-[50px]">
-            Contact Us
+            {contact.title}
           </h1>
           <p className="mx-auto mt-3 max-w-xl font-sans text-base text-[#3F3A3E] sm:text-[18px]">
-            Enter your details and send us a message, our team will get back to you soon.
+            {contact.subheading}
           </p>
         </div>
       </section>
@@ -75,17 +94,17 @@ export default function ContactPage() {
                 <CheckCircle2 size={36} />
               </div>
               <h2 className="mt-4 font-crimson text-2xl font-bold text-[#1E1E1E] sm:text-3xl">
-                Message Sent!
+                {contact.successTitle}
               </h2>
               <p className="mx-auto mt-2 max-w-md font-sans text-sm text-[#66605F]">
-                Thank you for contacting us! We have received your message and will get back to you as soon as possible.
+                {contact.successMessage}
               </p>
               <button
                 type="button"
                 onClick={() => setSubmitted(false)}
                 className="mt-6 rounded-xl bg-[#E88DA0] px-8 py-2.5 font-sans text-sm font-semibold text-white transition hover:bg-[#DD7893]"
               >
-                Send Another Message
+                {contact.sendAnother}
               </button>
             </div>
           ) : (
@@ -102,7 +121,7 @@ export default function ContactPage() {
               {/* Full Name Field */}
               <div>
                 <label className="mb-2 block font-sans text-sm font-semibold text-[#1E1E1E]">
-                  Full Name
+                  {contact.fullName}
                 </label>
                 <input
                   type="text"
@@ -110,7 +129,7 @@ export default function ContactPage() {
                   disabled={loading}
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  placeholder="Enter your full name"
+                  placeholder={contact.fullNamePlaceholder}
                   className="h-9 w-full rounded-[9px] border border-[#F3A8B7] bg-white px-2.5 font-sans text-sm text-[#1E1E1E] outline-none placeholder:text-[#BBB0B5] transition focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/20"
                 />
               </div>
@@ -118,7 +137,7 @@ export default function ContactPage() {
               {/* Email Field */}
               <div>
                 <label className="mb-2 block font-sans text-sm font-semibold text-[#1E1E1E]">
-                  Email
+                  {contact.email}
                 </label>
                 <input
                   type="email"
@@ -126,7 +145,7 @@ export default function ContactPage() {
                   disabled={loading}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
+                  placeholder={contact.emailPlaceholder}
                   className="h-9 w-full rounded-[9px] border border-[#F3A8B7] bg-white px-2.5 font-sans text-sm text-[#1E1E1E] outline-none placeholder:text-[#BBB0B5] transition focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/20"
                 />
               </div>
@@ -134,14 +153,14 @@ export default function ContactPage() {
               {/* Message Field */}
               <div>
                 <label className="mb-2 block font-sans text-sm font-semibold text-[#1E1E1E]">
-                  Message
+                  {contact.message}
                 </label>
                 <textarea
                   required
                   disabled={loading}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Write your message"
+                  placeholder={contact.messagePlaceholder}
                   className="min-h-[175px] w-full resize-none rounded-[9px] border border-[#F3A8B7] bg-white p-2.5 font-sans text-sm text-[#1E1E1E] outline-none placeholder:text-[#BBB0B5] transition focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/20"
                 />
               </div>
@@ -156,10 +175,10 @@ export default function ContactPage() {
                   {loading ? (
                     <>
                       <Loader2 size={16} className="animate-spin" />
-                      <span>Sending…</span>
+                      <span>{contact.sending}</span>
                     </>
                   ) : (
-                    <span>Send</span>
+                    <span>{contact.send}</span>
                   )}
                 </button>
               </div>
@@ -170,4 +189,3 @@ export default function ContactPage() {
     </main>
   );
 }
-

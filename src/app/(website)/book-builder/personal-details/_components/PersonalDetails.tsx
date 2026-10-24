@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useBookBuilder } from "../../_components/BookBuilderProvider";
 import { getStoryChoice } from "../../_components/subject-options";
+import { useBookBuilderTranslations } from "../../_components/useBookBuilderTranslations";
 import {
   getGuestDetailsValidationError,
   isValidCreatorName,
@@ -55,7 +56,7 @@ const fonts = [
 
 type Choice = { label: string; image: string; color: string };
 
-function ChoiceChip({ choice }: { choice?: Choice }) {
+function ChoiceChip({ choice, displayLabel }: { choice?: Choice; displayLabel?: string }) {
   if (!choice) return null;
 
   return (
@@ -66,7 +67,7 @@ function ChoiceChip({ choice }: { choice?: Choice }) {
       <span className="relative size-4 overflow-hidden rounded-full bg-white/45 sm:size-6">
         <Image src={choice.image} alt="" fill sizes="24px" className="object-contain object-bottom" />
       </span>
-      <span>{choice.label}</span>
+      <span>{displayLabel || choice.label}</span>
       <Pencil aria-hidden="true" size={11} strokeWidth={2.5} className="text-[#E5AF32] sm:size-[13px]" />
     </div>
   );
@@ -114,6 +115,7 @@ export default function PersonalDetails() {
     userDetails: initialUserDetails,
     setUserDetails,
   } = useBookBuilder();
+  const { bb, translateAge, translateTheme, translateMessage, translateIllustration, translateFont } = useBookBuilderTranslations();
 
   const { data: session, status: sessionStatus } = useSession();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -185,24 +187,24 @@ export default function PersonalDetails() {
     <main className="min-h-screen bg-[#FEFAF4] px-3 pb-8 pt-[102px] sm:px-7 sm:pb-12 sm:pt-[136px] lg:px-[38px] lg:pt-[196px]">
       <section className="mx-auto max-w-[1280px]" aria-labelledby="personal-details-heading">
         <h1 id="personal-details-heading" className="font-crimson text-[22px] leading-none text-[#1E1E1E] sm:text-4xl lg:text-[48px]">
-          Create a Story as Unique as Your Child
+          {bb?.bannerTitle}
         </h1>
         <p className="mt-3 max-w-[1120px] font-sans text-[10px] leading-[1.4] text-[#444444] sm:mt-5 sm:text-lg lg:text-[24px]">
-          Choose a theme, add their name and special details, and create a personalized eBook they&apos;ll love. Turn it into a beautiful hardcover keepsake to treasure forever.
+          {bb?.bannerDesc}
         </p>
 
         <section className="mt-5 w-full rounded-[18px] bg-[#FBF3EA] p-3 sm:mt-10 sm:p-6 lg:p-10" aria-labelledby="builder-summary-heading">
           <h2 id="builder-summary-heading" className="font-fredoka text-sm leading-none text-[#E88DA0] sm:text-xl lg:text-[32px]">
-            Build a Magical Story Just for Them
+            {bb?.buildStory}
           </h2>
-          <p className="mt-3 font-sans text-xs text-[#444444] sm:text-base lg:mt-5 lg:text-[20px]">Your Choice</p>
+          <p className="mt-3 font-sans text-xs text-[#444444] sm:text-base lg:mt-5 lg:text-[20px]">{bb?.yourChoice}</p>
           <div className="mt-2 flex flex-wrap gap-1.5 sm:mt-3 sm:gap-3">
-            <ChoiceChip choice={age} />
-            <ChoiceChip choice={theme} />
+            <ChoiceChip choice={age} displayLabel={translateAge(age?.label)} />
+            <ChoiceChip choice={theme} displayLabel={translateTheme(theme?.label)} />
             <ChoiceChip choice={story} />
-            <ChoiceChip choice={message} />
-            <ChoiceChip choice={illustration} />
-            <ChoiceChip choice={font} />
+            <ChoiceChip choice={message} displayLabel={translateMessage(message?.label)} />
+            <ChoiceChip choice={illustration} displayLabel={translateIllustration(illustration?.label)} />
+            <ChoiceChip choice={font} displayLabel={translateFont(font?.label)} />
             <ChoiceChip
               choice={
                 selectedLanguage
@@ -214,17 +216,17 @@ export default function PersonalDetails() {
 
           <div className="mt-6 sm:mt-9">
             <h3 className="font-sans text-sm font-semibold text-[#1E1E1E] sm:text-lg lg:text-[28px]">
-              Your personal details
+              {bb?.yourPersonalDetails || "Your personal details"}
             </h3>
             <p className="mt-1 font-sans text-[10px] text-[#66605F] sm:text-sm">
-              Give the book a unique and personal touch by including the creator of the book.
+              {bb?.creatorSubtitle || "Give the book a unique and personal touch by including the creator of the book."}
             </p>
           </div>
 
           <div className="mt-3 rounded-[7px] border border-[#F3A8B7] bg-white/20 p-2 sm:mt-5 sm:p-4">
             <FormField
-              label="Creator of the book"
-              placeholder="Enter the author’s name"
+              label={bb?.creatorLabel || "Creator of the book"}
+              placeholder={bb?.creatorPlaceholder || "Enter the author’s name"}
               value={localCreatorName}
               onChange={(e) => setLocalCreatorName(e.target.value)}
             />
@@ -234,42 +236,42 @@ export default function PersonalDetails() {
             <>
               <div className="mt-5 sm:mt-7">
                 <h3 className="font-sans text-sm font-semibold text-[#1E1E1E] sm:text-lg lg:text-[28px]">
-                  Your details
+                  {bb?.yourDetails || "Your details"}
                 </h3>
                 <p className="mt-1 font-sans text-[10px] text-[#66605F] sm:text-sm">
-                  Fill in your details to create an account and save your book.
+                  {bb?.yourDetailsSubtitle || "Fill in your details to create an account and save your book."}
                 </p>
               </div>
               <div className="mt-3 space-y-4 rounded-[7px] border border-[#F3A8B7] bg-white/20 p-2 sm:mt-5 sm:space-y-5 sm:p-4">
                 <FormField
-                  label="Name"
-                  placeholder="Enter your full name"
+                  label={bb?.name || "Name"}
+                  placeholder={bb?.namePlaceholder || "Enter your full name"}
                   value={localUser.name}
                   onChange={(e) => setLocalUser((prev) => ({ ...prev, name: e.target.value }))}
                 />
                 <FormField
-                  label="Country"
-                  placeholder="United Kingdom"
+                  label={bb?.country || "Country"}
+                  placeholder={bb?.countryPlaceholder || "United Kingdom"}
                   value={localUser.country}
                   onChange={(e) => setLocalUser((prev) => ({ ...prev, country: e.target.value }))}
                 />
                 <FormField
-                  label="Email"
-                  placeholder="you123@gmail.com"
+                  label={bb?.email || "Email"}
+                  placeholder={bb?.emailPlaceholder || "you123@gmail.com"}
                   type="email"
                   value={localUser.email}
                   onChange={(e) => setLocalUser((prev) => ({ ...prev, email: e.target.value }))}
                 />
                 <FormField
-                  label="Confirm email"
-                  placeholder="you123@gmail.com"
+                  label={bb?.confirmEmail || "Confirm email"}
+                  placeholder={bb?.emailPlaceholder || "you123@gmail.com"}
                   type="email"
                   value={localUser.confirmEmail}
                   onChange={(e) => setLocalUser((prev) => ({ ...prev, confirmEmail: e.target.value }))}
                 />
                 <FormField
-                  label="Password (min 8 letters)"
-                  placeholder="Choose strong password"
+                  label={bb?.password || "Password (min 8 letters)"}
+                  placeholder={bb?.passwordPlaceholder || "Choose strong password"}
                   type="password"
                   value={localUser.password}
                   onChange={(e) => setLocalUser((prev) => ({ ...prev, password: e.target.value }))}
@@ -283,7 +285,7 @@ export default function PersonalDetails() {
           )}
 
           <p className="mt-3 rounded-[5px] bg-[#FFF1C6] px-2 py-2 font-sans text-[8px] leading-[1.3] text-[#B78631] sm:mt-5 sm:text-[10px]">
-            ⓘ Almost there. Your digital book costs £9.99. If you also order a hardcover book later, this amount is deducted from it.
+            {bb?.pricingNotice || "ⓘ Almost there. Your digital book costs £9.99. If you also order a hardcover book later, this amount is deducted from it."}
           </p>
           <div className="mt-4 flex justify-center sm:mt-6">
             <button
@@ -291,7 +293,7 @@ export default function PersonalDetails() {
               onClick={handleNextStep}
               className="inline-flex h-8 items-center rounded-xl bg-[#E88DA0] px-5 font-sans text-[10px] font-semibold text-white shadow-[0_4px_10px_rgba(232,141,160,0.22)] transition hover:bg-[#DD7893] sm:h-10 sm:px-7 sm:text-sm"
             >
-              Next Step
+              {bb?.nextStep || "Next Step"}
             </button>
           </div>
         </section>

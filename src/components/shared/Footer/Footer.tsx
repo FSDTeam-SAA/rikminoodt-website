@@ -95,7 +95,7 @@ const Footer = () => {
     },
     {
       title: t.footer.groups.occasions,
-      href: "/?section=occasions",
+      href: "/book-builder/choose-age",
       links: [
         t.footer.links.birthday,
         t.footer.links.christmas,
@@ -160,12 +160,8 @@ const Footer = () => {
               <h2 className="font-crimson text-2xl font-semibold">{group.title}</h2>
               <ul className="mt-3 space-y-3">
                 {group.links.map((link) => {
-                  const sectionId = group.href
-                    ? "occasions"
-                    : link === t.footer.links.faqs
-                      ? "faq"
-                      : undefined;
-                  const href = sectionId ? `/?section=${sectionId}` : getFooterHref(link);
+                  const sectionId = link === t.footer.links.faqs ? "faq" : undefined;
+                  const href = sectionId ? `/?section=${sectionId}` : group.href ?? getFooterHref(link);
 
                   return (
                     <li key={link}>
