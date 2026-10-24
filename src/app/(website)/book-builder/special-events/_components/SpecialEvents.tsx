@@ -7,6 +7,8 @@ import { Mic, Pencil, PencilLine, Sparkles, Square } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useBookBuilder } from "../../_components/BookBuilderProvider";
 import { getStoryChoice } from "../../_components/subject-options";
+import { useBookBuilderTranslations } from "../../_components/useBookBuilderTranslations";
+import { useBookBuilderPageCopy } from "../../_components/useBookBuilderPageCopy";
 
 const ages = [
   { label: "0-2 Years", image: "/images/age_1.png", color: "#FDE1CF" },
@@ -55,10 +57,12 @@ function ChoiceChip({
   choice,
   href,
   label,
+  displayLabel,
 }: {
   choice: Choice | undefined;
   href: string;
   label: string;
+  displayLabel?: string;
 }) {
   if (!choice) {
     return (
@@ -87,7 +91,7 @@ function ChoiceChip({
           className="object-contain object-bottom"
         />
       </span>
-      <span>{choice.label}</span>
+      <span>{displayLabel || choice.label}</span>
       <Pencil
         aria-hidden="true"
         size={14}
@@ -100,6 +104,8 @@ function ChoiceChip({
 
 export default function SpecialEvents() {
   const router = useRouter();
+  const { bb, translateAge, translateTheme, translateMessage, translateIllustration, translateFont } = useBookBuilderTranslations();
+  const copy = useBookBuilderPageCopy();
   const {
     selectedAge,
     selectedTheme,
@@ -239,12 +245,10 @@ export default function SpecialEvents() {
           id="special-events-heading"
           className="font-crimson text-4xl font-normal leading-none text-[#1E1E1E] sm:text-[48px]"
         >
-          Create a Story as Unique as Your Child
+          {bb?.bannerTitle}
         </h1>
         <p className="mt-5 max-w-[1120px] font-sans text-lg font-normal leading-[1.4] text-[#444444] sm:text-[24px]">
-          Choose a theme, add their name and special details, and create a
-          personalized eBook they&apos;ll love. Turn it into a beautiful
-          hardcover keepsake to treasure forever.
+          {bb?.bannerDesc}
         </p>
 
         <section
@@ -255,19 +259,21 @@ export default function SpecialEvents() {
             id="special-events-options-heading"
             className="font-fredoka text-base font-normal leading-none text-[#E88DA0] sm:text-[20px] lg:text-[32px]"
           >
-            Build a Magical Story Just for Them
+            {bb?.buildStory}
           </h2>
           <p className="mt-3 font-sans text-sm font-normal leading-none text-[#444444] sm:text-base lg:mt-5 lg:text-[20px]">
-            Your Choice
+            {bb?.yourChoice}
           </p>
           <div className="mt-3 flex flex-wrap gap-2 sm:gap-3">
             <ChoiceChip
               label="Age"
+              displayLabel={translateAge(age?.label)}
               choice={age}
               href="/book-builder/choose-age"
             />
             <ChoiceChip
               label="Theme"
+              displayLabel={translateTheme(theme?.label)}
               choice={theme}
               href="/book-builder/choose-theme"
             />
@@ -278,16 +284,19 @@ export default function SpecialEvents() {
             />
             <ChoiceChip
               label="Message"
+              displayLabel={translateMessage(message?.label)}
               choice={message}
               href="/book-builder/personalize"
             />
             <ChoiceChip
               label="Illustration"
+              displayLabel={translateIllustration(illustration?.label)}
               choice={illustration}
               href="/book-builder/illustration"
             />
             <ChoiceChip
               label="Font"
+              displayLabel={translateFont(font?.label)}
               choice={font}
               href="/book-builder/choose-font"
             />
@@ -307,16 +316,16 @@ export default function SpecialEvents() {
           </div>
 
           <h3 className="mt-8 font-sans text-lg font-semibold leading-none text-[#1E1E1E] lg:mt-10 lg:text-[28px]">
-            Special events for the story
+            {copy.specialTitle}
           </h3>
           <p className="mt-2 font-sans text-sm text-[#444444] sm:text-base">
-            This is optional. Describe events or write an inspiring foreword you&apos;d like to see in the story.
+            {copy.specialDescription}
           </p>
 
           <div className="mt-7 max-w-[1120px] rounded-[10px] border border-[#F3A8B7] bg-white/20 p-3 sm:p-5">
             <div className="grid items-center gap-2 sm:grid-cols-[1fr_auto_1fr]">
               <span className="font-sans text-sm font-medium text-[#252025]">
-                Special event or foreword
+                {copy.specialLabel}
               </span>
               <div className="mx-auto flex w-fit items-center rounded-xl bg-[#FBE6EA] p-1.5 font-sans text-sm sm:text-base">
                 <button
@@ -330,7 +339,7 @@ export default function SpecialEvents() {
                     forewordMode === "write" ? "bg-[#E88DA0] text-white shadow-sm" : "text-[#252025]"
                   }`}
                 >
-                  <PencilLine aria-hidden="true" size={18} /> Write
+                  <PencilLine aria-hidden="true" size={18} /> {copy.write}
                 </button>
                 <button
                   type="button"
@@ -342,7 +351,7 @@ export default function SpecialEvents() {
                     forewordMode === "voice" ? "bg-[#E88DA0] text-white shadow-sm" : "text-[#252025]"
                   }`}
                 >
-                  <Mic aria-hidden="true" size={18} /> Voice
+                  <Mic aria-hidden="true" size={18} /> {copy.voice}
                 </button>
               </div>
               <button
@@ -350,12 +359,12 @@ export default function SpecialEvents() {
                 onClick={handleAiHelp}
                 className="inline-flex h-11 items-center gap-2 justify-self-start rounded-xl bg-[#FBE6EA] px-5 font-sans text-sm text-[#A06676] transition hover:bg-[#F8D8DF] sm:justify-self-end sm:text-base"
               >
-                <Sparkles aria-hidden="true" size={18} /> Let AI help
+                <Sparkles aria-hidden="true" size={18} /> {copy.aiHelp}
               </button>
             </div>
 
             <textarea
-              placeholder="e.g. birthday, holidays, favorite memories or write an inspiring message"
+              placeholder={copy.specialPlaceholder}
               hidden={forewordMode !== "write"}
               value={localForeword}
               onChange={(event) => setLocalForeword(event.target.value)}
@@ -366,7 +375,7 @@ export default function SpecialEvents() {
               <div className="mt-4 flex min-h-[245px] flex-col items-center justify-center rounded-lg border border-[#F5CED7] bg-white px-4 py-8 text-center sm:min-h-[290px]">
                 {isRecording ? (
                   <>
-                    <p className="font-sans text-xs text-[#E88DA0]"><span aria-hidden="true">●</span> Recording</p>
+                    <p className="font-sans text-xs text-[#E88DA0]"><span aria-hidden="true">●</span> {copy.recording}</p>
                     <p className="mt-1 font-sans text-xl text-[#514256]" aria-label={`Recording time ${Math.floor(seconds / 60)} minutes ${seconds % 60} seconds`}>
                       {String(Math.floor(seconds / 60)).padStart(2, "0")}:{String(seconds % 60).padStart(2, "0")}
                     </p>
@@ -392,8 +401,8 @@ export default function SpecialEvents() {
                   </>
                 ) : (
                   <>
-                    <p className="font-sans text-lg font-semibold text-[#514256]">What&apos;s your idea?</p>
-                    <p className="mt-1 font-sans text-sm text-[#AAA5A8]">Tap the mic and start speaking</p>
+                    <p className="font-sans text-lg font-semibold text-[#514256]">{copy.ideaTitle}</p>
+                    <p className="mt-1 font-sans text-sm text-[#AAA5A8]">{copy.ideaPrompt}</p>
                     <button
                       type="button"
                       onClick={startRecording}
@@ -424,7 +433,7 @@ export default function SpecialEvents() {
               onClick={handleNextStep}
               className="inline-flex h-10 items-center justify-center rounded-xl bg-[#E88DA0] px-7 font-sans text-sm font-semibold text-white shadow-[0_5px_12px_rgba(232,141,160,0.25)] transition hover:bg-[#DD7893] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2"
             >
-              Next Step
+              {bb?.nextStep || "Next Step"}
             </button>
           </div>
           {validationError && (

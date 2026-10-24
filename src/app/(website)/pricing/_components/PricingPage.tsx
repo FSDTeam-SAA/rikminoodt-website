@@ -3,24 +3,38 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Check } from "lucide-react";
-
-const digitalFeatures = [
-  "Personalised child hero",
-  "24-page digital story",
-  "Downloadable PDF (high quality)",
-  "1 illustration style",
-  "Instant access",
-];
-
-const printFeatures = [
-  "Personalised printed book",
-  "Premium cover finish",
-  "24 pages of magical illustrations",
-  "1 child hero included",
-  "Worldwide delivery",
-];
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function PricingPage() {
+  const { t } = useLanguage();
+  const pricing = t.pricing || {
+    title: "Pricing",
+    subheading: "Simple pricing for magical personalized books.",
+    digitalTitle: "Digital Storybook",
+    digitalDesc: "A magical story, ready to enjoy online or offline.",
+    digitalPrice: "€8.99",
+    digitalBtn: "Choose Digital",
+    mostPopular: "Most Popular",
+    printedTitle: "Printed Storybook",
+    printedDesc: "A beautiful keepsake, delivered to your door.",
+    printedPrice: "€34.60",
+    printedBtn: "Choose Print",
+    digitalFeatures: [
+      "Personalised child hero",
+      "24-page digital story",
+      "Downloadable PDF (high quality)",
+      "1 illustration style",
+      "Instant access",
+    ],
+    printFeatures: [
+      "Personalised printed book",
+      "Premium cover finish",
+      "24 pages of magical illustrations",
+      "1 child hero included",
+      "Worldwide delivery",
+    ],
+  };
+
   return (
     <main className="min-h-screen bg-white pb-20">
       {/* Hero Banner Section */}
@@ -41,10 +55,10 @@ export default function PricingPage() {
         {/* Hero Content */}
         <div className="container relative z-10 mx-auto px-4">
           <h1 className="font-crimson text-[38px] font-bold leading-none text-[#1E1E1E] sm:text-[44px] lg:text-[50px]">
-            Pricing
+            {pricing.title}
           </h1>
           <p className="mx-auto mt-3 max-w-xl font-sans text-base text-[#3F3A3E] sm:text-[18px]">
-            Simple pricing for magical personalized books.
+            {pricing.subheading}
           </p>
         </div>
       </section>
@@ -57,19 +71,19 @@ export default function PricingPage() {
             <div>
               <div className="text-center">
                 <h2 className="font-sans text-xl font-bold text-[#1E1E1E] sm:text-xl">
-                  Digital Storybook
+                  {pricing.digitalTitle}
                 </h2>
                 <p className="mx-auto mt-1.5 max-w-[250px] font-sans text-xs leading-[1.4] text-[#69718B]">
-                  A magical story, ready to enjoy online or offline.
+                  {pricing.digitalDesc}
                 </p>
                 <div className="my-5 font-crimson text-[32px] font-bold text-[#1E1E1E] sm:text-[34px]">
-                  €8.99
+                  {pricing.digitalPrice}
                 </div>
               </div>
 
               {/* Features List */}
               <ul className="space-y-2.5 pt-1">
-                {digitalFeatures.map((feature) => (
+                {pricing.digitalFeatures.map((feature) => (
                   <li
                     key={feature}
                     className="flex items-center gap-2.5 text-xs leading-tight text-[#443E42]"
@@ -89,7 +103,7 @@ export default function PricingPage() {
                 href="/book-builder/choose-age"
                 className="inline-flex h-10 w-full items-center justify-center rounded-lg bg-[#9C81BE] font-sans text-xs font-semibold text-white shadow-sm transition hover:bg-[#896FA9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9C81BE]"
               >
-                Choose Digital →
+                {pricing.digitalBtn} →
               </Link>
             </div>
           </div>
@@ -99,26 +113,26 @@ export default function PricingPage() {
             {/* Most Popular Badge */}
             <div className="absolute -top-3 left-1/2 -translate-x-1/2">
               <span className="inline-block whitespace-nowrap rounded-full bg-[#E88DA0] px-3.5 py-1 font-sans text-[10px] font-semibold text-white shadow-sm">
-                Most Popular
+                {pricing.mostPopular}
               </span>
             </div>
 
             <div>
               <div className="pt-1 text-center">
                 <h2 className="font-sans text-xl font-bold text-[#1E1E1E] sm:text-xl">
-                  Printed Storybook
+                  {pricing.printedTitle}
                 </h2>
                 <p className="mx-auto mt-1.5 max-w-[250px] font-sans text-xs leading-[1.4] text-[#69718B]">
-                  A beautiful keepsake, delivered to your door.
+                  {pricing.printedDesc}
                 </p>
                 <div className="my-5 font-crimson text-[32px] font-bold text-[#1E1E1E] sm:text-[34px]">
-                  €34.60
+                  {pricing.printedPrice}
                 </div>
               </div>
 
               {/* Features List */}
               <ul className="space-y-2.5 pt-1">
-                {printFeatures.map((feature) => (
+                {pricing.printFeatures.map((feature) => (
                   <li
                     key={feature}
                     className="flex items-center gap-2.5 text-xs leading-tight text-[#443E42]"
@@ -138,7 +152,7 @@ export default function PricingPage() {
                 href="/story-books"
                 className="inline-flex h-10 w-full items-center justify-center rounded-lg bg-[#E88DA0] font-sans text-xs font-semibold text-white shadow-sm transition hover:bg-[#DD7893] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]"
               >
-                Choose Print →
+                {pricing.printedBtn} →
               </Link>
             </div>
           </div>

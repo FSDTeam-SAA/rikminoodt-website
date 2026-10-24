@@ -2,20 +2,22 @@
 
 import { Check, ChevronLeft, PackageCheck, Truck, House } from "lucide-react";
 import OrderCard, { OrderDetails } from "./OrderCard";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 interface TrackingViewProps {
   order: OrderDetails;
   onBack: () => void;
 }
 
-const trackingSteps = [
-  { label: "Order placed", description: "Payment confirmed", icon: Check },
-  { label: "Processing", description: "We are preparing your book", icon: PackageCheck },
-  { label: "Shipped", description: "On its way to you", icon: Truck },
-  { label: "Delivered", description: "Enjoy your storybook", icon: House },
-];
-
 export default function TrackingView({ order, onBack }: TrackingViewProps) {
+  const { t } = useLanguage();
+  const copy = t.settings.orders;
+  const trackingSteps = [
+    { label: copy.orderPlaced, description: copy.paymentConfirmed, icon: Check },
+    { label: copy.processing, description: copy.preparingBook, icon: PackageCheck },
+    { label: copy.shipped, description: copy.onTheWay, icon: Truck },
+    { label: copy.delivered, description: copy.enjoyStorybook, icon: House },
+  ];
   const getStepFromStatus = (status?: string): number => {
     switch (status) {
       case "PAYMENT_PENDING":
@@ -40,18 +42,18 @@ export default function TrackingView({ order, onBack }: TrackingViewProps) {
         <button
           type="button"
           onClick={onBack}
-          aria-label="Back to orders"
+          aria-label={copy.backToOrders}
           className="rounded-full p-2 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E3859A]"
         >
           <ChevronLeft size={20} className="text-gray-600" />
         </button>
         <div>
-          <h2 className="text-lg font-semibold text-gray-800">Tracking Order</h2>
-          <p className="text-xs text-gray-500">Order #{order.orderId}</p>
+          <h2 className="text-lg font-semibold text-gray-800">{copy.trackingOrder}</h2>
+          <p className="text-xs text-gray-500">{copy.orderId} {order.orderId}</p>
         </div>
       </div>
 
-      <section aria-label="Order progress" className="mb-10 rounded-2xl border border-[#EDF1EE] bg-[#FBFDFC] px-3 py-6 sm:px-6 md:px-10">
+      <section aria-label={copy.orderProgress} className="mb-10 rounded-2xl border border-[#EDF1EE] bg-[#FBFDFC] px-3 py-6 sm:px-6 md:px-10">
         <div className="relative">
           <div className="absolute left-[12.5%] right-[12.5%] top-6 h-1 rounded-full bg-[#E4EAE6]" />
           <div
@@ -91,7 +93,7 @@ export default function TrackingView({ order, onBack }: TrackingViewProps) {
                   </span>
                   {isActive && (
                     <span className="mt-2 rounded-full bg-[#EAF4FB] px-2 py-0.5 text-[10px] font-semibold text-[#5A96C2]">
-                      Current
+                      {copy.current}
                     </span>
                   )}
                 </li>

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { useLanguage } from "@/components/providers/LanguageProvider";
@@ -125,8 +126,9 @@ const MakeAPersonalisedBook = () => {
             {occasionConfig.map((item, index) => {
               const title = t.occasions[item.key] ?? item.key;
               return (
-                <div
+                <Link
                   key={`${item.key}-${index}`}
+                  href="/book-builder/choose-age"
                   className={`group flex min-h-[250px] snap-start flex-col rounded-2xl p-3 transition-[filter] duration-300 ease-out hover:brightness-[0.97] lg:h-[310px] lg:min-h-0 lg:p-4 ${item.color}`}
                 >
                   <div className="flex flex-1 flex-col items-center rounded-xl bg-white/80 px-4 py-3">
@@ -146,7 +148,7 @@ const MakeAPersonalisedBook = () => {
                       {title}
                     </span>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>

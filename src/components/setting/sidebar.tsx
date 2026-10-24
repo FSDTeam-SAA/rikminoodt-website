@@ -7,8 +7,11 @@ import { ChevronRight, Camera, Loader2 } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import { getApiBaseUrl } from "@/config/api";
+import { useLanguage } from "@/components/providers/LanguageProvider";
+import LogoutConfirmationModal from "@/components/shared/LogoutConfirmationModal";
 
 export default function Sidebar() {
+  const { t } = useLanguage();
   const pathname = usePathname();
   const { data: session } = useSession();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -17,6 +20,8 @@ export default function Sidebar() {
   const [userEmail, setUserEmail] = useState<string>(session?.user?.email || "jackkhan@gmail.com");
   const [userAvatar, setUserAvatar] = useState<string>(session?.user?.profileImage || "https://github.com/shadcn.png");
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [logoutModalOpen, setLogoutModalOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
     const token = session?.user?.accessToken || (typeof window !== "undefined" ? localStorage.getItem("token") : null);
@@ -79,6 +84,7 @@ export default function Sidebar() {
   };
 
   const handleLogout = async () => {
+    setIsLoggingOut(true);
     if (typeof window !== "undefined") {
       localStorage.removeItem("token");
       localStorage.removeItem("accessToken");
@@ -86,12 +92,14 @@ export default function Sidebar() {
     await signOut({ callbackUrl: "/login" });
   };
 
+  const settingsLabels = t.settings;
+
   const menuItems = [
-    { name: "Edit Profile", href: "/setting" },
-    { name: "General Settings", href: "/setting/general" },
-    { name: "Language", href: "/setting/language" },
-    { name: "Generated Books", href: "/setting/generated-books" },
-    { name: "Ordered Book", href: "/setting/ordered-book" },
+    { name: settingsLabels.editProfile, href: "/setting" },
+    { name: settingsLabels.general.title, href: "/setting/general" },
+    { name: settingsLabels.language, href: "/setting/language" },
+    { name: settingsLabels.generatedBooks, href: "/setting/generated-books" },
+    { name: settingsLabels.orderedBooks, href: "/setting/ordered-book" },
   ];
 
   return (
@@ -160,12 +168,18 @@ export default function Sidebar() {
       {/* Logout Button */}
       <button
         type="button"
-        onClick={handleLogout}
+        onClick={() => setLogoutModalOpen(true)}
         className="mt-8 flex w-full items-center justify-between px-4 py-3 rounded-xl transition-colors text-sm font-medium text-red-500 hover:bg-red-50"
       >
-        <span>Log out</span>
+        <span>{settingsLabels.logout}</span>
         <ChevronRight size={16} className="text-red-300" />
       </button>
+      <LogoutConfirmationModal
+        open={logoutModalOpen}
+        isLoggingOut={isLoggingOut}
+        onClose={() => setLogoutModalOpen(false)}
+        onConfirm={handleLogout}
+      />
     </div>
   );
 }

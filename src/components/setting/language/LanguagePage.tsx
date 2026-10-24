@@ -10,7 +10,7 @@ import {
 } from "@/components/providers/LanguageProvider";
 
 export default function LanguagePageSetting() {
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(true);
 
   // Currently active language object
@@ -25,16 +25,18 @@ export default function LanguagePageSetting() {
     <div className="bg-white rounded-2xl shadow-sm p-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="mb-2 font-crimson text-[24px] font-semibold text-[#1E1E1E]">Language</h1>
+        <h1 className="mb-2 font-crimson text-[24px] font-semibold text-[#1E1E1E]">
+          {t.settings?.language || "Language"}
+        </h1>
         <p className="font-sans text-base font-normal text-[#444444]">
-          Choose your preferred language for the website.
+          {t.settings?.languageSubtitle || "Choose your preferred language for the website."}
         </p>
       </div>
 
       {/* Select Field Container */}
       <div className="w-full">
         <label className="mb-2 block font-sans text-sm font-medium text-[#444444]">
-          Language
+          {t.settings?.language || "Language"}
         </label>
 
         {/* Selected Field Box (Clickable Trigger) */}

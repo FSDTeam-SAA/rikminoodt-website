@@ -1,7 +1,7 @@
 "use client";
 
 import { MessageSquare } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type TermsSection = {
   id: string;
@@ -86,20 +86,37 @@ const termsSections: TermsSection[] = [
 export default function TermsAndConditions() {
   const [activeSection, setActiveSection] = useState("introduction");
 
+  useEffect(() => {
+    const sectionIds = termsSections.map((section) => section.id);
+
+    const updateActiveSection = () => {
+      const currentSection = sectionIds.reduce((activeId, id) => {
+        const section = document.getElementById(id);
+        return section && section.getBoundingClientRect().top <= 160 ? id : activeId;
+      }, sectionIds[0]);
+
+      setActiveSection((current) => current === currentSection ? current : currentSection);
+    };
+
+    updateActiveSection();
+    window.addEventListener("scroll", updateActiveSection, { passive: true });
+    return () => window.removeEventListener("scroll", updateActiveSection);
+  }, []);
+
   const scrollToSection = (id: string) => {
     setActiveSection(id);
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (
-    <div className="min-h-screen bg-white px-4 py-12 font-sans text-[#4A4A4A] antialiased sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl">
+    <div className="min-h-screen bg-white px-4 py-12 font-inter text-[#4A4A4A] antialiased sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1280px]">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-12 lg:gap-16">
           <aside className="md:col-span-3">
-            <div className="sticky top-8 space-y-6">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-[#DF7088]">Contents</h3>
+            <div className="sticky top-24 space-y-6 lg:top-[104px]">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-[#DF7088]">Contents</h3>
 
-              <nav className="space-y-3.5 text-xs sm:text-[13px]" aria-label="Terms and conditions contents">
+              <nav className="space-y-3.5 text-sm sm:text-[15px]" aria-label="Terms and conditions contents">
                 {termsSections.map((section) => {
                   const isActive = activeSection === section.id;
 
@@ -108,10 +125,11 @@ export default function TermsAndConditions() {
                       key={section.id}
                       type="button"
                       onClick={() => scrollToSection(section.id)}
-                      className={`block w-full border-l-2 text-left transition-all duration-150 ${
+                      aria-current={isActive ? "location" : undefined}
+                      className={`block w-full rounded-r-lg border-l-2 px-3 py-2 text-left transition-all duration-150 ${
                         isActive
-                          ? "border-[#DF7088] pl-2.5 font-semibold text-[#6C5CE7]"
-                          : "border-transparent pl-3 text-[#5C5C5C] hover:text-[#111111]"
+                          ? "border-[#DF7088] bg-[#FFF0F3] font-semibold text-[#6C5CE7] shadow-[0_2px_8px_rgba(223,112,136,0.12)]"
+                          : "border-transparent text-[#5C5C5C] hover:bg-[#FFF8FA] hover:text-[#111111]"
                       }`}
                     >
                       {section.title}
@@ -120,7 +138,7 @@ export default function TermsAndConditions() {
                 })}
               </nav>
 
-              <div className="pt-8 text-xs leading-relaxed">
+              <div className="pt-8 text-sm leading-relaxed">
                 <p className="font-semibold text-[#3B66FF]">Need help?</p>
                 <p className="mt-0.5 text-[#71717A]">Our team is here to assist you with any questions.</p>
               </div>
@@ -132,15 +150,15 @@ export default function TermsAndConditions() {
               <div className="flex size-4 shrink-0 items-center justify-center rounded-full border border-[#D97706] p-0.5 text-[10px] font-bold text-[#D97706]">
                 i
               </div>
-              <p className="text-[11px] font-medium leading-snug text-[#B45309] sm:text-xs">
+              <p className="text-xs font-medium leading-snug text-[#B45309] sm:text-sm">
                 <span className="font-semibold">Terms Summary:</span> By using our website and services, you agree to these Terms &amp; Conditions. If you do not agree, please do not use our website.
               </p>
             </div>
 
             {termsSections.map((section) => (
               <section key={section.id} id={section.id} className="scroll-mt-32 space-y-3.5">
-                <h2 className="font-serif text-2xl font-bold text-[#1E293B]">{section.title}</h2>
-                <div className="space-y-3 text-[13px] leading-relaxed text-[#475569] sm:text-sm">
+                <h2 className="text-2xl font-bold text-[#1E293B] sm:text-3xl">{section.title}</h2>
+                <div className="space-y-3 text-[15px] leading-relaxed text-[#475569] sm:text-base">
                   {section.paragraphs.map((paragraph) => (
                     <p key={paragraph}>{paragraph}</p>
                   ))}
@@ -177,7 +195,7 @@ export default function TermsAndConditions() {
               </div>
 
               <div>
-                <h3 className="font-serif text-xl font-bold tracking-wide text-white sm:text-2xl">Questions about these Terms?</h3>
+                <h3 className="text-xl font-bold tracking-wide text-white sm:text-2xl">Questions about these Terms?</h3>
                 <p className="mt-1 text-xs text-white/90 sm:text-sm">Our team is happy to help clarify any section before you sign up.</p>
               </div>
             </div>

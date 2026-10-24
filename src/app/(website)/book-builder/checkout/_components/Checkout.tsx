@@ -15,6 +15,8 @@ import { useSession } from "next-auth/react";
 import BookerelloReviews from "../../../_components/bookerello-reviews";
 import { useBookBuilder } from "../../_components/BookBuilderProvider";
 import { getStoryChoice } from "../../_components/subject-options";
+import { useBookBuilderTranslations } from "../../_components/useBookBuilderTranslations";
+import { useBookBuilderPageCopy } from "../../_components/useBookBuilderPageCopy";
 import { getApiBaseUrl } from "@/config/api";
 import {
   mapAge,
@@ -73,7 +75,7 @@ const fonts = [
 
 type Choice = { label: string; image: string; color: string };
 
-function ChoiceChip({ choice }: { choice?: Choice }) {
+function ChoiceChip({ choice, displayLabel }: { choice?: Choice; displayLabel?: string }) {
   if (!choice) return null;
   return (
     <div
@@ -89,7 +91,7 @@ function ChoiceChip({ choice }: { choice?: Choice }) {
           className="object-contain object-bottom"
         />
       </span>
-      <span>{choice.label}</span>
+      <span>{displayLabel || choice.label}</span>
       <Pencil
         size={13}
         strokeWidth={2.5}
@@ -118,6 +120,8 @@ export default function Checkout() {
     userDetails,
     setCurrentBookId,
   } = useBookBuilder();
+  const { bb, translateAge, translateTheme, translateMessage, translateFont } = useBookBuilderTranslations();
+  const copy = useBookBuilderPageCopy();
 
   const { data: session } = useSession();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -273,17 +277,17 @@ export default function Checkout() {
           id="checkout-heading"
           className="font-crimson text-[34px] font-semibold leading-none text-[#FC5A00] sm:text-[46px] lg:text-[58px]"
         >
-          Put together your unique children&apos;s book
+          {copy.checkoutTitle}
         </h1>
         <p className="mt-4 font-sans text-lg text-[#31445D] sm:text-2xl">
-          Your choices
+          {bb?.yourChoice || "Your choices"}
         </p>
         <div className="mt-4 flex max-w-[1110px] flex-wrap gap-3">
-          <ChoiceChip choice={age} />
-          <ChoiceChip choice={theme} />
+          <ChoiceChip choice={age} displayLabel={translateAge(age?.label)} />
+          <ChoiceChip choice={theme} displayLabel={translateTheme(theme?.label)} />
           <ChoiceChip choice={story} />
-          <ChoiceChip choice={message} />
-          <ChoiceChip choice={font} />
+          <ChoiceChip choice={message} displayLabel={translateMessage(message?.label)} />
+          <ChoiceChip choice={font} displayLabel={translateFont(font?.label)} />
           <ChoiceChip
             choice={
               selectedLanguage
@@ -306,12 +310,12 @@ export default function Checkout() {
                 </span>
                 <div>
                   <h2 className="font-sans text-xl font-medium text-[#FC5A00] sm:text-2xl">
-                    Your unique book creation
+                    {copy.uniqueCreation}
                   </h2>
                   <p className="mt-2 max-w-[530px] font-sans text-xs leading-[1.45] text-[#536278] sm:text-sm">
                     Your story is about{" "}
                     {story?.label ?? selectedStory?.toLowerCase().replaceAll("_", " ") ?? "a magical adventure"} within the theme{" "}
-                    {theme?.label ?? "Fairy Tales"}. Created by {creatorName || "you"}.
+                    {theme ? translateTheme(theme.label) : "Fairy Tales"}. Created by {creatorName || "you"}.
                   </p>
                 </div>
               </div>
@@ -319,26 +323,11 @@ export default function Checkout() {
 
             <article className="rounded-[16px] bg-white px-5 py-6 shadow-[0_2px_5px_rgba(80,66,73,0.1)] sm:px-7 sm:py-7">
               <h2 className="font-sans text-xl font-medium text-[#FC5A00] sm:text-2xl">
-                Now the magic begins
+                {copy.magicBegins}
               </h2>
               <ol className="mt-5 space-y-5">
-                {[
-                  [
-                    "1. Book is created",
-                    "After payment, we immediately create your digital children’s book. It will be available within just 15 minutes and you will receive an email once it’s ready!",
-                    CircleHelp,
-                  ],
-                  [
-                    "2. Edit & Perfect",
-                    "After creation you can easily adjust the book’s text and illustrations until the result is perfect.",
-                    Pencil,
-                  ],
-                  [
-                    "3. Share & Print",
-                    "Happy with it? Share your digital book directly with family and friends or order a beautiful hardcover copy as a lasting keepsake.",
-                    Sparkles,
-                  ],
-                ].map(([title, description, Icon]) => {
+                {copy.steps.map(([title, description], index) => {
+                  const Icon = [CircleHelp, Pencil, Sparkles][index];
                   const StepIcon = Icon as typeof CircleHelp;
                   return (
                     <li key={title as string} className="flex gap-4">
@@ -363,14 +352,10 @@ export default function Checkout() {
           <div className="space-y-5">
             <article className="rounded-[16px] bg-white px-5 py-6 shadow-[0_2px_5px_rgba(80,66,73,0.1)] sm:px-7 sm:py-7">
               <h2 className="font-sans text-xl font-medium text-[#FC5A00] sm:text-2xl">
-                Why this book?
+                {copy.whyBook}
               </h2>
               <ul className="mt-3 divide-y divide-[#F2DDCD]">
-                {[
-                  "A unique gift",
-                  "26 pages of pure magic",
-                  "232,140 books created so far",
-                ].map((item) => (
+                {copy.benefits.map((item) => (
                   <li
                     key={item}
                     className="flex items-center gap-2 py-3 font-sans text-xs text-[#536278] sm:text-sm"
@@ -387,15 +372,15 @@ export default function Checkout() {
 
             <article className="rounded-[16px] border-2 border-[#FF9568] bg-white px-5 py-6 text-center shadow-[0_2px_5px_rgba(80,66,73,0.08)] sm:px-7 sm:py-8">
               <h2 className="font-sans text-xl font-medium text-[#FC5A00] sm:text-2xl">
-                Your book is almost ready!
+                {copy.almostReady}
               </h2>
               <p className="mt-2 font-sans text-2xl font-bold text-[#0BA04B] sm:text-3xl">
                 €8.99
               </p>
               <div className="mt-6 rounded-2xl border border-[#f5dedf] bg-[#fff9f7] p-4">
                 <Image src="/images/secure-card-payment.svg" alt="Secure card payment powered by Stripe" width={420} height={190} className="mx-auto h-auto w-full max-w-[340px]" />
-                <div className="mt-3 flex items-center justify-center gap-2 text-sm font-semibold text-[#514256]"><CreditCard size={18} aria-hidden="true" /> Secure card payment</div>
-                <p className="mt-2 text-xs leading-relaxed text-[#73686d]">You&apos;ll enter your card details securely on Stripe&apos;s checkout page.</p>
+                <div className="mt-3 flex items-center justify-center gap-2 text-sm font-semibold text-[#514256]"><CreditCard size={18} aria-hidden="true" /> {copy.securePayment}</div>
+                <p className="mt-2 text-xs leading-relaxed text-[#73686d]">{copy.securePaymentDescription}</p>
               </div>
               {submitError && (
                 <div role="alert" className="mt-3.5 rounded-lg border border-[#F1ABBC] bg-[#FFF0F3] p-2.5 font-sans text-xs text-[#B74760]">
@@ -414,16 +399,14 @@ export default function Checkout() {
                 className="mt-4 flex h-11 sm:h-12 w-full items-center justify-center gap-2 rounded-[10px] bg-[#E88DA0] font-sans text-sm sm:text-base font-semibold text-white shadow-[0_4px_12px_rgba(232,141,160,0.25)] transition hover:bg-[#DD7893] active:scale-[0.99] disabled:opacity-60"
               >
                 {isSubmitting && <Loader2 size={17} className="animate-spin" />}
-                <span>{isSubmitting ? "Processing..." : "Continue with card"}</span>
+                <span>{isSubmitting ? copy.processing : copy.continueWithCard}</span>
               </button>
 
               <p className="mt-3 font-sans text-[11px] text-[#63758D]">
-                This €8.99 counts towards your hardback.
+                {copy.hardbackCredit}
               </p>
               <p className="mx-auto mt-2 max-w-[310px] font-sans text-[9px] leading-[1.45] text-[#8EA0B8]">
-                By purchasing you agree to our privacy policy and conditions
-                terms. Order with an obligation to pay. Made personally for you,
-                so it cannot be returned.
+                {copy.terms}
               </p>
 
 

@@ -80,6 +80,7 @@ const config: Config = {
         sans: ["var(--font-nunito-sans)", "sans-serif"],
         crimson: ["var(--font-crimson-text)", "serif"],
         fredoka: ["var(--font-fredoka)", "sans-serif"],
+        inter: ["Inter", "sans-serif"],
       },
 
       borderRadius: {
@@ -91,13 +92,16 @@ const config: Config = {
       container: {
         center: true,
         padding: {
-          DEFAULT: "14px",
-          lg: "20px",
+          DEFAULT: "16px",
+          sm: "24px",
+          lg: "32px",
         },
         screens: {
           sm: "100%",
           md: "100%",
-          lg: "1280px",
+          lg: "1024px",
+          xl: "1240px",
+          "2xl": "1440px",
         },
       },
 

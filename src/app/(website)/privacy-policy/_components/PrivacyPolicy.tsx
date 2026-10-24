@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {  MessageSquare } from 'lucide-react';
 
 interface NavItem {
@@ -13,16 +13,29 @@ const navItems: NavItem[] = [
   { id: 'information-we-collect', label: '2. Information We Collect' },
   { id: 'how-we-use', label: '3. How We Use Your Information' },
   { id: 'children-data', label: "4. Children's Data & Photos" },
-  { id: 'subscription-billing', label: '5. Subscription & Billing' },
-  { id: 'cookies-analytics', label: '6. Cookies & Analytics' },
-  { id: 'privacy-rights', label: '7. Your Privacy Rights' },
-  { id: 'data-security', label: '8. Data Security' },
-  { id: 'changes-to-policy', label: '9. Changes to This Policy' },
-  { id: 'contact-us', label: '10. Contact Us' },
+  { id: 'ai-processing', label: '5. AI Processing' },
+  { id: 'data-sharing', label: '6. Data Sharing' },
 ];
 
 export default function PrivacyPolicy() {
   const [activeSection, setActiveSection] = useState('introduction');
+
+  useEffect(() => {
+    const sectionIds = navItems.map((item) => item.id);
+
+    const updateActiveSection = () => {
+      const currentSection = sectionIds.reduce((activeId, id) => {
+        const section = document.getElementById(id);
+        return section && section.getBoundingClientRect().top <= 160 ? id : activeId;
+      }, sectionIds[0]);
+
+      setActiveSection((current) => current === currentSection ? current : currentSection);
+    };
+
+    updateActiveSection();
+    window.addEventListener('scroll', updateActiveSection, { passive: true });
+    return () => window.removeEventListener('scroll', updateActiveSection);
+  }, []);
 
   const scrollToSection = (id: string) => {
     setActiveSection(id);
@@ -33,29 +46,30 @@ export default function PrivacyPolicy() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#4A4A4A] py-12 px-4 sm:px-6 lg:px-8 font-sans antialiased">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-white px-4 py-12 font-inter text-[#4A4A4A] antialiased sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1280px]">
         {/* Main Grid: Sidebar + Content */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-16">
           
           {/* Left Sticky Sidebar */}
           <aside className="md:col-span-3">
-            <div className="sticky top-8 space-y-6">
-              <h3 className="text-xs font-semibold text-[#DF7088] uppercase tracking-wider">
+            <div className="sticky top-24 space-y-6 lg:top-[104px]">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-[#DF7088]">
                 Contents
               </h3>
               
-              <nav className="space-y-3.5 text-xs sm:text-[13px]">
+              <nav className="space-y-3.5 text-sm sm:text-[15px]">
                 {navItems.map((item) => {
                   const isActive = activeSection === item.id;
                   return (
                     <button
                       key={item.id}
                       onClick={() => scrollToSection(item.id)}
-                      className={`block w-full text-left transition-all duration-150 ${
+                      aria-current={isActive ? 'location' : undefined}
+                      className={`block w-full rounded-r-lg border-l-2 px-3 py-2 text-left transition-all duration-150 ${
                         isActive
-                          ? 'text-[#6C5CE7] font-semibold pl-2.5 border-l-2 border-[#DF7088]'
-                          : 'text-[#5C5C5C] hover:text-[#111111] pl-3 border-l-2 border-transparent'
+                          ? 'border-[#DF7088] bg-[#FFF0F3] font-semibold text-[#6C5CE7] shadow-[0_2px_8px_rgba(223,112,136,0.12)]'
+                          : 'border-transparent text-[#5C5C5C] hover:bg-[#FFF8FA] hover:text-[#111111]'
                       }`}
                     >
                       {item.label}
@@ -64,7 +78,7 @@ export default function PrivacyPolicy() {
                 })}
               </nav>
 
-              <div className="pt-8 text-xs leading-relaxed">
+              <div className="pt-8 text-sm leading-relaxed">
                 <p className="font-semibold text-[#3B66FF]">Need help?</p>
                 <p className="text-[#71717A] mt-0.5">
                   Our team is here to assist you with any questions.
@@ -80,17 +94,17 @@ export default function PrivacyPolicy() {
               <div className="rounded-full border border-[#D97706] text-[#D97706] p-0.5 flex-shrink-0 flex items-center justify-center w-4 h-4 text-[10px] font-bold">
                 i
               </div>
-              <p className="text-[11px] sm:text-xs text-[#B45309] leading-snug font-medium">
+              <p className="text-xs font-medium leading-snug text-[#B45309] sm:text-sm">
                 <span className="font-semibold">Privacy Summary:</span> We only collect information needed to create and deliver your personalized books. Your photos and personalization details are kept secure and are never sold to advertisers.
               </p>
             </div>
 
             {/* Section 1 */}
-            <section id="introduction" className="scroll-mt-8 space-y-3.5">
-              <h2 className="text-2xl font-serif font-bold text-[#1E293B]">
+            <section id="introduction" className="scroll-mt-32 space-y-3.5">
+              <h2 className="text-2xl font-bold text-[#1E293B] sm:text-3xl">
                 1. Introduction
               </h2>
-              <div className="text-[13px] sm:text-sm text-[#475569] leading-relaxed space-y-3">
+              <div className="space-y-3 text-[15px] leading-relaxed text-[#475569] sm:text-base">
                 <p>
                   We collect information that you provide directly to us, including: Account information (name, email address, password, contact details) Child personalisation details (name, age, interests, preferences) Technical and usage information (IP address, device type, browser, etc.)
                 </p>
@@ -101,16 +115,16 @@ export default function PrivacyPolicy() {
             </section>
 
             {/* Section 2 */}
-            <section id="information-we-collect" className="scroll-mt-8 space-y-3.5">
-              <h2 className="text-2xl font-serif font-bold text-[#1E293B]">
+            <section id="information-we-collect" className="scroll-mt-32 space-y-3.5">
+              <h2 className="text-2xl font-bold text-[#1E293B] sm:text-3xl">
                 2. Information We Collect
               </h2>
-              <div className="text-[13px] sm:text-sm text-[#475569] leading-relaxed space-y-3">
+              <div className="space-y-3 text-[15px] leading-relaxed text-[#475569] sm:text-base">
                 <p>
                   To access Noltra.ai, you must create an account using accurate and up-to-date information. You are responsible for maintaining the security of your account and for all activities performed under it.
                 </p>
                 <p>As a user, you agree to:</p>
-                <ul className="list-disc pl-5 space-y-1.5 text-[13px] sm:text-sm text-[#475569]">
+                <ul className="list-disc space-y-1.5 pl-5 text-[15px] text-[#475569] sm:text-base">
                   <li>Provide accurate registration information.</li>
                   <li>Keep your login credentials secure.</li>
                   <li>Manage team member access responsibly.</li>
@@ -120,15 +134,15 @@ export default function PrivacyPolicy() {
             </section>
 
             {/* Section 3 */}
-            <section id="how-we-use" className="scroll-mt-8 space-y-3.5">
-              <h2 className="text-2xl font-serif font-bold text-[#1E293B]">
+            <section id="how-we-use" className="scroll-mt-32 space-y-3.5">
+              <h2 className="text-2xl font-bold text-[#1E293B] sm:text-3xl">
                 3. How We Use Your Information
               </h2>
-              <div className="text-[13px] sm:text-sm text-[#475569] leading-relaxed space-y-3">
+              <div className="space-y-3 text-[15px] leading-relaxed text-[#475569] sm:text-base">
                 <p>
                   Noltra.ai is designed to support legitimate business operations and productivity. Users must use the platform responsibly and in compliance with applicable laws. You agree not to:
                 </p>
-                <ul className="list-disc pl-5 space-y-1.5 text-[13px] sm:text-sm text-[#475569]">
+                <ul className="list-disc space-y-1.5 pl-5 text-[15px] text-[#475569] sm:text-base">
                   <li>Use the platform for illegal or fraudulent activities.</li>
                   <li>Upload malicious software or harmful content.</li>
                   <li>Attempt unauthorized access to any account or system.</li>
@@ -142,11 +156,11 @@ export default function PrivacyPolicy() {
             </section>
 
             {/* Section 4 */}
-            <section id="children-data" className="scroll-mt-8 space-y-3.5">
-              <h2 className="text-2xl font-serif font-bold text-[#1E293B]">
+            <section id="children-data" className="scroll-mt-32 space-y-3.5">
+              <h2 className="text-2xl font-bold text-[#1E293B] sm:text-3xl">
                 4. Children&apos;s Data &amp; Uploaded Photos
               </h2>
-              <div className="text-[13px] sm:text-sm text-[#475569] leading-relaxed">
+              <div className="text-[15px] leading-relaxed text-[#475569] sm:text-base">
                 <p>
                   Our products are designed for children but must be used by a parent, guardian, or authorised adult. Photos and information about a child are used only to create the personalised product you request. We do not intentionally collect personal information from children without adult consent.
                 </p>
@@ -154,11 +168,11 @@ export default function PrivacyPolicy() {
             </section>
 
             {/* Section 5 */}
-            <section id="ai-processing" className="scroll-mt-8 space-y-3.5">
-              <h2 className="text-2xl font-serif font-bold text-[#1E293B]">
+            <section id="ai-processing" className="scroll-mt-32 space-y-3.5">
+              <h2 className="text-2xl font-bold text-[#1E293B] sm:text-3xl">
                 5. AI Processing
               </h2>
-              <div className="text-[13px] sm:text-sm text-[#475569] leading-relaxed">
+              <div className="text-[15px] leading-relaxed text-[#475569] sm:text-base">
                 <p>
                   We use AI technology to create personalised story text, illustrations, and related content. Your uploaded photos and personalisation details are processed only for the purpose of generating your book. We do not use your content to train AI models or for advertising purposes.
                 </p>
@@ -166,11 +180,11 @@ export default function PrivacyPolicy() {
             </section>
 
             {/* Section 6 */}
-            <section id="data-sharing" className="scroll-mt-8 space-y-3.5">
-              <h2 className="text-2xl font-serif font-bold text-[#1E293B]">
+            <section id="data-sharing" className="scroll-mt-32 space-y-3.5">
+              <h2 className="text-2xl font-bold text-[#1E293B] sm:text-3xl">
                 6. Data Sharing
               </h2>
-              <div className="text-[13px] sm:text-sm text-[#475569] leading-relaxed">
+              <div className="text-[15px] leading-relaxed text-[#475569] sm:text-base">
                 <p>
                   We do not sell your personal information. We may share information with trusted service providers (such as payment processors, printing partners, and hosting providers) only when necessary to operate our services.
                 </p>
@@ -224,7 +238,7 @@ export default function PrivacyPolicy() {
 
               {/* Title & Subtitle */}
               <div>
-                <h3 className="text-xl sm:text-2xl font-serif font-bold text-white tracking-wide">
+                <h3 className="text-xl font-bold tracking-wide text-white sm:text-2xl">
                   Questions about this Policy?
                 </h3>
                 <p className="text-white/90 text-xs sm:text-sm mt-1">

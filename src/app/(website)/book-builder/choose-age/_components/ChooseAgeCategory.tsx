@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useBookBuilder } from "../../_components/BookBuilderProvider";
+import { useBookBuilderTranslations } from "../../_components/useBookBuilderTranslations";
 
 const ageGroups = [
   { label: "0-2 Years", image: "/images/age_1.png", color: "#FDE1CF" },
@@ -14,6 +15,7 @@ const ageGroups = [
 export default function ChooseAgeCategory() {
   const router = useRouter();
   const { selectedAge, setSelectedAge } = useBookBuilder();
+  const { bb, translateAge } = useBookBuilderTranslations();
 
   return (
     <main className="min-h-screen bg-[#FEFAF4] px-4 pb-10 pt-[118px] sm:px-7 sm:pb-12 sm:pt-[136px] lg:px-[38px] lg:pb-20 lg:pt-[196px]">
@@ -22,18 +24,18 @@ export default function ChooseAgeCategory() {
           id="create-story-heading"
           className="font-crimson text-4xl font-normal leading-none text-[#1E1E1E] sm:text-[48px]"
         >
-          Create a Story as Unique as Your Child
+          {bb.bannerTitle}
         </h1>
         <p className="mt-5 max-w-[1120px] font-sans text-lg font-normal leading-[1.4] text-[#444444] sm:text-[24px]">
-          Choose a theme, add their name and special details, and create a personalized eBook they&apos;ll love. Turn it into a beautiful hardcover keepsake to treasure forever.
+          {bb.bannerDesc}
         </p>
 
         <section className="mt-10 rounded-[19px] bg-[#FBF3EA] px-5 py-7 sm:px-8 sm:py-9 lg:px-10 lg:py-10" aria-labelledby="age-category-heading">
           <h2 id="age-category-heading" className="font-fredoka text-[26px] font-normal leading-none text-[#E88DA0] sm:text-[32px]">
-            Build a Magical Story Just for Them
+            {bb.buildStory}
           </h2>
           <p className="mt-6 font-sans text-[26px] font-semibold leading-none text-[#1E1E1E] sm:text-[32px]">
-            Choose the age category
+            {bb.chooseAge}
           </p>
 
           <div className="mt-8 grid grid-cols-1 justify-items-center gap-4 min-[520px]:grid-cols-2 lg:grid-cols-4 lg:gap-4" role="radiogroup" aria-label="Choose the child age category">
@@ -62,7 +64,7 @@ export default function ChooseAgeCategory() {
                       className="h-[218px] w-[214px] object-contain object-bottom"
                     />
                   </span>
-                  <span className="pb-4 font-sans text-[28px] font-semibold leading-none text-[#1E1E1E] sm:text-[32px]">{age.label}</span>
+                  <span className="pb-4 font-sans text-[28px] font-semibold leading-none text-[#1E1E1E] sm:text-[32px]">{translateAge(age.label)}</span>
                 </button>
               );
             })}

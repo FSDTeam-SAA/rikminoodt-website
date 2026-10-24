@@ -18,7 +18,7 @@ export default function PageHero({
   imageAlt = "Decorative page banner",
 }: PageHeroProps) {
   return (
-    <section className="relative flex min-h-[340px] w-full items-center overflow-hidden text-center sm:min-h-[400px] lg:min-h-[460px]">
+    <section className="relative flex h-[58svh] min-h-[400px] w-full items-center justify-center overflow-hidden pt-16 text-center sm:min-h-[470px] sm:pt-20 lg:min-h-[520px]">
       <div className="absolute inset-0 z-0">
         <Image
           src={imageSrc}
@@ -26,10 +26,9 @@ export default function PageHero({
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center"
+          className="object-cover object-center opacity-70"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-[#FEFAF4]/75" />
-        <div className="absolute inset-0 bg-gradient-to-r from-white/35 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-white/10 to-white/65" />
       </div>
 
       <div className="container relative z-10 mx-auto px-4">

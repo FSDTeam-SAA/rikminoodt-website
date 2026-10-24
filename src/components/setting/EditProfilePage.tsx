@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Pencil, Check, Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { getApiBaseUrl } from "@/config/api";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import {
   Select,
   SelectContent,
@@ -14,6 +15,8 @@ import {
 
 export default function EditProfilePage() {
   const { data: session } = useSession();
+  const { t } = useLanguage();
+  const copy = t.settings;
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -25,7 +28,6 @@ export default function EditProfilePage() {
   const [country, setCountry] = useState("");
   const [gender, setGender] = useState("male");
   const [dob, setDob] = useState("");
-  const [bio, setBio] = useState("");
 
   const [message, setMessage] = useState<{ text: string; type: "success" | "error" } | null>(null);
 
@@ -44,7 +46,7 @@ export default function EditProfilePage() {
           },
           cache: "no-store",
         });
-        if (!res.ok) throw new Error("Failed to load user profile");
+        if (!res.ok) throw new Error(copy.failedToLoadProfile);
         const json = await res.json();
         if (json?.data) {
           setName(json.data.name || "");
@@ -62,7 +64,6 @@ export default function EditProfilePage() {
           } else {
             setDob("");
           }
-          setBio(json.data.bio || "");
         }
       } catch (err) {
         console.error(err);
@@ -72,7 +73,7 @@ export default function EditProfilePage() {
     };
 
     void fetchProfile();
-  }, [session?.user?.accessToken]);
+  }, [copy.failedToLoadProfile, session?.user?.accessToken]);
 
   const handleButtonClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -81,7 +82,7 @@ export default function EditProfilePage() {
     if (isEditing) {
       const token = session?.user?.accessToken || (typeof window !== "undefined" ? localStorage.getItem("token") : null);
       if (!token) {
-        setMessage({ text: "Authentication token missing. Please sign in again.", type: "error" });
+        setMessage({ text: copy.missingToken, type: "error" });
         return;
       }
 
@@ -92,7 +93,6 @@ export default function EditProfilePage() {
           phone: phone.trim(),
           country: country.trim(),
           gender,
-          bio: bio.trim(),
         };
 
         if (dob) {
@@ -114,13 +114,13 @@ export default function EditProfilePage() {
 
         const json = await res.json().catch(() => null);
         if (!res.ok) {
-          throw new Error(json?.message || "Failed to update profile");
+          throw new Error(json?.message || copy.failedToUpdateProfile);
         }
 
-        setMessage({ text: "Profile updated successfully!", type: "success" });
+        setMessage({ text: copy.profileUpdated, type: "success" });
         setIsEditing(false);
       } catch (err) {
-        setMessage({ text: err instanceof Error ? err.message : "Failed to update profile", type: "error" });
+        setMessage({ text: err instanceof Error ? err.message : copy.failedToUpdateProfile, type: "error" });
       } finally {
         setSaving(false);
       }
@@ -134,14 +134,14 @@ export default function EditProfilePage() {
       <div>
         {/* Header */}
         <div className="mb-8">
-          <h1 className="mb-2 font-crimson text-[24px] font-semibold text-[#1E1E1E]">Profile</h1>
+          <h1 className="mb-2 font-crimson text-[24px] font-semibold text-[#1E1E1E]">{copy.profileTitle}</h1>
           <p className="font-sans text-base font-normal text-[#444444]">
-            Manage your personal details, orders and account settings all in one place.
+            {copy.profileDescription}
           </p>
         </div>
 
         {loading ? (
-          <div role="status" aria-label="Loading profile" className="animate-pulse space-y-5">
+          <div role="status" aria-label={copy.profileTitle} className="animate-pulse space-y-5">
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
               {Array.from({ length: 6 }, (_, index) => (
                 <div key={index}>
@@ -149,10 +149,6 @@ export default function EditProfilePage() {
                   <div className="h-[46px] w-full rounded-xl bg-[#F8F0F2]" />
                 </div>
               ))}
-            </div>
-            <div>
-              <div className="mb-2 h-4 w-14 rounded-full bg-[#F3E7EB]" />
-              <div className="h-24 w-full rounded-xl bg-[#F8F0F2]" />
             </div>
           </div>
         ) : (
@@ -173,14 +169,14 @@ export default function EditProfilePage() {
               {/* Full Name Input */}
               <div>
                 <label className="block text-sm text-gray-600 mb-2 font-medium">
-                  Full Name
+                  {copy.fullName}
                 </label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   disabled={!isEditing || saving}
-                  placeholder="Enter your full name"
+                  placeholder={copy.fullNamePlaceholder}
                   className={`w-full bg-[#FCF8F5] border border-[#F3A8B7] rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-rose-200 transition-opacity ${
                     !isEditing ? "opacity-60 cursor-not-allowed" : "opacity-100"
                   }`}
@@ -190,7 +186,7 @@ export default function EditProfilePage() {
               {/* Email Input */}
               <div>
                 <label className="block text-sm text-gray-600 mb-2 font-medium">
-                  Email Address
+                  {copy.emailAddress}
                 </label>
                 <input
                   type="email"
@@ -203,7 +199,7 @@ export default function EditProfilePage() {
               {/* Phone Input */}
               <div>
                 <label className="block text-sm text-gray-600 mb-2 font-medium">
-                  Phone Number
+                  {copy.phoneNumber}
                 </label>
                 <input
                   type="tel"
@@ -220,14 +216,14 @@ export default function EditProfilePage() {
               {/* Country Input */}
               <div>
                 <label className="block text-sm text-gray-600 mb-2 font-medium">
-                  Country
+                  {copy.country}
                 </label>
                 <input
                   type="text"
                   value={country}
                   onChange={(e) => setCountry(e.target.value)}
                   disabled={!isEditing || saving}
-                  placeholder="e.g. Bangladesh, United Kingdom"
+                  placeholder={copy.countryPlaceholder}
                   className={`w-full bg-[#FCF8F5] border border-[#F3A8B7] rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-rose-200 transition-opacity ${
                     !isEditing ? "opacity-60 cursor-not-allowed" : "opacity-100"
                   }`}
@@ -237,7 +233,7 @@ export default function EditProfilePage() {
               {/* Gender Input */}
               <div>
                 <label className="block text-sm text-gray-600 mb-2 font-medium">
-                  Gender
+                  {copy.gender}
                 </label>
                 <Select
                   value={gender}
@@ -251,17 +247,17 @@ export default function EditProfilePage() {
                       !isEditing ? "opacity-60 cursor-not-allowed" : "opacity-100"
                     }`}
                   >
-                    <SelectValue placeholder="Select gender" />
+                    <SelectValue placeholder={copy.selectGender} />
                   </SelectTrigger>
                   <SelectContent className="z-[110] border border-[#F3A8B7] bg-white text-[#4B4650] shadow-md rounded-xl">
                     <SelectItem value="male" className="cursor-pointer py-2 hover:bg-[#FFF3F5]">
-                      Male
+                      {copy.male}
                     </SelectItem>
                     <SelectItem value="female" className="cursor-pointer py-2 hover:bg-[#FFF3F5]">
-                      Female
+                      {copy.female}
                     </SelectItem>
                     <SelectItem value="other" className="cursor-pointer py-2 hover:bg-[#FFF3F5]">
-                      Other
+                      {copy.other}
                     </SelectItem>
                   </SelectContent>
                 </Select>
@@ -270,7 +266,7 @@ export default function EditProfilePage() {
               {/* Date of Birth Input */}
               <div>
                 <label className="block text-sm text-gray-600 mb-2 font-medium">
-                  Date of Birth
+                  {copy.dateOfBirth}
                 </label>
                 <input
                   type="date"
@@ -284,22 +280,6 @@ export default function EditProfilePage() {
               </div>
             </div>
 
-            {/* Bio Input */}
-            <div>
-              <label className="block text-sm text-gray-600 mb-2 font-medium">
-                Bio
-              </label>
-              <textarea
-                value={bio}
-                onChange={(e) => setBio(e.target.value)}
-                disabled={!isEditing || saving}
-                rows={3}
-                placeholder="Write a short bio about yourself..."
-                className={`w-full bg-[#FCF8F5] border border-[#F3A8B7] rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-rose-200 resize-none transition-opacity ${
-                  !isEditing ? "opacity-60 cursor-not-allowed" : "opacity-100"
-                }`}
-              />
-            </div>
           </form>
         )}
       </div>
@@ -319,12 +299,12 @@ export default function EditProfilePage() {
           >
             {saving ? (
               <>
-                <span>Saving...</span>
+                <span>{copy.saving}</span>
                 <Loader2 size={16} className="animate-spin" />
               </>
             ) : (
               <>
-                <span>{isEditing ? "Submit" : "Edit"}</span>
+                <span>{isEditing ? copy.submit : copy.edit}</span>
                 {isEditing ? <Check size={16} /> : <Pencil size={16} />}
               </>
             )}

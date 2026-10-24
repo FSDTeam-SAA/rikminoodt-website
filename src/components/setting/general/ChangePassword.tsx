@@ -4,6 +4,7 @@ import { ArrowLeft, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { getApiBaseUrl } from "@/config/api";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 interface ChangePasswordProps {
   onViewChange: (view: "list" | "password" | "delete") => void;
@@ -11,6 +12,8 @@ interface ChangePasswordProps {
 
 export default function ChangePasswordView({ onViewChange }: ChangePasswordProps) {
   const { data: session } = useSession();
+  const { t } = useLanguage();
+  const copy = t.settings.general;
   const [visible, setVisible] = useState<Record<string, boolean>>({});
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -25,23 +28,23 @@ export default function ChangePasswordView({ onViewChange }: ChangePasswordProps
     setSuccess("");
 
     if (!oldPassword || !newPassword || !confirmPassword) {
-      setError("All fields are required.");
+      setError(copy.allFieldsRequired);
       return;
     }
 
     if (newPassword.length < 6) {
-      setError("New password must be at least 6 characters long.");
+      setError(copy.passwordMinLength);
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setError("New password and confirm password do not match.");
+      setError(copy.passwordsDoNotMatch);
       return;
     }
 
     const token = session?.user?.accessToken || (typeof window !== "undefined" ? localStorage.getItem("token") : null);
     if (!token) {
-      setError("Please sign in to change your password.");
+      setError(copy.signInToChangePassword);
       return;
     }
 
@@ -61,15 +64,15 @@ export default function ChangePasswordView({ onViewChange }: ChangePasswordProps
 
       const data = await res.json().catch(() => null);
       if (!res.ok) {
-        throw new Error(data?.message || "Failed to change password. Please check your current password.");
+        throw new Error(data?.message || copy.changePasswordFailed);
       }
 
-      setSuccess("Password changed successfully!");
+      setSuccess(copy.passwordChanged);
       setOldPassword("");
       setNewPassword("");
       setConfirmPassword("");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to change password");
+      setError(err instanceof Error ? err.message : copy.changePasswordFailed);
     } finally {
       setLoading(false);
     }
@@ -78,13 +81,13 @@ export default function ChangePasswordView({ onViewChange }: ChangePasswordProps
   return (
     <div>
       <div className="mb-8 flex items-center justify-between gap-4">
-        <h2 className="font-sans text-base font-medium text-[#1E1E1E]">Change Password</h2>
+        <h2 className="font-sans text-base font-medium text-[#1E1E1E]">{copy.changePassword}</h2>
         <button
           type="button"
           onClick={() => onViewChange("list")}
           className="inline-flex items-center gap-2 rounded-lg px-3 py-2 font-sans text-sm font-medium text-[#E3859A] transition hover:bg-[#FFF0F2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]"
         >
-          <ArrowLeft aria-hidden="true" size={16} /> Back
+          <ArrowLeft aria-hidden="true" size={16} /> {copy.back}
         </button>
       </div>
 
@@ -104,7 +107,7 @@ export default function ChangePasswordView({ onViewChange }: ChangePasswordProps
         {/* Current Password */}
         <div>
           <label htmlFor="current-password" className="mb-2 block font-sans text-sm text-[#444444]">
-            Current Password
+            {copy.currentPassword}
           </label>
           <div className="relative">
             <input
@@ -119,7 +122,7 @@ export default function ChangePasswordView({ onViewChange }: ChangePasswordProps
             <button
               type="button"
               onClick={() => setVisible((current) => ({ ...current, "current-password": !current["current-password"] }))}
-              aria-label={visible["current-password"] ? "Hide current password" : "Show current password"}
+              aria-label={visible["current-password"] ? copy.hideCurrentPassword : copy.showCurrentPassword}
               className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]"
             >
               {visible["current-password"] ? <Eye size={18} /> : <EyeOff size={18} />}
@@ -130,7 +133,7 @@ export default function ChangePasswordView({ onViewChange }: ChangePasswordProps
         {/* New Password */}
         <div>
           <label htmlFor="new-password" className="mb-2 block font-sans text-sm text-[#444444]">
-            New Password
+            {copy.newPassword}
           </label>
           <div className="relative">
             <input
@@ -145,7 +148,7 @@ export default function ChangePasswordView({ onViewChange }: ChangePasswordProps
             <button
               type="button"
               onClick={() => setVisible((current) => ({ ...current, "new-password": !current["new-password"] }))}
-              aria-label={visible["new-password"] ? "Hide new password" : "Show new password"}
+              aria-label={visible["new-password"] ? copy.hideNewPassword : copy.showNewPassword}
               className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]"
             >
               {visible["new-password"] ? <Eye size={18} /> : <EyeOff size={18} />}
@@ -156,7 +159,7 @@ export default function ChangePasswordView({ onViewChange }: ChangePasswordProps
         {/* Confirm Password */}
         <div>
           <label htmlFor="confirm-password" className="mb-2 block font-sans text-sm text-[#444444]">
-            Confirm Password
+            {copy.confirmPassword}
           </label>
           <div className="relative">
             <input
@@ -171,7 +174,7 @@ export default function ChangePasswordView({ onViewChange }: ChangePasswordProps
             <button
               type="button"
               onClick={() => setVisible((current) => ({ ...current, "confirm-password": !current["confirm-password"] }))}
-              aria-label={visible["confirm-password"] ? "Hide confirm password" : "Show confirm password"}
+              aria-label={visible["confirm-password"] ? copy.hideConfirmPassword : copy.showConfirmPassword}
               className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]"
             >
               {visible["confirm-password"] ? <Eye size={18} /> : <EyeOff size={18} />}
@@ -187,11 +190,11 @@ export default function ChangePasswordView({ onViewChange }: ChangePasswordProps
           >
             {loading ? (
               <>
-                <span>Saving...</span>
+                <span>{copy.saving}</span>
                 <Loader2 size={16} className="animate-spin" />
               </>
             ) : (
-              <span>Save</span>
+              <span>{copy.save}</span>
             )}
           </button>
         </div>
