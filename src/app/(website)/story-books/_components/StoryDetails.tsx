@@ -60,6 +60,7 @@ interface StoryCharacter {
 
 interface FetchedBookData {
   _id?: string;
+  isShowcase?: boolean;
   title?: string;
   coverImageUrl?: string;
   pdfUrl?: string;
@@ -107,6 +108,24 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
       setNotFound(false);
       try {
         const apiBase = getApiBaseUrl();
+        const showcaseResponse = await fetch(`${apiBase}/books/showcase`, {
+          cache: "no-store",
+        });
+        const showcaseJson = showcaseResponse.ok
+          ? await showcaseResponse.json().catch(() => null)
+          : null;
+        const showcaseBooks = Array.isArray(showcaseJson?.data)
+          ? showcaseJson.data
+          : [];
+        const showcaseBook = showcaseBooks.find(
+          (book: FetchedBookData) => book._id === storyId,
+        );
+
+        if (showcaseBook) {
+          setFetchedBook(showcaseBook);
+          return;
+        }
+
         const token = session?.user?.accessToken || (typeof window !== "undefined" ? localStorage.getItem("token") : null);
         const headers: Record<string, string> = { "Content-Type": "application/json" };
         if (token) headers["Authorization"] = `Bearer ${token}`;
@@ -327,13 +346,15 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
                         </>
                       )}
                     </button>
-                    <button
-                      type="button"
-                      onClick={() => setIsHardcopyModalOpen(true)}
-                      className="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#E88DA0] px-4 font-sans text-sm font-medium text-white transition-colors hover:bg-[#DF7894] min-[480px]:h-10 min-[480px]:w-auto"
-                    >
-                      <Printer size={16} aria-hidden="true" /> Order Hardcopy
-                    </button>
+                    {fetchedBook?.isShowcase !== true && (
+                      <button
+                        type="button"
+                        onClick={() => setIsHardcopyModalOpen(true)}
+                        className="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#E88DA0] px-4 font-sans text-sm font-medium text-white transition-colors hover:bg-[#DF7894] min-[480px]:h-10 min-[480px]:w-auto"
+                      >
+                        <Printer size={16} aria-hidden="true" /> Order Hardcopy
+                      </button>
+                    )}
                   </div>
                   {downloadError && (
                     <p role="alert" className="mt-3 font-sans text-xs text-[#B74760]">
@@ -357,7 +378,7 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
                     {usedPhotos.length} {usedPhotos.length === 1 ? "Character photo" : "Character photos"}
                   </span>
                 </div>
-                <div className="mx-auto mt-5 grid w-full grid-cols-1 gap-4 min-[480px]:grid-cols-2 sm:mt-6 sm:grid-cols-4 sm:gap-6">
+                <div className="mt-5 grid w-full max-w-[1080px] grid-cols-1 gap-4 min-[480px]:grid-cols-2 sm:mt-6 sm:grid-cols-4 sm:gap-6">
                   {usedPhotos.map((photo, i) => (
                     <article
                       key={`${photo.name}-${i}`}

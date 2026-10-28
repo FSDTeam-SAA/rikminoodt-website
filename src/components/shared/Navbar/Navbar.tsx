@@ -50,7 +50,7 @@ const Navbar = () => {
 
   const navigation = [
     { label: t.nav.home, href: "/" },
-    { label: t.nav.examples, href: "/examples" },
+    // { label: t.nav.examples, href: "/examples" },
     { label: t.nav.howItWorks, href: "/how-it-works" },
     { label: t.nav.storyBooks, href: "/story-books" },
     { label: t.nav.pricing, href: "/pricing" },

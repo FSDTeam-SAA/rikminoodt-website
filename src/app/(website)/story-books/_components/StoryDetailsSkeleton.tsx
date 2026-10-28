@@ -6,7 +6,7 @@ export default function StoryDetailsSkeleton() {
       className="pb-12 pt-7 sm:pb-16 sm:pt-10 lg:pb-20 lg:pt-14"
       aria-label="Loading story details"
     >
-      <div className="container mx-auto max-w-[1080px] px-4 sm:px-8 lg:px-0">
+      <div className="container mx-auto px-3 sm:px-5 lg:px-0">
         {/* Title */}
         <h1 className="text-balance text-center font-fredoka text-[30px] font-normal leading-[1.12] text-[#1E1E1E] min-[420px]:text-[34px] sm:text-[40px] lg:text-[48px] lg:leading-none">
           <span className="text-[#9C81BE]">Story</span>{" "}
@@ -77,7 +77,7 @@ export default function StoryDetailsSkeleton() {
               <Skeleton className="h-5 w-32 bg-[#EADFD3]" />
               <Skeleton className="h-4 w-24 bg-[#EADFD3]" />
             </div>
-            <div className="mx-auto mt-5 grid max-w-[880px] grid-cols-2 gap-3 sm:mt-6 sm:grid-cols-4 sm:gap-6">
+            <div className="mx-auto mt-5 grid w-full max-w-[1080px] grid-cols-2 gap-3 sm:mt-6 sm:grid-cols-4 sm:gap-6">
               {[1, 2, 3, 4].map((i) => (
                 <div
                   key={i}
