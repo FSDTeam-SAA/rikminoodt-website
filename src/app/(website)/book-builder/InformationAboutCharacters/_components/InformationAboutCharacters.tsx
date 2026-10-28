@@ -3,8 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Box, PawPrint, Pencil, Trash2, Upload, UserRound } from "lucide-react";
-import { useRef, useState } from "react";
+import { Box, ImagePlus, PawPrint, Pencil, Trash2, UserRound, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -112,6 +112,25 @@ function ChoiceChip({
 
 type CharacterType = "Person" | "Animal" | "Object";
 
+type CharacterPhotos = Record<CharacterType, File | null>;
+
+const emptyCharacterPhotos = (): CharacterPhotos => ({
+  Person: null,
+  Animal: null,
+  Object: null,
+});
+
+const characterTypeFromStoredType = (
+  type?: CharacterData["type"],
+): CharacterType =>
+  type === "ANIMAL" ? "Animal" : type === "OBJECT" ? "Object" : "Person";
+
+const photoLabelByCharacterType: Record<CharacterType, string> = {
+  Person: "Add a photo of the person for the illustrations",
+  Animal: "Add a photo of the animal for the illustrations",
+  Object: "Add a photo of the object for the illustrations",
+};
+
 const characterTypes = [
   { label: "Person" as const, icon: UserRound },
   { label: "Animal" as const, icon: PawPrint },
@@ -129,68 +148,95 @@ type AdditionalCharState = {
   animalName: string;
   animalSpecies: string;
   objectName: string;
-  photo: File | null;
-  photoName: string;
-  photoPreview: string;
+  photos: CharacterPhotos;
 };
 
 function PhotoUpload({
   id,
-  photoName,
-  previewUrl,
+  file,
+  label,
   onPhotoChange,
 }: {
   id: string;
-  photoName: string;
-  previewUrl: string;
-  onPhotoChange: (file: File | null, previewUrl: string) => void;
+  file: File | null;
+  label: string;
+  onPhotoChange: (file: File | null) => void;
 }) {
+  const [previewUrl, setPreviewUrl] = useState("");
+
+  // Object URLs are created only while this field is mounted. This avoids
+  // rendering stale blob URLs after the builder state is restored.
+  useEffect(() => {
+    if (!file) {
+      setPreviewUrl("");
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(file);
+    setPreviewUrl(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [file]);
+
   return (
-    <label
-      htmlFor={id}
-      className="mt-4 flex min-h-[160px] cursor-pointer flex-col items-center justify-center rounded-[8px] border border-dashed border-[#F4CDD5] bg-white/20 px-4 text-center transition hover:bg-white/45 focus-within:ring-2 focus-within:ring-[#E88DA0]"
-    >
-      {previewUrl ? (
-        <>
-          {/* A local object URL is used so the selected file can be shown before upload. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={previewUrl}
-            alt="Selected character preview"
-            className="size-24 rounded-lg border border-[#F3A8B7] bg-white object-cover shadow-sm"
-          />
-          <span className="mt-2 max-w-full truncate font-sans text-sm text-[#6B5B64]">
-            {photoName}
-          </span>
-          <span className="mt-1 font-sans text-xs text-[#B8B4B6]">
-            Click to change photo
-          </span>
-        </>
-      ) : (
-        <>
-          <Upload
-            aria-hidden="true"
-            size={26}
-            strokeWidth={1.5}
-            className="text-[#B8B4B6]"
-          />
-          <span className="mt-2 font-sans text-sm text-[#B8B4B6]">
-            Add a photo as a basis for the illustrations
-          </span>
-        </>
-      )}
+    <div className="mt-5">
       <input
         id={id}
         type="file"
         accept="image/*"
         className="sr-only"
         onChange={(event) => {
-          const file = event.target.files?.[0] || null;
-          onPhotoChange(file, file ? URL.createObjectURL(file) : "");
+          const nextFile = event.target.files?.[0] || null;
+          onPhotoChange(nextFile);
           event.target.value = "";
         }}
       />
-    </label>
+
+      {previewUrl ? (
+        <div className="relative flex min-h-[156px] items-center gap-4 rounded-xl border border-[#F3A8B7] bg-white p-3 pr-12 shadow-[0_4px_14px_rgba(91,69,78,0.08)] sm:min-h-[176px] sm:p-4 sm:pr-14">
+          <div className="h-[128px] w-[112px] shrink-0 overflow-hidden rounded-lg bg-[#FFF3F5] sm:h-[144px] sm:w-[128px]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={previewUrl}
+              alt={`Preview of ${file?.name || "selected character image"}`}
+              className="size-full object-cover"
+            />
+          </div>
+          <div className="min-w-0 text-left">
+            <p className="font-sans text-sm font-semibold text-[#514256]">Photo selected</p>
+            <p className="mt-1 max-w-[260px] truncate font-sans text-xs text-[#8A7982]" title={file?.name}>
+              {file?.name}
+            </p>
+            <label
+              htmlFor={id}
+              className="mt-4 inline-flex h-9 cursor-pointer items-center gap-2 rounded-lg border border-[#E88DA0] bg-[#FFF7F8] px-3 font-sans text-sm font-medium text-[#D36F87] transition hover:bg-[#FFECEF] focus-within:outline-none focus-within:ring-2 focus-within:ring-[#E88DA0] focus-within:ring-offset-2"
+            >
+              <ImagePlus aria-hidden="true" size={16} />
+              Change photo
+            </label>
+          </div>
+          <button
+            type="button"
+            onClick={() => onPhotoChange(null)}
+            aria-label="Remove selected photo"
+            title="Remove photo"
+            className="absolute right-3 top-3 inline-flex size-8 items-center justify-center rounded-full bg-[#FFF0F3] text-[#D36F87] transition hover:bg-[#FAD8DF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2"
+          >
+            <X aria-hidden="true" size={17} strokeWidth={2.5} />
+          </button>
+        </div>
+      ) : (
+        <label
+          htmlFor={id}
+          className="flex min-h-[156px] cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-[#F3A8B7] bg-[#FFFDFC] px-5 text-center transition hover:border-[#E88DA0] hover:bg-[#FFF7F8] focus-within:ring-2 focus-within:ring-[#E88DA0]"
+        >
+          <span className="flex size-11 items-center justify-center rounded-full bg-[#FFF0F3] text-[#E88DA0]">
+            <ImagePlus aria-hidden="true" size={22} />
+          </span>
+          <span className="mt-3 font-sans text-sm font-medium text-[#514256]">Upload a photo</span>
+          <span className="mt-1 max-w-sm font-sans text-xs text-[#8A7982]">{label}</span>
+        </label>
+      )}
+    </div>
   );
 }
 
@@ -210,6 +256,7 @@ function AddedCharacterForm({
   onChange: (updated: Partial<AdditionalCharState>) => void;
 }) {
   const fieldId = `character-${number}`;
+  const currentPhoto = character.photos[character.type];
 
   return (
     <>
@@ -410,14 +457,13 @@ function AddedCharacterForm({
         )}
 
         <PhotoUpload
-          id={`${fieldId}-photo`}
-          photoName={character.photoName}
-          previewUrl={character.photoPreview}
-          onPhotoChange={(photo, photoPreview) =>
+          key={`${fieldId}-${character.type}-photo`}
+          id={`${fieldId}-${character.type.toLowerCase()}-photo`}
+          file={currentPhoto}
+          label={photoLabelByCharacterType[character.type]}
+          onPhotoChange={(photo) =>
             onChange({
-              photo,
-              photoName: photo?.name || "",
-              photoPreview,
+              photos: { ...character.photos, [character.type]: photo },
             })
           }
         />
@@ -452,7 +498,10 @@ export default function InformationAboutCharacters() {
   const copy = useBookBuilderPageCopy();
 
   // Character 1 state
-  const [characterType, setCharacterType] = useState<CharacterType>("Person");
+  const storedMainCharacter = storedCharacters[0];
+  const [characterType, setCharacterType] = useState<CharacterType>(() =>
+    characterTypeFromStoredType(storedMainCharacter?.type),
+  );
   const [name, setName] = useState(storedCharacters[0]?.name || "Lily");
   const [gender, setGender] = useState<string | null>(
     storedCharacters[0]?.gender === "BOY"
@@ -471,9 +520,10 @@ export default function InformationAboutCharacters() {
     storedCharacters[0]?.animalSpecies || ""
   );
   const [objectName, setObjectName] = useState(storedCharacters[0]?.objectName || "");
-  const [photoFile, setPhotoFile] = useState<File | null>(storedCharacters[0]?.photo || null);
-  const [photoName, setPhotoName] = useState(storedCharacters[0]?.photo?.name || "");
-  const [photoPreview, setPhotoPreview] = useState(storedCharacters[0]?.photoPreview || "");
+  const [characterPhotos, setCharacterPhotos] = useState<CharacterPhotos>(() => ({
+    ...emptyCharacterPhotos(),
+    [characterTypeFromStoredType(storedMainCharacter?.type)]: storedMainCharacter?.photo || null,
+  }));
   const [validationError, setValidationError] = useState("");
 
   const [additionalCharacters, setAdditionalCharacters] = useState<AdditionalCharState[]>([]);
@@ -522,9 +572,7 @@ export default function InformationAboutCharacters() {
               animalName: "",
               animalSpecies: "",
               objectName: "",
-              photo: null,
-              photoName: "",
-              photoPreview: "",
+              photos: emptyCharacterPhotos(),
             },
           ]
     );
@@ -540,6 +588,7 @@ export default function InformationAboutCharacters() {
   };
 
   const handleNextStep = () => {
+    const mainCharacterPhoto = characterPhotos[characterType];
     const mainCharacterError = getCharacterValidationError({
       type: characterType,
       name,
@@ -583,8 +632,7 @@ export default function InformationAboutCharacters() {
         animalName: animalName || undefined,
         animalSpecies: animalSpecies || undefined,
         objectName: objectName || undefined,
-        photo: photoFile,
-        photoPreview: photoPreview || undefined,
+        photo: mainCharacterPhoto,
       },
       ...additionalCharacters.map((c, i): CharacterData => {
         const cGender: "BOY" | "GIRL" | "OTHER" =
@@ -604,8 +652,7 @@ export default function InformationAboutCharacters() {
           animalName: c.animalName || undefined,
           animalSpecies: c.animalSpecies || undefined,
           objectName: c.objectName || undefined,
-          photo: c.photo,
-          photoPreview: c.photoPreview || undefined,
+          photo: c.photos[c.type],
         };
       }),
     ];
@@ -899,14 +946,16 @@ export default function InformationAboutCharacters() {
             )}
 
             <PhotoUpload
-              id="character-1-photo"
-              photoName={photoName}
-              previewUrl={photoPreview}
-              onPhotoChange={(photo, previewUrl) => {
-                setPhotoFile(photo);
-                setPhotoName(photo?.name || "");
-                setPhotoPreview(previewUrl);
-              }}
+              key={`character-1-${characterType}-photo`}
+              id={`character-1-${characterType.toLowerCase()}-photo`}
+              file={characterPhotos[characterType]}
+              label={photoLabelByCharacterType[characterType]}
+              onPhotoChange={(photo) =>
+                setCharacterPhotos((photos) => ({
+                  ...photos,
+                  [characterType]: photo,
+                }))
+              }
             />
 
             {additionalCharacters.length < 3 && (

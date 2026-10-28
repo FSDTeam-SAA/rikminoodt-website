@@ -75,6 +75,7 @@ interface FetchedBookData {
   illustrationStyle?: string;
   language?: string;
   foreword?: string;
+  backCoverText?: string;
   characters?: StoryCharacter[];
   pages?: Array<{
     pageNumber?: number;
@@ -83,6 +84,9 @@ interface FetchedBookData {
     illustrationUrl?: string;
     image?: string;
     alt?: string;
+    kind?: string;
+    title?: string;
+    storyPageNumber?: number;
   }>;
 }
 
@@ -495,6 +499,9 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
         storyId={storyId}
         title={coverTitle}
         pages={fetchedBook?.pages}
+        coverImage={cover}
+        welcomeText={fetchedBook?.foreword}
+        finalText={fetchedBook?.backCoverText}
       />
 
       <OrderHardcopyModal

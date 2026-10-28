@@ -183,10 +183,10 @@ export default function Checkout() {
     try {
       const apiBase = getApiBaseUrl();
       let token = session?.user?.accessToken || localStorage.getItem("token");
-      const retryBookId = savedBookId || (new URLSearchParams(window.location.search).get("retry") === "1" ? sessionStorage.getItem("current_book_id") : null);
-      if (retryBookId) {
+      const paymentRetryBookId = savedBookId || (new URLSearchParams(window.location.search).get("retry") === "1" ? sessionStorage.getItem("current_book_id") : null);
+      if (paymentRetryBookId) {
         if (!token) throw new Error("Please log in to resume payment for your saved book.");
-        const retryResponse = await fetch(`${apiBase}/payments/generation/checkout`, { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, body: JSON.stringify({ bookId: retryBookId }) });
+        const retryResponse = await fetch(`${apiBase}/payments/generation/checkout`, { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, body: JSON.stringify({ bookId: paymentRetryBookId }) });
         const retryResult = await retryResponse.json().catch(() => null);
         if (!retryResponse.ok || !retryResult?.data?.checkoutUrl) throw new Error(retryResult?.message || "Unable to restart checkout. Please try again.");
         const url = new URL(retryResult.data.checkoutUrl);
@@ -224,6 +224,35 @@ export default function Checkout() {
       form.append("data", JSON.stringify(dto));
       photos.forEach((photo) => { if (photo instanceof File) form.append("characterPhotos", photo, photo.name); });
       if (forewordMode === "voice" && voiceBlob) form.append("voiceRecording", voiceBlob, voiceBlob.type.includes("mp4") ? "voice.m4a" : "voice.webm");
+
+      // A failed paid book is edited in the normal wizard, but must be
+      // regenerated in place: no new book and no new checkout are needed.
+      const retryBookId = sessionStorage.getItem("retry_book_id");
+      if (retryBookId) {
+        if (!token) throw new Error("Please sign in to retry generation.");
+        const retryResponse = await fetch(
+          `${apiBase}/books/${encodeURIComponent(retryBookId)}/retry`,
+          { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: form },
+        );
+        const retryResult = await retryResponse.json().catch(() => null);
+        if (!retryResponse.ok) {
+          throw new Error(retryResult?.message || "Unable to retry generation.");
+        }
+
+        setCurrentBookId(retryBookId);
+        sessionStorage.setItem("current_book_id", retryBookId);
+        sessionStorage.removeItem("retry_book_id");
+        const sessionId = retryResult?.data?.stripeSessionId;
+        if (sessionId) {
+          window.location.assign(
+            `/payment/success?session_id=${encodeURIComponent(sessionId)}&book_id=${encodeURIComponent(retryBookId)}`,
+          );
+        } else {
+          window.location.assign("/setting/generated-books");
+        }
+        return;
+      }
+
       let response = await fetch(`${apiBase}/books`, { method: "POST", headers: token ? { Authorization: `Bearer ${token}` } : {}, body: form });
       let result = await response.json().catch(() => null);
       if (!response.ok && result?.message === "User registration details are required for new/guest users.") {
