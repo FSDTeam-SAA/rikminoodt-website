@@ -81,6 +81,7 @@ export default function ForgotPasswordForm() {
             </Link>
           </div>
 
+
           {/* Logo */}
           <div className="mt-8 flex justify-center">
             <Link href="/" aria-label="Boekerello Home">

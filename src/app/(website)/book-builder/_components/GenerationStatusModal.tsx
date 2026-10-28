@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import {
   CheckCircle2,
@@ -29,6 +30,7 @@ type BookData = {
   coverImageUrl?: string;
   pages?: Array<{ pageNumber: number; text: string; illustrationUrl?: string }>;
   generationError?: string;
+  failureType?: "CONTENT_MODERATION" | "IMAGE_QUALITY" | "TIMEOUT" | "SERVER_ERROR";
   failureMessage?: string;
 };
 
@@ -46,6 +48,7 @@ export default function GenerationStatusModal({
   checkoutUrl,
   onClose,
 }: GenerationStatusModalProps) {
+  const router = useRouter();
   const [book, setBook] = useState<BookData | null>(null);
   const [loadingMsgIndex, setLoadingMsgIndex] = useState(0);
   const [progress, setProgress] = useState(15);
@@ -152,6 +155,14 @@ export default function GenerationStatusModal({
     }
   };
 
+  const redirectToWizard = () => {
+    if (!bookId) return;
+    // Keep the existing wizard data and mark this as an edit-and-retry flow.
+    // The checkout step will send the updated FormData to POST /books/:id/retry.
+    window.sessionStorage.setItem("retry_book_id", bookId);
+    router.push("/book-builder/InformationAboutCharacters");
+  };
+
   if (!isOpen) return null;
 
   const currentStatus = book?.status || (checkoutUrl ? "PENDING_PAYMENT" : "GENERATING");
@@ -159,6 +170,7 @@ export default function GenerationStatusModal({
   const isGenerating = currentStatus === "GENERATING";
   const isCompleted = currentStatus === "COMPLETED";
   const isFailed = currentStatus === "FAILED";
+  const failureType = book?.failureType;
 
   return (
     <div
@@ -309,6 +321,11 @@ export default function GenerationStatusModal({
                 <p className="mx-auto mt-2 max-w-[420px] font-sans text-xs leading-relaxed text-[#B74760] sm:text-sm">
                   {formatGenerationError(book?.generationError || book?.failureMessage || pollError)}
                 </p>
+                {failureType && (
+                  <p className="mt-2 font-sans text-[11px] font-semibold uppercase tracking-wide text-[#856F77]">
+                    Failure type: {failureType.replaceAll("_", " ")}
+                  </p>
+                )}
 
                 {/* RETRY SECTION WITH 5 COUNT LIMIT */}
                 <div className="mt-5 rounded-xl border border-[#F5CED7] bg-white p-4">
@@ -328,6 +345,33 @@ export default function GenerationStatusModal({
                     <p className="mt-3 font-sans text-xs font-semibold text-[#B74760]">
                       Maximum retry limit (5/5) reached. Please contact customer support with Book ID: {bookId}.
                     </p>
+                  ) : failureType === "CONTENT_MODERATION" ? (
+                    <button
+                      type="button"
+                      onClick={redirectToWizard}
+                      className="mt-4 inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-[#E88DA0] font-sans text-xs font-semibold text-white transition hover:bg-[#DD7893]"
+                    >
+                      Edit Story &amp; Retry
+                    </button>
+                  ) : failureType === "IMAGE_QUALITY" ? (
+                    <div className="mt-4 flex flex-col gap-2">
+                      <button
+                        type="button"
+                        disabled={isRetrying}
+                        onClick={handleRetry}
+                        className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-[#E88DA0] font-sans text-xs font-semibold text-white transition hover:bg-[#DD7893] disabled:opacity-60"
+                      >
+                        <RefreshCw size={14} className={isRetrying ? "animate-spin" : ""} />
+                        <span>{isRetrying ? "Restarting generation..." : "Retry Generation"}</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={redirectToWizard}
+                        className="inline-flex h-10 w-full items-center justify-center rounded-xl border border-[#E88DA0] bg-white font-sans text-xs font-semibold text-[#C75D78] transition hover:bg-[#FFF3F5]"
+                      >
+                        Change Photo &amp; Retry
+                      </button>
+                    </div>
                   ) : (
                     <button
                       type="button"

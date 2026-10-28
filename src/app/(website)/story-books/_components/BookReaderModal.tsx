@@ -5,12 +5,28 @@ import { forwardRef, useEffect, useRef, useState } from "react";
 import HTMLFlipBook, { usePageFlip } from "@gullabs/react-flipbook";
 import { ChevronLeft, ChevronRight, Minimize2, Minus, Plus } from "lucide-react";
 
+type RawBookPage = {
+  pageNumber?: number;
+  text?: string;
+  imageUrl?: string;
+  illustrationUrl?: string;
+  image?: string;
+  alt?: string;
+  kind?: string;
+  title?: string;
+  storyPageNumber?: number;
+};
+
 type BookReaderModalProps = {
   isOpen: boolean;
   onClose: () => void;
   storyId: string;
   title?: string;
-  pages?: Array<{ pageNumber?: number; text?: string; imageUrl?: string; illustrationUrl?: string; image?: string; alt?: string }>;
+  coverImage?: string;
+  welcomeText?: string;
+  finalText?: string;
+  pages?: RawBookPage[];
+  initialPageNumber?: number;
 };
 
 type PageProps = {
@@ -27,7 +43,7 @@ const ReaderPage = forwardRef<HTMLDivElement, PageProps>(({ children }, ref) => 
 
 ReaderPage.displayName = "ReaderPage";
 
-const defaultBookPages = [
+const defaultStoryPages: RawBookPage[] = [
   {
     image: "/images/story1.png",
     alt: "Noah exploring the ocean with friendly sea animals",
@@ -40,16 +56,82 @@ const defaultBookPages = [
   },
 ];
 
-const BookReaderModal = ({ isOpen, onClose, storyId, title, pages }: BookReaderModalProps) => {
+type ReaderBookPage = {
+  kind: "cover" | "welcome" | "storyImage" | "storyText" | "finalMessage";
+  image: string;
+  alt: string;
+  text: string;
+  title?: string;
+  storyIndex?: number;
+  sourcePageNumber?: number;
+};
+
+const BookReaderModal = ({
+  isOpen,
+  onClose,
+  storyId,
+  title,
+  coverImage,
+  welcomeText,
+  finalText,
+  pages,
+  initialPageNumber,
+}: BookReaderModalProps) => {
   const displayTitle = title || "Lisa's Camping Adventure";
-  const activePages =
-    pages && pages.length > 0
-      ? pages.map((p, idx) => ({
-          image: p.imageUrl || p.illustrationUrl || p.image || "/images/story1.png",
-          alt: p.alt || `Illustration for page ${p.pageNumber || idx + 1}`,
-          text: p.text || "",
-        }))
-      : defaultBookPages;
+  const suppliedPages = pages || [];
+  const hasSpecialPages = suppliedPages.some((page) => page.kind);
+  const storyPages = (hasSpecialPages
+    ? suppliedPages.filter((page) => page.kind === "story")
+    : suppliedPages.length > 0
+      ? suppliedPages
+      : defaultStoryPages
+  ).map((page, index) => ({
+    kind: "storyImage" as const,
+    image: page.imageUrl || page.illustrationUrl || page.image || "/images/story1.png",
+    alt: page.alt || `Illustration for story page ${page.storyPageNumber || page.pageNumber || index + 1}`,
+    text: page.text || "",
+    storyIndex: index,
+    sourcePageNumber: page.pageNumber || page.storyPageNumber || index + 1,
+  }));
+  const coverPage = suppliedPages.find((page) => page.kind === "cover");
+  const welcomePage = suppliedPages.find((page) => page.kind === "welcome");
+  const finalPage = suppliedPages.find((page) => page.kind === "finalMessage");
+  const activePages: ReaderBookPage[] = [
+    {
+      kind: "cover",
+      image: coverPage?.imageUrl || coverPage?.illustrationUrl || coverPage?.image || coverImage || storyPages[0]?.image || "/images/story1.png",
+      alt: `Cover of ${displayTitle}`,
+      text: "",
+      title: coverPage?.title || displayTitle,
+      sourcePageNumber: hasSpecialPages ? (coverPage?.pageNumber || 1) : undefined,
+    },
+    {
+      kind: "welcome",
+      image: "",
+      alt: "",
+      text: welcomePage?.text || welcomeText || `Welcome to ${displayTitle}. This magical adventure was created especially for you.`,
+      sourcePageNumber: hasSpecialPages ? welcomePage?.pageNumber : undefined,
+    },
+    ...storyPages.flatMap((storyPage) => [
+      storyPage,
+      {
+        ...storyPage,
+        kind: "storyText" as const,
+      },
+    ]),
+    {
+      kind: "finalMessage",
+      image: "",
+      alt: "",
+      text: finalPage?.text || finalText || "Thank you for sharing this magical adventure. May the story stay with you for years to come.",
+      title: finalPage?.title || displayTitle,
+      sourcePageNumber: hasSpecialPages ? finalPage?.pageNumber : undefined,
+    },
+  ];
+  const initialReaderPage = Math.max(
+    0,
+    activePages.findIndex((bookPage) => bookPage.sourcePageNumber === initialPageNumber),
+  );
   const stageRef = useRef<HTMLDivElement>(null);
   const [pageSize, setPageSize] = useState({ width: 360, height: 416 });
   const [isCompact, setIsCompact] = useState(false);
@@ -61,9 +143,8 @@ const BookReaderModal = ({ isOpen, onClose, storyId, title, pages }: BookReaderM
     canGoPrev,
     flipNext,
     flipPrev,
-    goToPage,
     page,
-  } = usePageFlip(0);
+  } = usePageFlip(initialReaderPage);
 
   useEffect(() => {
     const stage = stageRef.current;
@@ -109,8 +190,6 @@ const BookReaderModal = ({ isOpen, onClose, storyId, title, pages }: BookReaderM
 
   if (!isOpen) return null;
 
-  const activeSpread = Math.floor(page / 2) + 1;
-
   return (
     <div
       className="fixed inset-0 z-50 bg-[#1E1E1E]"
@@ -145,22 +224,73 @@ const BookReaderModal = ({ isOpen, onClose, storyId, title, pages }: BookReaderM
               lazyRadius={2}
               aria-label={`${displayTitle} book reader`}
             >
-              {activePages.flatMap((bookPage, index) => [
-                <ReaderPage key={`${index}-art`}>
-                  <div className="relative h-full w-full bg-[#E8DDD1] p-2 sm:p-3">
-                    <Image src={bookPage.image} alt={bookPage.alt} fill sizes="(max-width: 720px) 90vw, 45vw" className="object-contain" priority={index === 0} unoptimized />
-                  </div>
-                </ReaderPage>,
-                <ReaderPage key={`${index}-text`}>
-                  <div className="relative flex h-full w-full items-center justify-center bg-[#FFFEFC] px-8 py-10 text-center sm:px-14">
-                    <span className="absolute right-6 top-5 text-2xl text-[#F1AD43]" aria-hidden="true">✦</span>
-                    <p className="max-w-[300px] font-crimson text-xl font-semibold leading-relaxed text-[#302735] sm:text-2xl">
-                      {bookPage.text}
-                    </p>
-                    <span className="absolute bottom-6 right-7 text-3xl text-[#CF9139]" aria-hidden="true">❧</span>
-                  </div>
-                </ReaderPage>,
-              ])}
+              {activePages.map((bookPage, index) => (
+                <ReaderPage key={`${bookPage.kind}-${index}`}>
+                  {bookPage.kind === "cover" ? (
+                    <div className="relative h-full w-full overflow-hidden bg-[#302735]">
+                      <Image src={bookPage.image} alt={bookPage.alt} fill sizes="(max-width: 720px) 90vw, 45vw" className="object-cover" priority unoptimized />
+                      <div className="absolute inset-x-0 top-0 h-[35%] bg-gradient-to-b from-black/40 to-transparent" />
+                      <h2 className="absolute inset-x-6 top-7 text-center font-crimson text-[clamp(1.5rem,4vw,2.65rem)] font-bold leading-tight text-white [text-shadow:0_2px_3px_rgba(31,25,28,0.8)]">
+                        {bookPage.title}
+                      </h2>
+                      <Image src="/images/logo.png" alt="Bookerello" width={145} height={48} className="absolute bottom-6 left-1/2 h-auto w-28 -translate-x-1/2 drop-shadow-md sm:w-36" />
+                    </div>
+                  ) : bookPage.kind === "storyImage" ? (
+                    <div className="relative h-full w-full overflow-hidden bg-[#302735]">
+                      <Image
+                        src={bookPage.image}
+                        alt={bookPage.alt}
+                        fill
+                        sizes="(max-width: 720px) 90vw, 45vw"
+                        className="object-cover object-center"
+                        unoptimized
+                      />
+                      <span className="absolute bottom-4 right-4 flex size-8 items-center justify-center rounded-full bg-white/90 font-crimson text-xs text-[#302735] shadow-sm">
+                        {(bookPage.storyIndex || 0) + 1}
+                      </span>
+                    </div>
+                  ) : bookPage.kind === "storyText" ? (
+                    <div className="relative flex h-full w-full items-center overflow-hidden bg-[#FFFCF8] px-[12%] py-10">
+                      <span className="absolute -left-7 -top-7 size-24 rounded-full bg-[#DCE5DF]/70" aria-hidden="true" />
+                      <span className="absolute -right-5 top-20 size-16 rounded-full bg-[#F8C0B1]/65" aria-hidden="true" />
+                      <span className="absolute bottom-4 right-4 flex size-8 items-center justify-center rounded-full bg-white/90 font-crimson text-xs text-[#302735] shadow-sm">
+                        {(bookPage.storyIndex || 0) + 1}
+                      </span>
+                      <div className="relative w-full">
+                        {bookPage.text.split(/\n\s*\n/).filter(Boolean).map((paragraph, paragraphIndex) => (
+                          <p key={paragraphIndex} className="mb-4 font-crimson text-[clamp(0.82rem,1.75vw,1.25rem)] font-semibold leading-[1.62] text-[#302735] last:mb-0">
+                            {paragraph}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="relative flex h-full w-full items-center justify-center overflow-hidden bg-[#FFFCF6] px-[13%] text-center">
+                      <span className="absolute -left-10 -top-10 size-36 rounded-full bg-[#DCE5DF]" aria-hidden="true" />
+                      <span className="absolute -right-8 -top-8 size-32 rounded-full bg-[#F8C0B1]" aria-hidden="true" />
+                      <span className="absolute -bottom-10 -right-10 size-40 rounded-full bg-[#FFC38F]" aria-hidden="true" />
+                      {bookPage.kind === "welcome" ? (
+                        <>
+                          <p className="relative font-crimson text-[clamp(0.9rem,2vw,1.45rem)] font-semibold leading-relaxed text-[#302735]">
+                            {bookPage.text}
+                          </p>
+                          <div className="absolute bottom-[11%] left-[12%] rounded-[45%] bg-white/95 px-5 py-4 text-left shadow-sm">
+                            <p className="font-sans text-[clamp(0.55rem,1.1vw,0.8rem)] text-[#302735]">This magical children&apos;s book belongs to:</p>
+                            <span className="mt-3 block border-b border-dashed border-[#514256]" aria-label="Space for the reader's name or signature" />
+                          </div>
+                        </>
+                      ) : (
+                        <div className="relative">
+                          <h2 className="mb-5 font-crimson text-[clamp(1.2rem,2.7vw,2rem)] font-bold text-[#302735]">{bookPage.title}</h2>
+                          <p className="font-crimson text-[clamp(0.9rem,2vw,1.35rem)] font-semibold leading-relaxed text-[#302735]">{bookPage.text}</p>
+                          <p className="mt-12 font-sans text-[clamp(0.5rem,1vw,0.7rem)] text-[#514256]">This book is created with:</p>
+                          <Image src="/images/logo.png" alt="Bookerello" width={125} height={42} className="mx-auto mt-1 h-auto w-24 sm:w-28" />
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </ReaderPage>
+              ))}
             </HTMLFlipBook>
           </div>
         </div>
@@ -191,22 +321,9 @@ const BookReaderModal = ({ isOpen, onClose, storyId, title, pages }: BookReaderM
           >
             <ChevronLeft size={21} strokeWidth={2.5} aria-hidden="true" />
           </button>
-          {activePages.map((_, index) => {
-            const spreadPage = index * 2;
-            const pageNumber = index + 1;
-            return (
-              <button
-                key={pageNumber}
-                type="button"
-                aria-label={`Go to spread ${pageNumber}`}
-                aria-current={activeSpread === pageNumber ? "page" : undefined}
-                onClick={() => goToPage(spreadPage, "animate")}
-                className={`flex size-9 cursor-pointer items-center justify-center rounded border font-sans text-sm font-medium transition-colors sm:size-10 ${activeSpread === pageNumber ? "border-[#E0A94C] bg-[#E0A94C] text-white" : "border-[#E8AA46] bg-white text-[#D89A38] hover:bg-[#FFF5E2]"}`}
-              >
-                {pageNumber}
-              </button>
-            );
-          })}
+          <span className="min-w-14 text-center font-sans text-sm font-medium text-[#514256]" aria-live="polite">
+            {page + 1} / {activePages.length}
+          </span>
           <button
             type="button"
             aria-label="Next pages"

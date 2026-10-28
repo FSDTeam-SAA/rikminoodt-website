@@ -27,6 +27,31 @@ body {
   @apply bg-[#FBF3EA] font-sans text-[18px] font-normal;
 }
 
+/* A compact, on-brand scrollbar replaces the browser default everywhere. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #e88da0 #fff5ef;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #fff5ef;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #efadba, #d9879d);
+  border: 2px solid #fff5ef;
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #c9728b;
+}
+
 /*
   Secondary title fonts are available as Tailwind utilities:
   - font-crimson: Crimson Text — standard headings

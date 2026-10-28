@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import {
@@ -23,6 +23,7 @@ type Book = {
   stripeSessionId?: string;
   title?: string;
   generationError?: string;
+  failureType?: "CONTENT_MODERATION" | "IMAGE_QUALITY" | "TIMEOUT" | "SERVER_ERROR";
   failureMessage?: string;
   coverImageUrl?: string;
   pages?: Array<{ pageNumber: number; text: string }>;
@@ -113,6 +114,7 @@ function BookGenerationPaymentSuccess({
   bookId: string;
   sessionId: string;
 }) {
+  const router = useRouter();
   const { data: session } = useSession();
   const [book, setBook] = useState<Book | null>(null);
   const [modalOpen, setModalOpen] = useState(true);
@@ -200,9 +202,17 @@ function BookGenerationPaymentSuccess({
     }
   };
 
+  const redirectToWizard = () => {
+    // The builder keeps its existing values in session storage. Its checkout
+    // step recognizes this ID and submits the edited data to the retry API.
+    sessionStorage.setItem("retry_book_id", bookId);
+    router.push("/book-builder/InformationAboutCharacters");
+  };
+
   const paid = Boolean(book?.paidAt);
   const completed = paid && book?.status === "COMPLETED";
   const failed = paid && book?.status === "FAILED";
+  const failureType = book?.failureType;
 
   return (
     <main className="min-h-[70vh] bg-[radial-gradient(circle_at_top,_#FFF9F1,_#FEF6EC_52%,_#F8EEF5)] px-4 pb-16 pt-[120px] sm:px-8 sm:pt-[150px] lg:pt-[190px]">
@@ -230,9 +240,16 @@ function BookGenerationPaymentSuccess({
             : "Your payment is confirmed. We’re creating your personalised storybook."}
         </p>
         {failed && (
-          <p className="mt-3 text-sm text-[#B74760]">
-            {formatGenerationError(book?.generationError || book?.failureMessage)}
-          </p>
+          <div className="mt-3">
+            <p className="text-sm text-[#B74760]">
+              {formatGenerationError(book?.generationError || book?.failureMessage)}
+            </p>
+            {failureType && (
+              <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-[#856F77]">
+                Failure type: {failureType.replaceAll("_", " ")}
+              </p>
+            )}
+          </div>
         )}
         {bookId && (
           <p className="mt-3 break-all text-xs text-[#8A7982]">Book reference: {bookId}</p>
@@ -250,13 +267,38 @@ function BookGenerationPaymentSuccess({
             View book status
           </button>
         )}
-        {failed && (
+        {failed && failureType === "CONTENT_MODERATION" && (
+          <button
+            onClick={redirectToWizard}
+            className="mt-6 min-h-11 rounded-xl bg-[#E88DA0] px-6 text-sm font-semibold text-white"
+          >
+            Edit Story &amp; Retry
+          </button>
+        )}
+        {failed && failureType === "IMAGE_QUALITY" && (
+          <div className="mt-6 flex flex-col justify-center gap-2 sm:flex-row">
+            <button
+              onClick={retry}
+              disabled={retrying}
+              className="min-h-11 rounded-xl bg-[#E88DA0] px-6 text-sm font-semibold text-white disabled:opacity-60"
+            >
+              {retrying ? "Retrying…" : "Retry Generation"}
+            </button>
+            <button
+              onClick={redirectToWizard}
+              className="min-h-11 rounded-xl border border-[#E88DA0] bg-white px-6 text-sm font-semibold text-[#C75D78] transition hover:bg-[#FFF3F5]"
+            >
+              Change Photo &amp; Retry
+            </button>
+          </div>
+        )}
+        {failed && failureType !== "CONTENT_MODERATION" && failureType !== "IMAGE_QUALITY" && (
           <button
             onClick={retry}
             disabled={retrying}
             className="mt-6 min-h-11 rounded-xl bg-[#E88DA0] px-6 text-sm font-semibold text-white disabled:opacity-60"
           >
-            {retrying ? "Retrying…" : "Retry generation"}
+            {retrying ? "Retrying…" : "Retry Generation"}
           </button>
         )}
         {completed && (
@@ -346,9 +388,16 @@ function BookGenerationPaymentSuccess({
                 : "We’re waiting for payment confirmation before starting your book."}
             </p>
             {failed && (
-              <p className="mt-3 text-sm text-[#B74760]">
-                {formatGenerationError(book?.generationError || book?.failureMessage)}
-              </p>
+              <div className="mt-3">
+                <p className="text-sm text-[#B74760]">
+                  {formatGenerationError(book?.generationError || book?.failureMessage)}
+                </p>
+                {failureType && (
+                  <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-[#856F77]">
+                    Failure type: {failureType.replaceAll("_", " ")}
+                  </p>
+                )}
+              </div>
             )}
             {!failed && (
               <div className="mt-7 flex flex-col items-center text-center">
@@ -369,13 +418,38 @@ function BookGenerationPaymentSuccess({
                 {formatGenerationError(error)}
               </p>
             )}
-            {failed && (
+            {failed && failureType === "CONTENT_MODERATION" && (
+              <button
+                onClick={redirectToWizard}
+                className="mt-5 min-h-11 w-full rounded-xl bg-[#E88DA0] font-semibold text-white"
+              >
+                Edit Story &amp; Retry
+              </button>
+            )}
+            {failed && failureType === "IMAGE_QUALITY" && (
+              <div className="mt-5 flex flex-col gap-2">
+                <button
+                  onClick={retry}
+                  disabled={retrying}
+                  className="min-h-11 w-full rounded-xl bg-[#E88DA0] font-semibold text-white disabled:opacity-60"
+                >
+                  {retrying ? "Retrying…" : "Retry Generation"}
+                </button>
+                <button
+                  onClick={redirectToWizard}
+                  className="min-h-11 w-full rounded-xl border border-[#E88DA0] bg-white font-semibold text-[#C75D78] transition hover:bg-[#FFF3F5]"
+                >
+                  Change Photo &amp; Retry
+                </button>
+              </div>
+            )}
+            {failed && failureType !== "CONTENT_MODERATION" && failureType !== "IMAGE_QUALITY" && (
               <button
                 onClick={retry}
                 disabled={retrying}
                 className="mt-5 min-h-11 w-full rounded-xl bg-[#E88DA0] font-semibold text-white disabled:opacity-60"
               >
-                {retrying ? "Retrying…" : "Retry generation"}
+                {retrying ? "Retrying…" : "Retry Generation"}
               </button>
             )}
             <p className="mt-5 text-xs text-[#95858e]">
