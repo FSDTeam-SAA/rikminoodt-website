@@ -9,6 +9,7 @@ import { useBookBuilder } from "../../_components/BookBuilderProvider";
 import { getStoryChoice } from "../../_components/subject-options";
 import { useBookBuilderTranslations } from "../../_components/useBookBuilderTranslations";
 import { useBookBuilderPageCopy } from "../../_components/useBookBuilderPageCopy";
+import { getApiBaseUrl } from "@/config/api";
 
 const ages = [
   { label: "0-2 Years", image: "/images/age_1.png", color: "#FDE1CF" },
@@ -131,6 +132,8 @@ export default function SpecialEvents() {
   const [seconds, setSeconds] = useState(0);
   const [recordingUrl, setRecordingUrl] = useState<string | null>(null);
   const [recordingError, setRecordingError] = useState("");
+  const [isTranscribing, setIsTranscribing] = useState(false);
+  const [transcriptError, setTranscriptError] = useState("");
   const [validationError, setValidationError] = useState("");
   const recorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -163,6 +166,13 @@ export default function SpecialEvents() {
     }
     requestingMic.current = true;
     setRecordingError("");
+    setTranscriptError("");
+    setLocalForeword("");
+    if (audioUrlRef.current) {
+      URL.revokeObjectURL(audioUrlRef.current);
+      audioUrlRef.current = null;
+    }
+    setRecordingUrl(null);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       if (!isMounted.current || !voiceModeRef.current) {
@@ -188,6 +198,7 @@ export default function SpecialEvents() {
           audioUrlRef.current = url;
           setRecordingUrl(url);
           setVoiceBlob(blob);
+          void transcribeRecording(blob);
         }
       };
       recorder.start();
@@ -207,6 +218,36 @@ export default function SpecialEvents() {
     if (recorderRef.current?.state === "recording") recorderRef.current.stop();
   };
 
+  const transcribeRecording = async (blob: Blob) => {
+    setIsTranscribing(true);
+    setTranscriptError("");
+    try {
+      const form = new FormData();
+      const filename = blob.type.includes("mp4") ? "voice.m4a" : "voice.webm";
+      form.append("audio", blob, filename);
+      const response = await fetch(`${getApiBaseUrl()}/transcribe`, {
+        method: "POST",
+        body: form,
+      });
+      const result = await response.json().catch(() => null);
+      if (!response.ok) {
+        throw new Error(result?.message || "We could not convert this recording to text. Please try again.");
+      }
+      const transcript = String(result?.data?.transcript || result?.transcript || "").trim();
+      if (!transcript) throw new Error("No speech was detected. Please record your message again.");
+      if (!isMounted.current) return;
+      setLocalForeword(transcript);
+      setForeword(transcript);
+      setSpecialEvents(transcript);
+    } catch (error) {
+      if (isMounted.current) {
+        setTranscriptError(error instanceof Error ? error.message : "We could not convert this recording to text. Please try again.");
+      }
+    } finally {
+      if (isMounted.current) setIsTranscribing(false);
+    }
+  };
+
   const handleAiHelp = () => {
     setLocalForeword(
       "May this magical story fill your heart with joy, courage, and endless wonder. Always believe in yourself and follow your dreams."
@@ -215,8 +256,12 @@ export default function SpecialEvents() {
 
   const handleNextStep = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (forewordMode === "voice" && !voiceBlob) {
-      setValidationError("Record a voice message before continuing, or switch to Write.");
+    if (forewordMode === "voice" && (!voiceBlob || isTranscribing || !localForeword.trim())) {
+      setValidationError(
+        isTranscribing
+          ? "Your voice is still being converted to text. Please wait a moment."
+          : "Record a voice message before continuing, or switch to Write.",
+      );
       return;
     }
     setValidationError("");
@@ -399,6 +444,21 @@ export default function SpecialEvents() {
                       </span>
                     </button>
                   </>
+                ) : isTranscribing ? (
+                  <>
+                    <span className="flex size-16 items-center justify-center rounded-full bg-[#FBE4E9] text-[#E88DA0]" aria-hidden="true">
+                      <Mic size={25} className="animate-pulse" />
+                    </span>
+                    <p className="mt-5 font-sans text-lg font-semibold text-[#514256]" role="status">Converting your voice to text…</p>
+                    <p className="mt-2 font-sans text-sm text-[#AAA5A8]">This will only take a moment.</p>
+                  </>
+                ) : recordingUrl && localForeword ? (
+                  <textarea
+                    value={localForeword}
+                    onChange={(event) => setLocalForeword(event.target.value)}
+                    className="min-h-[220px] w-full resize-y bg-transparent px-2 py-1 font-sans text-sm leading-relaxed text-[#4B4650] outline-none sm:min-h-[250px]"
+                    aria-label="Transcribed voice message"
+                  />
                 ) : (
                   <>
                     <p className="font-sans text-lg font-semibold text-[#514256]">{copy.ideaTitle}</p>
@@ -407,7 +467,8 @@ export default function SpecialEvents() {
                       type="button"
                       onClick={startRecording}
                       aria-label="Start recording"
-                      className="mt-7 flex size-[88px] items-center justify-center rounded-full bg-[#FBE4E9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]"
+                      disabled={isTranscribing}
+                      className="mt-7 flex size-[88px] items-center justify-center rounded-full bg-[#FBE4E9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] disabled:cursor-wait disabled:opacity-60"
                     >
                       <span className="flex size-[72px] items-center justify-center rounded-full bg-[#F3B8C5]">
                         <span className="flex size-[58px] items-center justify-center rounded-full bg-[#E88DA0] text-white">
@@ -415,8 +476,8 @@ export default function SpecialEvents() {
                         </span>
                       </span>
                     </button>
-                    {recordingUrl && (
-                      <audio controls src={recordingUrl} className="mt-5 max-w-full" aria-label="Play recorded foreword" />
+                    {transcriptError && (
+                      <p role="alert" className="mt-4 max-w-xl font-sans text-sm text-[#B74760]">{transcriptError}</p>
                     )}
                     {recordingError && (
                       <p role="alert" className="mt-4 font-sans text-sm text-[#B74760]">{recordingError}</p>

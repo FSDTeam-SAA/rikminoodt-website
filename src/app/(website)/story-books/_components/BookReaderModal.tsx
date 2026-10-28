@@ -26,6 +26,7 @@ type BookReaderModalProps = {
   welcomeText?: string;
   finalText?: string;
   pages?: RawBookPage[];
+  initialPageNumber?: number;
 };
 
 type PageProps = {
@@ -56,12 +57,13 @@ const defaultStoryPages: RawBookPage[] = [
 ];
 
 type ReaderBookPage = {
-  kind: "cover" | "welcome" | "story" | "finalMessage";
+  kind: "cover" | "welcome" | "storyImage" | "storyText" | "finalMessage";
   image: string;
   alt: string;
   text: string;
   title?: string;
   storyIndex?: number;
+  sourcePageNumber?: number;
 };
 
 const BookReaderModal = ({
@@ -73,6 +75,7 @@ const BookReaderModal = ({
   welcomeText,
   finalText,
   pages,
+  initialPageNumber,
 }: BookReaderModalProps) => {
   const displayTitle = title || "Lisa's Camping Adventure";
   const suppliedPages = pages || [];
@@ -83,11 +86,12 @@ const BookReaderModal = ({
       ? suppliedPages
       : defaultStoryPages
   ).map((page, index) => ({
-    kind: "story" as const,
+    kind: "storyImage" as const,
     image: page.imageUrl || page.illustrationUrl || page.image || "/images/story1.png",
     alt: page.alt || `Illustration for story page ${page.storyPageNumber || page.pageNumber || index + 1}`,
     text: page.text || "",
     storyIndex: index,
+    sourcePageNumber: page.pageNumber || page.storyPageNumber || index + 1,
   }));
   const coverPage = suppliedPages.find((page) => page.kind === "cover");
   const welcomePage = suppliedPages.find((page) => page.kind === "welcome");
@@ -99,22 +103,35 @@ const BookReaderModal = ({
       alt: `Cover of ${displayTitle}`,
       text: "",
       title: coverPage?.title || displayTitle,
+      sourcePageNumber: hasSpecialPages ? (coverPage?.pageNumber || 1) : undefined,
     },
     {
       kind: "welcome",
       image: "",
       alt: "",
       text: welcomePage?.text || welcomeText || `Welcome to ${displayTitle}. This magical adventure was created especially for you.`,
+      sourcePageNumber: hasSpecialPages ? welcomePage?.pageNumber : undefined,
     },
-    ...storyPages,
+    ...storyPages.flatMap((storyPage) => [
+      storyPage,
+      {
+        ...storyPage,
+        kind: "storyText" as const,
+      },
+    ]),
     {
       kind: "finalMessage",
       image: "",
       alt: "",
       text: finalPage?.text || finalText || "Thank you for sharing this magical adventure. May the story stay with you for years to come.",
       title: finalPage?.title || displayTitle,
+      sourcePageNumber: hasSpecialPages ? finalPage?.pageNumber : undefined,
     },
   ];
+  const initialReaderPage = Math.max(
+    0,
+    activePages.findIndex((bookPage) => bookPage.sourcePageNumber === initialPageNumber),
+  );
   const stageRef = useRef<HTMLDivElement>(null);
   const [pageSize, setPageSize] = useState({ width: 360, height: 416 });
   const [isCompact, setIsCompact] = useState(false);
@@ -127,7 +144,7 @@ const BookReaderModal = ({
     flipNext,
     flipPrev,
     page,
-  } = usePageFlip(0);
+  } = usePageFlip(initialReaderPage);
 
   useEffect(() => {
     const stage = stageRef.current;
@@ -218,23 +235,33 @@ const BookReaderModal = ({
                       </h2>
                       <Image src="/images/logo.png" alt="Bookerello" width={145} height={48} className="absolute bottom-6 left-1/2 h-auto w-28 -translate-x-1/2 drop-shadow-md sm:w-36" />
                     </div>
-                  ) : bookPage.kind === "story" ? (
-                    <div className={`flex h-full w-full bg-[#FFFCF6] ${bookPage.storyIndex && bookPage.storyIndex % 2 === 1 ? "flex-row-reverse" : "flex-row"}`}>
-                      <div className="relative h-full w-1/2 shrink-0">
-                        <Image src={bookPage.image} alt={bookPage.alt} fill sizes="(max-width: 720px) 45vw, 22vw" className="object-cover" unoptimized />
-                      </div>
-                      <div className="relative flex h-full w-1/2 items-center overflow-hidden px-[7%] py-8">
-                        <span className="absolute left-3 top-2 size-10 rounded-full bg-white/80" aria-hidden="true" />
-                        <div className="relative w-full">
-                          {bookPage.text.split(/\n\s*\n/).filter(Boolean).map((paragraph, paragraphIndex) => (
-                            <p key={paragraphIndex} className="mb-4 font-crimson text-[clamp(0.7rem,1.65vw,1.2rem)] font-semibold leading-[1.62] text-[#302735] last:mb-0">
-                              {paragraph}
-                            </p>
-                          ))}
-                        </div>
-                        <span className={`absolute bottom-3 flex size-8 items-center justify-center rounded-full bg-white/90 font-crimson text-xs text-[#302735] ${bookPage.storyIndex && bookPage.storyIndex % 2 === 1 ? "left-3" : "right-3"}`}>
-                          {(bookPage.storyIndex || 0) + 1}
-                        </span>
+                  ) : bookPage.kind === "storyImage" ? (
+                    <div className="relative h-full w-full overflow-hidden bg-[#302735]">
+                      <Image
+                        src={bookPage.image}
+                        alt={bookPage.alt}
+                        fill
+                        sizes="(max-width: 720px) 90vw, 45vw"
+                        className="object-cover object-center"
+                        unoptimized
+                      />
+                      <span className="absolute bottom-4 right-4 flex size-8 items-center justify-center rounded-full bg-white/90 font-crimson text-xs text-[#302735] shadow-sm">
+                        {(bookPage.storyIndex || 0) + 1}
+                      </span>
+                    </div>
+                  ) : bookPage.kind === "storyText" ? (
+                    <div className="relative flex h-full w-full items-center overflow-hidden bg-[#FFFCF8] px-[12%] py-10">
+                      <span className="absolute -left-7 -top-7 size-24 rounded-full bg-[#DCE5DF]/70" aria-hidden="true" />
+                      <span className="absolute -right-5 top-20 size-16 rounded-full bg-[#F8C0B1]/65" aria-hidden="true" />
+                      <span className="absolute bottom-4 right-4 flex size-8 items-center justify-center rounded-full bg-white/90 font-crimson text-xs text-[#302735] shadow-sm">
+                        {(bookPage.storyIndex || 0) + 1}
+                      </span>
+                      <div className="relative w-full">
+                        {bookPage.text.split(/\n\s*\n/).filter(Boolean).map((paragraph, paragraphIndex) => (
+                          <p key={paragraphIndex} className="mb-4 font-crimson text-[clamp(0.82rem,1.75vw,1.25rem)] font-semibold leading-[1.62] text-[#302735] last:mb-0">
+                            {paragraph}
+                          </p>
+                        ))}
                       </div>
                     </div>
                   ) : (

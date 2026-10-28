@@ -5,18 +5,14 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import BookReaderModal from "./BookReaderModal";
+import InlineBookPreview from "./InlineBookPreview";
 import OrderHardcopyModal from "./OrderHardcopyModal";
 import StoryDetailsSkeleton from "./StoryDetailsSkeleton";
 import {
   BookOpen,
-  ChevronLeft,
-  ChevronRight,
   Download,
   Images,
   Loader2,
-  Maximize2,
-  Minus,
-  Plus,
   Printer,
 } from "lucide-react";
 import { getApiBaseUrl } from "@/config/api";
@@ -101,7 +97,6 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
   const [loading, setLoading] = useState(!isStaticStory);
   const [notFound, setNotFound] = useState(false);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
-  const [previewZoom, setPreviewZoom] = useState(1);
 
   useEffect(() => {
     if (!storyId || storyId === "max-sees-the-seasons" || storyId === "lisa-camping") return;
@@ -178,12 +173,14 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
     rawPages.length > 0
       ? rawPages.map((p, idx) => ({
           pageNumber: p.pageNumber || idx + 1,
-          image: p.imageUrl || p.illustrationUrl || p.image || cover,
+          image: p.imageUrl || p.illustrationUrl || p.image || (p.kind === "cover" ? cover : undefined),
           text: p.text || "",
+          kind: p.kind,
+          storyPageNumber: p.storyPageNumber,
         }))
       : [
-          { pageNumber: 1, image: cover, text: "" },
-          { pageNumber: 2, image: "/images/story2.png", text: "" },
+          { pageNumber: 1, image: cover, text: "", kind: "cover" },
+          { pageNumber: 2, image: "/images/story2.png", text: "", kind: "story" },
         ];
 
   const currentPreviewPage = previewPages[currentPageIndex] || previewPages[0];
@@ -244,10 +241,10 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
   return (
     <>
       <section
-        className="pb-12 pt-7 sm:pb-16 sm:pt-10 lg:pb-20 lg:pt-14"
+        className="overflow-x-hidden pb-12 pt-7 sm:pb-16 sm:pt-10 lg:pb-20 lg:pt-14"
         aria-labelledby="story-details-heading"
       >
-        <div className="container mx-auto max-w-[1080px] px-4 sm:px-8 lg:px-0">
+        <div className="container mx-auto px-3 sm:px-5 lg:px-0">
           <h1
             id="story-details-heading"
             className="text-balance text-center font-fredoka text-[30px] font-normal leading-[1.12] text-[#1E1E1E] min-[420px]:text-[34px] sm:text-[40px] lg:text-[48px] lg:leading-none"
@@ -360,136 +357,46 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
                     {usedPhotos.length} {usedPhotos.length === 1 ? "Character photo" : "Character photos"}
                   </span>
                 </div>
-                <div className="mx-auto mt-5 grid max-w-[880px] grid-cols-2 gap-3 sm:mt-6 sm:grid-cols-4 sm:gap-6">
+                <div className="mx-auto mt-5 grid w-full grid-cols-1 gap-4 min-[480px]:grid-cols-2 sm:mt-6 sm:grid-cols-4 sm:gap-6">
                   {usedPhotos.map((photo, i) => (
                     <article
                       key={`${photo.name}-${i}`}
-                      className="min-w-0 overflow-hidden rounded-xl border border-[#F0E5D9] bg-white p-2.5 shadow-[0_7px_16px_rgba(92,76,84,0.13)] transition-transform duration-300 hover:-translate-y-1 sm:p-3"
+                      className="min-w-0 overflow-hidden rounded-xl border border-[#F0E5D9] bg-white shadow-[0_7px_16px_rgba(92,76,84,0.13)] transition-transform duration-300 hover:-translate-y-1"
                     >
                       <Image
                         src={photo.image}
                         alt={photo.name}
                         width={190}
                         height={190}
-                        className="aspect-square w-full rounded-lg object-cover object-center"
+                        className="aspect-[4/3] w-full object-cover object-center"
                         unoptimized
                       />
-                      <p className="mt-3 truncate text-center font-crimson text-sm font-semibold text-[#514256]">
-                        {photo.name}
-                      </p>
-                      <p className="mt-1 truncate text-center font-sans text-xs text-[#8A8086]">
-                        {photo.role}
-                      </p>
+                      <div className="px-3 pb-3 pt-3 sm:px-4 sm:pb-4">
+                        <p className="truncate text-center font-crimson text-sm font-semibold text-[#514256]">
+                          {photo.name}
+                        </p>
+                        <p className="mt-1 truncate text-center font-sans text-xs text-[#8A8086]">
+                          {photo.role}
+                        </p>
+                      </div>
                     </article>
                   ))}
                 </div>
               </div>
             </div>
 
-          <section
-            className="mt-6 rounded-xl bg-[#FFFCF9] px-3.5 py-7 text-center shadow-[0_4px_14px_rgba(92,76,84,0.05)] sm:mt-8 sm:px-8 sm:py-10"
-            aria-labelledby="read-book-heading"
-          >
-            <h2
-              id="read-book-heading"
-              className="font-fredoka text-[32px] font-normal leading-none sm:text-[40px] lg:text-[48px]"
-            >
-              <span className="text-[#55A7CF]">Read</span>{" "}
-              <span className="text-[#E0A94C]">the book</span>
-            </h2>
-
-            <div
-              onClick={() => setIsReaderOpen(true)}
-              className="group relative mx-auto mt-6 w-full max-w-[300px] cursor-pointer overflow-hidden rounded-md bg-[#514256] p-1.5 shadow-[0_12px_24px_rgba(66,52,62,0.28)] transition-transform duration-200 hover:scale-[1.02]"
-              title="Click to open interactive book reader"
-            >
-              <div className="overflow-hidden rounded-sm">
-                <Image
-                  src={currentPreviewPage.image}
-                  alt={`Page ${currentPreviewPage.pageNumber} of ${coverTitle}`}
-                  width={396}
-                  height={512}
-                  className="aspect-[0.76] w-full rounded-sm object-cover object-top transition-transform duration-200"
-                  style={{ transform: `scale(${previewZoom})` }}
-                  unoptimized
-                />
-              </div>
-              <div className="absolute inset-0 flex items-center justify-center rounded-md bg-black/30 opacity-0 backdrop-blur-[1px] transition-opacity duration-200 group-hover:opacity-100">
-                <span className="flex items-center gap-2 rounded-full bg-[#E0A94C] px-4 py-2 font-sans text-xs font-semibold text-white shadow-md">
-                  <BookOpen size={16} /> Open Flipbook Reader
-                </span>
-              </div>
-            </div>
-
-            {currentPreviewPage.text && (
-              <p className="mx-auto mt-4 max-w-[550px] px-4 font-crimson text-base italic leading-relaxed text-[#514256] sm:text-lg">
-                &ldquo;{currentPreviewPage.text}&rdquo;
-              </p>
-            )}
-
-            <div
-              className="mt-6 flex flex-wrap justify-center gap-2 sm:mt-7 sm:gap-3"
-              aria-label={`Page navigation for story ${storyId}`}
-            >
-              <button
-                type="button"
-                aria-label="Zoom in"
-                onClick={() => setPreviewZoom((z) => Math.min(Number((z + 0.1).toFixed(1)), 1.4))}
-                className="flex size-11 cursor-pointer items-center justify-center rounded-md border border-[#E8AA46] bg-white text-[#D89A38] shadow-sm transition-colors hover:bg-[#FFF5E2] sm:size-12"
-              >
-                <Plus size={20} strokeWidth={2.5} aria-hidden="true" />
-              </button>
-              <button
-                type="button"
-                aria-label="Zoom out"
-                onClick={() => setPreviewZoom((z) => Math.max(Number((z - 0.1).toFixed(1)), 0.8))}
-                className="flex size-11 cursor-pointer items-center justify-center rounded-md border border-[#E8AA46] bg-white text-[#D89A38] shadow-sm transition-colors hover:bg-[#FFF5E2] sm:size-12"
-              >
-                <Minus size={20} strokeWidth={2.5} aria-hidden="true" />
-              </button>
-              <button
-                type="button"
-                aria-label="Previous page"
-                disabled={currentPageIndex === 0}
-                onClick={() => setCurrentPageIndex((p) => Math.max(0, p - 1))}
-                className="flex size-11 cursor-pointer items-center justify-center rounded-md border border-[#E8AA46] bg-white text-[#D89A38] shadow-sm transition-colors hover:bg-[#FFF5E2] disabled:cursor-not-allowed disabled:opacity-40 sm:size-12"
-              >
-                <ChevronLeft size={25} strokeWidth={2.5} aria-hidden="true" />
-              </button>
-              {previewPages.map((p, idx) => (
-                <button
-                  key={p.pageNumber}
-                  type="button"
-                  aria-label={`Go to page ${p.pageNumber}`}
-                  onClick={() => setCurrentPageIndex(idx)}
-                  className={`flex size-11 cursor-pointer items-center justify-center rounded-md border font-sans text-lg font-medium shadow-sm transition-colors sm:size-12 ${
-                    currentPageIndex === idx
-                      ? "border-[#E0A94C] bg-[#E0A94C] text-white"
-                      : "border-[#E8AA46] bg-white text-[#D89A38] hover:bg-[#FFF5E2]"
-                  }`}
-                >
-                  {p.pageNumber}
-                </button>
-              ))}
-              <button
-                type="button"
-                aria-label="Next page"
-                disabled={currentPageIndex === previewPages.length - 1}
-                onClick={() => setCurrentPageIndex((p) => Math.min(previewPages.length - 1, p + 1))}
-                className="flex size-11 cursor-pointer items-center justify-center rounded-md border border-[#E8AA46] bg-white text-[#D89A38] shadow-sm transition-colors hover:bg-[#FFF5E2] disabled:cursor-not-allowed disabled:opacity-40 sm:size-12"
-              >
-                <ChevronRight size={25} strokeWidth={2.5} aria-hidden="true" />
-              </button>
-              <button
-                type="button"
-                aria-label="View full screen"
-                onClick={() => setIsReaderOpen(true)}
-                className="flex size-11 cursor-pointer items-center justify-center rounded-md border border-[#E8AA46] bg-white text-[#D89A38] shadow-sm transition-colors hover:bg-[#FFF5E2] sm:size-12"
-              >
-                <Maximize2 size={21} strokeWidth={2.5} aria-hidden="true" />
-              </button>
-            </div>
-          </section>
+          <InlineBookPreview
+            title={coverTitle}
+            pages={previewPages}
+            coverImage={cover}
+            welcomeText={fetchedBook?.foreword}
+            finalText={fetchedBook?.backCoverText}
+            onOpenFullScreen={(pageNumber) => {
+              const nextPageIndex = previewPages.findIndex((page) => page.pageNumber === pageNumber);
+              if (nextPageIndex >= 0) setCurrentPageIndex(nextPageIndex);
+              setIsReaderOpen(true);
+            }}
+          />
         </div>
       </section>
 
@@ -502,6 +409,7 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
         coverImage={cover}
         welcomeText={fetchedBook?.foreword}
         finalText={fetchedBook?.backCoverText}
+        initialPageNumber={currentPreviewPage.pageNumber}
       />
 
       <OrderHardcopyModal

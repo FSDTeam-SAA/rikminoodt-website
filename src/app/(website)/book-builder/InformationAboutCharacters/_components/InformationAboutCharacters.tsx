@@ -198,7 +198,7 @@ function PhotoUpload({
             <img
               src={previewUrl}
               alt={`Preview of ${file?.name || "selected character image"}`}
-              className="size-full object-cover"
+              className="size-full object-contain object-center"
             />
           </div>
           <div className="min-w-0 text-left">
