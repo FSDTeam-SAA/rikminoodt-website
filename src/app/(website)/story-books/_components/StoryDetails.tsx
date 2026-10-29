@@ -13,6 +13,7 @@ import {
   Download,
   Images,
   Loader2,
+  Pencil,
   Printer,
 } from "lucide-react";
 import { getApiBaseUrl } from "@/config/api";
@@ -61,7 +62,10 @@ interface StoryCharacter {
 interface FetchedBookData {
   _id?: string;
   isShowcase?: boolean;
+  status?: string;
   title?: string;
+  titlePosition?: "Top" | "Middle" | "Bottom";
+  font?: string;
   coverImageUrl?: string;
   pdfUrl?: string;
   ageCategory?: string;
@@ -212,9 +216,10 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
       const token = session?.user?.accessToken || localStorage.getItem("token");
       if (!token) throw new Error("Please sign in to download your book.");
 
-      const response = await fetch(`${getApiBaseUrl()}/books/${storyId}/download`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await fetch(
+        `${getApiBaseUrl()}/books/${encodeURIComponent(storyId)}/download?refresh=${Date.now()}`,
+        { headers: { Authorization: `Bearer ${token}` }, cache: "no-store" },
+      );
       if (!response.ok) {
         const result = await response.json().catch(() => null);
         throw new Error(result?.message || "Unable to prepare your PDF download.");
@@ -275,8 +280,8 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
           </h1>
 
           <div className="relative mt-6 rounded-xl border border-[#FFAD79] bg-[#FFF9F3] p-3.5 sm:mt-8 sm:p-6 lg:p-8">
-            <div className="grid gap-6 lg:grid-cols-[minmax(230px,0.76fr)_minmax(0,1.24fr)] lg:items-start lg:gap-10">
-                <div className="mx-auto w-full max-w-[240px] rounded-md bg-[#514256] p-1.5 shadow-[0_10px_20px_rgba(66,52,62,0.28)] sm:max-w-[290px]">
+            <div className="grid gap-6 lg:grid-cols-[minmax(400px,0.95fr)_minmax(0,1.05fr)] lg:items-start lg:gap-10">
+                <div className="mx-auto w-full max-w-[280px] rounded-md bg-[#514256] p-1.5 shadow-[0_10px_20px_rgba(66,52,62,0.28)] sm:max-w-[340px] lg:max-w-[420px]">
                   <Image
                     src={cover}
                     alt={`Cover of ${coverTitle}`}
@@ -298,6 +303,14 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
                       />
                       Story Details
                     </h2>
+                    {fetchedBook && !isStaticStory && fetchedBook.isShowcase !== true && (
+                      <Link
+                        href={`/setting/edit-book?book_id=${encodeURIComponent(storyId)}`}
+                        className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-[#E88DA0] bg-white px-4 font-sans text-sm font-medium text-[#E88DA0] transition-colors hover:bg-[#FFF0F2]"
+                      >
+                        <Pencil size={16} aria-hidden="true" /> Edit Book
+                      </Link>
+                    )}
                   </div>
 
                   <dl className="mt-3 divide-y divide-[#EEE6DE] font-sans text-sm">
@@ -408,6 +421,9 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
 
           <InlineBookPreview
             title={coverTitle}
+            titlePosition={fetchedBook?.titlePosition}
+            creatorName={fetchedBook?.creatorName}
+            font={fetchedBook?.font}
             pages={previewPages}
             coverImage={cover}
             welcomeText={fetchedBook?.foreword}
@@ -426,6 +442,9 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
         onClose={() => setIsReaderOpen(false)}
         storyId={storyId}
         title={coverTitle}
+        titlePosition={fetchedBook?.titlePosition}
+        creatorName={fetchedBook?.creatorName}
+        font={fetchedBook?.font}
         pages={fetchedBook?.pages}
         coverImage={cover}
         welcomeText={fetchedBook?.foreword}

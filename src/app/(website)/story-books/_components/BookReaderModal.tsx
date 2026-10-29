@@ -4,6 +4,7 @@ import Image from "next/image";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import HTMLFlipBook, { usePageFlip } from "@gullabs/react-flipbook";
 import { ChevronLeft, ChevronRight, Minimize2, Minus, Plus } from "lucide-react";
+import { getBookFontFamily } from "@/lib/book-font";
 
 type RawBookPage = {
   pageNumber?: number;
@@ -22,6 +23,9 @@ type BookReaderModalProps = {
   onClose: () => void;
   storyId: string;
   title?: string;
+  titlePosition?: "Top" | "Middle" | "Bottom";
+  creatorName?: string;
+  font?: string;
   coverImage?: string;
   welcomeText?: string;
   finalText?: string;
@@ -71,6 +75,9 @@ const BookReaderModal = ({
   onClose,
   storyId,
   title,
+  titlePosition,
+  creatorName,
+  font,
   coverImage,
   welcomeText,
   finalText,
@@ -78,6 +85,8 @@ const BookReaderModal = ({
   initialPageNumber,
 }: BookReaderModalProps) => {
   const displayTitle = title || "Lisa's Camping Adventure";
+  const coverTitlePosition = titlePosition === "Middle" ? "top-1/2 -translate-y-1/2" : titlePosition === "Bottom" ? "bottom-16" : "top-7";
+  const bookFontFamily = getBookFontFamily(font);
   const suppliedPages = pages || [];
   const hasSpecialPages = suppliedPages.some((page) => page.kind);
   const storyPages = (hasSpecialPages
@@ -102,7 +111,7 @@ const BookReaderModal = ({
       image: coverPage?.imageUrl || coverPage?.illustrationUrl || coverPage?.image || coverImage || storyPages[0]?.image || "/images/story1.png",
       alt: `Cover of ${displayTitle}`,
       text: "",
-      title: coverPage?.title || displayTitle,
+      title: displayTitle,
       sourcePageNumber: hasSpecialPages ? (coverPage?.pageNumber || 1) : undefined,
     },
     {
@@ -114,10 +123,7 @@ const BookReaderModal = ({
     },
     ...storyPages.flatMap((storyPage) => [
       storyPage,
-      {
-        ...storyPage,
-        kind: "storyText" as const,
-      },
+      { ...storyPage, kind: "storyText" as const },
     ]),
     {
       kind: "finalMessage",
@@ -132,6 +138,10 @@ const BookReaderModal = ({
     0,
     activePages.findIndex((bookPage) => bookPage.sourcePageNumber === initialPageNumber),
   );
+  const totalBookPages = hasSpecialPages ? suppliedPages.length : activePages.length;
+  const readerContentKey = activePages
+    .map((bookPage) => `${bookPage.sourcePageNumber}-${bookPage.title || ""}-${bookPage.text}-${bookPage.image}`)
+    .join("|");
   const stageRef = useRef<HTMLDivElement>(null);
   const [pageSize, setPageSize] = useState({ width: 360, height: 416 });
   const [isCompact, setIsCompact] = useState(false);
@@ -145,6 +155,7 @@ const BookReaderModal = ({
     flipPrev,
     page,
   } = usePageFlip(initialReaderPage);
+  const currentBookPage = activePages[page]?.sourcePageNumber || page + 1;
 
   useEffect(() => {
     const stage = stageRef.current;
@@ -208,6 +219,7 @@ const BookReaderModal = ({
         <div ref={stageRef} className="absolute inset-0 flex items-center justify-center overflow-hidden px-4 py-[68px] sm:px-7 sm:py-[80px]">
           <div className="origin-center transition-transform duration-200" style={{ transform: `scale(${zoom})` }}>
             <HTMLFlipBook
+              key={readerContentKey}
               ref={ref}
               {...bookProps}
               width={pageSize.width}
@@ -230,37 +242,24 @@ const BookReaderModal = ({
                     <div className="relative h-full w-full overflow-hidden bg-[#302735]">
                       <Image src={bookPage.image} alt={bookPage.alt} fill sizes="(max-width: 720px) 90vw, 45vw" className="object-cover" priority unoptimized />
                       <div className="absolute inset-x-0 top-0 h-[35%] bg-gradient-to-b from-black/40 to-transparent" />
-                      <h2 className="absolute inset-x-6 top-7 text-center font-crimson text-[clamp(1.5rem,4vw,2.65rem)] font-bold leading-tight text-white [text-shadow:0_2px_3px_rgba(31,25,28,0.8)]">
+                      <h2 style={{ fontFamily: bookFontFamily }} className={`absolute inset-x-6 ${coverTitlePosition} text-center text-[clamp(1.5rem,4vw,2.65rem)] font-bold leading-tight text-white [text-shadow:0_2px_3px_rgba(31,25,28,0.8)]`}>
                         {bookPage.title}
                       </h2>
                       <Image src="/images/logo.png" alt="Bookerello" width={145} height={48} className="absolute bottom-6 left-1/2 h-auto w-28 -translate-x-1/2 drop-shadow-md sm:w-36" />
                     </div>
                   ) : bookPage.kind === "storyImage" ? (
                     <div className="relative h-full w-full overflow-hidden bg-[#302735]">
-                      <Image
-                        src={bookPage.image}
-                        alt={bookPage.alt}
-                        fill
-                        sizes="(max-width: 720px) 90vw, 45vw"
-                        className="object-cover object-center"
-                        unoptimized
-                      />
-                      <span className="absolute bottom-4 right-4 flex size-8 items-center justify-center rounded-full bg-white/90 font-crimson text-xs text-[#302735] shadow-sm">
-                        {(bookPage.storyIndex || 0) + 1}
-                      </span>
+                      <Image src={bookPage.image} alt={bookPage.alt} fill sizes="(max-width: 720px) 90vw, 45vw" className="object-cover object-center" unoptimized />
+                      <span className="absolute bottom-4 right-4 flex size-8 items-center justify-center rounded-full bg-white/90 font-crimson text-xs text-[#302735] shadow-sm">{(bookPage.storyIndex || 0) + 1}</span>
                     </div>
                   ) : bookPage.kind === "storyText" ? (
                     <div className="relative flex h-full w-full items-center overflow-hidden bg-[#FFFCF8] px-[12%] py-10">
                       <span className="absolute -left-7 -top-7 size-24 rounded-full bg-[#DCE5DF]/70" aria-hidden="true" />
                       <span className="absolute -right-5 top-20 size-16 rounded-full bg-[#F8C0B1]/65" aria-hidden="true" />
-                      <span className="absolute bottom-4 right-4 flex size-8 items-center justify-center rounded-full bg-white/90 font-crimson text-xs text-[#302735] shadow-sm">
-                        {(bookPage.storyIndex || 0) + 1}
-                      </span>
+                      <span className="absolute bottom-4 right-4 flex size-8 items-center justify-center rounded-full bg-white/90 font-crimson text-xs text-[#302735] shadow-sm">{(bookPage.storyIndex || 0) + 1}</span>
                       <div className="relative w-full">
                         {bookPage.text.split(/\n\s*\n/).filter(Boolean).map((paragraph, paragraphIndex) => (
-                          <p key={paragraphIndex} className="mb-4 font-crimson text-[clamp(0.82rem,1.75vw,1.25rem)] font-semibold leading-[1.62] text-[#302735] last:mb-0">
-                            {paragraph}
-                          </p>
+                          <p key={paragraphIndex} style={{ fontFamily: bookFontFamily }} className="mb-4 text-[clamp(0.82rem,1.75vw,1.25rem)] font-semibold leading-[1.62] text-[#302735] last:mb-0">{paragraph}</p>
                         ))}
                       </div>
                     </div>
@@ -271,18 +270,18 @@ const BookReaderModal = ({
                       <span className="absolute -bottom-10 -right-10 size-40 rounded-full bg-[#FFC38F]" aria-hidden="true" />
                       {bookPage.kind === "welcome" ? (
                         <>
-                          <p className="relative font-crimson text-[clamp(0.9rem,2vw,1.45rem)] font-semibold leading-relaxed text-[#302735]">
+                          <p style={{ fontFamily: bookFontFamily }} className="relative text-[clamp(0.9rem,2vw,1.45rem)] font-semibold leading-relaxed text-[#302735]">
                             {bookPage.text}
                           </p>
-                          <div className="absolute bottom-[11%] left-[12%] rounded-[45%] bg-white/95 px-5 py-4 text-left shadow-sm">
-                            <p className="font-sans text-[clamp(0.55rem,1.1vw,0.8rem)] text-[#302735]">This magical children&apos;s book belongs to:</p>
-                            <span className="mt-3 block border-b border-dashed border-[#514256]" aria-label="Space for the reader's name or signature" />
+                          <div className="absolute bottom-[11%] left-[12%] text-left">
+                            <p style={{ fontFamily: bookFontFamily }} className="text-[clamp(0.55rem,1.1vw,0.8rem)] text-[#302735]">This magical children&apos;s book belongs to:</p>
+                            <span style={{ fontFamily: bookFontFamily }} className="mt-3 block border-b border-dashed border-[#514256] pb-1 text-[clamp(0.7rem,1.35vw,1rem)] font-semibold text-[#302735]">{creatorName || " "}</span>
                           </div>
                         </>
                       ) : (
                         <div className="relative">
-                          <h2 className="mb-5 font-crimson text-[clamp(1.2rem,2.7vw,2rem)] font-bold text-[#302735]">{bookPage.title}</h2>
-                          <p className="font-crimson text-[clamp(0.9rem,2vw,1.35rem)] font-semibold leading-relaxed text-[#302735]">{bookPage.text}</p>
+                          <h2 style={{ fontFamily: bookFontFamily }} className="mb-5 text-[clamp(1.2rem,2.7vw,2rem)] font-bold text-[#302735]">{bookPage.title}</h2>
+                          <p style={{ fontFamily: bookFontFamily }} className="text-[clamp(0.9rem,2vw,1.35rem)] font-semibold leading-relaxed text-[#302735]">{bookPage.text}</p>
                           <p className="mt-12 font-sans text-[clamp(0.5rem,1vw,0.7rem)] text-[#514256]">This book is created with:</p>
                           <Image src="/images/logo.png" alt="Bookerello" width={125} height={42} className="mx-auto mt-1 h-auto w-24 sm:w-28" />
                         </div>
@@ -322,7 +321,7 @@ const BookReaderModal = ({
             <ChevronLeft size={21} strokeWidth={2.5} aria-hidden="true" />
           </button>
           <span className="min-w-14 text-center font-sans text-sm font-medium text-[#514256]" aria-live="polite">
-            {page + 1} / {activePages.length}
+            {currentBookPage} / {totalBookPages}
           </span>
           <button
             type="button"

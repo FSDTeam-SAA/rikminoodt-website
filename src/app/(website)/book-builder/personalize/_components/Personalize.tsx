@@ -125,7 +125,7 @@ export default function Personalize() {
                       className="h-full w-full object-contain object-bottom"
                     />
                   </span>
-                  <span className="flex min-h-9 items-center justify-center px-1 pb-1 pt-1 font-sans text-xs font-medium leading-[1.15] text-[#1E1E1E] sm:min-h-11 sm:text-sm lg:text-base">
+                  <span className="px-2 pb-4 pt-2 font-sans text-base font-semibold leading-none text-[#1E1E1E] sm:text-[20px]">
                     {translateMessage(message.label)}
                   </span>
                 </button>

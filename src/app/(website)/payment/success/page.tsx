@@ -85,7 +85,7 @@ function HardcopyPaymentSuccess({ sessionId }: { sessionId: string | null }) {
           </div>
         </div>
 
-        <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+        <div className="mt-7 flex flex-wrap items-center justify-center gap-4">
           <Link
             href="/setting/ordered-book"
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#E88DA0] px-6 font-sans text-sm font-semibold text-white transition hover:bg-[#DD7893]"
