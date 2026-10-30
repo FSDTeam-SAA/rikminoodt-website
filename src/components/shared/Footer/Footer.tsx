@@ -123,14 +123,14 @@ const Footer = () => {
             <Link
               href="/"
               aria-label={t.nav.homeAria}
-              className="inline-flex rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eea0b4] focus-visible:ring-offset-2 focus-visible:ring-offset-[#504557]"
+              className="inline-flex rounded-xl p-2 transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eea0b4] focus-visible:ring-offset-2 focus-visible:ring-offset-[#504557]"
             >
               <Image
-                src="/images/logo.png"
-                alt="Bookereillo"
-                width={180}
-                height={45}
-                className="h-auto w-[150px]"
+                src="/images/rikLogo-transparent.png"
+                alt="Boekerello"
+                width={1600}
+                height={427}
+                className="h-auto w-[160px] object-contain"
               />
             </Link>
 

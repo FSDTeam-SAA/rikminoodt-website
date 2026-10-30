@@ -61,7 +61,7 @@ function ChoiceChip({ choice, href, label, displayLabel }: { choice: Choice | un
 export default function CreateAStory() {
   const router = useRouter();
   const { selectedAge, selectedTheme, selectedStory, setSelectedStory } = useBookBuilder();
-  const { bb, translateAge, translateTheme } = useBookBuilderTranslations();
+  const { bb, translateAge, translateTheme, translateSubject } = useBookBuilderTranslations();
   const age = ages.find((item) => item.label === selectedAge);
   const theme = themes.find((item) => item.label === selectedTheme);
   const availableSubjects = selectedTheme ? SUBJECT_OPTIONS[selectedTheme] ?? [] : [];
@@ -122,7 +122,7 @@ export default function CreateAStory() {
                     />
                   </span>
                   <span className="px-2 pb-4 pt-2 font-sans text-base font-semibold leading-none text-[#1E1E1E] sm:text-[20px]">
-                    {subject.label}
+                    {translateSubject(subject.value)}
                   </span>
                 </button>
               );

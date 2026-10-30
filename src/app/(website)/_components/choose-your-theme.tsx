@@ -37,7 +37,8 @@ const ChooseYourTheme = () => {
             return (
               <Link
                 key={theme.key}
-                href="/book-builder/choose-age"
+                href={`/book-builder/choose-age?theme=${encodeURIComponent(theme.label)}`}
+                scroll
                 className={`group flex min-h-[220px] flex-col items-center justify-between rounded-2xl px-3 pb-4 pt-4 text-center shadow-sm transition duration-200 hover:shadow-[0_10px_22px_rgba(103,75,92,0.16)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#987fc5] focus-visible:ring-offset-4 sm:min-h-[286px] sm:px-4 sm:pb-5 sm:pt-5 lg:h-[330px] lg:min-h-0 lg:rounded-2xl lg:p-4 ${theme.color}`}
               >
                 <div className="relative flex flex-1 items-center justify-center self-stretch">

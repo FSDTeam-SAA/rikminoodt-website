@@ -119,7 +119,7 @@ export default function PersonalDetails() {
 
   const { data: session, status: sessionStatus } = useSession();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [localCreatorName, setLocalCreatorName] = useState(initialCreatorName || "Mum & Dad");
+  const [localCreatorName, setLocalCreatorName] = useState(initialCreatorName);
   const [localUser, setLocalUser] = useState(initialUserDetails);
   const [errorMessage, setErrorMessage] = useState("");
 

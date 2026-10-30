@@ -11,9 +11,10 @@ type ReviewModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onSubmitted: () => void;
+  embedded?: boolean;
 };
 
-const ReviewModal = ({ isOpen, onClose, onSubmitted }: ReviewModalProps) => {
+const ReviewModal = ({ isOpen, onClose, onSubmitted, embedded = false }: ReviewModalProps) => {
   const { data: session } = useSession();
   const router = useRouter();
   const [rating, setRating] = useState(5);
@@ -74,11 +75,9 @@ const ReviewModal = ({ isOpen, onClose, onSubmitted }: ReviewModalProps) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-[#302735]/45 p-4" role="dialog" aria-modal="true" aria-labelledby="review-modal-title">
+    <div className={embedded ? "min-h-[70vh] bg-[#FEFAF4] px-4 py-16 sm:py-20" : "fixed inset-0 z-[70] flex items-center justify-center bg-[#302735]/45 p-4"} role={embedded ? undefined : "dialog"} aria-modal={embedded ? undefined : true} aria-labelledby="review-modal-title">
       <div className="relative w-full max-w-lg rounded-2xl bg-[#FFFDFC] p-5 shadow-2xl sm:p-7">
-        <button type="button" onClick={onClose} aria-label="Close review form" className="absolute right-4 top-4 flex size-9 items-center justify-center rounded-full bg-[#FFF0F3] text-[#D36F87] transition hover:bg-[#FAD8DF]">
-          <X size={18} aria-hidden="true" />
-        </button>
+        {!embedded && <button type="button" onClick={onClose} aria-label="Close review form" className="absolute right-4 top-4 flex size-9 items-center justify-center rounded-full bg-[#FFF0F3] text-[#D36F87] transition hover:bg-[#FAD8DF]"><X size={18} aria-hidden="true" /></button>}
         <h2 id="review-modal-title" className="pr-10 font-crimson text-3xl font-semibold text-[#302735]">Share your review</h2>
         <p className="mt-2 font-sans text-sm leading-relaxed text-[#756E73]">Tell other families about your personalised storybook.</p>
 

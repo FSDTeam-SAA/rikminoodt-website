@@ -89,7 +89,7 @@ function ChoiceChip({ choice, href, label, displayLabel, chooseLabel }: { choice
     <Link
       href={href}
       aria-label={`Edit ${label.toLowerCase()}: ${choice.label}`}
-      className="group inline-flex h-10 items-center gap-2 rounded-full px-2 pr-3 font-sans text-base font-medium text-[#4B4650] transition hover:brightness-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2"
+      className={`group inline-flex h-10 items-center gap-2 rounded-full px-2 pr-3 font-sans text-base font-medium transition hover:brightness-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2 ${choice.label === "Neon Nexus" ? "text-white" : "text-[#4B4650]"}`}
       style={{ backgroundColor: choice.color ?? "#FFFFFF" }}
     >
       <span className="relative size-6 overflow-hidden rounded-full bg-white/45">

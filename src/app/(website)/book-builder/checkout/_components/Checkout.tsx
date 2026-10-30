@@ -120,7 +120,7 @@ export default function Checkout() {
     userDetails,
     setCurrentBookId,
   } = useBookBuilder();
-  const { bb, translateAge, translateTheme, translateMessage, translateFont } = useBookBuilderTranslations();
+  const { bb, translateAge, translateTheme, translateMessage, translateFont, translateSubject } = useBookBuilderTranslations();
   const copy = useBookBuilderPageCopy();
 
   const { data: session } = useSession();
@@ -314,7 +314,7 @@ export default function Checkout() {
         <div className="mt-4 flex max-w-[1110px] flex-wrap gap-3">
           <ChoiceChip choice={age} displayLabel={translateAge(age?.label)} />
           <ChoiceChip choice={theme} displayLabel={translateTheme(theme?.label)} />
-          <ChoiceChip choice={story} />
+          <ChoiceChip choice={story} displayLabel={translateSubject(story?.value ?? story?.label)} />
           <ChoiceChip choice={message} displayLabel={translateMessage(message?.label)} />
           <ChoiceChip choice={font} displayLabel={translateFont(font?.label)} />
           <ChoiceChip
@@ -342,9 +342,11 @@ export default function Checkout() {
                     {copy.uniqueCreation}
                   </h2>
                   <p className="mt-2 max-w-[530px] font-sans text-xs leading-[1.45] text-[#536278] sm:text-sm">
-                    Your story is about{" "}
-                    {story?.label ?? selectedStory?.toLowerCase().replaceAll("_", " ") ?? "a magical adventure"} within the theme{" "}
-                    {theme ? translateTheme(theme.label) : "Fairy Tales"}. Created by {creatorName || "you"}.
+                    {copy.storySummaryAbout}{" "}
+                    {translateSubject(story?.value ?? story?.label ?? selectedStory) || copy.storySummaryFallback}{" "}
+                    {copy.storySummaryTheme}{" "}
+                    {theme ? translateTheme(theme.label) : translateTheme("Fairy Tales")}. {copy.storySummaryCreatedBy}{" "}
+                    {creatorName || "you"}.
                   </p>
                 </div>
               </div>

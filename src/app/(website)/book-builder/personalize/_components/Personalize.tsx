@@ -68,7 +68,7 @@ function ChoiceChip({ choice, href, label, displayLabel }: { choice: Choice | un
 export default function Personalize() {
   const router = useRouter();
   const { selectedAge, selectedTheme, selectedStory, selectedMessage, setSelectedMessage } = useBookBuilder();
-  const { bb, translateAge, translateTheme, translateMessage } = useBookBuilderTranslations();
+  const { bb, translateAge, translateTheme, translateMessage, translateSubject } = useBookBuilderTranslations();
   const age = ages.find((item) => item.label === selectedAge);
   const theme = themes.find((item) => item.label === selectedTheme);
   const story = getStoryChoice(selectedStory, selectedTheme);
@@ -92,7 +92,7 @@ export default function Personalize() {
           <div className="mt-3 flex flex-wrap gap-2 sm:gap-3">
             <ChoiceChip label="Age" displayLabel={translateAge(age?.label)} choice={age} href="/book-builder/choose-age" />
             <ChoiceChip label="Theme" displayLabel={translateTheme(theme?.label)} choice={theme} href="/book-builder/choose-theme" />
-            <ChoiceChip label="Subject" choice={story} href="/book-builder/choose-story" />
+            <ChoiceChip label="Subject" displayLabel={translateSubject(story?.value ?? story?.label)} choice={story} href="/book-builder/choose-story" />
           </div>
 
           <h3 className="mt-6 font-sans text-base font-semibold leading-none text-[#1E1E1E] sm:text-lg lg:mt-8 lg:text-[28px]">

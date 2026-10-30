@@ -149,7 +149,7 @@ export default function PricingPage() {
             {/* Action Button */}
             <div className="mt-9 pt-1">
               <Link
-                href="/story-books"
+                href="/book-builder/choose-age"
                 className="inline-flex h-10 w-full items-center justify-center rounded-lg bg-[#E88DA0] font-sans text-xs font-semibold text-white shadow-sm transition hover:bg-[#DD7893] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]"
               >
                 {pricing.printedBtn} →
