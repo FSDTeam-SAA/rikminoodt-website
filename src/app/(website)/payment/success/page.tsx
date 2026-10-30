@@ -14,6 +14,7 @@ import {
   X,
 } from "lucide-react";
 import { getApiBaseUrl } from "@/config/api";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import { formatGenerationError } from "../../book-builder/_components/generation-error";
 
 type Book = {
@@ -27,6 +28,43 @@ type Book = {
   failureMessage?: string;
   coverImageUrl?: string;
   pages?: Array<{ pageNumber: number; text: string }>;
+};
+
+type PaymentLanguage = "en" | "nl" | "fr";
+
+const paymentCopy: Record<PaymentLanguage, {
+  paymentSuccessful: string;
+  confirmingPayment: string;
+  confirmingDescription: string;
+  bookReady: string;
+  generationIssue: string;
+  creatingBook: string;
+  bookReference: string;
+  viewBookStatus: string;
+  editAndRetry: string;
+  retryGeneration: string;
+  changePhotoAndRetry: string;
+  creationComplete: string;
+  creationCompleteDescription: string;
+  goToGeneratedBook: string;
+  generationNeedsAttention: string;
+  creatingMagicalBook: string;
+  generationFailedDescription: string;
+  generationDescription: string;
+  waitingForPayment: string;
+  addingFinalTouches: string;
+  thisMayTakeAMoment: string;
+  closeStatusHint: string;
+}> = {
+  en: {
+    paymentSuccessful: "Payment successful", confirmingPayment: "Confirming your payment", confirmingDescription: "Please wait while we confirm your payment with the server.", bookReady: "Your personalised book is ready!", generationIssue: "Your payment is confirmed, but book generation encountered an issue.", creatingBook: "Your payment is confirmed. We’re creating your personalised storybook.", bookReference: "Book reference", viewBookStatus: "View book status", editAndRetry: "Edit Story & Retry", retryGeneration: "Retry Generation", changePhotoAndRetry: "Change Photo & Retry", creationComplete: "Book creation complete", creationCompleteDescription: "Your personalised book is ready to read whenever you are.", goToGeneratedBook: "Go to Generated Book", generationNeedsAttention: "Generation needs attention", creatingMagicalBook: "Creating your magical book", generationFailedDescription: "Your payment is confirmed, but we couldn’t finish the book. You can try again.", generationDescription: "We’re writing and illustrating your story. This window will close when your book is ready.", waitingForPayment: "We’re waiting for payment confirmation before starting your book.", addingFinalTouches: "Adding the final magical touches…", thisMayTakeAMoment: "This may take a moment.", closeStatusHint: "You can close this window and reopen the status on this page.",
+  },
+  nl: {
+    paymentSuccessful: "Betaling geslaagd", confirmingPayment: "Je betaling wordt bevestigd", confirmingDescription: "Even geduld terwijl we je betaling met de server bevestigen.", bookReady: "Je persoonlijke boek is klaar!", generationIssue: "Je betaling is bevestigd, maar er is een probleem opgetreden bij het maken van het boek.", creatingBook: "Je betaling is bevestigd. We maken jouw persoonlijke verhalenboek.", bookReference: "Boekreferentie", viewBookStatus: "Bekijk boekstatus", editAndRetry: "Verhaal bewerken en opnieuw proberen", retryGeneration: "Opnieuw proberen", changePhotoAndRetry: "Foto wijzigen en opnieuw proberen", creationComplete: "Boek maken voltooid", creationCompleteDescription: "Je persoonlijke boek is klaar om te lezen wanneer jij dat wilt.", goToGeneratedBook: "Naar je gemaakte boek", generationNeedsAttention: "Voor het maken is actie nodig", creatingMagicalBook: "We maken jouw magische boek", generationFailedDescription: "Je betaling is bevestigd, maar we konden het boek niet afmaken. Je kunt het opnieuw proberen.", generationDescription: "We schrijven en illustreren jouw verhaal. Dit venster sluit wanneer je boek klaar is.", waitingForPayment: "We wachten op de betalingsbevestiging voordat we met je boek beginnen.", addingFinalTouches: "De laatste magische details worden toegevoegd…", thisMayTakeAMoment: "Dit kan even duren.", closeStatusHint: "Je kunt dit venster sluiten en de status op deze pagina opnieuw openen.",
+  },
+  fr: {
+    paymentSuccessful: "Paiement réussi", confirmingPayment: "Confirmation de votre paiement", confirmingDescription: "Veuillez patienter pendant que nous confirmons votre paiement avec le serveur.", bookReady: "Votre livre personnalisé est prêt !", generationIssue: "Votre paiement est confirmé, mais un problème est survenu lors de la création du livre.", creatingBook: "Votre paiement est confirmé. Nous créons votre livre d’histoires personnalisé.", bookReference: "Référence du livre", viewBookStatus: "Voir le statut du livre", editAndRetry: "Modifier l’histoire et réessayer", retryGeneration: "Réessayer la création", changePhotoAndRetry: "Changer la photo et réessayer", creationComplete: "Création du livre terminée", creationCompleteDescription: "Votre livre personnalisé est prêt à être lu quand vous le souhaitez.", goToGeneratedBook: "Voir votre livre créé", generationNeedsAttention: "La création nécessite votre attention", creatingMagicalBook: "Création de votre livre magique", generationFailedDescription: "Votre paiement est confirmé, mais nous n’avons pas pu terminer le livre. Vous pouvez réessayer.", generationDescription: "Nous écrivons et illustrons votre histoire. Cette fenêtre se fermera lorsque votre livre sera prêt.", waitingForPayment: "Nous attendons la confirmation du paiement avant de commencer votre livre.", addingFinalTouches: "Ajout des dernières touches magiques…", thisMayTakeAMoment: "Cela peut prendre un instant.", closeStatusHint: "Vous pouvez fermer cette fenêtre et rouvrir le statut sur cette page.",
+  },
 };
 
 /** Flow 1: Hardcopy / Print Order Success (No book generation, no generation modal) */
@@ -116,11 +154,13 @@ function BookGenerationPaymentSuccess({
 }) {
   const router = useRouter();
   const { data: session } = useSession();
+  const { language } = useLanguage();
   const [book, setBook] = useState<Book | null>(null);
   const [modalOpen, setModalOpen] = useState(true);
   const [error, setError] = useState("");
   const [retrying, setRetrying] = useState(false);
   const [pollVersion, setPollVersion] = useState(0);
+  const copy = paymentCopy[language as PaymentLanguage];
 
   useEffect(() => {
     let stopped = false;
@@ -215,8 +255,8 @@ function BookGenerationPaymentSuccess({
   const failureType = book?.failureType;
 
   return (
-    <main className="min-h-[70vh] bg-[radial-gradient(circle_at_top,_#FFF9F1,_#FEF6EC_52%,_#F8EEF5)] px-4 pb-16 pt-[120px] sm:px-8 sm:pt-[150px] lg:pt-[190px]">
-      <section className="relative mx-auto max-w-3xl overflow-hidden rounded-3xl border border-[#f3dce2] bg-[#FEFAF4] p-6 text-center shadow-[0_16px_44px_rgba(80,40,50,0.1)] sm:p-10">
+    <main className="flex min-h-[calc(100vh-80px)] items-center bg-[radial-gradient(circle_at_top,_#FFF9F1,_#FEF6EC_52%,_#F8EEF5)] px-4 py-8 sm:px-8 sm:py-12">
+      <section className="relative mx-auto w-full max-w-xl overflow-hidden rounded-3xl border border-[#f3dce2] bg-[#FEFAF4] p-6 text-center shadow-[0_16px_44px_rgba(80,40,50,0.1)] sm:p-8">
         <div className="pointer-events-none absolute -right-16 -top-16 size-48 rounded-full bg-[#FDE2E8]/60 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-20 -left-16 size-52 rounded-full bg-[#EDE5FB]/60 blur-3xl" />
         <div className="relative">
@@ -228,16 +268,16 @@ function BookGenerationPaymentSuccess({
           {paid ? <CheckCircle2 size={32} /> : <Loader2 size={32} className="animate-spin" />}
         </div>
         <h1 className="mt-5 font-crimson text-3xl font-bold text-[#1E1E1E] sm:text-4xl">
-          {paid ? "Payment successful" : "Confirming your payment"}
+          {paid ? copy.paymentSuccessful : copy.confirmingPayment}
         </h1>
         <p className="mt-3 text-sm leading-relaxed text-[#66605F]">
           {!paid
-            ? "Please wait while we confirm your payment with the server."
+            ? copy.confirmingDescription
             : completed
-            ? "Your personalised book is ready!"
+            ? copy.bookReady
             : failed
-            ? "Your payment is confirmed, but book generation encountered an issue."
-            : "Your payment is confirmed. We’re creating your personalised storybook."}
+            ? copy.generationIssue
+            : copy.creatingBook}
         </p>
         {failed && (
           <div className="mt-3">
@@ -252,7 +292,7 @@ function BookGenerationPaymentSuccess({
           </div>
         )}
         {bookId && (
-          <p className="mt-3 break-all text-xs text-[#8A7982]">Book reference: {bookId}</p>
+          <p className="mt-3 break-all text-xs text-[#8A7982]">{copy.bookReference}: {bookId}</p>
         )}
         {error && (
           <p role="alert" className="mt-4 text-sm text-[#B74760]">
@@ -264,7 +304,7 @@ function BookGenerationPaymentSuccess({
             onClick={() => setModalOpen(true)}
             className="mt-6 min-h-11 rounded-xl bg-[#E88DA0] px-6 text-sm font-semibold text-white transition hover:bg-[#DD7893]"
           >
-            View book status
+            {copy.viewBookStatus}
           </button>
         )}
         {failed && failureType === "CONTENT_MODERATION" && (
@@ -272,7 +312,7 @@ function BookGenerationPaymentSuccess({
             onClick={redirectToWizard}
             className="mt-6 min-h-11 rounded-xl bg-[#E88DA0] px-6 text-sm font-semibold text-white"
           >
-            Edit Story &amp; Retry
+            {copy.editAndRetry}
           </button>
         )}
         {failed && failureType === "IMAGE_QUALITY" && (
@@ -282,13 +322,13 @@ function BookGenerationPaymentSuccess({
               disabled={retrying}
               className="min-h-11 rounded-xl bg-[#E88DA0] px-6 text-sm font-semibold text-white disabled:opacity-60"
             >
-              {retrying ? "Retrying…" : "Retry Generation"}
+              {retrying ? `${copy.retryGeneration}…` : copy.retryGeneration}
             </button>
             <button
               onClick={redirectToWizard}
               className="min-h-11 rounded-xl border border-[#E88DA0] bg-white px-6 text-sm font-semibold text-[#C75D78] transition hover:bg-[#FFF3F5]"
             >
-              Change Photo &amp; Retry
+              {copy.changePhotoAndRetry}
             </button>
           </div>
         )}
@@ -298,44 +338,26 @@ function BookGenerationPaymentSuccess({
             disabled={retrying}
             className="mt-6 min-h-11 rounded-xl bg-[#E88DA0] px-6 text-sm font-semibold text-white disabled:opacity-60"
           >
-            {retrying ? "Retrying…" : "Retry Generation"}
+            {retrying ? `${copy.retryGeneration}…` : copy.retryGeneration}
           </button>
         )}
         {completed && (
-          <div className="mt-7 text-left">
-            <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
-              <div>
-                <p className="font-sans text-xs font-semibold uppercase tracking-[0.16em] text-[#C76B85]">
-                  Your story preview
-                </p>
-                <h2 className="mt-1 font-crimson text-3xl text-[#514256]">
-                  {book?.title || "Your storybook"}
-                </h2>
-              </div>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#E6F7ED] px-3 py-1.5 font-sans text-xs font-semibold text-[#18B56E]">
-                <CheckCircle2 size={14} /> Ready to read
-              </span>
+          <div className="mt-6 rounded-2xl border border-[#D8EFDF] bg-white/75 p-5 sm:p-6">
+            <div className="mx-auto flex size-11 items-center justify-center rounded-full bg-[#E6F7ED] text-[#18B56E]">
+              <CheckCircle2 size={22} />
             </div>
-
-            <div className="mt-5 grid gap-4 sm:grid-cols-2">
-              {(book?.pages || []).slice(0, 2).map((page) => (
-                <article key={page.pageNumber} className="rounded-2xl border border-[#F0DFE4] bg-white/85 p-5 shadow-[0_5px_15px_rgba(90,57,68,0.06)]">
-                  <span className="inline-flex rounded-full bg-[#FDE9EE] px-2.5 py-1 font-sans text-[11px] font-semibold text-[#C75D78]">
-                    Page {page.pageNumber}
-                  </span>
-                  <p className="mt-3 whitespace-pre-wrap font-sans text-sm leading-relaxed text-[#514256]">
-                    {page.text}
-                  </p>
-                </article>
-              ))}
-            </div>
-
+            <h2 className="mt-3 font-crimson text-2xl font-semibold text-[#514256]">
+              {copy.creationComplete}
+            </h2>
+            <p className="mx-auto mt-1.5 max-w-sm text-sm leading-relaxed text-[#66605F]">
+              {copy.creationCompleteDescription}
+            </p>
             <Link
               href="/setting/generated-books"
-              className="mt-7 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#E88DA0] px-6 font-sans text-sm font-semibold text-white shadow-[0_5px_15px_rgba(232,141,160,0.3)] transition hover:bg-[#DD7893] sm:w-auto"
+              className="mt-5 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#E88DA0] px-6 font-sans text-sm font-semibold text-white shadow-[0_5px_15px_rgba(232,141,160,0.3)] transition hover:bg-[#DD7893] sm:w-auto"
             >
               <BookOpen size={17} />
-              Go to Generated Books
+              {copy.goToGeneratedBook}
             </Link>
           </div>
         )}
@@ -375,17 +397,17 @@ function BookGenerationPaymentSuccess({
               className="mt-5 font-crimson text-3xl font-semibold text-[#514256]"
             >
               {failed
-                ? "Generation needs attention"
+                ? copy.generationNeedsAttention
                 : paid
-                ? "Creating your magical book"
-                : "Confirming your payment"}
+                ? copy.creatingMagicalBook
+                : copy.confirmingPayment}
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-[#70636b]">
               {failed
-                ? "Your payment is confirmed, but we couldn’t finish the book. You can try again."
+                ? copy.generationFailedDescription
                 : paid
-                ? "We’re writing and illustrating your story. This window will close when your book is ready."
-                : "We’re waiting for payment confirmation before starting your book."}
+                ? copy.generationDescription
+                : copy.waitingForPayment}
             </p>
             {failed && (
               <div className="mt-3">
@@ -407,10 +429,10 @@ function BookGenerationPaymentSuccess({
                   <Sparkles size={22} className="relative animate-pulse text-[#E88DA0]" />
                 </div>
                 <div className="mt-4 flex items-center justify-center gap-2 text-xs font-semibold text-[#816F78]">
-                  <span>Adding the final magical touches…</span>
+                  <span>{copy.addingFinalTouches}</span>
                   <Loader2 size={14} className="animate-spin text-[#9C81BE]" />
                 </div>
-                <p className="mt-1.5 text-[11px] text-[#A09199]">This may take a moment.</p>
+                <p className="mt-1.5 text-[11px] text-[#A09199]">{copy.thisMayTakeAMoment}</p>
               </div>
             )}
             {error && (
@@ -423,7 +445,7 @@ function BookGenerationPaymentSuccess({
                 onClick={redirectToWizard}
                 className="mt-5 min-h-11 w-full rounded-xl bg-[#E88DA0] font-semibold text-white"
               >
-                Edit Story &amp; Retry
+                {copy.editAndRetry}
               </button>
             )}
             {failed && failureType === "IMAGE_QUALITY" && (
@@ -433,13 +455,13 @@ function BookGenerationPaymentSuccess({
                   disabled={retrying}
                   className="min-h-11 w-full rounded-xl bg-[#E88DA0] font-semibold text-white disabled:opacity-60"
                 >
-                  {retrying ? "Retrying…" : "Retry Generation"}
+                  {retrying ? `${copy.retryGeneration}…` : copy.retryGeneration}
                 </button>
                 <button
                   onClick={redirectToWizard}
                   className="min-h-11 w-full rounded-xl border border-[#E88DA0] bg-white font-semibold text-[#C75D78] transition hover:bg-[#FFF3F5]"
                 >
-                  Change Photo &amp; Retry
+                  {copy.changePhotoAndRetry}
                 </button>
               </div>
             )}
@@ -449,11 +471,11 @@ function BookGenerationPaymentSuccess({
                 disabled={retrying}
                 className="mt-5 min-h-11 w-full rounded-xl bg-[#E88DA0] font-semibold text-white disabled:opacity-60"
               >
-                {retrying ? "Retrying…" : "Retry Generation"}
+                {retrying ? `${copy.retryGeneration}…` : copy.retryGeneration}
               </button>
             )}
             <p className="mt-5 text-xs text-[#95858e]">
-              You can close this window and reopen the status on this page.
+              {copy.closeStatusHint}
             </p>
           </div>
         </div>

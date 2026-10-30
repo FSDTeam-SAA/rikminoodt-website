@@ -285,7 +285,7 @@ export default function PersonalDetails() {
           )}
 
           <p className="mt-3 rounded-[5px] bg-[#FFF1C6] px-2 py-2 font-sans text-[8px] leading-[1.3] text-[#B78631] sm:mt-5 sm:text-[10px]">
-            {bb?.pricingNotice || "ⓘ Almost there. Your digital book costs £9.99. If you also order a hardcover book later, this amount is deducted from it."}
+            {bb?.pricingNotice || "ⓘ Almost there. Your digital book costs €8.99. If you also order a hardcover book later, this amount is deducted from it."}
           </p>
           <div className="mt-4 flex justify-center sm:mt-6">
             <button

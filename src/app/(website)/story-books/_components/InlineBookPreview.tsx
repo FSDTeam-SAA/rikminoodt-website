@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import HTMLFlipBook, { usePageFlip } from "@gullabs/react-flipbook";
 import { getBookFontFamily } from "@/lib/book-font";
+import BookPageDecorations from "./BookPageDecorations";
 
 type PreviewPage = {
   pageNumber: number;
@@ -195,13 +196,10 @@ const InlineBookPreview = ({
                 ) : bookPage.kind === "storyImage" ? (
                   <div className="relative h-full w-full overflow-hidden bg-[#302735]">
                     <Image src={bookPage.image} alt={`Illustration for story page ${(bookPage.storyIndex || 0) + 1}`} fill sizes="(max-width: 720px) 90vw, 45vw" className="object-cover object-center" priority={index < 3} unoptimized />
-                    <span className="absolute bottom-4 right-4 flex size-8 items-center justify-center rounded-full bg-white/90 font-crimson text-xs text-[#302735] shadow-sm">{(bookPage.storyIndex || 0) + 1}</span>
                   </div>
                 ) : bookPage.kind === "storyText" ? (
                   <div className="relative flex h-full w-full items-center overflow-hidden bg-[#FFFCF8] px-[12%] py-10">
-                    <span className="absolute -left-7 -top-7 size-24 rounded-full bg-[#DCE5DF]/70" aria-hidden="true" />
-                    <span className="absolute -right-5 top-20 size-16 rounded-full bg-[#F8C0B1]/65" aria-hidden="true" />
-                    <span className="absolute bottom-4 right-4 flex size-8 items-center justify-center rounded-full bg-white/90 font-crimson text-xs text-[#302735] shadow-sm">{(bookPage.storyIndex || 0) + 1}</span>
+                    <BookPageDecorations pageNumber={(bookPage.storyIndex || 0) + 1} />
                     <div className="relative w-full">
                       {bookPage.text.split(/\n\s*\n/).filter(Boolean).map((paragraph, paragraphIndex) => (
                         <p key={paragraphIndex} style={{ fontFamily: bookFontFamily }} className={`mb-3 font-semibold leading-[1.48] text-[#302735] last:mb-0 ${bookPage.text.length > 900 ? "text-[clamp(0.8rem,1.15vw,1.05rem)]" : "text-[clamp(0.9rem,1.45vw,1.25rem)]"}`}>{paragraph}</p>
@@ -210,9 +208,7 @@ const InlineBookPreview = ({
                   </div>
                 ) : (
                   <div className="relative flex h-full w-full items-center justify-center overflow-hidden bg-[#FFFCF6] px-[13%] text-center">
-                    <span className="absolute -left-10 -top-10 size-36 rounded-full bg-[#DCE5DF]" aria-hidden="true" />
-                    <span className="absolute -right-8 -top-8 size-32 rounded-full bg-[#F8C0B1]" aria-hidden="true" />
-                    <span className="absolute -bottom-10 -right-10 size-40 rounded-full bg-[#FFC38F]" aria-hidden="true" />
+                    <BookPageDecorations />
                     {bookPage.kind === "welcome" ? (
                       <>
                         <p style={{ fontFamily: bookFontFamily }} className="relative text-[clamp(0.9rem,2vw,1.45rem)] font-semibold leading-relaxed text-[#302735]">
