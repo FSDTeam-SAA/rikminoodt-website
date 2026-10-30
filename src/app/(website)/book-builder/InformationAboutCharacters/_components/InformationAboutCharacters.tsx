@@ -502,16 +502,16 @@ export default function InformationAboutCharacters() {
   const [characterType, setCharacterType] = useState<CharacterType>(() =>
     characterTypeFromStoredType(storedMainCharacter?.type),
   );
-  const [name, setName] = useState(storedCharacters[0]?.name || "Lily");
+  const [name, setName] = useState(storedCharacters[0]?.name || "");
   const [gender, setGender] = useState<string | null>(
     storedCharacters[0]?.gender === "BOY"
       ? "Male"
       : storedCharacters[0]?.gender === "GIRL"
         ? "Female"
-        : "Female"
+        : null
   );
   const [ageValue, setAgeValue] = useState(
-    storedCharacters[0]?.age ? String(storedCharacters[0].age) : "4"
+    storedCharacters[0]?.age ? String(storedCharacters[0].age) : ""
   );
   const [hobbies, setHobbies] = useState(storedCharacters[0]?.hobbies || "");
   const [food, setFood] = useState(storedCharacters[0]?.favoriteFood || "");
@@ -565,8 +565,8 @@ export default function InformationAboutCharacters() {
               id,
               type,
               name: "",
-              gender: "Female",
-              age: "4",
+              gender: "",
+              age: "",
               hobbies: "",
               food: "",
               animalName: "",
@@ -624,9 +624,9 @@ export default function InformationAboutCharacters() {
           : characterType === "Animal"
             ? "ANIMAL"
             : "OBJECT") as "PERSON" | "ANIMAL" | "OBJECT",
-        name: name || "Lily",
+        name,
         gender: char1Gender,
-        age: parseInt(ageValue, 10) || 4,
+        age: parseInt(ageValue, 10),
         hobbies: hobbies || undefined,
         favoriteFood: food || undefined,
         animalName: animalName || undefined,
@@ -646,7 +646,7 @@ export default function InformationAboutCharacters() {
               : "OBJECT") as "PERSON" | "ANIMAL" | "OBJECT",
           name: c.name || `Character ${i + 2}`,
           gender: cGender,
-          age: parseInt(c.age, 10) || 4,
+          age: parseInt(c.age, 10),
           hobbies: c.hobbies || undefined,
           favoriteFood: c.food || undefined,
           animalName: c.animalName || undefined,

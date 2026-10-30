@@ -91,7 +91,7 @@ function ChoiceChip({ choice, href, label, displayLabel }: { choice: Choice | un
 export default function Choosefont() {
   const router = useRouter();
   const { selectedAge, selectedTheme, selectedStory, selectedMessage, selectedIllustration, selectedFont, setSelectedFont } = useBookBuilder();
-  const { bb, translateAge, translateTheme, translateMessage, translateIllustration, translateFont } = useBookBuilderTranslations();
+  const { bb, translateAge, translateTheme, translateMessage, translateIllustration, translateFont, translateSubject } = useBookBuilderTranslations();
   const [previewFont, setPreviewFont] = useState<(typeof fonts)[number] | null>(null);
   const age = ages.find((item) => item.label === selectedAge);
   const theme = themes.find((item) => item.label === selectedTheme);
@@ -135,7 +135,7 @@ export default function Choosefont() {
           <div className="mt-3 flex flex-wrap gap-2 sm:gap-3">
             <ChoiceChip label="Age" displayLabel={translateAge(age?.label)} choice={age} href="/book-builder/choose-age" />
             <ChoiceChip label="Theme" displayLabel={translateTheme(theme?.label)} choice={theme} href="/book-builder/choose-theme" />
-            <ChoiceChip label="Subject" choice={story} href="/book-builder/choose-story" />
+            <ChoiceChip label="Subject" displayLabel={translateSubject(story?.value ?? story?.label)} choice={story} href="/book-builder/choose-story" />
             <ChoiceChip label="Message" displayLabel={translateMessage(message?.label)} choice={message} href="/book-builder/personalize" />
             <ChoiceChip label="Illustration" displayLabel={translateIllustration(illustration?.label)} choice={illustration} href="/book-builder/illustration" />
           </div>

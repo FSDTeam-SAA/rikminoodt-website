@@ -1,6 +1,7 @@
 "use client";
 
 import { useLanguage } from "@/components/providers/LanguageProvider";
+import { getLocalizedSubjectLabel, SUBJECT_OPTIONS } from "./subject-options";
 
 export function useBookBuilderTranslations() {
   const { t, language } = useLanguage();
@@ -35,6 +36,12 @@ export function useBookBuilderTranslations() {
     return bb?.labels?.[label as keyof typeof bb.labels] ?? label;
   };
 
+  const translateSubject = (subject?: string | null): string => {
+    if (!subject) return "";
+    const option = Object.values(SUBJECT_OPTIONS).flat().find((item) => item.value === subject || item.label === subject);
+    return option ? getLocalizedSubjectLabel(option, language) : subject;
+  };
+
   return {
     t,
     language,
@@ -45,6 +52,7 @@ export function useBookBuilderTranslations() {
     translateIllustration,
     translateFont,
     translateLabel,
+    translateSubject,
   };
 }
 

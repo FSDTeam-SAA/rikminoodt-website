@@ -17,6 +17,14 @@ import {
   Printer,
 } from "lucide-react";
 import { getApiBaseUrl } from "@/config/api";
+import { useLanguage } from "@/components/providers/LanguageProvider";
+import { getExploreStoryWelcomeText, getExploreStory } from "@/lib/explore-stories-data";
+
+const detailLabels = {
+  en: { headingStory: "Story", headingBooks: "Personalised Children's Books", details: "Story Details", title: "Title", ages: "Ages", years: "years", characters: "Characters", theme: "Theme", subject: "Subject", message: "Message", illustration: "Illustration", language: "Language", creator: "Creator", story: "Story", read: "Read Story", download: "Download PDF", generating: "Generating PDF…", hardcopy: "Order Hardcopy", photos: "Photos used", characterPhoto: "Character photo", characterPhotos: "Character photos", artwork: "Story artwork", illustrationRole: "Story illustration" },
+  nl: { headingStory: "Verhaal", headingBooks: "Gepersonaliseerde Kinderboeken", details: "Verhaaldetails", title: "Titel", ages: "Leeftijden", years: "jaar", characters: "Personages", theme: "Thema", subject: "Onderwerp", message: "Boodschap", illustration: "Illustratie", language: "Taal", creator: "Maker", story: "Verhaal", read: "Lees verhaal", download: "Download PDF", generating: "PDF wordt gemaakt…", hardcopy: "Bestel hardcover", photos: "Gebruikte foto's", characterPhoto: "Personagefoto", characterPhotos: "Personagefoto's", artwork: "Verhaalillustratie", illustrationRole: "Verhaalillustratie" },
+  fr: { headingStory: "Histoire", headingBooks: "Livres Personnalisés pour Enfants", details: "Détails de l'histoire", title: "Titre", ages: "Âges", years: "ans", characters: "Personnages", theme: "Thème", subject: "Sujet", message: "Message", illustration: "Illustration", language: "Langue", creator: "Créateur", story: "Histoire", read: "Lire l'histoire", download: "Télécharger le PDF", generating: "Création du PDF…", hardcopy: "Commander un livre relié", photos: "Photos utilisées", characterPhoto: "Photo de personnage", characterPhotos: "Photos de personnages", artwork: "Illustration de l'histoire", illustrationRole: "Illustration de l'histoire" },
+} as const;
 
 const story = {
   title: "Lisa's Camping Adventure",
@@ -93,18 +101,44 @@ interface FetchedBookData {
 
 const StoryDetails = ({ storyId }: { storyId: string }) => {
   const { data: session, status: sessionStatus } = useSession();
+  const { language } = useLanguage();
+  const labels = detailLabels[language];
+  const staticExploreStory = getExploreStory(storyId, language);
+  const hasStaticExploreStory = Boolean(staticExploreStory);
+  const staticExploreBook: FetchedBookData | null = staticExploreStory
+    ? {
+        isShowcase: true,
+        title: staticExploreStory.title,
+        coverImageUrl: staticExploreStory.coverImageUrl,
+        ageCategory: staticExploreStory.ageCategory,
+        theme: staticExploreStory.theme,
+        subject: staticExploreStory.subject,
+        specialMessage: staticExploreStory.specialMessage,
+        creatorName: staticExploreStory.creatorName,
+        illustrationStyle: staticExploreStory.illustrationStyle,
+        language: language === "nl" ? "Dutch" : language === "fr" ? "French" : "English",
+        foreword: getExploreStoryWelcomeText(language),
+        backCoverText: staticExploreStory.finalText || staticExploreStory.specialMessage,
+        pages: [
+          { pageNumber: 1, kind: "cover", imageUrl: staticExploreStory.coverImageUrl, title: staticExploreStory.title },
+          { pageNumber: 2, kind: "welcome", text: staticExploreStory.description },
+          ...staticExploreStory.storyPages.map((page, index) => ({ pageNumber: index + 3, kind: "story", imageUrl: page.image, text: page.text, storyPageNumber: index + 1 })),
+          { pageNumber: staticExploreStory.storyPages.length + 3, kind: "finalMessage", text: staticExploreStory.specialMessage, title: staticExploreStory.title },
+        ],
+      }
+    : null;
   const [isReaderOpen, setIsReaderOpen] = useState(false);
   const [isHardcopyModalOpen, setIsHardcopyModalOpen] = useState(false);
   const [downloadingPdf, setDownloadingPdf] = useState(false);
   const [downloadError, setDownloadError] = useState("");
   const [fetchedBook, setFetchedBook] = useState<FetchedBookData | null>(null);
-  const isStaticStory = storyId === "max-sees-the-seasons" || storyId === "lisa-camping";
+  const isStaticStory = storyId === "max-sees-the-seasons" || storyId === "lisa-camping" || hasStaticExploreStory;
   const [loading, setLoading] = useState(!isStaticStory);
   const [notFound, setNotFound] = useState(false);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
   useEffect(() => {
-    if (!storyId || storyId === "max-sees-the-seasons" || storyId === "lisa-camping") return;
+    if (!storyId || storyId === "max-sees-the-seasons" || storyId === "lisa-camping" || hasStaticExploreStory) return;
     if (sessionStatus === "loading") return;
 
     const loadBook = async () => {
@@ -157,41 +191,45 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
     };
 
     loadBook();
-  }, [storyId, sessionStatus, session?.user?.accessToken]);
+  }, [storyId, sessionStatus, session?.user?.accessToken, hasStaticExploreStory]);
 
   const isMaxStory = storyId === "max-sees-the-seasons";
-  const cover = fetchedBook?.coverImageUrl || (isMaxStory ? "/images/exp_c_1.jpg" : story.cover);
-  const coverTitle = fetchedBook?.title || (isMaxStory ? "Max Sees the Seasons: Autumn Adventures" : story.title);
-  const activeDetails = fetchedBook
+  const activeBook = staticExploreBook || fetchedBook;
+  const cover = activeBook?.coverImageUrl || (isMaxStory ? "/images/exp_c_1.jpg" : story.cover);
+  const coverTitle = activeBook?.title || (isMaxStory ? "Max Sees the Seasons: Autumn Adventures" : story.title);
+  const activeDetails = activeBook
     ? [
-        ["Ages", `${fetchedBook.ageCategory || "3-5"} years`],
-        ["Characters", String(fetchedBook.characters?.length || 1)],
-        ["Theme", fetchedBook.theme ? String(fetchedBook.theme).replace(/_/g, " ") : "Adventure"],
-        ...(fetchedBook.subject ? [["Subject", String(fetchedBook.subject).replace(/_/g, " ")]] : []),
-        ...(fetchedBook.specialMessage ? [["Message", String(fetchedBook.specialMessage).replace(/_/g, " ")]] : []),
-        ["Illustration", fetchedBook.illustrationStyle ? String(fetchedBook.illustrationStyle).replace(/_/g, " ") : "Animation 3D"],
-        ["Language", fetchedBook.language || "English"],
-        ...(fetchedBook.creatorName ? [["Creator", fetchedBook.creatorName]] : []),
+        [labels.ages, `${activeBook.ageCategory || "3-5"} ${labels.years}`],
+        [labels.characters, String(staticExploreStory?.characterCount || activeBook.characters?.length || 1)],
+        [labels.theme, activeBook.theme ? String(activeBook.theme).replace(/_/g, " ") : "Adventure"],
+        ...(activeBook.subject ? [[labels.subject, String(activeBook.subject).replace(/_/g, " ")]] : []),
+        ...(activeBook.specialMessage ? [[labels.message, String(activeBook.specialMessage).replace(/_/g, " ")]] : []),
+        [labels.illustration, activeBook.illustrationStyle ? String(activeBook.illustrationStyle).replace(/_/g, " ") : "Animation 3D"],
+        [labels.language, activeBook.language || "English"],
+        ...(activeBook.creatorName ? [[labels.creator, activeBook.creatorName]] : []),
       ]
     : story.details;
   const activeDescription =
-    fetchedBook?.foreword ||
-    (fetchedBook?.pages && fetchedBook.pages.length > 0 ? fetchedBook.pages[0].text : "") ||
+    staticExploreStory?.description ||
+    activeBook?.foreword ||
+    (activeBook?.pages && activeBook.pages.length > 0 ? activeBook.pages[0].text : "") ||
     story.description;
-  const usedPhotos = isMaxStory
+  const usedPhotos = staticExploreStory
+    ? staticExploreStory.photos.map((photo) => ({ name: photo.alt, role: labels.characterPhoto, image: photo.src }))
+    : isMaxStory
     ? [
         { name: "Child", role: "Main character", image: "/images/exp_u_1_1.png" },
         { name: "Grandmother", role: "Family", image: "/images/exp_u_1_2.jpg" },
       ]
-    : fetchedBook?.characters && fetchedBook.characters.some((c: StoryCharacter) => c.photoUrl)
-      ? fetchedBook.characters.map((c: StoryCharacter, i: number) => ({
+    : activeBook?.characters && activeBook.characters.some((c: StoryCharacter) => c.photoUrl)
+      ? activeBook.characters.map((c: StoryCharacter, i: number) => ({
           name: c.name || c.animalName || c.objectName || `Character ${i + 1}`,
           role: c.type ? c.type.charAt(0).toUpperCase() + c.type.slice(1).toLowerCase() : "Character",
           image: c.photoUrl || "/images/profile.png",
         }))
       : photos;
 
-  const rawPages = fetchedBook?.pages && fetchedBook.pages.length > 0 ? fetchedBook.pages : [];
+  const rawPages = activeBook?.pages && activeBook.pages.length > 0 ? activeBook.pages : [];
   const previewPages =
     rawPages.length > 0
       ? rawPages.map((p, idx) => ({
@@ -273,9 +311,9 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
             id="story-details-heading"
             className="text-balance text-center font-fredoka text-[30px] font-normal leading-[1.12] text-[#1E1E1E] min-[420px]:text-[34px] sm:text-[40px] lg:text-[48px] lg:leading-none"
           >
-            <span className="text-[#9C81BE]">Story</span>{" "}
+            <span className="text-[#9C81BE]">{labels.headingStory}</span>{" "}
             <span className="text-[#55AA82]">
-              Personalised Children&apos;s Books
+              {labels.headingBooks}
             </span>
           </h1>
 
@@ -301,7 +339,7 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
                         className="text-[#F27643]"
                         aria-hidden="true"
                       />
-                      Story Details
+                      {labels.details}
                     </h2>
                     {fetchedBook && !isStaticStory && fetchedBook.isShowcase !== true && (
                       <Link
@@ -315,7 +353,7 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
 
                   <dl className="mt-3 divide-y divide-[#EEE6DE] font-sans text-sm">
                     <div className="grid grid-cols-1 gap-1 py-2 text-[#514A4E] min-[420px]:grid-cols-[100px_minmax(0,1fr)] min-[420px]:gap-3 sm:grid-cols-[105px_minmax(0,1fr)]">
-                      <dt className="font-medium text-[#756E73]">Title</dt>
+                      <dt className="font-medium text-[#756E73]">{labels.title}</dt>
                       <dd className="break-words font-semibold text-[#302735]">{coverTitle}</dd>
                     </div>
                     {activeDetails.map(([label, value]) => (
@@ -328,7 +366,7 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
                       </div>
                     ))}
                     <div className="grid grid-cols-1 gap-1 py-2 text-[#514A4E] min-[420px]:grid-cols-[100px_minmax(0,1fr)] min-[420px]:gap-3 sm:grid-cols-[105px_minmax(0,1fr)]">
-                      <dt className="font-medium text-[#756E73]">Story</dt>
+                      <dt className="font-medium text-[#756E73]">{labels.story}</dt>
                       <dd className="leading-relaxed">{activeDescription}</dd>
                     </div>
                   </dl>
@@ -339,33 +377,35 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
                       onClick={() => setIsReaderOpen(true)}
                       className="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#55AA82] px-4 font-sans text-sm font-medium text-white transition-colors hover:bg-[#47936f] min-[480px]:h-10 min-[480px]:w-auto"
                     >
-                      <BookOpen size={16} aria-hidden="true" /> Read Story
+                      <BookOpen size={16} aria-hidden="true" /> {labels.read}
                     </button>
-                    <button
-                      type="button"
-                      disabled={downloadingPdf}
-                      onClick={handleDownloadPdf}
-                      className="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#9C81BE] px-4 font-sans text-sm font-medium text-white transition-colors hover:bg-[#8667AD] disabled:cursor-not-allowed disabled:opacity-60 min-[480px]:h-10 min-[480px]:w-auto"
-                    >
-                      {downloadingPdf ? (
-                        <>
-                          <Loader2 size={16} className="animate-spin" aria-hidden="true" />
-                          <span>Generating PDF…</span>
-                        </>
-                      ) : (
-                        <>
-                          <Download size={16} aria-hidden="true" />
-                          <span>Download PDF</span>
-                        </>
-                      )}
-                    </button>
-                    {fetchedBook?.isShowcase !== true && (
+                    {!staticExploreStory && (
+                      <button
+                        type="button"
+                        disabled={downloadingPdf}
+                        onClick={handleDownloadPdf}
+                        className="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#9C81BE] px-4 font-sans text-sm font-medium text-white transition-colors hover:bg-[#8667AD] disabled:cursor-not-allowed disabled:opacity-60 min-[480px]:h-10 min-[480px]:w-auto"
+                      >
+                        {downloadingPdf ? (
+                          <>
+                            <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+                            <span>{labels.generating}</span>
+                          </>
+                        ) : (
+                          <>
+                            <Download size={16} aria-hidden="true" />
+                            <span>{labels.download}</span>
+                          </>
+                        )}
+                      </button>
+                    )}
+                    {!isStaticStory && fetchedBook?.isShowcase !== true && (
                       <button
                         type="button"
                         onClick={() => setIsHardcopyModalOpen(true)}
                         className="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#E88DA0] px-4 font-sans text-sm font-medium text-white transition-colors hover:bg-[#DF7894] min-[480px]:h-10 min-[480px]:w-auto"
                       >
-                        <Printer size={16} aria-hidden="true" /> Order Hardcopy
+                        <Printer size={16} aria-hidden="true" /> {labels.hardcopy}
                       </button>
                     )}
                   </div>
@@ -385,10 +425,10 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
                       className="text-[#9C81BE]"
                       aria-hidden="true"
                     />{" "}
-                    Photos used
+                    {labels.photos}
                   </h2>
                   <span className="font-sans text-xs text-[#8A8086]">
-                    {usedPhotos.length} {usedPhotos.length === 1 ? "Character photo" : "Character photos"}
+                    {usedPhotos.length} {usedPhotos.length === 1 ? labels.characterPhoto : labels.characterPhotos}
                   </span>
                 </div>
                 <div className="mt-5 grid w-full max-w-[1080px] grid-cols-1 gap-4 min-[480px]:grid-cols-2 sm:mt-6 sm:grid-cols-4 sm:gap-6">
@@ -402,7 +442,7 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
                         alt={photo.name}
                         width={190}
                         height={190}
-                        className="aspect-[4/3] w-full object-cover object-center"
+                        className="h-56 w-full bg-[#F8F4EF] object-contain object-center sm:h-64"
                         unoptimized
                       />
                       <div className="px-3 pb-3 pt-3 sm:px-4 sm:pb-4">
@@ -421,13 +461,13 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
 
           <InlineBookPreview
             title={coverTitle}
-            titlePosition={fetchedBook?.titlePosition}
-            creatorName={fetchedBook?.creatorName}
-            font={fetchedBook?.font}
+            titlePosition={activeBook?.titlePosition}
+            creatorName={activeBook?.creatorName}
+            font={activeBook?.font}
             pages={previewPages}
             coverImage={cover}
-            welcomeText={fetchedBook?.foreword}
-            finalText={fetchedBook?.backCoverText}
+            welcomeText={activeBook?.foreword}
+            finalText={activeBook?.backCoverText}
             onOpenFullScreen={(pageNumber) => {
               const nextPageIndex = previewPages.findIndex((page) => page.pageNumber === pageNumber);
               if (nextPageIndex >= 0) setCurrentPageIndex(nextPageIndex);
@@ -442,13 +482,13 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
         onClose={() => setIsReaderOpen(false)}
         storyId={storyId}
         title={coverTitle}
-        titlePosition={fetchedBook?.titlePosition}
-        creatorName={fetchedBook?.creatorName}
-        font={fetchedBook?.font}
-        pages={fetchedBook?.pages}
+        titlePosition={activeBook?.titlePosition}
+        creatorName={activeBook?.creatorName}
+        font={activeBook?.font}
+        pages={activeBook?.pages}
         coverImage={cover}
-        welcomeText={fetchedBook?.foreword}
-        finalText={fetchedBook?.backCoverText}
+        welcomeText={activeBook?.foreword}
+        finalText={activeBook?.backCoverText}
         initialPageNumber={currentPreviewPage.pageNumber}
       />
 

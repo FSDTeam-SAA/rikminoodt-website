@@ -105,14 +105,9 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
     {
       id: 1,
       type: "PERSON",
-      name: "Lily",
-      gender: "GIRL",
-      age: 4,
-      hobbies: "drawing",
-      favoriteFood: "pizza",
     },
   ]);
-  const [creatorName, setCreatorName] = useState<string>("Mum & Dad");
+  const [creatorName, setCreatorName] = useState<string>("");
   const [foreword, setForeword] = useState<string>("");
   const [forewordMode, setForewordMode] = useState<"write" | "voice">("write");
   const [voiceBlob, setVoiceBlobState] = useState<Blob | null>(null);
@@ -122,7 +117,7 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
 
   const [userDetails, setUserDetailsState] = useState<UserDetails>({
     name: "",
-    country: "United Kingdom",
+    country: "",
     email: "",
     confirmEmail: "",
     password: "",
@@ -160,21 +155,16 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
       {
         id: 1,
         type: "PERSON",
-        name: "Lily",
-        gender: "GIRL",
-        age: 4,
-        hobbies: "drawing",
-        favoriteFood: "pizza",
       },
     ]);
-    setCreatorName("Mum & Dad");
+    setCreatorName("");
     setForeword("");
     setForewordMode("write");
     setVoiceBlob(null);
     setSpecialEvents("");
     setUserDetailsState({
       name: "",
-      country: "United Kingdom",
+      country: "",
       email: "",
       confirmEmail: "",
       password: "",
@@ -207,13 +197,25 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
         if (progress.selectedFont) setSelectedFont(progress.selectedFont);
         if (progress.selectedLanguage) setSelectedLanguage(progress.selectedLanguage);
         if (progress.selectedVariant) setSelectedVariant(progress.selectedVariant);
-        if (progress.characters && Array.isArray(progress.characters)) setCharacters(progress.characters);
-        if (progress.creatorName) setCreatorName(progress.creatorName);
+        const isLegacySampleCharacter =
+          Array.isArray(progress.characters) &&
+          progress.characters.length === 1 &&
+          progress.characters[0]?.name === "Lily" &&
+          progress.characters[0]?.hobbies === "drawing";
+        if (progress.characters && Array.isArray(progress.characters) && !isLegacySampleCharacter) {
+          setCharacters(progress.characters);
+        }
+        if (progress.creatorName && progress.creatorName !== "Mum & Dad") setCreatorName(progress.creatorName);
         if (progress.foreword) setForeword(progress.foreword);
         if (progress.voiceExpected) setVoiceExpected(true);
         if (progress.forewordMode === "write" || progress.forewordMode === "voice") setForewordMode(progress.forewordMode);
         if (progress.specialEvents) setSpecialEvents(progress.specialEvents);
-        if (progress.userDetails) setUserDetailsState(progress.userDetails);
+        if (progress.userDetails) {
+          setUserDetailsState({
+            ...progress.userDetails,
+            country: progress.userDetails.country === "United Kingdom" ? "" : progress.userDetails.country,
+          });
+        }
         if (progress.currentBookId) setCurrentBookId(progress.currentBookId);
         if (typeof progress.retryCount === "number") setRetryCount(progress.retryCount);
       }

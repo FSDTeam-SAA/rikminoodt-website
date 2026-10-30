@@ -119,16 +119,16 @@ const Navbar = () => {
         <div className="flex min-h-[54px] items-center justify-between gap-3 px-4 sm:min-h-[58px] sm:px-6 lg:min-h-[72px] lg:px-8">
           <Link
             href="/"
-            aria-label="Bookereillo home"
+            aria-label="Boekerello home"
             className="shrink-0 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf] focus-visible:ring-offset-2"
           >
             <Image
-              src="/images/logo.png"
-              alt="Bookereillo"
-              width={198}
-              height={57}
+              src="/images/rikLogo-transparent.png"
+              alt="Boekerello"
+              width={1600}
+              height={427}
               priority
-              className="h-auto w-[126px] sm:w-[142px] lg:w-[198px]"
+              className="h-auto w-[132px] object-contain sm:w-[150px] lg:w-[210px]"
             />
           </Link>
 

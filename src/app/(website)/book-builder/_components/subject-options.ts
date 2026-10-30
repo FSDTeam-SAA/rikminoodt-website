@@ -157,10 +157,40 @@ export const SUBJECT_OPTIONS: Record<string, SubjectOption[]> = {
 
 export const ALL_SUBJECTS: SubjectOption[] = Object.values(SUBJECT_OPTIONS).flat();
 
+type SubjectLocale = "en" | "nl" | "fr";
+
+// Subject values are kept in English for the API; only the visible label changes with the site language.
+const subjectTranslations: Record<Exclude<SubjectLocale, "en">, Partial<Record<string, string>>> = {
+  nl: {
+    UNICORNS: "Eenhoorns", PRINCES_AND_PRINCESSES: "Prinsen en prinsessen", KNIGHTS_AND_DRAGONS: "Ridders en draken", WIZARD_SCHOOL: "Toverschool", ENCHANTED_FOREST: "Het betoverde bos", MERMAIDS: "Zeemeerminnen", GNOMES: "Kabouters", FAIRIES_AND_ELVES: "Feeën en elfen", WITCHES_AND_ENCHANTMENT: "Heksen en spreuken", GIANTS: "Reuzen",
+    GARBAGE_TRUCK: "Vuilniswagen", CONSTRUCTION_VEHICLES: "Bouwvoertuigen", AIRPLANE: "Vliegtuig", RACING: "Racen", FIREFIGHTER: "Brandweer", POLICE: "Politie", DINOSAURS: "Dinosaurussen", PIRATES: "Piraten", SUPERHERO: "Superheld", CAMPING: "Kamperen", TRAVEL: "Reizen", TREASURE_HUNTS: "Schattenjachten", SECRET_MISSIONS: "Geheime missies", HAUNTED_HOUSE: "Spookhuis", TIME_TRAVEL: "Tijdreizen",
+    OUTDOOR_PLAY: "Buiten spelen", DANCING: "Dansen", MAKING_MUSIC: "Muziek maken", GOING_TO_THE_FARM: "Naar de boerderij", INTO_THE_FOREST: "Het bos in", TO_THE_BEACH: "Naar het strand", CRAFTING: "Knutselen", PAINTING: "Schilderen", COOKING_AND_BAKING: "Koken en bakken", GARDENING: "Tuinieren", DRESS_UP: "Verkleden", GOING_TO_SCHOOL: "Naar school", GOING_TO_THE_LIBRARY: "Naar de bibliotheek", VISITING_THE_DOCTOR: "Naar de dokter", VISITING_THE_DENTIST: "Naar de tandarts", TRAIN_JOURNEYS: "Treinreizen", VISITING_THE_ZOO: "Naar de dierentuin", GOING_TO_THE_CIRCUS: "Naar het circus", VISITING_AN_AMUSEMENT_PARK: "Pretparken bezoeken", SPORTS: "Sport", CARING_FOR_ANIMALS: "Voor dieren zorgen", BUILDING_A_TREEHOUSE: "Een boomhut bouwen", GAMING: "Gamen",
+    JUNGLE: "In de jungle", THE_SAVANA: "De savanne", UNDERWATER: "Diep in zee", AT_THE_NORTH_POLE: "Op de Noordpool", CANDYLAND: "Snoepland", THE_MIDDLE_AGES: "De middeleeuwen", SPACE: "In de ruimte", IN_THE_FUTURE: "In de toekomst", PREHISTORIC_AGE: "De prehistorie", WILD_WEST: "Het Wilde Westen", VIKINGS: "De Vikingen", ARABIAN_NIGHTS: "1001 nachten", ANCIENT_EGYPT: "Het oude Egypte", ANCIENT_GREECE: "Het oude Griekenland",
+    BIRTHDAY: "Verjaardag", CHRISTMAS: "Kerstmis", MOTHERS_DAY: "Moederdag", FATHERS_DAY: "Vaderdag", GRANDPARENTS_DAY: "Grootouderdag", CHILDRENS_DAY: "Kinderdag", VALENTINES_DAY: "Valentijnsdag", EASTER: "Pasen", THREE_KINGS: "Driekoningen", FIRST_COMMUNION: "Eerste heilige communie", EID_AL_FITR: "Eid al-Fitr", EID_AL_ADHA: "Eid al-Adha", HANUKKAH: "Chanoeka", CARNIVAL: "Carnaval", HALLOWEEN: "Halloween", ST_PATRICKS_DAY: "Sint-Patrickdag", NEW_YEARS: "Oudejaarsavond", WORLD_ANIMAL_DAY: "Werelddierendag",
+    NEW_BABY: "Nieuwe baby", GETTING_A_BABY_SISTER: "Een zusje krijgen", GETTING_A_BABY_BROTHER: "Een broertje krijgen", NEW_PET: "Een nieuw huisdier", MOVING: "Verhuizen", HOLIDAY: "Vakantie", SLEEPOVER: "Logeerpartijtje", WEDDING: "Trouwen", PARENTAL_SEPARATION: "Scheiding van ouders", BLENDED_FAMILY: "Samengesteld gezin", SAYING_GOODBYE: "Afscheid nemen",
+    LEARNING_TO_WALK: "Leren lopen", FIRST_WORDS: "Eerste woordjes", BODY_PARTS: "Lichaamsdelen", PACIFIER_WEANING: "Stoppen met de speen", STOPPING_THUMB_SUCKING: "Stoppen met duimzuigen", TOOTHBRUSHING: "Tanden poetsen", POTTY_TRAINING: "Zindelijk worden", HEALTHY_EATING: "Gezonder eten", TIDYING_UP: "Opruimen", SHAPES_AND_COLORS: "Vormen en kleuren", LEARNING_TO_COUNT: "Leren tellen", SEASONS_AND_WEATHER: "Seizoenen en weer", LEARNING_TO_RIDE_A_BIKE: "Leren fietsen", ALPHABET: "Alfabet", TYING_SHOELACES: "Veters strikken", TELLING_TIME: "Klokkijken", POCKET_MONEY_AND_SAVING: "Zakgeld en sparen",
+    BEING_PROUD_OF_YOURSELF: "Trots zijn op jezelf", FINDING_CONFIDENCE: "Zelfvertrouwen vinden", SHAME: "Schaamte", FEAR_OF_THE_DARK: "Bang in het donker", INSECURITY: "Onzekerheid", HOMESICKNESS: "Heimwee", JEALOUSY: "Jaloezie", TANTRUMS: "Driftbuien", PEER_PRESSURE: "Groepsdruk", BEING_BULLIED: "Gepest worden",
+  },
+  fr: {
+    UNICORNS: "Licornes", PRINCES_AND_PRINCESSES: "Princes et princesses", KNIGHTS_AND_DRAGONS: "Chevaliers et dragons", WIZARD_SCHOOL: "École de magie", ENCHANTED_FOREST: "La forêt enchantée", MERMAIDS: "Sirènes", GNOMES: "Gnomes", FAIRIES_AND_ELVES: "Fées et elfes", WITCHES_AND_ENCHANTMENT: "Sorcières et sortilèges", GIANTS: "Géants",
+    GARBAGE_TRUCK: "Camion-poubelle", CONSTRUCTION_VEHICLES: "Engins de chantier", AIRPLANE: "Avion", RACING: "Course", FIREFIGHTER: "Pompiers", POLICE: "Police", DINOSAURS: "Dinosaures", PIRATES: "Pirates", SUPERHERO: "Super-héros", CAMPING: "Camping", TRAVEL: "Voyage", TREASURE_HUNTS: "Chasses au trésor", SECRET_MISSIONS: "Missions secrètes", HAUNTED_HOUSE: "Maison hantée", TIME_TRAVEL: "Voyage dans le temps",
+    OUTDOOR_PLAY: "Jeux en plein air", DANCING: "Danse", MAKING_MUSIC: "Faire de la musique", GOING_TO_THE_FARM: "À la ferme", INTO_THE_FOREST: "Dans la forêt", TO_THE_BEACH: "À la plage", CRAFTING: "Loisirs créatifs", PAINTING: "Peinture", COOKING_AND_BAKING: "Cuisine et pâtisserie", GARDENING: "Jardinage", DRESS_UP: "Déguisements", GOING_TO_SCHOOL: "À l'école", GOING_TO_THE_LIBRARY: "À la bibliothèque", VISITING_THE_DOCTOR: "Chez le médecin", VISITING_THE_DENTIST: "Chez le dentiste", TRAIN_JOURNEYS: "Voyages en train", VISITING_THE_ZOO: "Au zoo", GOING_TO_THE_CIRCUS: "Au cirque", VISITING_AN_AMUSEMENT_PARK: "Parcs d'attractions", SPORTS: "Sports", CARING_FOR_ANIMALS: "S'occuper des animaux", BUILDING_A_TREEHOUSE: "Construire une cabane", GAMING: "Jeux vidéo",
+    JUNGLE: "Dans la jungle", THE_SAVANA: "La savane", UNDERWATER: "Au fond de la mer", AT_THE_NORTH_POLE: "Au pôle Nord", CANDYLAND: "Le pays des bonbons", THE_MIDDLE_AGES: "Le Moyen Âge", SPACE: "Dans l'espace", IN_THE_FUTURE: "Dans le futur", PREHISTORIC_AGE: "La préhistoire", WILD_WEST: "Le Far West", VIKINGS: "Les Vikings", ARABIAN_NIGHTS: "Les Mille et Une Nuits", ANCIENT_EGYPT: "L'Égypte ancienne", ANCIENT_GREECE: "La Grèce antique",
+    BIRTHDAY: "Anniversaire", CHRISTMAS: "Noël", MOTHERS_DAY: "Fête des Mères", FATHERS_DAY: "Fête des Pères", GRANDPARENTS_DAY: "Fête des grands-parents", CHILDRENS_DAY: "Fête des enfants", VALENTINES_DAY: "Saint-Valentin", EASTER: "Pâques", THREE_KINGS: "Épiphanie", FIRST_COMMUNION: "Première communion", EID_AL_FITR: "Aïd el-Fitr", EID_AL_ADHA: "Aïd al-Adha", HANUKKAH: "Hanoucca", CARNIVAL: "Carnaval", HALLOWEEN: "Halloween", ST_PATRICKS_DAY: "Saint-Patrick", NEW_YEARS: "Réveillon du Nouvel An", WORLD_ANIMAL_DAY: "Journée mondiale des animaux",
+    NEW_BABY: "Nouveau bébé", GETTING_A_BABY_SISTER: "Avoir une petite sœur", GETTING_A_BABY_BROTHER: "Avoir un petit frère", NEW_PET: "Un nouvel animal", MOVING: "Déménagement", HOLIDAY: "Vacances", SLEEPOVER: "Soirée pyjama", WEDDING: "Mariage", PARENTAL_SEPARATION: "Séparation des parents", BLENDED_FAMILY: "Famille recomposée", SAYING_GOODBYE: "Dire au revoir",
+    LEARNING_TO_WALK: "Apprendre à marcher", FIRST_WORDS: "Premiers mots", BODY_PARTS: "Parties du corps", PACIFIER_WEANING: "Arrêter la tétine", STOPPING_THUMB_SUCKING: "Arrêter de sucer son pouce", TOOTHBRUSHING: "Se brosser les dents", POTTY_TRAINING: "Apprendre la propreté", HEALTHY_EATING: "Manger mieux", TIDYING_UP: "Ranger", SHAPES_AND_COLORS: "Formes et couleurs", LEARNING_TO_COUNT: "Apprendre à compter", SEASONS_AND_WEATHER: "Saisons et météo", LEARNING_TO_RIDE_A_BIKE: "Apprendre à faire du vélo", ALPHABET: "Alphabet", TYING_SHOELACES: "Faire ses lacets", TELLING_TIME: "Lire l'heure", POCKET_MONEY_AND_SAVING: "Argent de poche et épargne",
+    BEING_PROUD_OF_YOURSELF: "Être fier de soi", FINDING_CONFIDENCE: "Trouver confiance en soi", SHAME: "Honte", FEAR_OF_THE_DARK: "Peur du noir", INSECURITY: "Insécurité", HOMESICKNESS: "Mal du pays", JEALOUSY: "Jalousie", TANTRUMS: "Colères", PEER_PRESSURE: "Pression des pairs", BEING_BULLIED: "Être harcelé",
+  },
+};
+
+export function getLocalizedSubjectLabel(subject: SubjectOption, language: SubjectLocale): string {
+  return subjectTranslations[language as Exclude<SubjectLocale, "en">]?.[subject.value] ?? subject.label;
+}
+
 export function getStoryChoice(
   selectedStory?: string | null,
   selectedTheme?: string | null,
-): { label: string; image: string; color: string } | undefined {
+): { label: string; value: string; image: string; color: string } | undefined {
   if (!selectedStory) return undefined;
 
   const normalized = selectedStory.trim().toLowerCase();
@@ -175,6 +205,7 @@ export function getStoryChoice(
     if (foundInTheme) {
       return {
         label: foundInTheme.label,
+        value: foundInTheme.value,
         image: foundInTheme.image,
         color: foundInTheme.color,
       };
@@ -190,6 +221,7 @@ export function getStoryChoice(
   if (found) {
     return {
       label: found.label,
+      value: found.value,
       image: found.image,
       color: found.color,
     };
@@ -203,6 +235,7 @@ export function getStoryChoice(
 
   return {
     label: formattedLabel,
+    value: selectedStory,
     image: "/images/story_1.png",
     color: "#FFE5D6",
   };

@@ -4,6 +4,7 @@ import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
 import ScrollToTopComponent from "@/components/providers/ScrollToTop";
 import { LanguageProvider } from "@/components/providers/LanguageProvider";
 import NextAuthProvider from "@/components/providers/NextAuthProvider";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Boekerello",
@@ -19,12 +20,14 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <NextAuthProvider>
-          <SmoothScrollProvider>
-            <LanguageProvider>
-              {children}
-              <ScrollToTopComponent />
-            </LanguageProvider>
-          </SmoothScrollProvider>
+          <LanguageProvider>
+            <Suspense fallback={children}>
+              <SmoothScrollProvider>
+                {children}
+                <ScrollToTopComponent />
+              </SmoothScrollProvider>
+            </Suspense>
+          </LanguageProvider>
         </NextAuthProvider>
       </body>
     </html>

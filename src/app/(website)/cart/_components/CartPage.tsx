@@ -47,7 +47,7 @@ export default function CartPage({ isSignedIn = false, books = [] }: CartPagePro
               {isSignedIn ? (
                 <Link href="/setting/generated-books" className={`${buttonClass} bg-[#E88DA0] hover:bg-[#DD7893]`}>{copy.addBook}</Link>
               ) : (
-                <button type="button" disabled className={`${buttonClass} cursor-not-allowed bg-[#9C81BE] opacity-70`}>{copy.logIn}</button>
+                <Link href="/login" className={`${buttonClass} bg-[#9C81BE] hover:bg-[#8667AD]`}>{copy.logIn}</Link>
               )}
               <Link href="/book-builder/choose-age" className={`${buttonClass} ${isSignedIn ? "bg-[#9C81BE] hover:bg-[#8667AD]" : "bg-[#E88DA0] hover:bg-[#DD7893]"}`}>{isSignedIn ? copy.createNew : copy.createBook}</Link>
             </div>
