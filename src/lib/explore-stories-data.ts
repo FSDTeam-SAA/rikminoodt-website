@@ -204,14 +204,10 @@ const translatedStoryBeats: Record<"nl" | "fr", Record<ExploreStoryKey, readonly
 };
 
 const localizedPageText = (language: "nl" | "fr", story: ExploreStoryKey, index: number) => {
-  const beat = translatedStoryBeats[language][story][index];
-  const middle = language === "nl"
-    ? "De illustratie op deze pagina brengt dit moment uit het avontuur tot leven. De gevoelens, keuzes en kleine ontdekkingen helpen het verhaal stap voor stap verder."
-    : "L'illustration de cette page donne vie à ce moment de l'aventure. Les émotions, les choix et les petites découvertes font avancer l'histoire pas à pas.";
-  const ending = language === "nl"
-    ? "Zo groeit het avontuur verder met moed, verbeelding en een les die de lezer kan meenemen naar zijn eigen wereld."
-    : "L'aventure continue ainsi avec courage, imagination et une leçon que chaque lecteur peut emporter dans son propre monde.";
-  return `${beat}\n\n${middle}\n\n${ending}`;
+  // Each illustration needs its own part of the story.  The old implementation
+  // appended the same two generic paragraphs to every Dutch and French page,
+  // which made consecutive pages look like duplicates in the reader.
+  return translatedStoryBeats[language][story][index];
 };
 
 const finalStoryTranslations: Record<"nl" | "fr", Record<ExploreStoryKey, string>> = {
