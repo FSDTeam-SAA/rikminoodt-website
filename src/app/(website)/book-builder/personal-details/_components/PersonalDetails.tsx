@@ -54,6 +54,14 @@ const fonts = [
   { label: "Adventure Book", image: "/images/font_8.png", color: "#F0D39F" },
 ];
 
+const EMPTY_USER_DETAILS = {
+  name: "",
+  country: "",
+  email: "",
+  confirmEmail: "",
+  password: "",
+};
+
 type Choice = { label: string; image: string; color: string };
 
 function ChoiceChip({ choice, displayLabel }: { choice?: Choice; displayLabel?: string }) {
@@ -110,17 +118,18 @@ export default function PersonalDetails() {
     selectedIllustration,
     selectedFont,
     selectedLanguage,
-    creatorName: initialCreatorName,
     setCreatorName,
-    userDetails: initialUserDetails,
     setUserDetails,
   } = useBookBuilder();
   const { bb, translateAge, translateTheme, translateMessage, translateIllustration, translateFont } = useBookBuilderTranslations();
 
   const { data: session, status: sessionStatus } = useSession();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [localCreatorName, setLocalCreatorName] = useState(initialCreatorName);
-  const [localUser, setLocalUser] = useState(initialUserDetails);
+  // Form fields deliberately start empty on every visit. Builder state still
+  // powers the "Your Choice" summary, but it must never prefill user-entered
+  // information in this form.
+  const [localCreatorName, setLocalCreatorName] = useState("");
+  const [localUser, setLocalUser] = useState(EMPTY_USER_DETAILS);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {

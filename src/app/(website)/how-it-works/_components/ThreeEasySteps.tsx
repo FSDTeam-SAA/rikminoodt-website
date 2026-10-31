@@ -11,19 +11,19 @@ const ThreeEasySteps = () => {
       title: t.createMagicalBook.step1Title,
       description: t.createMagicalBook.step1Desc,
       details: t.howItWorksPage.step1Details,
-      image: "/images/book1.png",
+      image: "/images/stap_1.png",
     },
     {
       title: t.createMagicalBook.step2Title,
       description: t.createMagicalBook.step2Desc,
       details: t.howItWorksPage.step2Details,
-      image: "/images/book2.png",
+      image: "/images/stap_2.png",
     },
     {
       title: t.createMagicalBook.step3Title,
       description: t.createMagicalBook.step3Desc,
       details: t.howItWorksPage.step3Details,
-      image: "/images/book3.png",
+      image: "/images/stap_3.png",
     },
   ];
 

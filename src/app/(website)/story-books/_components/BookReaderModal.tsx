@@ -166,7 +166,9 @@ const BookReaderModal = ({
       const { width, height } = stage.getBoundingClientRect();
       const compact = width < 720;
       const availableWidth = Math.max(width - 32, 240);
-      const availableHeight = Math.max(height - 132, 300);
+      // The stage already sits between the header and the navigation bar.
+      // Reserve a subtle, equal inset above and below the book.
+      const availableHeight = Math.max(height - 12, 300);
       const pageWidth = Math.floor(
         Math.min(compact ? availableWidth : availableWidth / 2, availableHeight * PAGE_RATIO),
       );
@@ -217,7 +219,7 @@ const BookReaderModal = ({
           <span className="font-sans text-sm text-[#8A8086]">Book reader</span>
         </header>
 
-        <div ref={stageRef} className="absolute inset-0 flex items-center justify-center overflow-hidden px-4 py-[68px] sm:px-7 sm:py-[80px]">
+        <div ref={stageRef} className="absolute inset-x-0 top-[52px] bottom-[72px] flex items-center justify-center overflow-hidden px-4 py-1.5 sm:bottom-[80px] sm:px-7">
           <div className="origin-center transition-transform duration-200" style={{ transform: `scale(${zoom})` }}>
             <HTMLFlipBook
               key={readerContentKey}
@@ -254,7 +256,7 @@ const BookReaderModal = ({
                     </div>
                   ) : bookPage.kind === "storyText" ? (
                     <div className="relative flex h-full w-full items-center overflow-hidden bg-[#FFFCF8] px-[12%] py-10">
-                      <BookPageDecorations pageNumber={(bookPage.storyIndex || 0) + 1} />
+                      <BookPageDecorations pageNumber={bookPage.sourcePageNumber || (bookPage.storyIndex || 0) + 3} />
                       <div className="relative w-full">
                         {bookPage.text.split(/\n\s*\n/).filter(Boolean).map((paragraph, paragraphIndex) => (
                           <p key={paragraphIndex} style={{ fontFamily: bookFontFamily }} className="mb-4 text-[clamp(0.82rem,1.75vw,1.25rem)] font-semibold leading-[1.62] text-[#302735] last:mb-0">{paragraph}</p>
@@ -270,7 +272,7 @@ const BookReaderModal = ({
                             {bookPage.text}
                           </p>
                           <div className="absolute bottom-[11%] left-[12%] text-left">
-                            <p style={{ fontFamily: bookFontFamily }} className="text-[clamp(0.55rem,1.1vw,0.8rem)] text-[#302735]">This magical children&apos;s book belongs to:</p>
+                            <p style={{ fontFamily: bookFontFamily }} className="text-[clamp(0.55rem,1.1vw,0.8rem)] text-[#302735]">This magical children&apos;s book was made by:</p>
                             <span style={{ fontFamily: bookFontFamily }} className="mt-3 block border-b border-dashed border-[#514256] pb-1 text-[clamp(0.7rem,1.35vw,1rem)] font-semibold text-[#302735]">{creatorName || " "}</span>
                           </div>
                         </>

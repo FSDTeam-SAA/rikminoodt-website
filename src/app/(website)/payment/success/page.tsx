@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -31,6 +31,10 @@ type Book = {
 };
 
 type PaymentLanguage = "en" | "nl" | "fr";
+
+const ESTIMATED_BOOK_GENERATION_MS = 15 * 60 * 1000;
+const INITIAL_GENERATION_PROGRESS = 5;
+const MAX_SIMULATED_PROGRESS = 95;
 
 const paymentCopy: Record<PaymentLanguage, {
   paymentSuccessful: string;
@@ -160,6 +164,8 @@ function BookGenerationPaymentSuccess({
   const [error, setError] = useState("");
   const [retrying, setRetrying] = useState(false);
   const [pollVersion, setPollVersion] = useState(0);
+  const [generationProgress, setGenerationProgress] = useState(0);
+  const generationStartedAtRef = useRef<number | null>(null);
   const copy = paymentCopy[language as PaymentLanguage];
 
   useEffect(() => {
@@ -189,10 +195,7 @@ function BookGenerationPaymentSuccess({
         }
         setBook(next);
         setError("");
-        if (next.status === "COMPLETED" && next.paidAt) {
-          setModalOpen(false);
-          return;
-        }
+        if (next.status === "COMPLETED" && next.paidAt) return;
         if (next.status !== "FAILED" || !next.paidAt) {
           timer = setTimeout(poll, 4000);
         }
@@ -233,6 +236,8 @@ function BookGenerationPaymentSuccess({
       const result = await response.json().catch(() => null);
       if (!response.ok) throw new Error(result?.message || "Unable to retry generation.");
       setBook(result.data);
+      generationStartedAtRef.current = Date.now();
+      setGenerationProgress(INITIAL_GENERATION_PROGRESS);
       setModalOpen(true);
       setPollVersion((value) => value + 1);
     } catch (err) {
@@ -253,6 +258,43 @@ function BookGenerationPaymentSuccess({
   const completed = paid && book?.status === "COMPLETED";
   const failed = paid && book?.status === "FAILED";
   const failureType = book?.failureType;
+
+  // The API reports only the final book status. Simulate a 15-minute journey,
+  // then reserve 100% for the real completion signal.
+  useEffect(() => {
+    if (!paid) {
+      generationStartedAtRef.current = null;
+      setGenerationProgress(0);
+      return;
+    }
+    if (failed) return;
+    if (completed) {
+      setGenerationProgress(100);
+      // Let the completed bar be visible briefly, then reveal the localized
+      // payment-success screen behind this modal.
+      const closeTimer = window.setTimeout(() => setModalOpen(false), 1200);
+      return () => window.clearTimeout(closeTimer);
+    }
+
+    if (!generationStartedAtRef.current) generationStartedAtRef.current = Date.now();
+    const updateProgress = () => {
+      const elapsed = Date.now() - (generationStartedAtRef.current || Date.now());
+      const simulatedProgress = Math.min(
+        MAX_SIMULATED_PROGRESS,
+        INITIAL_GENERATION_PROGRESS + Math.floor(
+          (elapsed / ESTIMATED_BOOK_GENERATION_MS) * (MAX_SIMULATED_PROGRESS - INITIAL_GENERATION_PROGRESS),
+        ),
+      );
+      setGenerationProgress((current) => Math.max(current, simulatedProgress));
+    };
+
+    updateProgress();
+    const timer = window.setInterval(() => {
+      updateProgress();
+    }, 5000);
+
+    return () => window.clearInterval(timer);
+  }, [paid, failed, completed]);
 
   return (
     <main className="flex min-h-[calc(100vh-80px)] items-center bg-[radial-gradient(circle_at_top,_#FFF9F1,_#FEF6EC_52%,_#F8EEF5)] px-4 py-8 sm:px-8 sm:py-12">
@@ -336,7 +378,7 @@ function BookGenerationPaymentSuccess({
           <button
             onClick={retry}
             disabled={retrying}
-            className="mt-6 min-h-11 rounded-xl bg-[#E88DA0] px-6 text-sm font-semibold text-white disabled:opacity-60"
+            className="ml-3 mt-6 min-h-11 rounded-xl bg-[#E88DA0] px-6 text-sm font-semibold text-white disabled:opacity-60"
           >
             {retrying ? `${copy.retryGeneration}…` : copy.retryGeneration}
           </button>
@@ -383,11 +425,17 @@ function BookGenerationPaymentSuccess({
             </button>
             <div
               className={`mx-auto flex size-20 items-center justify-center rounded-2xl ${
-                failed ? "bg-[#FFF0F2] text-[#B74760]" : "bg-[#FDE9EE] text-[#E88DA0]"
+                failed
+                  ? "bg-[#FFF0F2] text-[#B74760]"
+                  : completed
+                    ? "bg-[#E6F7ED] text-[#18B56E]"
+                    : "bg-[#FDE9EE] text-[#E88DA0]"
               }`}
             >
               {failed ? (
                 <AlertCircle size={34} />
+              ) : completed ? (
+                <CheckCircle2 size={34} />
               ) : (
                 <Sparkles size={34} className="animate-pulse" />
               )}
@@ -398,6 +446,8 @@ function BookGenerationPaymentSuccess({
             >
               {failed
                 ? copy.generationNeedsAttention
+                : completed
+                  ? copy.bookReady
                 : paid
                 ? copy.creatingMagicalBook
                 : copy.confirmingPayment}
@@ -405,6 +455,8 @@ function BookGenerationPaymentSuccess({
             <p className="mt-3 text-sm leading-relaxed text-[#70636b]">
               {failed
                 ? copy.generationFailedDescription
+                : completed
+                  ? copy.creationCompleteDescription
                 : paid
                 ? copy.generationDescription
                 : copy.waitingForPayment}
@@ -421,18 +473,40 @@ function BookGenerationPaymentSuccess({
                 )}
               </div>
             )}
-            {!failed && (
+            {paid && !failed && (
               <div className="mt-7 flex flex-col items-center text-center">
-                <div className="relative flex size-16 items-center justify-center rounded-full bg-[#FDE9EE]">
-                  <span className="absolute inset-0 animate-ping rounded-full border border-[#E88DA0]/40" />
-                  <span className="absolute size-12 animate-spin rounded-full border-2 border-[#E88DA0]/20 border-t-[#9C81BE]" />
-                  <Sparkles size={22} className="relative animate-pulse text-[#E88DA0]" />
+                <div className="w-full rounded-2xl border border-[#F1D8E0] bg-white/80 p-4 shadow-sm">
+                  <div className="flex items-center justify-between font-sans text-xs font-semibold text-[#71616A]">
+                    <span>{completed ? copy.creationComplete : copy.addingFinalTouches}</span>
+                    <span className={completed ? "text-[#18B56E]" : "text-[#D56A88]"}>{generationProgress}%</span>
+                  </div>
+                  <div
+                    className="mt-3 h-3 w-full overflow-hidden rounded-full bg-[#F6DFE6]"
+                    role="progressbar"
+                    aria-label="Book generation progress"
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-valuenow={generationProgress}
+                  >
+                    <div
+                      className={`h-full rounded-full bg-gradient-to-r transition-all duration-700 ease-out ${
+                        completed
+                          ? "from-[#32B978] via-[#4FCB8D] to-[#78D9A7]"
+                          : "from-[#F48FB1] via-[#E88DA0] to-[#FC8A43]"
+                      }`}
+                      style={{ width: `${generationProgress}%` }}
+                    />
+                  </div>
+                  <p className={`mt-3 text-xs font-medium ${completed ? "text-[#188856]" : "text-[#9A8B93]"}`}>
+                    {completed ? copy.creationCompleteDescription : copy.thisMayTakeAMoment}
+                  </p>
                 </div>
-                <div className="mt-4 flex items-center justify-center gap-2 text-xs font-semibold text-[#816F78]">
-                  <span>{copy.addingFinalTouches}</span>
-                  <Loader2 size={14} className="animate-spin text-[#9C81BE]" />
-                </div>
-                <p className="mt-1.5 text-[11px] text-[#A09199]">{copy.thisMayTakeAMoment}</p>
+              </div>
+            )}
+            {!paid && !failed && (
+              <div className="mt-7 flex flex-col items-center text-center">
+                <Loader2 size={22} className="animate-spin text-[#9C81BE]" />
+                <p className="mt-3 text-xs text-[#A09199]">{copy.thisMayTakeAMoment}</p>
               </div>
             )}
             {error && (

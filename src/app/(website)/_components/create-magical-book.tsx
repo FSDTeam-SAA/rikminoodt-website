@@ -8,17 +8,17 @@ const CreateMagicalBook = () => {
 
   const steps = [
     {
-      image: "/images/book1.png",
+      image: "/images/stap_1.png",
       title: t.createMagicalBook.step1Title,
       description: t.createMagicalBook.step1Desc,
     },
     {
-      image: "/images/book2.png",
+      image: "/images/stap_2.png",
       title: t.createMagicalBook.step2Title,
       description: t.createMagicalBook.step2Desc,
     },
     {
-      image: "/images/book3.png",
+      image: "/images/stap_3.png",
       title: t.createMagicalBook.step3Title,
       description: t.createMagicalBook.step3Desc,
     },
