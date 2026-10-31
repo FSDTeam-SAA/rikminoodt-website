@@ -303,18 +303,119 @@ const translatedStoryClosings: Record<"nl" | "fr", Record<ExploreStoryKey, reado
   },
 };
 
+// These details retain the setting, character actions, and emotional beats
+// from the longer English original instead of reducing a translated page to a
+// short summary.
+const translatedStoryDetails: Record<"nl" | "fr", Record<ExploreStoryKey, readonly string[]>> = {
+  nl: {
+    pirate: [
+      "Bubbles draait vrolijk rond in zijn kom, terwijl bloemen en een zilte zeebries de tuin vullen.",
+      "Zijn kleine reiskom staat op tafel en zijn ouders glimlachen om zijn zelfverzekerde piratengroet.",
+      "De zilte lucht mengt zich met zijn teleurstelling, maar hij kiest bewust voor een vriendelijkere aanpak.",
+      "Hij herinnert zich dat kapitein Mira respect en slim nadenken de beste eigenschappen van een piraat vond.",
+      "Hij wijst de schelpen en rotsmarkeringen aan die hij zorgvuldig op zijn kaart heeft bestudeerd.",
+      "Bubbles kijkt gelukkig toe terwijl iedereen aandachtig luistert naar elkaars vondsten in het warme zand.",
+      "De opwinding slaat om in twijfel wanneer een paar kinderen de schatkist voor zichzelf willen houden.",
+      "Kapitein Mira knikt terwijl de bezorgde gezichten ontspannen en de kinderen elkaar beter begrijpen.",
+      "Ze bekijken de vervaagde inkt en kleurrijke tekeningen alsof ze een schat uit lang vervlogen tijden hebben gevonden.",
+      "Tussen blauwe en groene verf vertellen golven en gelach het verhaal van hun gezamenlijke werk.",
+      "Op een grote rots begrijpt Tanvir dat de dag nooit alleen om goud ging.",
+      "Bubbles flikkert met zijn vinnen in de kom terwijl de oceaan zachtjes als een slaapliedje neuriet.",
+      "Naast hem glinstert Bubbles als een kleine ster, een teken dat zorg ieder avontuur rijker maakt.",
+    ],
+    dinosaur: [
+      "Beneden sisten pannenkoeken in de keuken en de warme, zoete geur maakt hem trots en blij.",
+      "Het zonlicht laat alle kleuren stralen terwijl opa Kumar zich voorbereidt op een groot avontuur.",
+      "De afdruk is veel groter dan zijn eigen voeten, waardoor hij zich tegelijk nieuwsgierig en verbaasd voelt.",
+      "Het pad glinstert in de zon en de frisse lucht ruikt naar ochtenddauw terwijl hij verder loopt.",
+      "De kleine triceratops knippert verlegen, maar haar rustige begroeting vormt het begin van een nieuwe vriendschap.",
+      "Boven hen ritselen de bladeren zacht terwijl ze ontdekken dat ze allebei dat eenzame gevoel kennen.",
+      "Het zachte geluid van zijn potlood en Tara's heldere ogen maken de vrolijke tekening extra bijzonder.",
+      "De late middaglucht gloeit warm wanneer ze zij aan zij met nieuw vertrouwen naar huis lopen.",
+      "Bloemen, hapjes en lachende stemmen vullen de tuin terwijl opa ervoor zorgt dat Tara zich veilig voelt.",
+      "De bries danst door de tuin terwijl ze spelletjes spelen en de zon langzaam ondergaat.",
+      "Een koele bries beweegt door hun haar en schubben en laat hen zich veilig en dankbaar voelen.",
+      "Zijn kamer voelt warm en rustig wanneer hij terugdenkt aan de moed die hij die dag heeft getoond.",
+      "Kleine zorgzame daden maken de wereld warmer en kunnen een groot verschil voor iemand betekenen.",
+    ],
+    space: [
+      "Hij houdt zijn favoriete ruimteboek dicht tegen zich aan terwijl de sterren vervagen in het ochtendlicht.",
+      "De zon verwarmt zijn gezicht als een zachte knuffel terwijl zijn familie naar zijn plannen luistert.",
+      "Hij kijkt naar zijn lege gereedschapskist, maar besluit dat hij misschien zelf een oplossing kan bouwen.",
+      "Hij neuriet een vrolijk deuntje terwijl elke lijn in zijn notitieboek de droom echter maakt.",
+      "De onderdelen wiebelen en passen niet goed, maar een klein vonkje moed houdt hem aan het werk.",
+      "Hij veegt zijn voorhoofd af en repareert de raket voorzichtig terwijl de avondbries langs zijn gezicht strijkt.",
+      "De raket valt met een zachte plof, maar zijn nieuwsgierigheid verdwijnt niet met de mislukte poging.",
+      "In de stille garage noteert hij zorgvuldig wat de vorm en het gewicht van ieder onderdeel doen.",
+      "Als een zilveren vlieger stijgt de raket op, terwijl zijn spinnende kat naast hem toekijkt.",
+      "In het zachte lamplicht tekent hij een vlag en kleine voetstappen op de zilveren grond van de Maan.",
+      "Zijn familie klapt en verzamelt zich om hem heen, trots op alles wat hij heeft geleerd.",
+      "Zijn vriend luistert aandachtig naar hoe hij na elke moeilijke poging bleef leren.",
+      "Elke kleine stap kan hem dichter bij de sterren brengen wanneer iets lastig voelt.",
+    ],
+  },
+  fr: {
+    pirate: [
+      "Bubbles tourne joyeusement dans son bocal pendant que les fleurs et une brise marine parfumée remplissent le jardin.",
+      "Son petit bocal de voyage est posé sur la table et ses parents sourient à son salut de pirate assuré.",
+      "L'air salé se mêle à sa déception, mais il choisit consciemment une façon plus gentille d'agir.",
+      "Il se souvient que la capitaine Mira disait que le respect et l'intelligence font les meilleurs pirates.",
+      "Il montre les coquillages et les marques sur les rochers qu'il a soigneusement étudiés sur sa carte.",
+      "Bubbles observe avec bonheur pendant que chacun écoute attentivement les découvertes des autres dans le sable chaud.",
+      "L'excitation devient une hésitation lorsque quelques enfants veulent garder le coffre pour eux seuls.",
+      "La capitaine Mira approuve d'un signe de tête tandis que les visages inquiets se détendent et se comprennent mieux.",
+      "Ils regardent l'encre effacée et les dessins colorés comme un trésor venu d'un temps très lointain.",
+      "Parmi les peintures bleues et vertes, les vagues et les rires racontent leur travail réalisé ensemble.",
+      "Assis sur un grand rocher, Tanvir comprend que cette journée n'a jamais été seulement une question d'or.",
+      "Bubbles agite ses nageoires dans son bocal pendant que l'océan fredonne doucement comme une berceuse.",
+      "Près de lui, Bubbles scintille comme une petite étoile, rappelant que l'attention enrichit chaque aventure.",
+    ],
+    dinosaur: [
+      "En bas, les crêpes grésillent dans la cuisine et leur parfum chaud et sucré le rend fier et heureux.",
+      "La lumière du soleil fait briller toutes les couleurs pendant que grand-père Kumar prépare la grande aventure.",
+      "L'empreinte est bien plus grande que ses petits pieds, ce qui le rend curieux et un peu perplexe.",
+      "Le chemin scintille au soleil et l'air frais sent la rosée du matin pendant qu'il avance.",
+      "La petite tricératops cligne timidement des yeux, mais ce salut doux devient le début d'une nouvelle amitié.",
+      "Au-dessus d'eux, les feuilles bruissent doucement lorsqu'ils découvrent qu'ils connaissent tous les deux la solitude.",
+      "Le doux bruit de son crayon et les yeux brillants de Tara rendent ce dessin joyeux encore plus spécial.",
+      "Le ciel de fin d'après-midi brille chaleureusement lorsqu'ils rentrent côte à côte avec une confiance nouvelle.",
+      "Les fleurs, les goûters et les voix joyeuses remplissent le jardin pendant que grand-père aide Tara à se sentir en sécurité.",
+      "La brise danse dans le jardin pendant qu'ils jouent et que le soleil descend lentement.",
+      "Une brise fraîche passe dans leurs cheveux et sur ses écailles, et ils se sentent en sécurité et reconnaissants.",
+      "Sa chambre est chaude et paisible lorsqu'il repense au courage dont il a fait preuve ce jour-là.",
+      "Les petits gestes attentionnés rendent le monde plus chaleureux et peuvent faire une grande différence pour quelqu'un.",
+    ],
+    space: [
+      "Il serre son livre préféré sur l'espace contre lui pendant que les étoiles s'effacent dans la lumière du matin.",
+      "Le soleil réchauffe son visage comme un câlin douillet pendant que sa famille écoute ses projets.",
+      "Il regarde sa boîte à outils vide, mais décide qu'il peut peut-être construire lui-même une solution.",
+      "Il fredonne un air joyeux pendant que chaque ligne de son carnet rend son rêve plus réel.",
+      "Les pièces tremblent et s'ajustent mal, mais une petite étincelle de courage le fait continuer.",
+      "Il essuie son front et répare soigneusement la fusée pendant que la brise du soir effleure son visage.",
+      "La fusée retombe avec un petit bruit, mais sa curiosité ne disparaît pas avec cet essai raté.",
+      "Dans le garage silencieux, il note avec soin l'effet de la forme et du poids de chaque pièce.",
+      "Comme un cerf-volant argenté, la fusée s'élève tandis que son chat ronronnant le regarde à côté de lui.",
+      "Dans la douce lumière de sa lampe, il dessine un drapeau et de petites empreintes sur le sol argenté de la Lune.",
+      "Sa famille applaudit et se rassemble autour de lui, fière de tout ce qu'il a appris.",
+      "Son ami écoute attentivement comment il a continué d'apprendre après chaque tentative difficile.",
+      "Chaque petit pas peut le rapprocher des étoiles lorsque quelque chose paraît compliqué.",
+    ],
+  },
+};
+
 const localizedPageText = (language: "nl" | "fr", story: ExploreStoryKey, index: number) => {
   const beat = translatedStoryBeats[language][story][index];
   const closing = translatedStoryClosings[language][story][index];
+  const detail = translatedStoryDetails[language][story][index];
   const firstSentenceEnd = beat.search(/[.!?](?:\s|$)/);
 
   // BookReaderModal and InlineBookPreview render blank-line-separated text as
   // paragraphs. Split the localized opening from its development and add the
   // page-specific ending so language changes retain the English layout.
-  if (firstSentenceEnd === -1) return `${beat}\n\n${closing}`;
+  if (firstSentenceEnd === -1) return `${beat}\n\n${detail}\n\n${closing}`;
 
   return [
-    beat.slice(0, firstSentenceEnd + 1),
+    `${beat.slice(0, firstSentenceEnd + 1)} ${detail}`,
     beat.slice(firstSentenceEnd + 1).trim(),
     closing,
   ].filter(Boolean).join("\n\n");
@@ -362,8 +463,16 @@ const storyVisualKey: Record<string, ExploreStoryKey> = {
   "jishad-space": "space",
 };
 
+const sampleBookCreators: Record<ExploreStoryKey, string> = {
+  pirate: "Amina & Rahim Parkar",
+  dinosaur: "Nusrat & Kamal Ahmed",
+  space: "Sadia & Imran Rahman",
+};
+
 export const getExploreStory = (id: string, language: LanguageCode) => {
   const story = exploreStoriesByLanguage[language].find((item) => item.id === id);
   const visualKey = storyVisualKey[id];
-  return story && visualKey ? { ...story, ...fullStoryContent(visualKey, language) } : undefined;
+  return story && visualKey
+    ? { ...story, creatorName: sampleBookCreators[visualKey], ...fullStoryContent(visualKey, language) }
+    : undefined;
 };
