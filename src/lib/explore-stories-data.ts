@@ -203,11 +203,121 @@ const translatedStoryBeats: Record<"nl" | "fr", Record<ExploreStoryKey, readonly
   },
 };
 
+// The first two sentences of each localized beat provide the opening and the
+// development of that page.  These final lines complete the page so every
+// translated spread follows the same three-paragraph reading rhythm as English.
+const translatedStoryClosings: Record<"nl" | "fr", Record<ExploreStoryKey, readonly string[]>> = {
+  nl: {
+    pirate: [
+      "Tanvir voelt dat de kaart het begin kan zijn van iets heel bijzonders.",
+      "Met een glimlach bereidt Tanvir zich voor om zijn avontuur eerlijk en vriendelijk te beleven.",
+      "Hij haalt diep adem en zoekt naar een manier om toch samen verder te gaan.",
+      "De golven geven hem moed om morgen met een open hart terug te keren.",
+      "Voor het eerst merken de kinderen dat Tanvir een goede vriend kan zijn.",
+      "De gedeelde speurtocht maakt iedereen vrolijker en brengt hen dichter bij elkaar.",
+      "Tanvir weet dat juist nu een vriendelijke stem het verschil kan maken.",
+      "Zo verandert een lastig moment in een kans om echte vrienden te worden.",
+      "Ze beseffen dat hun mooiste vondst de band is die ze samen hebben opgebouwd.",
+      "Iedere tekening bewaart een herinnering aan hun samenwerking en plezier.",
+      "Hij koestert de nieuwe vriendschappen die door respect zijn ontstaan.",
+      "Met die belofte eindigt de dag, maar niet hun vriendschap.",
+      "Die gedachte neemt Tanvir mee, waar zijn volgende reis hem ook brengt.",
+    ],
+    dinosaur: [
+      "Rishad voelt dat deze verjaardag vol verrassingen zal zitten.",
+      "Met zijn tekeningen in gedachten kijkt Rishad verlangend naar buiten.",
+      "De mysterieuze afdruk wijst hem de weg naar iets wonderlijks.",
+      "Hij loopt rustig door, nieuwsgierig naar de vriend die hij misschien zal ontmoeten.",
+      "Rishad merkt dat een vriendelijk welkom het begin van vertrouwen kan zijn.",
+      "Hun eerlijke gesprek laat Tara voelen dat ze niet alleen is.",
+      "De kleuren op papier maken hun gedeelde glimlach alleen maar groter.",
+      "Zo wordt een uitnodiging een klein gebaar met een grote betekenis.",
+      "Rishad is blij dat zijn vriendelijkheid Tara een plek in het feest geeft.",
+      "Samen maken ze van de verjaardag een herinnering die lang blijft stralen.",
+      "Hun rustige moment bevestigt hoe bijzonder hun nieuwe vriendschap is.",
+      "Met dat warme gevoel valt Rishad later tevreden in slaap.",
+      "Hij wil die sleutel elke dag gebruiken om anderen welkom te laten voelen.",
+    ],
+    space: [
+      "De gedachte aan de Maan laat zijn nieuwsgierigheid nog sterker groeien.",
+      "Zijn familie ziet hoe groot zijn droom is en luistert aandachtig.",
+      "Jishad ontdekt dat een goed idee soms begint met eenvoudige spullen.",
+      "Met elk plan komt zijn eigen ruimteavontuur een stap dichterbij.",
+      "Hij leert dat geduld en oefenen horen bij het maken van iets nieuws.",
+      "De aanmoediging geeft hem precies de energie die hij nodig heeft.",
+      "Ook een mislukte lancering kan een belangrijk onderdeel van leren zijn.",
+      "Vol vertrouwen bereidt hij zijn verbeterde ontwerp voor op een nieuwe start.",
+      "Zijn doorzettingsvermogen laat hem zien wat hij zelf allemaal kan bereiken.",
+      "De Maan voelt niet meer zo ver weg als aan het begin van de dag.",
+      "Jishad weet dat hij door te blijven proberen steeds verder kan komen.",
+      "Zijn woorden geven zijn vriend ook moed om eigen dromen te volgen.",
+      "Met hoop in zijn hart blijft Jishad naar de sterren kijken.",
+    ],
+  },
+  fr: {
+    pirate: [
+      "Tanvir sent que cette carte pourrait être le début de quelque chose de merveilleux.",
+      "Avec un sourire, Tanvir se prépare à vivre son aventure avec honnêteté et gentillesse.",
+      "Il respire profondément et cherche une façon de continuer l'aventure avec les autres.",
+      "Le bruit des vagues lui donne le courage de revenir le lendemain avec le cœur ouvert.",
+      "Pour la première fois, les enfants comprennent que Tanvir peut être un bon ami.",
+      "Cette chasse partagée rend chacun plus heureux et les rapproche les uns des autres.",
+      "Tanvir sait qu'une parole douce peut faire toute la différence à cet instant.",
+      "Ainsi, un moment difficile devient une occasion de se faire de vrais amis.",
+      "Ils réalisent que leur plus belle découverte est le lien qu'ils ont créé ensemble.",
+      "Chaque dessin garde le souvenir de leur coopération et de leur joie.",
+      "Il chérit les nouvelles amitiés nées du respect.",
+      "Avec cette promesse, la journée se termine, mais leur amitié continue.",
+      "Tanvir emporte cette idée avec lui, où que sa prochaine aventure le conduise.",
+    ],
+    dinosaur: [
+      "Rishad sent que cet anniversaire sera plein de surprises.",
+      "En pensant à ses dessins, Rishad regarde dehors avec impatience.",
+      "L'empreinte mystérieuse lui montre le chemin vers quelque chose de merveilleux.",
+      "Il avance tranquillement, curieux de découvrir l'ami qu'il pourrait rencontrer.",
+      "Rishad comprend qu'un accueil chaleureux peut faire naître la confiance.",
+      "Leur conversation sincère montre à Tara qu'elle n'est pas seule.",
+      "Les couleurs sur le papier rendent leur sourire partagé encore plus grand.",
+      "Cette invitation devient ainsi un petit geste qui compte énormément.",
+      "Rishad est heureux que sa gentillesse donne à Tara une place dans la fête.",
+      "Ensemble, ils font de cet anniversaire un souvenir qui brillera longtemps.",
+      "Ce moment paisible confirme la beauté de leur nouvelle amitié.",
+      "Avec cette chaleur dans le cœur, Rishad s'endort plus tard, très heureux.",
+      "Il veut utiliser cette clé chaque jour pour que les autres se sentent les bienvenus.",
+    ],
+    space: [
+      "L'idée de la Lune fait grandir encore plus sa curiosité.",
+      "Sa famille comprend l'importance de son rêve et l'écoute attentivement.",
+      "Jishad découvre qu'une bonne idée peut commencer avec des objets tout simples.",
+      "À chaque plan, sa propre aventure spatiale se rapproche un peu plus.",
+      "Il apprend que la patience et l'entraînement font partie de toute création.",
+      "Cet encouragement lui donne l'énergie dont il a besoin pour continuer.",
+      "Même un lancement raté peut devenir une étape importante pour apprendre.",
+      "Avec confiance, il prépare son modèle amélioré pour un nouveau départ.",
+      "Sa persévérance lui montre tout ce qu'il peut accomplir par lui-même.",
+      "La Lune ne lui semble plus aussi loin qu'au début de la journée.",
+      "Jishad sait qu'en continuant d'essayer, il pourra aller toujours plus loin.",
+      "Ses paroles donnent aussi à son ami le courage de suivre ses propres rêves.",
+      "Avec de l'espoir dans le cœur, Jishad continue de regarder les étoiles.",
+    ],
+  },
+};
+
 const localizedPageText = (language: "nl" | "fr", story: ExploreStoryKey, index: number) => {
-  // Each illustration needs its own part of the story.  The old implementation
-  // appended the same two generic paragraphs to every Dutch and French page,
-  // which made consecutive pages look like duplicates in the reader.
-  return translatedStoryBeats[language][story][index];
+  const beat = translatedStoryBeats[language][story][index];
+  const closing = translatedStoryClosings[language][story][index];
+  const firstSentenceEnd = beat.search(/[.!?](?:\s|$)/);
+
+  // BookReaderModal and InlineBookPreview render blank-line-separated text as
+  // paragraphs. Split the localized opening from its development and add the
+  // page-specific ending so language changes retain the English layout.
+  if (firstSentenceEnd === -1) return `${beat}\n\n${closing}`;
+
+  return [
+    beat.slice(0, firstSentenceEnd + 1),
+    beat.slice(firstSentenceEnd + 1).trim(),
+    closing,
+  ].filter(Boolean).join("\n\n");
 };
 
 const finalStoryTranslations: Record<"nl" | "fr", Record<ExploreStoryKey, string>> = {
