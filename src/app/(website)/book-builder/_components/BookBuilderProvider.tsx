@@ -78,8 +78,7 @@ type BookBuilderContextValue = {
 };
 
 const BookBuilderContext = createContext<BookBuilderContextValue | null>(null);
-const storageKey = "book-builder-progress";
-const defaultAge = "0-2 Years";
+const defaultAge: string | null = null;
 const themeOptions = new Set([
   "Fairy Tales",
   "Adventure",
@@ -132,7 +131,6 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
 
   const [currentBookId, setCurrentBookId] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState<number>(0);
-  const [hasLoadedProgress, setHasLoadedProgress] = useState(false);
 
   const setUserDetails = (details: Partial<UserDetails>) => {
     setUserDetailsState((prev) => ({ ...prev, ...details }));
@@ -178,7 +176,8 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
     setCurrentBookId(null);
     setRetryCount(0);
     try {
-      window.sessionStorage.removeItem(storageKey);
+      window.sessionStorage.removeItem("book-builder-progress");
+      window.sessionStorage.removeItem("current_book_id");
     } catch {
       // ignore
     }
@@ -186,42 +185,9 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     try {
-      const savedProgress = window.sessionStorage.getItem(storageKey);
-      if (savedProgress) {
-        const progress = JSON.parse(savedProgress);
-        if (progress.selectedAge) setSelectedAge(progress.selectedAge);
-        if (progress.selectedTheme) setSelectedTheme(progress.selectedTheme);
-        if (progress.selectedStory) setSelectedStory(progress.selectedStory);
-        if (progress.selectedMessage) setSelectedMessage(progress.selectedMessage);
-        if (progress.selectedIllustration) setSelectedIllustration(progress.selectedIllustration);
-        if (progress.selectedFont) setSelectedFont(progress.selectedFont);
-        if (progress.selectedLanguage) setSelectedLanguage(progress.selectedLanguage);
-        if (progress.selectedVariant) setSelectedVariant(progress.selectedVariant);
-        const isLegacySampleCharacter =
-          Array.isArray(progress.characters) &&
-          progress.characters.length === 1 &&
-          progress.characters[0]?.name === "Lily" &&
-          progress.characters[0]?.hobbies === "drawing";
-        if (progress.characters && Array.isArray(progress.characters) && !isLegacySampleCharacter) {
-          setCharacters(progress.characters);
-        }
-        if (progress.creatorName && progress.creatorName !== "Mum & Dad") setCreatorName(progress.creatorName);
-        if (progress.foreword) setForeword(progress.foreword);
-        if (progress.voiceExpected) setVoiceExpected(true);
-        if (progress.forewordMode === "write" || progress.forewordMode === "voice") setForewordMode(progress.forewordMode);
-        if (progress.specialEvents) setSpecialEvents(progress.specialEvents);
-        if (progress.userDetails) {
-          setUserDetailsState({
-            ...progress.userDetails,
-            country: progress.userDetails.country === "United Kingdom" ? "" : progress.userDetails.country,
-          });
-        }
-        if (progress.currentBookId) setCurrentBookId(progress.currentBookId);
-        if (typeof progress.retryCount === "number") setRetryCount(progress.retryCount);
-      }
-
+      window.sessionStorage.removeItem("book-builder-progress");
     } catch {
-      window.sessionStorage.removeItem(storageKey);
+      // ignore unavailable browser storage
     }
 
     const selectedThemeFromHome = new URLSearchParams(window.location.search).get("theme");
@@ -230,64 +196,7 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
       setSelectedTheme(selectedThemeFromHome);
       setSelectedStory(null);
     }
-
-    setHasLoadedProgress(true);
   }, []);
-
-  useEffect(() => {
-    if (!hasLoadedProgress) return;
-    try {
-      const serializableCharacters = characters.map((c) => ({
-        ...c,
-        photoExpected: Boolean(c.photo || c.photoExpected),
-        photo: undefined, // Files can't be JSON serialized
-      }));
-
-      window.sessionStorage.setItem(
-        storageKey,
-        JSON.stringify({
-          selectedAge,
-          selectedTheme,
-          selectedStory,
-          selectedMessage,
-          selectedIllustration,
-          selectedFont,
-          selectedLanguage,
-          selectedVariant,
-          characters: serializableCharacters,
-          creatorName,
-          foreword,
-          forewordMode,
-          specialEvents,
-          userDetails: { ...userDetails, password: "" },
-          voiceExpected,
-          currentBookId,
-          retryCount,
-        }),
-      );
-    } catch {
-      // ignore quota errors
-    }
-  }, [
-    hasLoadedProgress,
-    selectedAge,
-    selectedTheme,
-    selectedStory,
-    selectedMessage,
-    selectedIllustration,
-    selectedFont,
-    selectedLanguage,
-    selectedVariant,
-    characters,
-    voiceExpected,
-    creatorName,
-    foreword,
-    forewordMode,
-    specialEvents,
-    userDetails,
-    currentBookId,
-    retryCount,
-  ]);
 
   return (
     <BookBuilderContext.Provider
