@@ -83,7 +83,31 @@
     "title": "Avis Bookerello - Visages Heureux",
     "subheading": "Plus de 24 522 histoires personnalisées créées. Chaque livre est une nouvelle aventure, un sourire plus grand et un souvenir inoubliable.",
     "ratingText": "4.8/5 parmi plus de 1 700 avis",
-    "ratingAria": "Noté 4,8 sur 5 d'après plus de 1 700 avis"
+    "ratingAria": "Noté 4,8 sur 5 d'après plus de 1 700 avis",
+    "reviewSingular": "avis",
+    "reviewPlural": "avis",
+    "starRatingAria": "{rating} sur 5 étoiles",
+    "photoAlt": "Photo partagée par {name}",
+    "verifiedCustomer": "Client vérifié",
+    "bookLabelTitle": "L'aventure",
+    "bookLabelSubtitle": "magique d'Emma",
+    "placeholderReviews": [
+      { "name": "Pierre Dubois", "comment": "Ma fille adore absolument ce livre ! Elle demande à le lire chaque soir avant de dormir." },
+      { "name": "Camille Laurent", "comment": "Voir mon enfant devenir le héros de l'histoire en a fait un cadeau si spécial pour notre famille." },
+      { "name": "Antoine Moreau", "comment": "Les illustrations sont magnifiques et les détails personnalisés nous ont fait sourire dès la première page." },
+      { "name": "Chloé Lefebvre", "comment": "Un merveilleux souvenir. Notre petit était si heureux de reconnaître son prénom dans l'aventure." },
+      { "name": "Julien Bernard", "comment": "Toute l'expérience de commande a été simple et le livre terminé est vraiment magique." },
+      { "name": "Émilie Rousseau", "comment": "C'est vite devenu notre histoire préférée du soir. Nous avons hâte d'en créer une autre." },
+      { "name": "Nicolas Garnier", "comment": "Un cadeau si attentionné et original. La qualité et les touches personnelles sont ravissantes." },
+      { "name": "Sophie Marchand", "comment": "Notre famille a aimé le lire ensemble. Cela a rendu le moment de lecture encore plus spécial." },
+      { "name": "Alexandre Petit", "comment": "L'histoire a parfaitement captivé l'imagination de notre enfant. C'est un livre que nous chérirons pendant des années." },
+      { "name": "Manon Girard", "comment": "Un magnifique livre d'histoire personnalisé qui a apporté un immense sourire au visage de notre enfant." }
+    ]
+  },
+  "bookPreview": {
+    "madeBy": "Ce merveilleux livre pour enfants a été créé par :",
+    "createdWith": "Ce livre a été créé avec :",
+    "readerLabel": "Lecteur de livre"
   },
   "faq": {
     "title": "Foire aux questions",

@@ -83,7 +83,31 @@
     "title": "Bookerello Reviews - Happy faces",
     "subheading": "Over 24,522 personalised stories created. Every book is a new adventure, a bigger smile and a memory to treasure forever.",
     "ratingText": "4.8/5 from 1,700+ reviews",
-    "ratingAria": "Rated 4.8 out of 5 from 1,700 plus reviews"
+    "ratingAria": "Rated 4.8 out of 5 from 1,700 plus reviews",
+    "reviewSingular": "review",
+    "reviewPlural": "reviews",
+    "starRatingAria": "{rating} out of 5 stars",
+    "photoAlt": "Photo shared by {name}",
+    "verifiedCustomer": "Verified Customer",
+    "bookLabelTitle": "Emma's",
+    "bookLabelSubtitle": "Magical Adventure",
+    "placeholderReviews": [
+      { "name": "Sarah Mitchell", "comment": "My daughter absolutely loves this book! She asks to read it every night before bed." },
+      { "name": "James Carter", "comment": "Seeing my child become the hero of the story made this such a special gift for our family." },
+      { "name": "Olivia Bennett", "comment": "The illustrations are beautiful and the personalised details made us smile from the first page." },
+      { "name": "Daniel Wilson", "comment": "A wonderful keepsake. Our little one was so excited to recognise their name in the adventure." },
+      { "name": "Mia Thompson", "comment": "The whole ordering experience was easy, and the finished book feels truly magical." },
+      { "name": "Ethan Parker", "comment": "This has quickly become our favourite bedtime story. We cannot wait to create another one." },
+      { "name": "Sophie Martin", "comment": "Such a thoughtful and original present. The quality and personal touches are lovely." },
+      { "name": "Noah Williams", "comment": "Our family enjoyed reading it together. It made story time feel extra special." },
+      { "name": "Emma Davis", "comment": "The story captured our child's imagination perfectly. It is a book we will treasure for years." },
+      { "name": "Lucas Brown", "comment": "A beautiful personalised storybook that brought a huge smile to our child's face." }
+    ]
+  },
+  "bookPreview": {
+    "madeBy": "This magical children's book was made by:",
+    "createdWith": "This book is created with:",
+    "readerLabel": "Book reader"
   },
   "faq": {
     "title": "Frequently asked questions",

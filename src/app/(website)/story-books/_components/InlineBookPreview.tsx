@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import HTMLFlipBook, { usePageFlip } from "@gullabs/react-flipbook";
 import { getBookFontFamily } from "@/lib/book-font";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import BookPageDecorations from "./BookPageDecorations";
 
 type PreviewPage = {
@@ -60,6 +61,7 @@ const InlineBookPreview = ({
   finalText,
   onOpenFullScreen,
 }: InlineBookPreviewProps) => {
+  const { t } = useLanguage();
   const coverTitlePosition = titlePosition === "Middle" ? "top-1/2 -translate-y-1/2" : titlePosition === "Bottom" ? "bottom-16" : "top-7";
   const bookFontFamily = getBookFontFamily(font);
   const readerPages = useMemo<ReaderBookPage[]>(() => {
@@ -191,7 +193,7 @@ const InlineBookPreview = ({
                     <h3 style={{ fontFamily: bookFontFamily }} className={`absolute inset-x-6 ${coverTitlePosition} text-center text-[clamp(1.5rem,4vw,2.65rem)] font-bold leading-tight text-white [text-shadow:0_2px_3px_rgba(31,25,28,0.8)]`}>
                       {bookPage.title}
                     </h3>
-                    <Image src="/images/logo.png" alt="Boekerello" width={145} height={48} className="absolute bottom-6 left-1/2 h-auto w-28 -translate-x-1/2 drop-shadow-md sm:w-36" />
+                    <Image src="/images/rikLogo-transparent.png" alt="Boekerello" width={2170} height={725} className="absolute bottom-4 left-1/2 h-auto w-28 -translate-x-1/2 drop-shadow-md sm:w-36" />
                   </div>
                 ) : bookPage.kind === "storyImage" ? (
                   <div className="relative h-full w-full overflow-hidden bg-[#302735]">
@@ -215,7 +217,7 @@ const InlineBookPreview = ({
                           {bookPage.text}
                         </p>
                         <div className="absolute bottom-[11%] left-[12%] text-left">
-                          <p style={{ fontFamily: bookFontFamily }} className="text-[clamp(0.55rem,1.1vw,0.8rem)] text-[#302735]">This magical children&apos;s book was made by:</p>
+                          <p style={{ fontFamily: bookFontFamily }} className="text-[clamp(0.55rem,1.1vw,0.8rem)] text-[#302735]">{t.bookPreview.madeBy}</p>
                           <span style={{ fontFamily: bookFontFamily }} className="mt-3 block border-b border-dashed border-[#514256] pb-1 text-[clamp(0.7rem,1.35vw,1rem)] font-semibold text-[#302735]">{creatorName || " "}</span>
                         </div>
                       </>
@@ -223,8 +225,8 @@ const InlineBookPreview = ({
                       <div className="relative">
                         <h3 style={{ fontFamily: bookFontFamily }} className="mb-5 text-[clamp(1.2rem,2.7vw,2rem)] font-bold text-[#302735]">{bookPage.title}</h3>
                         <p style={{ fontFamily: bookFontFamily }} className="text-[clamp(0.9rem,2vw,1.35rem)] font-semibold leading-relaxed text-[#302735]">{bookPage.text}</p>
-                        <p className="mt-12 font-sans text-[clamp(0.5rem,1vw,0.7rem)] text-[#514256]">This book is created with:</p>
-                        <Image src="/images/logo.png" alt="Boekerello" width={125} height={42} className="mx-auto mt-1 h-auto w-24 sm:w-28" />
+                        <p className="mt-12 font-sans text-[clamp(0.5rem,1vw,0.7rem)] text-[#514256]">{t.bookPreview.createdWith}</p>
+                        <Image src="/images/rikLogo-transparent.png" alt="Boekerello" width={2170} height={725} className="mx-auto mt-1 h-auto w-24 sm:w-28" />
                       </div>
                     )}
                   </div>

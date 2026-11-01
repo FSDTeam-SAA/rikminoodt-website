@@ -121,9 +121,9 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
         backCoverText: staticExploreStory.finalText || staticExploreStory.specialMessage,
         pages: [
           { pageNumber: 1, kind: "cover", imageUrl: staticExploreStory.coverImageUrl, title: staticExploreStory.title },
-          { pageNumber: 2, kind: "welcome", text: staticExploreStory.description },
+          { pageNumber: 2, kind: "welcome", text: getExploreStoryWelcomeText(language) },
           ...staticExploreStory.storyPages.map((page, index) => ({ pageNumber: index + 3, kind: "story", imageUrl: page.image, text: page.text, storyPageNumber: index + 1 })),
-          { pageNumber: staticExploreStory.storyPages.length + 3, kind: "finalMessage", text: staticExploreStory.specialMessage, title: staticExploreStory.title },
+          { pageNumber: staticExploreStory.storyPages.length + 3, kind: "finalMessage", text: staticExploreStory.finalText || staticExploreStory.specialMessage, title: staticExploreStory.title },
         ],
       }
     : null;
@@ -280,6 +280,47 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
     }
   };
 
+  const handleSampleBookDownload = async () => {
+    if (!staticExploreStory || downloadingPdf) return;
+    setDownloadingPdf(true);
+    setDownloadError("");
+    try {
+      const response = await fetch(
+        `${getApiBaseUrl()}/sample-books/${encodeURIComponent(storyId)}/download?language=${encodeURIComponent(language)}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: staticExploreStory.title,
+            creatorName: staticExploreStory.creatorName,
+            foreword: getExploreStoryWelcomeText(language),
+            finalText: staticExploreStory.finalText || staticExploreStory.specialMessage,
+            storyPages: staticExploreStory.storyPages.map(({ text }) => ({ text })),
+          }),
+        },
+      );
+      if (!response.ok) {
+        const result = await response.json().catch(() => null);
+        throw new Error(result?.message || "Unable to prepare your sample PDF download.");
+      }
+
+      const pdfBlob = await response.blob();
+      const objectUrl = URL.createObjectURL(pdfBlob);
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.download = `${staticExploreStory.title.replace(/[^a-zA-Z0-9_-]/g, "_") || "sample-storybook"}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(objectUrl);
+    } catch (err) {
+      console.error("Failed to generate sample PDF:", err);
+      setDownloadError(err instanceof Error ? err.message : "Unable to prepare your sample PDF download.");
+    } finally {
+      setDownloadingPdf(false);
+    }
+  };
+
   if (!isStaticStory && (loading || !fetchedBook)) {
     if (notFound) {
       return (
@@ -334,11 +375,15 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
                 <div className="min-w-0 rounded-xl bg-white p-4 shadow-[0_4px_14px_rgba(92,76,84,0.08)] sm:p-6">
                   <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E9DFD6] pb-4">
                     <h2 className="flex items-center gap-2 font-sans text-lg font-semibold text-[#1E1E1E]">
-                      <BookOpen
-                        size={19}
-                        className="text-[#F27643]"
-                        aria-hidden="true"
-                      />
+                      <span className="relative h-6 w-5 overflow-hidden" aria-hidden="true">
+                        <Image
+                          src="/images/rikLogo-transparent.png"
+                          alt=""
+                          width={2170}
+                          height={725}
+                          className="absolute left-0 top-[-3px] h-auto w-[6.8rem] max-w-none"
+                        />
+                      </span>
                       {labels.details}
                     </h2>
                     {fetchedBook && !isStaticStory && fetchedBook.isShowcase !== true && (
@@ -379,26 +424,24 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
                     >
                       <BookOpen size={16} aria-hidden="true" /> {labels.read}
                     </button>
-                    {!staticExploreStory && (
-                      <button
-                        type="button"
-                        disabled={downloadingPdf}
-                        onClick={handleDownloadPdf}
-                        className="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#9C81BE] px-4 font-sans text-sm font-medium text-white transition-colors hover:bg-[#8667AD] disabled:cursor-not-allowed disabled:opacity-60 min-[480px]:h-10 min-[480px]:w-auto"
-                      >
-                        {downloadingPdf ? (
-                          <>
-                            <Loader2 size={16} className="animate-spin" aria-hidden="true" />
-                            <span>{labels.generating}</span>
-                          </>
-                        ) : (
-                          <>
-                            <Download size={16} aria-hidden="true" />
-                            <span>{labels.download}</span>
-                          </>
-                        )}
-                      </button>
-                    )}
+                    <button
+                      type="button"
+                      disabled={downloadingPdf}
+                      onClick={staticExploreStory ? handleSampleBookDownload : handleDownloadPdf}
+                      className="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#9C81BE] px-4 font-sans text-sm font-medium text-white transition-colors hover:bg-[#8667AD] disabled:cursor-not-allowed disabled:opacity-60 min-[480px]:h-10 min-[480px]:w-auto"
+                    >
+                      {downloadingPdf ? (
+                        <>
+                          <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+                          <span>{labels.generating}</span>
+                        </>
+                      ) : (
+                        <>
+                          <Download size={16} aria-hidden="true" />
+                          <span>{labels.download}</span>
+                        </>
+                      )}
+                    </button>
                     {!isStaticStory && fetchedBook?.isShowcase !== true && (
                       <button
                         type="button"

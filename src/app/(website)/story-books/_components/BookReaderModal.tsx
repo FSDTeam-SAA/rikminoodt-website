@@ -5,6 +5,7 @@ import { forwardRef, useEffect, useRef, useState } from "react";
 import HTMLFlipBook, { usePageFlip } from "@gullabs/react-flipbook";
 import { ChevronLeft, ChevronRight, Minimize2, Minus, Plus } from "lucide-react";
 import { getBookFontFamily } from "@/lib/book-font";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import BookPageDecorations from "./BookPageDecorations";
 
 type RawBookPage = {
@@ -85,6 +86,7 @@ const BookReaderModal = ({
   pages,
   initialPageNumber,
 }: BookReaderModalProps) => {
+  const { t } = useLanguage();
   const displayTitle = title || "Lisa's Camping Adventure";
   const coverTitlePosition = titlePosition === "Middle" ? "top-1/2 -translate-y-1/2" : titlePosition === "Bottom" ? "bottom-16" : "top-7";
   const bookFontFamily = getBookFontFamily(font);
@@ -216,7 +218,7 @@ const BookReaderModal = ({
           <p id="book-reader-title" className="font-crimson text-lg font-semibold text-[#514256] sm:text-xl">
             {displayTitle}
           </p>
-          <span className="font-sans text-sm text-[#8A8086]">Book reader</span>
+          <span className="font-sans text-sm text-[#8A8086]">{t.bookPreview.readerLabel}</span>
         </header>
 
         <div ref={stageRef} className="absolute inset-x-0 top-[52px] bottom-[72px] flex items-center justify-center overflow-hidden px-4 py-1.5 sm:bottom-[80px] sm:px-7">
@@ -248,7 +250,7 @@ const BookReaderModal = ({
                       <h2 style={{ fontFamily: bookFontFamily }} className={`absolute inset-x-6 ${coverTitlePosition} text-center text-[clamp(1.5rem,4vw,2.65rem)] font-bold leading-tight text-white [text-shadow:0_2px_3px_rgba(31,25,28,0.8)]`}>
                         {bookPage.title}
                       </h2>
-                      <Image src="/images/logo.png" alt="Bookerello" width={145} height={48} className="absolute bottom-6 left-1/2 h-auto w-28 -translate-x-1/2 drop-shadow-md sm:w-36" />
+                      <Image src="/images/rikLogo-transparent.png" alt="Bookerello" width={2170} height={725} className="absolute bottom-4 left-1/2 h-auto w-28 -translate-x-1/2 drop-shadow-md sm:w-36" />
                     </div>
                   ) : bookPage.kind === "storyImage" ? (
                     <div className="relative h-full w-full overflow-hidden bg-[#302735]">
@@ -272,17 +274,21 @@ const BookReaderModal = ({
                             {bookPage.text}
                           </p>
                           <div className="absolute bottom-[11%] left-[12%] text-left">
-                            <p style={{ fontFamily: bookFontFamily }} className="text-[clamp(0.55rem,1.1vw,0.8rem)] text-[#302735]">This magical children&apos;s book was made by:</p>
+                            <p style={{ fontFamily: bookFontFamily }} className="text-[clamp(0.55rem,1.1vw,0.8rem)] text-[#302735]">{t.bookPreview.madeBy}</p>
                             <span style={{ fontFamily: bookFontFamily }} className="mt-3 block border-b border-dashed border-[#514256] pb-1 text-[clamp(0.7rem,1.35vw,1rem)] font-semibold text-[#302735]">{creatorName || " "}</span>
                           </div>
                         </>
                       ) : (
-                        <div className="relative">
-                          <h2 style={{ fontFamily: bookFontFamily }} className="mb-5 text-[clamp(1.2rem,2.7vw,2rem)] font-bold text-[#302735]">{bookPage.title}</h2>
-                          <p style={{ fontFamily: bookFontFamily }} className="text-[clamp(0.9rem,2vw,1.35rem)] font-semibold leading-relaxed text-[#302735]">{bookPage.text}</p>
-                          <p className="mt-12 font-sans text-[clamp(0.5rem,1vw,0.7rem)] text-[#514256]">This book is created with:</p>
-                          <Image src="/images/logo.png" alt="Bookerello" width={125} height={42} className="mx-auto mt-1 h-auto w-24 sm:w-28" />
-                        </div>
+                        <>
+                          <div className="relative">
+                            <h2 style={{ fontFamily: bookFontFamily }} className="mb-5 text-[clamp(1.2rem,2.7vw,2rem)] font-bold text-[#302735]">{bookPage.title}</h2>
+                            <p style={{ fontFamily: bookFontFamily }} className="text-[clamp(0.9rem,2vw,1.35rem)] font-semibold leading-relaxed text-[#302735]">{bookPage.text}</p>
+                          </div>
+                          <div className="absolute inset-x-0 bottom-[14%]">
+                            <p className="font-sans text-[clamp(0.5rem,1vw,0.7rem)] text-[#514256]">{t.bookPreview.createdWith}</p>
+                            <Image src="/images/rikLogo-transparent.png" alt="Bookerello" width={2170} height={725} className="mx-auto mt-1 h-auto w-24 sm:w-28" />
+                          </div>
+                        </>
                       )}
                     </div>
                   )}
