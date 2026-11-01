@@ -83,7 +83,31 @@
     "title": "Bookerello Reviews - Blije Gezichten",
     "subheading": "Meer dan 24.522 gepersonaliseerde verhalen gemaakt. Elk boek is een nieuw avontuur, een grotere glimlach en een herinnering voor altijd.",
     "ratingText": "4.8/5 uit 1.700+ reviews",
-    "ratingAria": "Beoordeeld met 4.8 van de 5 uit meer dan 1.700 reviews"
+    "ratingAria": "Beoordeeld met 4.8 van de 5 uit meer dan 1.700 reviews",
+    "reviewSingular": "review",
+    "reviewPlural": "reviews",
+    "starRatingAria": "{rating} van de 5 sterren",
+    "photoAlt": "Foto gedeeld door {name}",
+    "verifiedCustomer": "Geverifieerde klant",
+    "bookLabelTitle": "Emma's",
+    "bookLabelSubtitle": "Magische Avontuur",
+    "placeholderReviews": [
+      { "name": "Thomas Vermeulen", "comment": "Mijn dochter is helemaal weg van dit boek! Ze wil het elke avond voor het slapengaan lezen." },
+      { "name": "Lotte De Smet", "comment": "Mijn kind de held van het verhaal zien worden, maakte dit een heel bijzonder cadeau voor ons gezin." },
+      { "name": "Pieter Van den Broeck", "comment": "De illustraties zijn prachtig en de persoonlijke details bezorgden ons vanaf de eerste pagina een glimlach." },
+      { "name": "Julie Peeters", "comment": "Een prachtig aandenken. Onze kleine was zo enthousiast om zijn naam in het avontuur te herkennen." },
+      { "name": "Matthias Verhaeghe", "comment": "Het hele bestelproces was eenvoudig en het afgewerkte boek voelt echt magisch aan." },
+      { "name": "Emma Vandenberghe", "comment": "Dit is snel ons favoriete verhaaltje voor het slapengaan geworden. We kunnen niet wachten om er nog een te maken." },
+      { "name": "Simon De Clercq", "comment": "Zo'n attent en origineel cadeau. De kwaliteit en persoonlijke accenten zijn prachtig." },
+      { "name": "Laura Van Acker", "comment": "Ons gezin genoot ervan om het samen te lezen. Het maakte het voorleesmoment extra bijzonder." },
+      { "name": "Nicolas Maes", "comment": "Het verhaal sprak perfect tot de verbeelding van ons kind. Dit is een boek dat we jarenlang zullen koesteren." },
+      { "name": "Sarah Dewaele", "comment": "Een prachtig gepersonaliseerd verhalenboek dat een grote glimlach op het gezicht van ons kind toverde." }
+    ]
+  },
+  "bookPreview": {
+    "madeBy": "Dit magische kinderboek is gemaakt door:",
+    "createdWith": "Dit boek is gemaakt met:",
+    "readerLabel": "Boeklezer"
   },
   "faq": {
     "title": "Veelgestelde Vragen",

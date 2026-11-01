@@ -92,6 +92,168 @@ const storyTexts: Record<ExploreStoryKey, readonly string[]> = {
   ],
 };
 
+// The first example book is intentionally a fuller reading sample. These
+// page-specific paragraphs keep its existing story intact in all three languages.
+const firstSampleBookExtensions: Record<LanguageCode, readonly string[]> = {
+  en: [
+    "He carefully traced the dotted path with one finger, imagining every step from the garden gate to the shining shore.",
+    "His parents agreed that a true explorer is remembered not only for finding clues, but also for making everyone feel welcome.",
+    "Watching the waves curl around the stones, Tanvir realised that a friendly question might work better than trying to prove he was right.",
+    "Before going to sleep, he packed his map and promised himself that tomorrow he would listen first and speak with a gentle voice.",
+    "One child leaned closer to ask about a tiny symbol on the map, and that small question became the first sign of a new friendship.",
+    "Everyone took turns with the map and the spade, so the treasure hunt slowly became a team adventure instead of a race.",
+    "Tanvir suggested that, if they found anything, they could decide together what to do with it. Friendship, he thought, was worth more than a secret.",
+    "Captain Mira smiled when she saw the children make a fair plan, because each voice was finally being heard.",
+    "Tanvir imagined that the adventurers who had hidden the chest wanted their stories to be discovered and passed on, not kept by only one person.",
+    "They dated their drawings and tucked them safely into the chest, hoping another child would one day feel just as welcome in the adventure.",
+    "The chest felt lighter in Tanvir's hands because the happiest part of a treasure is the joy that people share together.",
+    "He folded the map carefully into his bag, knowing that his next adventure could begin with a simple invitation to a new friend.",
+    "The story was ending, but its lesson travelled on with Tanvir: every caring choice can help an ordinary day become an adventure.",
+  ],
+  nl: [
+    "Hij volgde voorzichtig het gestippelde pad met één vinger en stelde zich elke stap voor, van het tuinhek tot de glinsterende kust.",
+    "Zijn ouders waren het erover eens dat een echte ontdekkingsreiziger niet alleen wordt herinnerd om gevonden aanwijzingen, maar ook omdat iedereen zich welkom voelt.",
+    "Terwijl hij naar de golven rond de stenen keek, besefte Tanvir dat een vriendelijke vraag beter kon werken dan proberen te bewijzen dat hij gelijk had.",
+    "Voor hij ging slapen, pakte hij zijn kaart in en beloofde hij zichzelf dat hij morgen eerst zou luisteren en met een vriendelijke stem zou spreken.",
+    "Een kind boog zich naar voren om naar een klein symbool op de kaart te vragen, en die kleine vraag werd het eerste teken van een nieuwe vriendschap.",
+    "Iedereen kreeg om de beurt de kaart en de schep, waardoor de schattenjacht langzaam een teamavontuur werd in plaats van een wedstrijd.",
+    "Tanvir stelde voor dat ze samen konden beslissen wat ze met hun vondst zouden doen. Vriendschap was, dacht hij, meer waard dan een geheim.",
+    "Kapitein Mira glimlachte toen ze zag dat de kinderen een eerlijk plan maakten, omdat eindelijk naar iedere stem werd geluisterd.",
+    "Tanvir stelde zich voor dat de avonturiers die de kist hadden verstopt, wilden dat hun verhalen werden ontdekt en doorgegeven, niet door één persoon bewaard.",
+    "Ze zetten een datum bij hun tekeningen en stopten ze veilig in de kist, in de hoop dat een ander kind zich ooit net zo welkom zou voelen in het avontuur.",
+    "De kist voelde lichter in Tanvirs handen, omdat het mooiste van een schat de vreugde is die mensen samen delen.",
+    "Hij vouwde de kaart zorgvuldig op in zijn tas, wetend dat zijn volgende avontuur kon beginnen met een eenvoudige uitnodiging aan een nieuwe vriend.",
+    "Het verhaal liep ten einde, maar de les reisde met Tanvir mee: iedere zorgzame keuze kan een gewone dag in een avontuur veranderen.",
+  ],
+  fr: [
+    "Il suivit soigneusement le chemin en pointillés avec un doigt, imaginant chaque pas depuis le portail du jardin jusqu'au rivage scintillant.",
+    "Ses parents furent d'accord : on se souvient d'un véritable explorateur non seulement pour les indices qu'il trouve, mais aussi parce qu'il fait sentir chacun le bienvenu.",
+    "En regardant les vagues se glisser autour des pierres, Tanvir comprit qu'une question gentille pouvait mieux fonctionner que chercher à prouver qu'il avait raison.",
+    "Avant de dormir, il rangea sa carte et se promit que, le lendemain, il écouterait d'abord et parlerait d'une voix douce.",
+    "Un enfant se pencha pour demander ce que signifiait un petit symbole sur la carte, et cette petite question devint le premier signe d'une nouvelle amitié.",
+    "Chacun prit son tour avec la carte et la pelle, si bien que la chasse au trésor devint peu à peu une aventure d'équipe plutôt qu'une course.",
+    "Tanvir proposa que, s'ils trouvaient quelque chose, ils décideraient ensemble quoi en faire. L'amitié, pensa-t-il, valait plus qu'un secret.",
+    "La capitaine Mira sourit en voyant les enfants établir un plan juste, car chaque voix était enfin entendue.",
+    "Tanvir imagina que les aventuriers qui avaient caché le coffre voulaient que leurs histoires soient découvertes et transmises, et non gardées par une seule personne.",
+    "Ils datèrent leurs dessins et les glissèrent soigneusement dans le coffre, espérant qu'un autre enfant se sentirait un jour tout aussi bienvenu dans l'aventure.",
+    "Le coffre sembla plus léger dans les mains de Tanvir, car la plus belle part d'un trésor est la joie que l'on partage ensemble.",
+    "Il plia soigneusement la carte dans son sac, sachant que sa prochaine aventure pourrait commencer par une simple invitation adressée à un nouvel ami.",
+    "L'histoire se terminait, mais sa leçon accompagnait Tanvir : chaque geste attentionné peut transformer une journée ordinaire en aventure.",
+  ],
+};
+
+const secondSampleBookExtensions: Record<LanguageCode, readonly string[]> = {
+  en: [
+    "He slipped into his slippers and hurried downstairs, certain that the day would hold a surprise larger than any birthday present.",
+    "Grandpa Kumar checked that the little backpack held water, crayons, and a snack, because every good explorer should be ready to share.",
+    "Beside the print, a broken fern pointed toward the tall grass, giving Rishad another clue to follow with Grandpa close by.",
+    "He noticed tiny drops of dew shining on the leaves and wondered whether the mysterious visitor had passed there only a few minutes before.",
+    "Tara's gentle eyes told Rishad that she wanted a friend, so he gave her time to feel safe before asking another question.",
+    "They decided that a kind listener can make a quiet heart feel less alone, even before a single problem is solved.",
+    "Tara chose a bright blue crayon for the sky, and Rishad added a smiling sun above the two friends in the picture.",
+    "As they walked, Rishad described the balloons, games, and cake, making Tara smile a little more with every step.",
+    "Grandpa Kumar saved a special place at the table for Tara, showing her that she belonged at the celebration just as much as anyone else.",
+    "When Tara joined the games, the other guests cheered for her, and Rishad saw how one welcome can make a whole party brighter.",
+    "They made a wish for more adventures together, knowing that the best memories are even warmer when they are shared with a friend.",
+    "He placed the new drawing beside the old one and smiled at how much a single day of courage and care had changed his world.",
+    "Rishad knew he could carry that magic into every new day by noticing when someone needed a smile, a kind word, or a friend.",
+  ],
+  nl: [
+    "Hij schoot in zijn pantoffels en haastte zich naar beneden, zeker dat de dag een verrassing zou brengen die groter was dan elk verjaardagscadeau.",
+    "Opa Kumar controleerde of de kleine rugzak water, kleurpotloden en een hapje bevatte, want elke goede ontdekkingsreiziger moet klaar zijn om te delen.",
+    "Naast de afdruk wees een gebroken varen naar het hoge gras, waardoor Rishad nog een aanwijzing had om te volgen terwijl opa dichtbij bleef.",
+    "Hij zag kleine dauwdruppels op de bladeren glinsteren en vroeg zich af of de geheimzinnige bezoeker daar pas enkele minuten geleden was geweest.",
+    "Tara's zachte ogen vertelden Rishad dat ze een vriend wilde, dus gaf hij haar tijd om zich veilig te voelen voordat hij nog een vraag stelde.",
+    "Ze besloten dat een vriendelijke luisteraar een stil hart minder eenzaam kan laten voelen, nog voordat er een probleem is opgelost.",
+    "Tara koos een helder blauw kleurpotlood voor de lucht en Rishad tekende een lachende zon boven de twee vrienden.",
+    "Tijdens het lopen vertelde Rishad over de ballonnen, spelletjes en taart, waardoor Tara bij elke stap iets meer glimlachte.",
+    "Opa Kumar hield een speciale plaats aan tafel vrij voor Tara en liet zo zien dat zij net zo goed bij het feest hoorde als ieder ander.",
+    "Toen Tara meedeed met de spelletjes, juichten de andere gasten voor haar en zag Rishad hoe één welkom een heel feest mooier kan maken.",
+    "Ze deden een wens voor meer avonturen samen, wetend dat de mooiste herinneringen nog warmer zijn wanneer je ze met een vriend deelt.",
+    "Hij legde de nieuwe tekening naast de oude en glimlachte om hoezeer één dag vol moed en zorg zijn wereld had veranderd.",
+    "Rishad wist dat hij die magie elke nieuwe dag kon meenemen door te merken wanneer iemand een glimlach, een vriendelijk woord of een vriend nodig had.",
+  ],
+  fr: [
+    "Il enfila ses pantoufles et descendit en hâte, certain que la journée lui réserverait une surprise plus grande que n'importe quel cadeau d'anniversaire.",
+    "Grand-père Kumar vérifia que le petit sac contenait de l'eau, des crayons et un goûter, car tout bon explorateur doit être prêt à partager.",
+    "Près de l'empreinte, une fougère cassée indiquait les hautes herbes, donnant à Rishad un nouvel indice à suivre pendant que son grand-père restait près de lui.",
+    "Il remarqua de petites gouttes de rosée brillant sur les feuilles et se demanda si le mystérieux visiteur était passé là seulement quelques minutes plus tôt.",
+    "Les yeux doux de Tara dirent à Rishad qu'elle voulait un ami, alors il lui laissa le temps de se sentir en sécurité avant de poser une autre question.",
+    "Ils décidèrent qu'une personne qui écoute avec gentillesse peut rendre un cœur silencieux moins seul, même avant de résoudre le moindre problème.",
+    "Tara choisit un crayon bleu vif pour le ciel, et Rishad ajouta un soleil souriant au-dessus des deux amis sur le dessin.",
+    "En marchant, Rishad lui décrivit les ballons, les jeux et le gâteau, et Tara souriait un peu plus à chaque pas.",
+    "Grand-père Kumar réserva une place spéciale à table pour Tara, lui montrant qu'elle avait autant sa place à la fête que n'importe qui.",
+    "Lorsque Tara se joignit aux jeux, les autres invités l'encouragèrent, et Rishad vit qu'un seul accueil peut rendre toute une fête plus lumineuse.",
+    "Ils firent le vœu de vivre encore beaucoup d'aventures ensemble, sachant que les plus beaux souvenirs sont plus chaleureux lorsqu'on les partage avec un ami.",
+    "Il posa le nouveau dessin près de l'ancien et sourit en voyant combien une seule journée de courage et d'attention avait changé son monde.",
+    "Rishad savait qu'il pourrait emporter cette magie dans chaque nouvelle journée en remarquant quand quelqu'un avait besoin d'un sourire, d'un mot gentil ou d'un ami.",
+  ],
+};
+
+const thirdSampleBookExtensions: Record<LanguageCode, readonly string[]> = {
+  en: [
+    "He imagined the Moon waiting quietly above the rooftops, like a silver friend who might one day show him its craters and shadows.",
+    "His family asked to see every drawing, and their excited questions made Jishad feel that his big idea was worth exploring.",
+    "He remembered that many great inventions begin with a small question, so he decided that an empty toolbox did not have to end his dream.",
+    "He labelled each part of his plan and pictured the cardboard rocket standing tall in the garden, ready for its first countdown.",
+    "Each wobbly piece taught him something new about balance, and he began to see mistakes as helpful clues instead of reasons to stop.",
+    "With every careful repair, the rocket looked a little stronger, and Jishad felt stronger too because someone believed in him.",
+    "He picked up the rocket gently, smiled at the bent wing, and wrote down one change he could make before the next launch.",
+    "The notes in his book helped him turn disappointment into a new experiment, one small improvement at a time.",
+    "For a moment, Jishad imagined that the stars themselves were cheering as his homemade rocket climbed through the cool night air.",
+    "He added bright colours around the Moon in his drawing, saving a place for the rocket and for the explorer he hoped to become.",
+    "The rocket was more than cardboard and tape now; it was proof that patience and practice can make an idea grow.",
+    "His friend promised to build something too, and Jishad was happy to share the lesson that had helped him keep going.",
+    "Whenever he looked up at the Moon, Jishad would remember that brave dreams begin with one hopeful step and another try.",
+  ],
+  nl: [
+    "Hij stelde zich voor dat de maan stil boven de daken wachtte, als een zilveren vriend die hem op een dag haar kraters en schaduwen zou laten zien.",
+    "Zijn familie vroeg om elke tekening te zien, en hun enthousiaste vragen gaven Jishad het gevoel dat zijn grote idee het waard was om te onderzoeken.",
+    "Hij herinnerde zich dat veel grote uitvindingen met een kleine vraag beginnen, dus besloot hij dat een lege gereedschapskist zijn droom niet hoefde te stoppen.",
+    "Hij gaf ieder deel van zijn plan een label en zag de kartonnen raket al hoog in de tuin staan, klaar voor de eerste aftelling.",
+    "Elk wiebelend onderdeel leerde hem iets nieuws over evenwicht, en hij begon fouten te zien als nuttige aanwijzingen in plaats van redenen om te stoppen.",
+    "Met elke zorgvuldige reparatie zag de raket er iets sterker uit, en Jishad voelde zich ook sterker omdat iemand in hem geloofde.",
+    "Hij pakte de raket voorzichtig op, glimlachte naar de gebogen vleugel en schreef één verandering op die hij voor de volgende lancering kon maken.",
+    "De aantekeningen in zijn boek hielpen hem teleurstelling om te zetten in een nieuw experiment, steeds met een kleine verbetering.",
+    "Even stelde Jishad zich voor dat de sterren zelf juichten terwijl zijn zelfgemaakte raket door de koele nachtelijke lucht klom.",
+    "Hij voegde heldere kleuren rond de maan toe aan zijn tekening en hield ruimte vrij voor de raket en voor de ontdekkingsreiziger die hij hoopte te worden.",
+    "De raket was nu meer dan karton en tape; hij was het bewijs dat geduld en oefenen een idee kunnen laten groeien.",
+    "Zijn vriend beloofde ook iets te bouwen, en Jishad deelde graag de les die hem had geholpen om door te gaan.",
+    "Wanneer hij naar de maan keek, zou Jishad onthouden dat dappere dromen beginnen met één hoopvolle stap en nog een poging.",
+  ],
+  fr: [
+    "Il imagina la Lune attendant calmement au-dessus des toits, comme une amie argentée qui lui montrerait un jour ses cratères et ses ombres.",
+    "Sa famille demanda à voir chaque dessin, et leurs questions enthousiastes firent sentir à Jishad que sa grande idée méritait d'être explorée.",
+    "Il se souvint que beaucoup de grandes inventions commencent par une petite question, alors il décida qu'une boîte à outils vide ne devait pas arrêter son rêve.",
+    "Il étiqueta chaque partie de son plan et imagina la fusée en carton se dresser dans le jardin, prête pour son premier compte à rebours.",
+    "Chaque pièce qui tremblait lui apprit quelque chose sur l'équilibre, et il commença à voir les erreurs comme des indices utiles plutôt que comme des raisons d'abandonner.",
+    "À chaque réparation soigneuse, la fusée semblait un peu plus solide, et Jishad se sentit plus fort lui aussi parce que quelqu'un croyait en lui.",
+    "Il ramassa doucement la fusée, sourit à son aile tordue et nota un changement qu'il pourrait faire avant le prochain lancement.",
+    "Les notes de son carnet l'aidèrent à transformer sa déception en une nouvelle expérience, avec une petite amélioration à la fois.",
+    "Pendant un instant, Jishad imagina que les étoiles elles-mêmes l'encourageaient tandis que sa fusée faite maison montait dans l'air frais de la nuit.",
+    "Il ajouta des couleurs vives autour de la Lune sur son dessin, gardant une place pour la fusée et pour l'explorateur qu'il espérait devenir.",
+    "La fusée était désormais plus que du carton et du ruban adhésif : elle prouvait que la patience et l'entraînement peuvent faire grandir une idée.",
+    "Son ami promit de construire quelque chose lui aussi, et Jishad fut heureux de partager la leçon qui l'avait aidé à continuer.",
+    "Chaque fois qu'il regarderait la Lune, Jishad se souviendrait que les rêves courageux commencent par un pas plein d'espoir et une nouvelle tentative.",
+  ],
+};
+
+// Most spreads use three substantial paragraphs. Two key moments keep four
+// paragraphs to give the story a little more breathing room without shortening it.
+const firstSampleBookFourParagraphPages = new Set([4, 8]);
+const secondSampleBookFourParagraphPages = new Set([3, 9]);
+const thirdSampleBookFourParagraphPages = new Set([2, 10]);
+
+const formatSampleBookPage = (text: string, extension: string, index: number, fourParagraphPages: ReadonlySet<number>) => {
+  if (fourParagraphPages.has(index)) return `${text}\n\n${extension}`;
+
+  const paragraphs = text.split(/\n\s*\n/);
+  return [
+    ...paragraphs.slice(0, 2),
+    `${paragraphs.slice(2).join(" ")} ${extension}`,
+  ].join("\n\n");
+};
+
 const exploreStoryWelcomeTexts: Record<LanguageCode, string> = {
   en: "Welcome to this sample book, a glimpse of what is possible. This book serves as inspiration and a guide, showing what the structure and content of a personalised story can look like.\n\nEvery page is created from a child's interests, special memories, and imagination. The characters, adventure, and illustrations turn those details into a magical book to read again and again.\n\nOpen the pages, follow the adventure, and imagine the story that could be created especially for you.",
   nl: "Welkom in dit voorbeeldboek, een glimp van wat mogelijk is. Dit boek is een inspiratie en een gids die laat zien hoe een persoonlijk verhaal kan worden opgebouwd.\n\nIedere pagina is gemaakt vanuit de interesses, bijzondere herinneringen en verbeelding van een kind. De personages, het avontuur en de illustraties vormen samen een magisch boek.\n\nSla de pagina's om, volg het avontuur en stel je het verhaal voor dat speciaal voor jou kan worden gemaakt.",
@@ -434,10 +596,25 @@ const finalStoryTranslations: Record<"nl" | "fr", Record<ExploreStoryKey, string
   },
 };
 
-const fullStoryContent = (story: ExploreStoryKey, language: LanguageCode) => ({
-  storyPages: (language === "en" ? storyTexts[story] : translatedStoryBeats[language][story].map((_, index) => localizedPageText(language, story, index))).map((text, index) => ({ image: visuals[story].storyImages[index], text })),
-  finalText: language === "en" ? finalStoryTexts[story] : finalStoryTranslations[language][story],
-});
+const fullStoryContent = (story: ExploreStoryKey, language: LanguageCode) => {
+  const pageTexts = language === "en"
+    ? storyTexts[story]
+    : translatedStoryBeats[language][story].map((_, index) => localizedPageText(language, story, index));
+
+  return {
+    storyPages: pageTexts.map((text, index) => ({
+      image: visuals[story].storyImages[index],
+      text: story === "pirate"
+        ? formatSampleBookPage(text, firstSampleBookExtensions[language][index], index, firstSampleBookFourParagraphPages)
+        : story === "dinosaur"
+          ? formatSampleBookPage(text, secondSampleBookExtensions[language][index], index, secondSampleBookFourParagraphPages)
+          : story === "space"
+            ? formatSampleBookPage(text, thirdSampleBookExtensions[language][index], index, thirdSampleBookFourParagraphPages)
+            : text,
+    })),
+    finalText: language === "en" ? finalStoryTexts[story] : finalStoryTranslations[language][story],
+  };
+};
 
 export const exploreStoriesByLanguage: Record<LanguageCode, ExploreStory[]> = {
   en: [
