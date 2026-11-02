@@ -48,7 +48,7 @@ export default function LanguageSwitcher({ className = "", isMobile = false }: L
     return (
       <div className={`flex flex-col gap-1.5 py-1 ${className}`}>
         <span className="text-xs font-semibold uppercase tracking-wider text-[#876d7c]">
-          Language
+          {language === "nl" ? "Taal" : language === "fr" ? "Langue" : "Language"}
         </span>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           {SUPPORTED_LANGUAGES.map((item) => {
@@ -88,7 +88,7 @@ export default function LanguageSwitcher({ className = "", isMobile = false }: L
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
         className="group flex items-center gap-2 rounded-full border border-white/60 bg-white/70 px-2.5 py-1.5 shadow-[0_2px_8px_rgba(74,63,82,0.06)] backdrop-blur transition-all duration-200 hover:border-[#e88da0]/40 hover:bg-white hover:shadow-[0_4px_12px_rgba(232,141,160,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf]"
-        aria-label={`Select language. Current: ${current.label}`}
+        aria-label={language === "nl" ? `Selecteer taal. Huidige: ${current.label}` : `Select language. Current: ${current.label}`}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
       >
@@ -102,8 +102,8 @@ export default function LanguageSwitcher({ className = "", isMobile = false }: L
             className="object-cover"
           />
         </div>
-        <span className="font-fredoka text-sm font-medium uppercase text-[#5a5358] transition-colors group-hover:text-[#e77f9a]">
-          {current.label.slice(0, 2)}
+        <span className="font-fredoka text-sm font-semibold uppercase text-[#5a5358] transition-colors group-hover:text-[#e77f9a]">
+          {current.code.toUpperCase()}
         </span>
         <ChevronDown
           size={14}
@@ -117,11 +117,11 @@ export default function LanguageSwitcher({ className = "", isMobile = false }: L
       {isOpen && (
         <div
           role="listbox"
-          aria-label="Language selection"
+          aria-label={language === "nl" ? "Taalselectie" : "Language selection"}
           className="absolute right-0 top-full mt-2.5 z-[110] min-w-[170px] overflow-hidden rounded-2xl border border-[#F3A8B7]/60 bg-white/95 p-1.5 shadow-[0_10px_25px_rgba(74,63,82,0.15)] backdrop-blur-md animate-in fade-in-50 zoom-in-95 duration-150"
         >
           <div className="px-2 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#9d8995]">
-            Select Language
+            {language === "nl" ? "Kies een taal" : language === "fr" ? "Choisir une langue" : "Select Language"}
           </div>
           {SUPPORTED_LANGUAGES.map((item) => {
             const isSelected = language === item.code;

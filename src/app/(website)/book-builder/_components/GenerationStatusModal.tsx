@@ -12,9 +12,136 @@ import {
   BookOpen,
   ArrowRight,
   ExternalLink,
+  X,
+  Mail,
 } from "lucide-react";
 import { getApiBaseUrl } from "@/config/api";
 import { formatGenerationError } from "./generation-error";
+
+function RocketIllustration({ className = "size-12" }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 48 58"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      {/* Exhaust Flame */}
+      <path
+        d="M19 43C19 43 20.5 53 24 57C27.5 53 29 43 29 43H19Z"
+        fill="#FBBF24"
+        stroke="#24222B"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M21.5 43C21.5 43 22.5 49 24 51.5C25.5 49 26.5 43 26.5 43H21.5Z"
+        fill="#F59E0B"
+      />
+
+      {/* Left Fin */}
+      <path
+        d="M15 35C10.5 35 5.5 39 4.5 43C8.5 43 14 42 16.5 38L15 35Z"
+        fill="#7F6EA0"
+        stroke="#24222B"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+
+      {/* Right Fin */}
+      <path
+        d="M33 35C37.5 35 42.5 39 43.5 43C39.5 43 34 42 31.5 38L33 35Z"
+        fill="#557F77"
+        stroke="#24222B"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+
+      {/* Rocket Main Body */}
+      <path
+        d="M24 3C17 11 14 26 15 43H33C34 26 31 11 24 3Z"
+        fill="#F472B6"
+        stroke="#24222B"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+
+      {/* Window / Porthole */}
+      <circle
+        cx="24"
+        cy="20"
+        r="6"
+        fill="#38BDF8"
+        stroke="#24222B"
+        strokeWidth="2"
+      />
+      <circle cx="26" cy="18" r="1.5" fill="white" />
+    </svg>
+  );
+}
+
+function ModalConfettiDecorations() {
+  return (
+    <div
+      className="pointer-events-none absolute inset-0 overflow-hidden rounded-[36px]"
+      aria-hidden="true"
+    >
+      {/* Top Left Corner */}
+      <div className="absolute -left-6 -top-6 size-28 rounded-full bg-[#E2ECE6]" />
+      <svg
+        className="absolute left-11 top-10 size-4 rotate-12 text-[#6BA4D8]"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <polygon points="10,0 20,20 0,20" />
+      </svg>
+      <svg
+        className="absolute left-5 top-16 size-5 text-[#FFB830]"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+      </svg>
+      <span className="absolute left-4 top-28 size-2 rounded-full bg-[#FF7A59]" />
+      <span className="absolute left-16 top-6 size-2 rounded-full bg-[#FFB830]" />
+
+      {/* Top Right Corner */}
+      <div className="absolute -right-6 -top-6 size-28 rounded-full bg-[#FDDCD8]" />
+      <span className="absolute right-16 top-14 size-2.5 rounded-full bg-[#70B984]" />
+      <svg
+        className="absolute right-7 top-20 size-4 -rotate-45 text-[#F58778]"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <polygon points="10,0 20,20 0,20" />
+      </svg>
+      <span className="absolute right-4 top-32 size-2 rounded-full bg-[#FFB830]" />
+
+      {/* Bottom Left Corner */}
+      <div className="absolute -bottom-6 -left-6 size-24 rounded-full bg-[#FCE3EB]" />
+      <span className="absolute bottom-24 left-4 size-2 rounded-full bg-[#70B984]" />
+      <span className="absolute bottom-16 left-5 size-2 rounded-full bg-[#FFB830]" />
+
+      {/* Bottom Right Corner */}
+      <div className="absolute -bottom-8 -right-8 size-28 rounded-full bg-[#FDE8B3]" />
+      <svg
+        className="absolute bottom-2 right-2 h-16 w-16"
+        viewBox="0 0 60 60"
+        fill="none"
+      >
+        <path
+          d="M12 48C32 46 46 32 48 12"
+          stroke="#7BC7C1"
+          strokeWidth="2"
+          strokeDasharray="4 4"
+          strokeLinecap="round"
+        />
+      </svg>
+      <span className="absolute bottom-24 right-4 size-2 rounded-full bg-[#FF7A59]" />
+    </div>
+  );
+}
 
 type GenerationStatusModalProps = {
   isOpen: boolean;
@@ -34,14 +161,6 @@ type BookData = {
   failureMessage?: string;
 };
 
-const LOADING_MESSAGES = [
-  "Weaving your magical storyline...",
-  "Creating unique characters and whimsical scenes...",
-  "Painting vibrant illustrations with AI...",
-  "Formatting storybook typography and layouts...",
-  "Adding your special touches and final magic sparkles...",
-];
-
 export default function GenerationStatusModal({
   isOpen,
   bookId,
@@ -50,21 +169,11 @@ export default function GenerationStatusModal({
 }: GenerationStatusModalProps) {
   const router = useRouter();
   const [book, setBook] = useState<BookData | null>(null);
-  const [loadingMsgIndex, setLoadingMsgIndex] = useState(0);
   const [progress, setProgress] = useState(15);
   const [retryCount, setRetryCount] = useState(0);
   const [isRetrying, setIsRetrying] = useState(false);
   const [pollError, setPollError] = useState("");
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Rotate inspiring messages while generating
-  useEffect(() => {
-    if (!isOpen) return;
-    const msgTimer = setInterval(() => {
-      setLoadingMsgIndex((prev) => (prev + 1) % LOADING_MESSAGES.length);
-    }, 4500);
-    return () => clearInterval(msgTimer);
-  }, [isOpen]);
 
   // Animated progress bar simulation while generating
   useEffect(() => {
@@ -79,7 +188,7 @@ export default function GenerationStatusModal({
       });
     }, 2000);
     return () => clearInterval(progTimer);
-  }, [isOpen, book?.status]);
+  }, [isOpen, book]);
 
   // Polling function
   const fetchBookStatus = async (id: string) => {
@@ -174,52 +283,63 @@ export default function GenerationStatusModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#2B2330]/50 p-4 backdrop-blur-sm"
       role="dialog"
       aria-modal="true"
     >
-      <div className="relative w-full max-w-[560px] overflow-hidden rounded-[24px] border border-[#F3A8B7]/40 bg-[#FEFAF4] p-6 shadow-[0_20px_50px_rgba(50,30,40,0.25)] sm:p-8">
-        {/* Glow decoration */}
-        <div className="pointer-events-none absolute -right-16 -top-16 size-48 rounded-full bg-[#FFE3DC] opacity-60 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-16 -left-16 size-48 rounded-full bg-[#FCE3E7] opacity-60 blur-3xl" />
+      <div className="relative w-full max-w-[450px] overflow-hidden rounded-[36px] border border-[#FBE5EC] bg-[#FFFDFB] p-6 pt-7 pb-7 text-center shadow-[0_24px_60px_rgba(60,30,50,0.22)] sm:p-8 sm:pt-9 sm:pb-8">
+        <ModalConfettiDecorations />
 
-        <div className="relative z-10">
+        {onClose && (
+          <button
+            type="button"
+            aria-label="Close"
+            onClick={onClose}
+            className="absolute right-4 top-4 z-20 flex size-9 items-center justify-center rounded-full text-[#4B4650] transition hover:bg-[#FCE6EE] hover:text-[#252025] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]"
+          >
+            <X size={20} strokeWidth={2.2} />
+          </button>
+        )}
+
+        <div className="relative z-10 flex flex-col items-center">
           {/* HEADER / ICON */}
-          <div className="mx-auto flex size-16 items-center justify-center rounded-2xl sm:size-20">
+          <div
+            className={`flex size-20 items-center justify-center rounded-[24px] sm:size-[84px] ${
+              isPendingPayment
+                ? "bg-[#FFF2DE] text-[#FC5A00] shadow-sm"
+                : isGenerating
+                  ? "bg-[#FFE4ED] shadow-sm"
+                  : isCompleted
+                    ? "bg-[#E6F7ED] text-[#18B56E]"
+                    : "bg-[#FFF0F2] text-[#B74760]"
+            }`}
+          >
             {isPendingPayment && (
-              <div className="flex size-16 items-center justify-center rounded-2xl bg-[#FFF2DE] text-[#FC5A00] shadow-inner sm:size-20">
-                <Sparkles className="size-8 animate-pulse text-[#FC5A00] sm:size-10" />
-              </div>
+              <Sparkles className="size-9 animate-pulse text-[#FC5A00]" />
             )}
             {isGenerating && (
-              <div className="relative flex size-16 items-center justify-center rounded-2xl bg-[#FDE9EE] text-[#E88DA0] shadow-inner sm:size-20">
-                <Sparkles className="size-8 animate-spin text-[#E88DA0] sm:size-10" style={{ animationDuration: "6s" }} />
-              </div>
+              <RocketIllustration className="h-14 w-12" />
             )}
             {isCompleted && (
-              <div className="flex size-16 items-center justify-center rounded-2xl bg-[#E6F7ED] text-[#18B56E] shadow-inner sm:size-20">
-                <CheckCircle2 className="size-8 text-[#18B56E] sm:size-10" />
-              </div>
+              <CheckCircle2 className="size-9 text-[#18B56E]" />
             )}
             {isFailed && (
-              <div className="flex size-16 items-center justify-center rounded-2xl bg-[#FDE8E8] text-[#E53E3E] shadow-inner sm:size-20">
-                <AlertCircle className="size-8 text-[#E53E3E] sm:size-10" />
-              </div>
+              <AlertCircle className="size-9 text-[#E53E3E]" />
             )}
           </div>
 
           {/* TITLE & DESCRIPTION */}
-          <div className="mt-5 text-center">
+          <div className="mt-5 w-full text-center">
             {isPendingPayment && (
               <>
-                <h3 className="font-crimson text-2xl font-bold text-[#1E1E1E] sm:text-3xl">
+                <h3 className="font-sans text-2xl font-bold leading-tight tracking-tight text-[#162035] sm:text-[28px]">
                   Almost Done! Complete Checkout
                 </h3>
-                <p className="mx-auto mt-2 max-w-[420px] font-sans text-xs leading-relaxed text-[#66605F] sm:text-sm">
+                <p className="mx-auto mt-2 max-w-[360px] font-sans text-xs leading-relaxed text-[#66605F] sm:text-sm">
                   Your personalized storybook structure has been registered. Complete payment to begin instant AI generation.
                 </p>
                 {checkoutUrl && (
-                  <div className="mt-6 flex flex-col items-center gap-3">
+                  <div className="mt-5 flex flex-col items-center gap-3">
                     <a
                       href={checkoutUrl}
                       target="_blank"
@@ -239,30 +359,41 @@ export default function GenerationStatusModal({
 
             {isGenerating && (
               <>
-                <h3 className="font-crimson text-2xl font-bold text-[#1E1E1E] sm:text-3xl">
-                  Generating Your Magical Book
+                <h3 className="font-sans text-2xl font-bold leading-tight tracking-tight text-[#162035] sm:text-[28px]">
+                  We&apos;re creating your magical book
                 </h3>
-                <p className="mx-auto mt-2 min-h-[40px] max-w-[440px] font-sans text-xs font-medium text-[#E88DA0] transition-all duration-300 sm:text-sm">
-                  {LOADING_MESSAGES[loadingMsgIndex]}
+                <p className="mx-auto mt-2.5 max-w-[340px] font-sans text-sm leading-[1.5] text-[#5A5560] sm:text-[15px]">
+                  We&apos;re writing and illustrating your story. This window will close once your book is ready.
                 </p>
 
-                {/* Animated Progress Bar */}
-                <div className="mt-5">
-                  <div className="flex justify-between font-sans text-[11px] font-medium text-[#73686D]">
-                    <span>Magic in progress...</span>
-                    <span>{progress}%</span>
+                {/* Progress Box */}
+                <div className="mt-5 w-full rounded-[22px] border border-[#FBD6E0] bg-white p-4 shadow-sm sm:p-5">
+                  <div className="flex items-center justify-between font-sans text-xs font-bold sm:text-[13px]">
+                    <span className="text-[#162035]">Adding the final magical touches...</span>
+                    <span className="text-[#ED3875]">{progress}%</span>
                   </div>
-                  <div className="mt-1.5 h-2.5 w-full overflow-hidden rounded-full bg-[#F3D6DE]">
+                  <div className="mt-3 h-3 w-full overflow-hidden rounded-full bg-[#FCE3EB]">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-[#F48FB1] via-[#E88DA0] to-[#FC5A00] transition-all duration-700 ease-out"
-                      style={{ width: `${progress}%` }}
+                      className="h-full rounded-full bg-gradient-to-r from-[#ED3875] via-[#F4608B] to-[#FF7A59] transition-all duration-700 ease-out"
+                      style={{ width: `${Math.max(progress, 5)}%` }}
                     />
                   </div>
+                  <p className="mt-3 font-sans text-xs font-normal text-[#756F7C]">
+                    This may take a few minutes.
+                  </p>
                 </div>
 
-                <p className="mt-4 font-sans text-[11px] text-[#9A8F95]">
-                  Please keep this page open. Storybooks usually take between 30 seconds to 2 minutes to generate all illustrations and chapters.
+                <p className="mx-auto mt-4 max-w-[320px] font-sans text-xs font-medium leading-relaxed text-[#5A5560] sm:text-[13px]">
+                  You can close this window and check the status on this page later.
                 </p>
+
+                {/* Email Pill Banner */}
+                <div className="mt-4 inline-flex items-center justify-center gap-2 rounded-full border border-[#FCDCE6] bg-[#FFEBF1] px-4 py-2 sm:px-5 sm:py-2.5">
+                  <Mail className="size-4 shrink-0 text-[#ED3875]" />
+                  <span className="font-sans text-xs font-semibold text-[#162035] sm:text-[12.5px]">
+                    You&apos;ll receive an email as soon as the PDF is ready.
+                  </span>
+                </div>
               </>
             )}
 

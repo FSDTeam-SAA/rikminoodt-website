@@ -28,42 +28,90 @@ const CreateMagicalBook = () => {
     <section id="create-your-book" aria-labelledby="create-book-heading" className="pt-14 pb-0 sm:pt-16 sm:pb-0 lg:pt-0 lg:pb-0 lg:mb-0">
       <div className="container mx-auto px-5 sm:px-8 lg:px-0">
         <header className="text-center">
-          <h2 id="create-book-heading" className="font-crimson text-[48px] font-semibold leading-none text-[#1E1E1E]">
+          <h2 id="create-book-heading" className="font-crimson text-[38px] sm:text-[44px] lg:text-[48px] font-semibold leading-tight text-[#1E1E1E]">
             {t.createMagicalBook.title}
           </h2>
-          <p className="mx-auto mt-2 max-w-4xl text-center font-sans text-[18px] font-normal leading-normal text-[#444444]">
+          <p className="mx-auto mt-3 max-w-3xl text-center font-sans text-[16px] sm:text-[18px] font-normal leading-relaxed text-[#444444]">
             {t.createMagicalBook.subheading}
           </p>
         </header>
 
-        <ol className="relative mt-9 grid gap-5 sm:grid-cols-3 sm:gap-8 lg:mx-2.5 lg:mt-[58px] lg:gap-12">
+        <ol className="relative mt-10 grid gap-6 sm:grid-cols-3 sm:gap-6 md:gap-8 lg:mt-[58px] lg:gap-12">
           {steps.map((step, index) => (
-            <li key={step.title} className="h-full">
-              <article className="group flex h-full min-h-[300px] flex-col items-center rounded-2xl bg-white px-5 pb-5 pt-5 text-center shadow-[0_3px_8px_rgba(92,76,84,0.18)] transition duration-200 hover:shadow-[0_9px_18px_rgba(92,76,84,0.18)] sm:px-4 lg:min-h-[415px] lg:px-6">
-                <Image src={step.image} alt="" width={300} height={224} className="h-[180px] w-auto max-w-full object-contain transition-transform duration-200 group-hover:scale-105 sm:h-[190px] lg:h-[210px]" />
-                <h3 className="mt-3 break-words text-center font-crimson text-[24px] font-semibold leading-none text-[#82330d]">{step.title}</h3>
-                <p className="mt-2 max-w-[330px] break-words text-center font-sans text-[18px] font-normal leading-[1.35] text-[#595257]">{step.description}</p>
+            <li key={step.title} className="relative h-full">
+              <article className="group flex h-full min-h-[360px] flex-col items-center justify-between rounded-[28px] sm:rounded-[32px] bg-white px-6 pt-7 pb-6 text-center shadow-[0_4px_24px_rgba(110,80,60,0.06)] transition-all duration-300 hover:shadow-[0_12px_32px_rgba(110,80,60,0.1)] border border-[#F3ECE4]/80 sm:px-5 sm:pt-8 sm:pb-7 lg:min-h-[440px] lg:px-7 lg:pt-9 lg:pb-8">
+                <div className="flex w-full items-center justify-center">
+                  <Image
+                    src={step.image}
+                    alt={step.title}
+                    width={300}
+                    height={224}
+                    className="h-[175px] w-auto max-w-full object-contain transition-transform duration-300 group-hover:scale-105 sm:h-[185px] lg:h-[210px]"
+                    priority={index === 0}
+                  />
+                </div>
+
+                <div className="flex flex-1 flex-col items-center justify-center">
+                  <h3 className="mt-5 font-crimson text-[22px] sm:text-[23px] lg:text-[25px] font-semibold leading-tight text-[#7A3611] break-words text-center">
+                    {step.title}
+                  </h3>
+                  <p className="mt-2.5 max-w-[320px] font-sans text-[14.5px] sm:text-[15.5px] font-normal leading-[1.55] text-[#554F54] break-words text-center">
+                    {step.description}
+                  </p>
+                </div>
+
+                {/* Numbered badge circle */}
+                <div className="mt-6 flex items-center justify-center pt-1 sm:mt-7">
+                  <span className="size-9 sm:size-10 rounded-full bg-[#F5A623] text-white font-sans font-bold text-base sm:text-lg flex items-center justify-center shadow-[0_2px_8px_rgba(245,166,35,0.35)] select-none">
+                    {index + 1}
+                  </span>
+                </div>
               </article>
+
+              {/* Mobile vertical downward curved arrow */}
               {index < steps.length - 1 && (
-                <div className="flex h-10 items-center justify-center sm:hidden" aria-hidden="true">
-                  <svg viewBox="0 0 48 64" className="h-9 w-10">
-                    <path d="M9 5c0 24 11 39 25 47" fill="none" stroke="#F7B733" strokeLinecap="round" strokeWidth="6" />
-                    <path d="m25 43 9 10-12 5" fill="none" stroke="#F7B733" strokeLinecap="round" strokeLinejoin="round" strokeWidth="6" />
+                <div className="my-2 flex h-12 items-center justify-center sm:hidden" aria-hidden="true">
+                  <svg viewBox="0 0 40 56" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-11 w-8">
+                    <path
+                      d="M 12 6 C 6 22, 10 36, 25 44"
+                      stroke="#F5A623"
+                      strokeWidth="4.5"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M 28 52 L 28 38 L 22 43 L 16 40 Z"
+                      fill="#F5A623"
+                    />
+                  </svg>
+                </div>
+              )}
+
+              {/* Desktop curved arching arrow to next card */}
+              {index < steps.length - 1 && (
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -top-1 sm:-top-2 lg:-top-3 xl:-top-4 z-20 hidden sm:block w-16 md:w-20 lg:w-24 xl:w-28 left-[calc(100%+0.75rem)] md:left-[calc(100%+1rem)] lg:left-[calc(100%+1.5rem)] -translate-x-1/2"
+                >
+                  <svg
+                    viewBox="0 0 100 48"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-full h-auto overflow-visible drop-shadow-sm"
+                  >
+                    <path
+                      d="M 6 36 C 26 10, 64 8, 82 21"
+                      stroke="#F5A623"
+                      strokeWidth="5"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M 96 32 L 87 15 L 83 22 L 77 27 Z"
+                      fill="#F5A623"
+                    />
                   </svg>
                 </div>
               )}
             </li>
-          ))}
-          {["first", "second"].map((arrow, index) => (
-            <svg
-              key={arrow}
-              viewBox="0 0 64 48"
-              className={`pointer-events-none absolute top-[29%] z-10 hidden h-11 w-14 -translate-x-1/2 sm:block ${index === 0 ? "left-1/3" : "left-2/3"}`}
-              aria-hidden="true"
-            >
-              <path d="M4 39C15 10 41 9 54 22" fill="none" stroke="#F7B733" strokeLinecap="round" strokeWidth="6" />
-              <path d="m47 13 10 9-10 9" fill="none" stroke="#F7B733" strokeLinecap="round" strokeLinejoin="round" strokeWidth="6" />
-            </svg>
           ))}
         </ol>
 

@@ -7,8 +7,8 @@ import NextAuthProvider from "@/components/providers/NextAuthProvider";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "Boekerello",
-  description: "Their Imagination. Their Adventure. Their Story.",
+  title: "Boekerello - Gepersonaliseerde Kinderboeken",
+  description: "Hun Verbeelding. Hun Avontuur. Hun Verhaal. Maak een magisch gepersonaliseerd kinderboek waarin jouw kind de held van het verhaal is.",
 };
 
 export default function RootLayout({
@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="nl">
       <body>
         <NextAuthProvider>
           <LanguageProvider>

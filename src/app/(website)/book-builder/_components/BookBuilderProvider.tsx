@@ -97,8 +97,8 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
   const [selectedMessage, setSelectedMessage] = useState<string | null>(null);
   const [selectedIllustration, setSelectedIllustration] = useState<string | null>(null);
   const [selectedFont, setSelectedFont] = useState<string | null>(null);
-  const [selectedLanguage, setSelectedLanguage] = useState<string | null>("English");
-  const [selectedVariant, setSelectedVariant] = useState<string | null>("Standard (Brits Engls)");
+  const [selectedLanguage, setSelectedLanguage] = useState<string | null>("Dutch");
+  const [selectedVariant, setSelectedVariant] = useState<string | null>("Standard Dutch");
 
   const [characters, setCharacters] = useState<CharacterData[]>([
     {
@@ -147,8 +147,8 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
     setSelectedMessage(null);
     setSelectedIllustration(null);
     setSelectedFont(null);
-    setSelectedLanguage("English");
-    setSelectedVariant("Standard (Brits Engls)");
+    setSelectedLanguage("Dutch");
+    setSelectedVariant("Standard Dutch");
     setCharacters([
       {
         id: 1,

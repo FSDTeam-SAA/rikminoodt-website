@@ -13,7 +13,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
   }, [error]);
 
   return (
-    <html lang="en">
+    <html lang="nl">
       <body className="min-h-screen bg-[#003be2] font-sans text-white">
         <main className="relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-12">
           <div
@@ -25,14 +25,14 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
               !
             </div>
             <h1 className="mt-5 text-2xl font-bold sm:text-3xl">
-              Something went wrong
+              Er is iets misgegaan
             </h1>
             <p className="mt-3 break-words text-sm leading-6 text-white/80">
-              {error.message || "An unexpected application error occurred."}
+              {error.message || "Er is een onverwachte fout opgetreden in de applicatie."}
             </p>
             {error.digest && (
               <p className="mt-4 text-xs text-white/70">
-                Error reference: <code className="select-all">{error.digest}</code>
+                Foutcode: <code className="select-all">{error.digest}</code>
               </p>
             )}
             <button
@@ -40,7 +40,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
               onClick={() => reset()}
               className="mt-7 inline-flex min-h-11 items-center justify-center rounded-full bg-primary px-6 font-medium text-black transition-colors hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#003be2]"
             >
-              Try again
+              Opnieuw proberen
             </button>
           </section>
         </main>

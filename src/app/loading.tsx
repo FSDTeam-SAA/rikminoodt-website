@@ -22,10 +22,10 @@ export default function Loading() {
 
       <div className="flex items-center gap-2.5 font-sans text-sm font-medium text-[#7A6B75]">
         <Loader2 size={20} className="animate-spin text-[#E88DA0]" />
-        <span>Loading magical stories…</span>
+        <span>Magische verhalen laden…</span>
       </div>
 
-      <span className="sr-only">Please wait while the content loads.</span>
+      <span className="sr-only">Even geduld terwijl de inhoud wordt geladen.</span>
     </div>
   );
 }

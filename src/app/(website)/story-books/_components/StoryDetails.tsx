@@ -26,18 +26,49 @@ const detailLabels = {
   fr: { headingStory: "Histoire", headingBooks: "Livres Personnalisés pour Enfants", details: "Détails de l'histoire", title: "Titre", ages: "Âges", years: "ans", characters: "Personnages", theme: "Thème", subject: "Sujet", message: "Message", illustration: "Illustration", language: "Langue", creator: "Créateur", story: "Histoire", read: "Lire l'histoire", download: "Télécharger le PDF", generating: "Création du PDF…", hardcopy: "Commander un livre relié", photos: "Photos utilisées", characterPhoto: "Photo de personnage", characterPhotos: "Photos de personnages", artwork: "Illustration de l'histoire", illustrationRole: "Illustration de l'histoire" },
 } as const;
 
-const story = {
-  title: "Lisa's Camping Adventure",
-  cover: "/images/story1.png",
-  details: [
-    ["Ages", "3 - 5 years"],
-    ["Characters", "4"],
-    ["Theme", "Adventure"],
-    ["Illustration", "Collage"],
-    ["Language", "English"],
-  ],
-  description:
-    "When Lisa arrives at the camping ground with her family, she thinks the outdoor life will be boring. But an exciting adventure soon follows! She discovers new friends and they walk across a magical forest, make a big difference in protecting the home of forest creatures. Join Lisa on her heartwarming adventure as she discovers the magic of friendship by being a great friend to the world.",
+const staticDetailsByLang = {
+  nl: {
+    title: "Lisa's Kampeeravontuur",
+    cover: "/images/story1.png",
+    details: [
+      ["Leeftijden", "3 - 5 jaar"],
+      ["Personages", "4"],
+      ["Thema", "Avontuur"],
+      ["Illustratie", "Collage"],
+      ["Taal", "Nederlands"],
+    ],
+    description:
+      "Wanneer Lisa met haar gezin op de camping aankomt, denkt ze dat het buitenleven saai zal zijn. Maar al snel volgt er een spannend avontuur! Ze ontdekt nieuwe vrienden en samen trekken ze door een magisch bos om de bosdieren te helpen beschermen. Ga mee met Lisa op haar hartverwarmende avontuur en ontdek de magie van vriendschap.",
+    editBook: "Boek bewerken",
+  },
+  en: {
+    title: "Lisa's Camping Adventure",
+    cover: "/images/story1.png",
+    details: [
+      ["Ages", "3 - 5 years"],
+      ["Characters", "4"],
+      ["Theme", "Adventure"],
+      ["Illustration", "Collage"],
+      ["Language", "English"],
+    ],
+    description:
+      "When Lisa arrives at the camping ground with her family, she thinks the outdoor life will be boring. But an exciting adventure soon follows! She discovers new friends and they walk across a magical forest, make a big difference in protecting the home of forest creatures. Join Lisa on her heartwarming adventure as she discovers the magic of friendship by being a great friend to the world.",
+    editBook: "Edit Book",
+  },
+  fr: {
+    title: "L'aventure de camping de Lisa",
+    cover: "/images/story1.png",
+    details: [
+      ["Âges", "3 - 5 ans"],
+      ["Personnages", "4"],
+      ["Thème", "Aventure"],
+      ["Illustration", "Collage"],
+      ["Langue", "Français"],
+    ],
+    description:
+      "Lorsque Lisa arrive au camping avec sa famille, elle pense que la vie en plein air sera ennuyeuse. Mais une aventure palpitante l'attend très vite ! Elle rencontre de nouveaux amis et ensemble, ils traversent une forêt magique.",
+    editBook: "Modifier le livre",
+  },
 };
 
 const photos = [
@@ -193,41 +224,47 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
     loadBook();
   }, [storyId, sessionStatus, session?.user?.accessToken, hasStaticExploreStory]);
 
+  const staticStory = staticDetailsByLang[language] || staticDetailsByLang.nl;
   const isMaxStory = storyId === "max-sees-the-seasons";
   const activeBook = staticExploreBook || fetchedBook;
-  const cover = activeBook?.coverImageUrl || (isMaxStory ? "/images/exp_c_1.jpg" : story.cover);
-  const coverTitle = activeBook?.title || (isMaxStory ? "Max Sees the Seasons: Autumn Adventures" : story.title);
+  const cover = activeBook?.coverImageUrl || (isMaxStory ? "/images/exp_c_1.jpg" : staticStory.cover);
+  const coverTitle = activeBook?.title || (isMaxStory ? (language === "nl" ? "Max ziet de seizoenen: Herfstavonturen" : "Max Sees the Seasons: Autumn Adventures") : staticStory.title);
   const activeDetails = activeBook
     ? [
         [labels.ages, `${activeBook.ageCategory || "3-5"} ${labels.years}`],
         [labels.characters, String(staticExploreStory?.characterCount || activeBook.characters?.length || 1)],
-        [labels.theme, activeBook.theme ? String(activeBook.theme).replace(/_/g, " ") : "Adventure"],
+        [labels.theme, activeBook.theme ? String(activeBook.theme).replace(/_/g, " ") : (language === "nl" ? "Avontuur" : "Adventure")],
         ...(activeBook.subject ? [[labels.subject, String(activeBook.subject).replace(/_/g, " ")]] : []),
         ...(activeBook.specialMessage ? [[labels.message, String(activeBook.specialMessage).replace(/_/g, " ")]] : []),
         [labels.illustration, activeBook.illustrationStyle ? String(activeBook.illustrationStyle).replace(/_/g, " ") : "Animation 3D"],
-        [labels.language, activeBook.language || "English"],
+        [labels.language, activeBook.language || (language === "nl" ? "Nederlands" : language === "fr" ? "Français" : "English")],
         ...(activeBook.creatorName ? [[labels.creator, activeBook.creatorName]] : []),
       ]
-    : story.details;
+    : staticStory.details;
   const activeDescription =
     staticExploreStory?.description ||
     activeBook?.foreword ||
     (activeBook?.pages && activeBook.pages.length > 0 ? activeBook.pages[0].text : "") ||
-    story.description;
+    staticStory.description;
   const usedPhotos = staticExploreStory
     ? staticExploreStory.photos.map((photo) => ({ name: photo.alt, role: labels.characterPhoto, image: photo.src }))
     : isMaxStory
     ? [
-        { name: "Child", role: "Main character", image: "/images/exp_u_1_1.png" },
-        { name: "Grandmother", role: "Family", image: "/images/exp_u_1_2.jpg" },
+        { name: language === "nl" ? "Kind" : "Child", role: labels.characterPhoto, image: "/images/exp_u_1_1.png" },
+        { name: language === "nl" ? "Grootmoeder" : "Grandmother", role: language === "nl" ? "Familie" : "Family", image: "/images/exp_u_1_2.jpg" },
       ]
     : activeBook?.characters && activeBook.characters.some((c: StoryCharacter) => c.photoUrl)
       ? activeBook.characters.map((c: StoryCharacter, i: number) => ({
-          name: c.name || c.animalName || c.objectName || `Character ${i + 1}`,
-          role: c.type ? c.type.charAt(0).toUpperCase() + c.type.slice(1).toLowerCase() : "Character",
+          name: c.name || c.animalName || c.objectName || `${language === "nl" ? "Personage" : "Character"} ${i + 1}`,
+          role: c.type ? c.type.charAt(0).toUpperCase() + c.type.slice(1).toLowerCase() : labels.characterPhoto,
           image: c.photoUrl || "/images/profile.png",
         }))
-      : photos;
+      : (language === "nl" ? [
+          { name: "Onze kleine kampeerder!", role: "Hoofdpersonage", image: "/images/profile.png" },
+          { name: "Dappere ontdekker!", role: "Vriend", image: "/images/book_customer.jpg" },
+          { name: "Beste vriend!", role: "Huisdier", image: "/images/story3.png" },
+          { name: "Vrolijke reiziger!", role: "Familie", image: "/images/book_reveiew.jpg" },
+        ] : photos);
 
   const rawPages = activeBook?.pages && activeBook.pages.length > 0 ? activeBook.pages : [];
   const previewPages =
@@ -391,7 +428,7 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
                         href={`/setting/edit-book?book_id=${encodeURIComponent(storyId)}`}
                         className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-[#E88DA0] bg-white px-4 font-sans text-sm font-medium text-[#E88DA0] transition-colors hover:bg-[#FFF0F2]"
                       >
-                        <Pencil size={16} aria-hidden="true" /> Edit Book
+                        <Pencil size={16} aria-hidden="true" /> {staticStory.editBook}
                       </Link>
                     )}
                   </div>

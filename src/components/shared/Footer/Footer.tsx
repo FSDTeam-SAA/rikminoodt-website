@@ -3,13 +3,20 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa";
+import { FaFacebookF, FaInstagram } from "react-icons/fa";
 import { useLanguage } from "@/components/providers/LanguageProvider";
 
 const socialLinks = [
-  { label: "Facebook", icon: FaFacebookF },
-  { label: "Instagram", icon: FaInstagram },
-  { label: "TikTok", icon: FaTiktok },
+  {
+    label: "Facebook",
+    icon: FaFacebookF,
+    href: "https://www.facebook.com/boekerello",
+  },
+  {
+    label: "Instagram",
+    icon: FaInstagram,
+    href: "https://www.instagram.com/boekerello/",
+  },
 ];
 
 const getFooterHref = (label: string) => {
@@ -138,10 +145,12 @@ const Footer = () => {
               {t.footer.about}
             </p>
             <nav aria-label="Social media" className="mt-4 flex items-center gap-3">
-              {socialLinks.map(({ label, icon: Icon }) => (
+              {socialLinks.map(({ label, icon: Icon, href }) => (
                 <Link
                   key={label}
-                  href="#"
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={label}
                   className="flex size-7 items-center justify-center rounded-md text-white transition hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eea0b4]"
                 >

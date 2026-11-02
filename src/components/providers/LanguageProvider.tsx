@@ -15,16 +15,16 @@ export interface LanguageOption {
 }
 
 export const SUPPORTED_LANGUAGES: LanguageOption[] = [
+  { code: "nl", label: "Nederlands", nativeLabel: "Nederlands", flag: "/images/flags/nl.svg" },
   { code: "en", label: "English", nativeLabel: "English", flag: "/images/flags/en.png" },
-  { code: "nl", label: "Dutch", nativeLabel: "Dutch", flag: "/images/flags/nl.svg" },
   { code: "fr", label: "French", nativeLabel: "Français", flag: "/images/flags/fr.svg" },
 ];
 
 export type Translations = typeof en;
 
 const dictionaries: Record<LanguageCode, Translations> = {
-  en,
   nl: { ...en, ...(nl as unknown as Partial<Translations>) },
+  en,
   fr: { ...en, ...(fr as unknown as Partial<Translations>) },
 };
 
@@ -38,7 +38,7 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 function getInitialLanguage(): LanguageCode {
-  if (typeof window === "undefined") return "en";
+  if (typeof window === "undefined") return "nl";
   try {
     const savedLang = localStorage.getItem("boekerello_lang") as LanguageCode | null;
     if (savedLang && SUPPORTED_LANGUAGES.some((item) => item.code === savedLang)) {
@@ -51,25 +51,24 @@ function getInitialLanguage(): LanguageCode {
         return cookieLang;
       }
     }
-    const browserLang = navigator.language?.slice(0, 2) as LanguageCode;
-    if (SUPPORTED_LANGUAGES.some((item) => item.code === browserLang)) {
-      return browserLang;
-    }
+    // Dutch is the primary default language for this site
   } catch {
     // fallback
   }
-  return "en";
+  return "nl";
 }
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<LanguageCode>("en");
-  const [translations, setTranslations] = useState<Translations>(en);
+  const [language, setLanguageState] = useState<LanguageCode>("nl");
+  const [translations, setTranslations] = useState<Translations>(dictionaries.nl);
 
   useEffect(() => {
     const initialLang = getInitialLanguage();
-    if (initialLang !== "en") {
+    if (initialLang !== "nl") {
       setLanguageState(initialLang);
-      setTranslations(dictionaries[initialLang] || en);
+      setTranslations(dictionaries[initialLang] || dictionaries.nl);
+    }
+    if (typeof document !== "undefined") {
       document.documentElement.lang = initialLang;
     }
   }, []);
@@ -77,7 +76,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const setLanguage = (newLang: LanguageCode) => {
     if (!SUPPORTED_LANGUAGES.some((item) => item.code === newLang)) return;
     setLanguageState(newLang);
-    setTranslations(dictionaries[newLang] || en);
+    setTranslations(dictionaries[newLang] || dictionaries.nl);
     if (typeof document !== "undefined") {
       document.documentElement.lang = newLang;
       try {

@@ -53,26 +53,65 @@ const isText = (value: string | undefined, min = 2, max = 100) => {
   return length >= min && length <= max;
 };
 
-export function getCharacterValidationError(character: CharacterInput) {
+const validationMessages = {
+  nl: {
+    characterName: "Voer een naam in voor het personage (2–100 tekens).",
+    gender: "Selecteer een geldig geslacht.",
+    age: "Voer een leeftijd in tussen 0 en 120.",
+    animalName: "Voer de naam van het dier in (2–100 tekens).",
+    animalSpecies: "Voer de diersoort in (2–100 tekens).",
+    objectName: "Voer de naam van het voorwerp in (2–100 tekens).",
+  },
+  en: {
+    characterName: "Enter a character name (2–100 characters).",
+    gender: "Select a valid gender.",
+    age: "Enter an age between 0 and 120.",
+    animalName: "Enter the animal name (2–100 characters).",
+    animalSpecies: "Enter the animal species (2–100 characters).",
+    objectName: "Enter the object name (2–100 characters).",
+  },
+  fr: {
+    characterName: "Saisissez un nom de personnage (2–100 caractères).",
+    gender: "Sélectionnez un genre valide.",
+    age: "Saisissez un âge compris entre 0 et 120.",
+    animalName: "Saisissez le nom de l'animal (2–100 caractères).",
+    animalSpecies: "Saisissez l'espèce de l'animal (2–100 caractères).",
+    objectName: "Saisissez le nom de l'objet (2–100 caractères).",
+  },
+};
+
+export function getCharacterValidationError(
+  character: CharacterInput,
+  language: "en" | "nl" | "fr" = "nl",
+) {
+  const msgs = validationMessages[language] || validationMessages.nl;
   if (character.type === "PERSON" || character.type === "Person") {
     const age = Number(character.age);
-    if (!isText(character.name)) return "Enter a character name (2–100 characters).";
-    if (!['BOY', 'GIRL', 'OTHER', 'Male', 'Female', 'Non-binary', 'Prefer not to say'].includes(character.gender ?? "")) {
-      return "Select a valid gender.";
+    if (!isText(character.name)) return msgs.characterName;
+    if (
+      ![
+        "BOY",
+        "GIRL",
+        "OTHER",
+        "Male",
+        "Female",
+        "Non-binary",
+        "Prefer not to say",
+      ].includes(character.gender ?? "")
+    ) {
+      return msgs.gender;
     }
-    if (!Number.isInteger(age) || age < 0 || age > 120) return "Enter an age between 0 and 120.";
+    if (!Number.isInteger(age) || age < 0 || age > 120) return msgs.age;
     return null;
   }
 
   if (character.type === "ANIMAL" || character.type === "Animal") {
-    if (!isText(character.animalName)) return "Enter the animal name (2–100 characters).";
-    if (!isText(character.animalSpecies)) return "Enter the animal species (2–100 characters).";
+    if (!isText(character.animalName)) return msgs.animalName;
+    if (!isText(character.animalSpecies)) return msgs.animalSpecies;
     return null;
   }
 
-  return isText(character.objectName)
-    ? null
-    : "Enter the object name (2–100 characters).";
+  return isText(character.objectName) ? null : msgs.objectName;
 }
 
 export function getBookChoicesValidationError(choices: {

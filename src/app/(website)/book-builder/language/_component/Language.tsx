@@ -63,14 +63,14 @@ const fonts = [
 ];
 
 const variants: Record<string, string[]> = {
-  English: ["Standard (British English)", "Standard (American English)", "Australian English"],
   Dutch: ["Standard Dutch", "Belgian Dutch"],
+  English: ["Standard (British English)", "Standard (American English)", "Australian English"],
   French: ["France French", "Canadian French"],
 };
 
 const bookLanguageBySiteLanguage = {
-  en: "English",
   nl: "Dutch",
+  en: "English",
   fr: "French",
 } as const;
 

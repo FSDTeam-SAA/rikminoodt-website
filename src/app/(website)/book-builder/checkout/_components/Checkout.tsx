@@ -321,10 +321,10 @@ export default function Checkout() {
             choice={
               selectedLanguage
                 ? {
-                    label: selectedLanguage,
-                    image: "/images/flag.png",
-                    color: "#FFFBDF",
-                  }
+                  label: selectedLanguage,
+                  image: "/images/flag.png",
+                  color: "#FFFBDF",
+                }
                 : undefined
             }
           />

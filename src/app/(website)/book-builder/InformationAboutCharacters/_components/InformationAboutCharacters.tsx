@@ -125,16 +125,43 @@ const characterTypeFromStoredType = (
 ): CharacterType =>
   type === "ANIMAL" ? "Animal" : type === "OBJECT" ? "Object" : "Person";
 
-const photoLabelByCharacterType: Record<CharacterType, string> = {
-  Person: "Add a photo of the person for the illustrations",
-  Animal: "Add a photo of the animal for the illustrations",
-  Object: "Add a photo of the object for the illustrations",
+const getPhotoLabelByCharacterType = (
+  type: CharacterType,
+  copy: ReturnType<typeof useBookBuilderPageCopy>,
+) => {
+  switch (type) {
+    case "Person":
+      return copy.photoPromptPerson;
+    case "Animal":
+      return copy.photoPromptAnimal;
+    case "Object":
+      return copy.photoPromptObject;
+  }
 };
 
 const characterTypes = [
   { label: "Person" as const, icon: UserRound },
   { label: "Animal" as const, icon: PawPrint },
   { label: "Object" as const, icon: Box },
+];
+
+const getGenderDisplay = (
+  val: string | null | undefined,
+  copy: ReturnType<typeof useBookBuilderPageCopy>,
+) => {
+  if (!val) return copy.selectGender;
+  if (val === "Male") return copy.male;
+  if (val === "Female") return copy.female;
+  if (val === "Non-binary") return copy.nonBinary;
+  if (val === "Prefer not to say") return copy.preferNotToSay;
+  return val;
+};
+
+const getGenderItems = (copy: ReturnType<typeof useBookBuilderPageCopy>) => [
+  { value: "Female", label: copy.female },
+  { value: "Male", label: copy.male },
+  { value: "Non-binary", label: copy.nonBinary },
+  { value: "Prefer not to say", label: copy.preferNotToSay },
 ];
 
 type AdditionalCharState = {
@@ -156,11 +183,19 @@ function PhotoUpload({
   file,
   label,
   onPhotoChange,
+  uploadPrompt,
+  photoSelectedText,
+  changePhotoText,
+  removePhotoAria,
 }: {
   id: string;
   file: File | null;
   label: string;
   onPhotoChange: (file: File | null) => void;
+  uploadPrompt?: string;
+  photoSelectedText?: string;
+  changePhotoText?: string;
+  removePhotoAria?: string;
 }) {
   const [previewUrl, setPreviewUrl] = useState("");
 
@@ -202,7 +237,7 @@ function PhotoUpload({
             />
           </div>
           <div className="min-w-0 text-left">
-            <p className="font-sans text-sm font-semibold text-[#514256]">Photo selected</p>
+            <p className="font-sans text-sm font-semibold text-[#514256]">{photoSelectedText || "Foto geselecteerd"}</p>
             <p className="mt-1 max-w-[260px] truncate font-sans text-xs text-[#8A7982]" title={file?.name}>
               {file?.name}
             </p>
@@ -211,14 +246,14 @@ function PhotoUpload({
               className="mt-4 inline-flex h-9 cursor-pointer items-center gap-2 rounded-lg border border-[#E88DA0] bg-[#FFF7F8] px-3 font-sans text-sm font-medium text-[#D36F87] transition hover:bg-[#FFECEF] focus-within:outline-none focus-within:ring-2 focus-within:ring-[#E88DA0] focus-within:ring-offset-2"
             >
               <ImagePlus aria-hidden="true" size={16} />
-              Change photo
+              {changePhotoText || "Foto wijzigen"}
             </label>
           </div>
           <button
             type="button"
             onClick={() => onPhotoChange(null)}
-            aria-label="Remove selected photo"
-            title="Remove photo"
+            aria-label={removePhotoAria || "Geselecteerde foto verwijderen"}
+            title="Verwijder foto"
             className="absolute right-3 top-3 inline-flex size-8 items-center justify-center rounded-full bg-[#FFF0F3] text-[#D36F87] transition hover:bg-[#FAD8DF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2"
           >
             <X aria-hidden="true" size={17} strokeWidth={2.5} />
@@ -232,7 +267,7 @@ function PhotoUpload({
           <span className="flex size-11 items-center justify-center rounded-full bg-[#FFF0F3] text-[#E88DA0]">
             <ImagePlus aria-hidden="true" size={22} />
           </span>
-          <span className="mt-3 font-sans text-sm font-medium text-[#514256]">Upload a photo</span>
+          <span className="mt-3 font-sans text-sm font-medium text-[#514256]">{uploadPrompt || "Upload een foto"}</span>
           <span className="mt-1 max-w-sm font-sans text-xs text-[#8A7982]">{label}</span>
         </label>
       )}
@@ -247,6 +282,7 @@ function AddedCharacterForm({
   onAdd,
   onRemove,
   onChange,
+  copy,
 }: {
   number: number;
   character: AdditionalCharState;
@@ -254,20 +290,22 @@ function AddedCharacterForm({
   onAdd: (type: CharacterType) => void;
   onRemove: () => void;
   onChange: (updated: Partial<AdditionalCharState>) => void;
+  copy: ReturnType<typeof useBookBuilderPageCopy>;
 }) {
   const fieldId = `character-${number}`;
   const currentPhoto = character.photos[character.type];
+  const genderItems = getGenderItems(copy);
 
   return (
     <>
       <div className="mt-7 flex max-w-[1120px] items-center justify-between gap-3">
         <h4 className="font-sans text-base font-semibold text-[#1E1E1E] sm:text-lg">
-          Character {number}
+          {copy.character} {number}
         </h4>
         <button
           type="button"
           onClick={onRemove}
-          aria-label={`Remove character ${number}`}
+          aria-label={`${copy.removeCharacterAria} ${number}`}
           className="inline-flex size-9 items-center justify-center rounded-lg text-[#E88DA0] transition hover:bg-[#FFF3F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]"
         >
           <Trash2 aria-hidden="true" size={19} />
@@ -279,7 +317,7 @@ function AddedCharacterForm({
       >
         <fieldset>
           <legend className="font-sans text-sm font-medium text-[#252025]">
-            Choose the type of character
+            {copy.chooseCharacterType}
           </legend>
           <div className="mt-3 flex flex-wrap gap-2">
             {characterTypes.map((characterType) => {
@@ -297,7 +335,11 @@ function AddedCharacterForm({
                   }`}
                 >
                   <Icon aria-hidden="true" size={16} />
-                  {characterType.label}
+                  {characterType.label === "Person"
+                    ? copy.person
+                    : characterType.label === "Animal"
+                      ? copy.animal
+                      : copy.object}
                 </button>
               );
             })}
@@ -310,13 +352,13 @@ function AddedCharacterForm({
               className="mt-5 block font-sans text-sm font-medium text-[#252025]"
               htmlFor={`${fieldId}-name`}
             >
-              Character Name
+              {copy.characterName}
             </label>
             <input
               id={`${fieldId}-name`}
               value={character.name}
               onChange={(e) => onChange({ name: e.target.value })}
-              placeholder="Enter the character's name"
+              placeholder={copy.enterCharacterName}
               className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
             />
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -325,9 +367,10 @@ function AddedCharacterForm({
                   className="block font-sans text-sm font-medium text-[#252025]"
                   htmlFor={`${fieldId}-gender`}
                 >
-                  Gender
+                  {copy.gender}
                 </label>
                 <Select
+                  items={genderItems}
                   value={character.gender}
                   onValueChange={(val) => onChange({ gender: val ?? "" })}
                 >
@@ -335,26 +378,34 @@ function AddedCharacterForm({
                     id={`${fieldId}-gender`}
                     className="mt-2 h-10 w-full rounded-[8px] border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] focus-visible:border-[#E88DA0] focus-visible:ring-[#E88DA0]/25"
                   >
-                    <SelectValue placeholder="Select gender" />
+                    <SelectValue placeholder={copy.selectGender}>
+                      {(val) => getGenderDisplay(val, copy)}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent className="z-[100] border border-[#F3A8B7] bg-white text-[#4B4650] shadow-[0_10px_24px_rgba(91,69,78,0.16)]">
                     <SelectItem
                       className="cursor-pointer py-2 text-[#4B4650] focus:bg-[#FFF3F5]"
                       value="Female"
                     >
-                      Female
+                      {copy.female}
                     </SelectItem>
                     <SelectItem
                       className="cursor-pointer py-2 text-[#4B4650] focus:bg-[#FFF3F5]"
                       value="Male"
                     >
-                      Male
+                      {copy.male}
                     </SelectItem>
                     <SelectItem
                       className="cursor-pointer py-2 text-[#4B4650] focus:bg-[#FFF3F5]"
                       value="Non-binary"
                     >
-                      Non-binary
+                      {copy.nonBinary}
+                    </SelectItem>
+                    <SelectItem
+                      className="cursor-pointer py-2 text-[#4B4650] focus:bg-[#FFF3F5]"
+                      value="Prefer not to say"
+                    >
+                      {copy.preferNotToSay}
                     </SelectItem>
                   </SelectContent>
                 </Select>
@@ -364,14 +415,14 @@ function AddedCharacterForm({
                   className="block font-sans text-sm font-medium text-[#252025]"
                   htmlFor={`${fieldId}-age`}
                 >
-                  Age
+                  {copy.age}
                 </label>
                 <input
                   id={`${fieldId}-age`}
                   inputMode="numeric"
                   value={character.age}
                   onChange={(e) => onChange({ age: e.target.value })}
-                  placeholder="e.g. 5"
+                  placeholder={copy.agePlaceholder}
                   className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
                 />
               </div>
@@ -382,13 +433,13 @@ function AddedCharacterForm({
                   className="block font-sans text-sm font-medium text-[#252025]"
                   htmlFor={`${fieldId}-hobbies`}
                 >
-                  Hobbies/ Interests <span className="font-normal">(optional)</span>
+                  {copy.hobbies} <span className="font-normal">{copy.optional}</span>
                 </label>
                 <input
                   id={`${fieldId}-hobbies`}
                   value={character.hobbies}
                   onChange={(e) => onChange({ hobbies: e.target.value })}
-                  placeholder="e.g. drawing, cycling"
+                  placeholder={copy.hobbiesPlaceholder}
                   className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
                 />
               </div>
@@ -397,13 +448,13 @@ function AddedCharacterForm({
                   className="block font-sans text-sm font-medium text-[#252025]"
                   htmlFor={`${fieldId}-food`}
                 >
-                  Favorite food <span className="font-normal">(optional)</span>
+                  {copy.favoriteFood} <span className="font-normal">{copy.optional}</span>
                 </label>
                 <input
                   id={`${fieldId}-food`}
                   value={character.food}
                   onChange={(e) => onChange({ food: e.target.value })}
-                  placeholder="e.g. pizza, ice-cream"
+                  placeholder={copy.favoriteFoodPlaceholder}
                   className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
                 />
               </div>
@@ -415,26 +466,26 @@ function AddedCharacterForm({
               className="mt-5 block font-sans text-sm font-medium text-[#252025]"
               htmlFor={`${fieldId}-name`}
             >
-              Animal Name
+              {copy.animalName}
             </label>
             <input
               id={`${fieldId}-name`}
               value={character.animalName}
               onChange={(e) => onChange({ animalName: e.target.value })}
-              placeholder="Enter the animal name"
+              placeholder={copy.enterAnimalName}
               className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
             />
             <label
               className="mt-4 block font-sans text-sm font-medium text-[#252025]"
               htmlFor={`${fieldId}-species`}
             >
-              Animal species
+              {copy.animalSpecies}
             </label>
             <input
               id={`${fieldId}-species`}
               value={character.animalSpecies}
               onChange={(e) => onChange({ animalSpecies: e.target.value })}
-              placeholder="e.g. dog, cat, fish"
+              placeholder={copy.animalSpeciesPlaceholder}
               className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
             />
           </>
@@ -444,13 +495,13 @@ function AddedCharacterForm({
               className="mt-5 block font-sans text-sm font-medium text-[#252025]"
               htmlFor={`${fieldId}-name`}
             >
-              Name of object
+              {copy.objectName}
             </label>
             <input
               id={`${fieldId}-name`}
               value={character.objectName}
               onChange={(e) => onChange({ objectName: e.target.value })}
-              placeholder={"E.g. “Car”"}
+              placeholder={copy.objectNamePlaceholder}
               className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
             />
           </>
@@ -460,12 +511,16 @@ function AddedCharacterForm({
           key={`${fieldId}-${character.type}-photo`}
           id={`${fieldId}-${character.type.toLowerCase()}-photo`}
           file={currentPhoto}
-          label={photoLabelByCharacterType[character.type]}
+          label={getPhotoLabelByCharacterType(character.type, copy)}
           onPhotoChange={(photo) =>
             onChange({
               photos: { ...character.photos, [character.type]: photo },
             })
           }
+          uploadPrompt={copy.uploadPhoto}
+          photoSelectedText={copy.photoSelected}
+          changePhotoText={copy.changePhotoBtn}
+          removePhotoAria={copy.removePhotoAria}
         />
         {canAdd && (
           <button
@@ -473,7 +528,7 @@ function AddedCharacterForm({
             onClick={() => onAdd(character.type)}
             className="mt-3 inline-flex h-8 items-center gap-1.5 rounded-[7px] border border-[#F3A8B7] bg-white px-3 font-sans text-xs text-[#E88DA0] transition hover:bg-[#FFF3F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]"
           >
-            <UserRound aria-hidden="true" size={13} /> Add Character (max 4)
+            <UserRound aria-hidden="true" size={13} /> {copy.addCharacter}
           </button>
         )}
       </form>
@@ -494,8 +549,9 @@ export default function InformationAboutCharacters() {
     characters: storedCharacters,
     setCharacters,
   } = useBookBuilder();
-  const { bb, translateAge, translateTheme, translateMessage, translateIllustration, translateFont } = useBookBuilderTranslations();
+  const { bb, language, translateAge, translateTheme, translateMessage, translateIllustration, translateFont } = useBookBuilderTranslations();
   const copy = useBookBuilderPageCopy();
+  const genderItems = getGenderItems(copy);
 
   // Character 1 state
   const storedMainCharacter = storedCharacters[0];
@@ -589,26 +645,32 @@ export default function InformationAboutCharacters() {
 
   const handleNextStep = () => {
     const mainCharacterPhoto = characterPhotos[characterType];
-    const mainCharacterError = getCharacterValidationError({
-      type: characterType,
-      name,
-      gender: gender ?? undefined,
-      age: ageValue,
-      animalName,
-      animalSpecies,
-      objectName,
-    });
+    const mainCharacterError = getCharacterValidationError(
+      {
+        type: characterType,
+        name,
+        gender: gender ?? undefined,
+        age: ageValue,
+        animalName,
+        animalSpecies,
+        objectName,
+      },
+      language,
+    );
     if (mainCharacterError) {
-      setValidationError(`Character 1: ${mainCharacterError}`);
+      setValidationError(`${copy.character} 1: ${mainCharacterError}`);
       return;
     }
 
     const additionalCharacterIndex = additionalCharacters.findIndex((character) =>
-      getCharacterValidationError(character),
+      getCharacterValidationError(character, language),
     );
     if (additionalCharacterIndex >= 0) {
-      const message = getCharacterValidationError(additionalCharacters[additionalCharacterIndex]);
-      setValidationError(`Character ${additionalCharacterIndex + 2}: ${message}`);
+      const message = getCharacterValidationError(
+        additionalCharacters[additionalCharacterIndex],
+        language,
+      );
+      setValidationError(`${copy.character} ${additionalCharacterIndex + 2}: ${message}`);
       return;
     }
 
@@ -808,6 +870,7 @@ export default function InformationAboutCharacters() {
                       {copy.gender}
                     </label>
                     <Select
+                      items={genderItems}
                       value={gender}
                       onValueChange={(val) => setGender(val)}
                     >
@@ -815,7 +878,9 @@ export default function InformationAboutCharacters() {
                         id="character-gender"
                         className="mt-2 h-10 w-full rounded-[8px] border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] focus-visible:border-[#E88DA0] focus-visible:ring-[#E88DA0]/25"
                       >
-                        <SelectValue placeholder={copy.selectGender} />
+                        <SelectValue placeholder={copy.selectGender}>
+                          {(val) => getGenderDisplay(val, copy)}
+                        </SelectValue>
                       </SelectTrigger>
                       <SelectContent className="z-[100] border border-[#F3A8B7] bg-white text-[#4B4650] shadow-[0_10px_24px_rgba(91,69,78,0.16)]">
                         <SelectItem
@@ -857,7 +922,7 @@ export default function InformationAboutCharacters() {
                       inputMode="numeric"
                       value={ageValue}
                       onChange={(e) => setAgeValue(e.target.value)}
-                      placeholder="e.g. 5"
+                      placeholder={copy.agePlaceholder}
                       className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
                     />
                   </div>
@@ -876,7 +941,7 @@ export default function InformationAboutCharacters() {
                       id="character-hobbies"
                       value={hobbies}
                       onChange={(e) => setHobbies(e.target.value)}
-                      placeholder="e.g. drawing, cycling"
+                      placeholder={copy.hobbiesPlaceholder}
                       className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
                     />
                   </div>
@@ -892,7 +957,7 @@ export default function InformationAboutCharacters() {
                       id="character-food"
                       value={food}
                       onChange={(e) => setFood(e.target.value)}
-                      placeholder="e.g. pizza, ice-cream"
+                      placeholder={copy.favoriteFoodPlaceholder}
                       className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
                     />
                   </div>
@@ -910,7 +975,7 @@ export default function InformationAboutCharacters() {
                   id="animal-name"
                   value={animalName}
                   onChange={(e) => setAnimalName(e.target.value)}
-                  placeholder="Enter the animal name"
+                  placeholder={copy.enterAnimalName}
                   className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
                 />
                 <label
@@ -923,7 +988,7 @@ export default function InformationAboutCharacters() {
                   id="animal-species"
                   value={animalSpecies}
                   onChange={(e) => setAnimalSpecies(e.target.value)}
-                  placeholder="e.g. dog, cat, fish"
+                  placeholder={copy.animalSpeciesPlaceholder}
                   className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
                 />
               </>
@@ -939,7 +1004,7 @@ export default function InformationAboutCharacters() {
                   id="object-name"
                   value={objectName}
                   onChange={(e) => setObjectName(e.target.value)}
-                  placeholder={"E.g. “Car”"}
+                  placeholder={copy.objectNamePlaceholder}
                   className="mt-2 h-10 w-full rounded-[8px] border border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] outline-none placeholder:text-[#B9B4B7] focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/25"
                 />
               </>
@@ -949,7 +1014,11 @@ export default function InformationAboutCharacters() {
               key={`character-1-${characterType}-photo`}
               id={`character-1-${characterType.toLowerCase()}-photo`}
               file={characterPhotos[characterType]}
-              label={photoLabelByCharacterType[characterType]}
+              label={getPhotoLabelByCharacterType(characterType, copy)}
+              uploadPrompt={copy.uploadPhoto}
+              photoSelectedText={copy.photoSelected}
+              changePhotoText={copy.changePhotoBtn}
+              removePhotoAria={copy.removePhotoAria}
               onPhotoChange={(photo) =>
                 setCharacterPhotos((photos) => ({
                   ...photos,
@@ -987,6 +1056,7 @@ export default function InformationAboutCharacters() {
               onChange={(updated) =>
                 updateAdditionalCharacter(character.id, updated)
               }
+              copy={copy}
             />
           ))}
 
