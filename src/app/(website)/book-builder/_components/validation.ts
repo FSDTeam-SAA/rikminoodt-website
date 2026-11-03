@@ -80,6 +80,30 @@ const validationMessages = {
   },
 };
 
+const guestDetailsValidationMessages = {
+  nl: {
+    name: "Voer je volledige naam in (2–100 tekens).",
+    country: "Voer je land in (2–100 tekens).",
+    email: "Voer een geldig e-mailadres in.",
+    emailMatch: "De e-mailadressen komen niet overeen. Controleer je e-mailadres.",
+    password: "Het wachtwoord moet minimaal 8 tekens lang zijn.",
+  },
+  en: {
+    name: "Enter your full name (2–100 characters).",
+    country: "Enter your country (2–100 characters).",
+    email: "Enter a valid email address.",
+    emailMatch: "Emails do not match. Please verify your email address.",
+    password: "Password must be at least 8 characters long.",
+  },
+  fr: {
+    name: "Saisissez votre nom complet (2–100 caractères).",
+    country: "Saisissez votre pays (2–100 caractères).",
+    email: "Saisissez une adresse e-mail valide.",
+    emailMatch: "Les adresses e-mail ne correspondent pas. Vérifiez votre adresse e-mail.",
+    password: "Le mot de passe doit contenir au moins 8 caractères.",
+  },
+};
+
 export function getCharacterValidationError(
   character: CharacterInput,
   language: "en" | "nl" | "fr" = "nl",
@@ -145,13 +169,14 @@ export function getGuestDetailsValidationError(details: {
   email: string;
   confirmEmail: string;
   password: string;
-}) {
-  if (!isText(details.name)) return "Enter your full name (2–100 characters).";
-  if (!isText(details.country)) return "Enter your country (2–100 characters).";
+}, language: "en" | "nl" | "fr" = "nl") {
+  const msgs = guestDetailsValidationMessages[language] || guestDetailsValidationMessages.nl;
+  if (!isText(details.name)) return msgs.name;
+  if (!isText(details.country)) return msgs.country;
   const email = details.email.trim();
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return "Enter a valid email address.";
-  if (email !== details.confirmEmail.trim()) return "Emails do not match. Please verify your email address.";
-  if (details.password.length < 8) return "Password must be at least 8 characters long.";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return msgs.email;
+  if (email !== details.confirmEmail.trim()) return msgs.emailMatch;
+  if (details.password.length < 8) return msgs.password;
   return null;
 }
 

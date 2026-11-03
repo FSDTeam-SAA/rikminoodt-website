@@ -89,6 +89,46 @@ const themeOptions = new Set([
   "Educational",
   "Feelings",
 ]);
+const progressStorageKey = "book-builder-progress";
+
+type BuilderProgress = Pick<
+  BookBuilderContextValue,
+  | "selectedAge"
+  | "selectedTheme"
+  | "selectedStory"
+  | "selectedMessage"
+  | "selectedIllustration"
+  | "selectedFont"
+  | "selectedLanguage"
+  | "selectedVariant"
+>;
+
+const isNullableString = (value: unknown): value is string | null =>
+  typeof value === "string" || value === null;
+
+function getStoredProgress(): BuilderProgress | null {
+  try {
+    const rawProgress = window.sessionStorage.getItem(progressStorageKey);
+    if (!rawProgress) return null;
+
+    const progress = JSON.parse(rawProgress) as Record<string, unknown>;
+    const keys: Array<keyof BuilderProgress> = [
+      "selectedAge",
+      "selectedTheme",
+      "selectedStory",
+      "selectedMessage",
+      "selectedIllustration",
+      "selectedFont",
+      "selectedLanguage",
+      "selectedVariant",
+    ];
+
+    if (!keys.every((key) => isNullableString(progress[key]))) return null;
+    return progress as BuilderProgress;
+  } catch {
+    return null;
+  }
+}
 
 export function BookBuilderProvider({ children }: { children: ReactNode }) {
   const [selectedAge, setSelectedAge] = useState<string | null>(defaultAge);
@@ -131,6 +171,7 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
 
   const [currentBookId, setCurrentBookId] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState<number>(0);
+  const [hasRestoredProgress, setHasRestoredProgress] = useState(false);
 
   const setUserDetails = (details: Partial<UserDetails>) => {
     setUserDetailsState((prev) => ({ ...prev, ...details }));
@@ -176,7 +217,7 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
     setCurrentBookId(null);
     setRetryCount(0);
     try {
-      window.sessionStorage.removeItem("book-builder-progress");
+      window.sessionStorage.removeItem(progressStorageKey);
       window.sessionStorage.removeItem("current_book_id");
     } catch {
       // ignore
@@ -184,10 +225,16 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    try {
-      window.sessionStorage.removeItem("book-builder-progress");
-    } catch {
-      // ignore unavailable browser storage
+    const storedProgress = getStoredProgress();
+    if (storedProgress) {
+      setSelectedAge(storedProgress.selectedAge);
+      setSelectedTheme(storedProgress.selectedTheme);
+      setSelectedStory(storedProgress.selectedStory);
+      setSelectedMessage(storedProgress.selectedMessage);
+      setSelectedIllustration(storedProgress.selectedIllustration);
+      setSelectedFont(storedProgress.selectedFont);
+      setSelectedLanguage(storedProgress.selectedLanguage);
+      setSelectedVariant(storedProgress.selectedVariant);
     }
 
     const selectedThemeFromHome = new URLSearchParams(window.location.search).get("theme");
@@ -196,7 +243,38 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
       setSelectedTheme(selectedThemeFromHome);
       setSelectedStory(null);
     }
+    setHasRestoredProgress(true);
   }, []);
+
+  useEffect(() => {
+    if (!hasRestoredProgress) return;
+
+    try {
+      const progress: BuilderProgress = {
+        selectedAge,
+        selectedTheme,
+        selectedStory,
+        selectedMessage,
+        selectedIllustration,
+        selectedFont,
+        selectedLanguage,
+        selectedVariant,
+      };
+      window.sessionStorage.setItem(progressStorageKey, JSON.stringify(progress));
+    } catch {
+      // ignore unavailable browser storage
+    }
+  }, [
+    hasRestoredProgress,
+    selectedAge,
+    selectedTheme,
+    selectedStory,
+    selectedMessage,
+    selectedIllustration,
+    selectedFont,
+    selectedLanguage,
+    selectedVariant,
+  ]);
 
   return (
     <BookBuilderContext.Provider

@@ -99,6 +99,14 @@ export default function OrderedBooksPage() {
     return d.toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" });
   };
 
+  const formatAmount = (amount?: number) => {
+    const locale = language === "nl" ? "nl-NL" : language === "fr" ? "fr-FR" : "en-GB";
+    return new Intl.NumberFormat(locale, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(Number(amount || 0));
+  };
+
   const ongoingOrders: OrderDetails[] = orders
     .filter((o) => o.status !== "DELIVERED")
     .map((o, index) => ({
@@ -107,7 +115,7 @@ export default function OrderedBooksPage() {
       orderDate: formatDate(o.createdAt || o.paidAt),
       address: formatAddress(o.shippingAddress),
       quantity: o.quantity || 1,
-      amount: `£${Number(o.totalAmount || 0).toFixed(2)}`,
+      amount: formatAmount(o.totalAmount),
       coverImage: o.book?.coverImageUrl || "/images/exp_c_1.jpg",
       bgColor: bgColors[index % bgColors.length],
       rawStatus: o.status,
@@ -122,7 +130,7 @@ export default function OrderedBooksPage() {
       deliveryDate: formatDate(o.updatedAt || o.createdAt),
       address: formatAddress(o.shippingAddress),
       quantity: o.quantity || 1,
-      amount: `£${Number(o.totalAmount || 0).toFixed(2)}`,
+      amount: formatAmount(o.totalAmount),
       coverImage: o.book?.coverImageUrl || "/images/exp_c_1.jpg",
       bgColor: bgColors[index % bgColors.length],
       rawStatus: o.status,

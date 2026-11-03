@@ -372,13 +372,19 @@
     "name": "Naam",
     "namePlaceholder": "Voer je volledige naam in",
     "country": "Land",
-    "countryPlaceholder": "Nederland",
+    "countryPlaceholder": "Dutch",
     "email": "E-mail",
     "emailPlaceholder": "jouw123@gmail.com",
     "confirmEmail": "E-mail bevestigen",
     "password": "Wachtwoord (minimaal 8 tekens)",
     "passwordPlaceholder": "Kies een sterk wachtwoord",
-    "pricingNotice": "ⓘ Bijna klaar. Jouw digitale boek kost €8.99. Als je later ook een hardcover boek bestelt, wordt dit bedrag verrekend.",
+    "creatorNameError": "Voer de naam van de maker in (2–100 tekens).",
+    "bookLanguages": {
+      "English": "Engels",
+      "Dutch": "Dutch",
+      "French": "Frans"
+    },
+    "pricingNotice": "ⓘ Bijna klaar. Jouw digitale boek kost €8.99.",
     "characters": "Personages",
     "addCharacter": "Personage toevoegen",
     "labels": {

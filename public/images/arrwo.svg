@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60" width="100%" height="100%">
+  <!-- Yellow curved arrow without any white border -->
+  <path d="M 12 52 
+       C 28 26, 52 14, 76 21 
+       L 74 14 
+       L 92 27 
+       L 77 42 
+       L 76 34 
+       C 54 28, 33 38, 12 52 Z" fill="#f5a623" />
+</svg>

@@ -154,55 +154,35 @@ const ThreeEasySteps = () => {
                   />
                 )}
 
-                {/* Arrow 1: Sweeps from under Card 1 to Card 2 laptop */}
+                {/* Sweeps from Card 1 down towards the Card 2 laptop */}
                 {index === 0 && (
                   <div
-                    className="pointer-events-none absolute -bottom-14 md:-bottom-18 lg:-bottom-20 left-0 w-full h-32 md:h-40 lg:h-44 z-30 hidden md:block overflow-visible"
+                    className="pointer-events-none absolute -bottom-12 left-[33%] z-30 hidden w-[205px] md:block lg:w-[240px]"
                     aria-hidden="true"
                   >
-                    <svg
-                      viewBox="0 0 1000 180"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-full h-full overflow-visible drop-shadow-sm"
-                    >
-                      <path
-                        d="M 560 25 C 530 85, 440 120, 370 160"
-                        stroke="#F5A623"
-                        strokeWidth="6"
-                        strokeLinecap="round"
-                      />
-                      <polygon
-                        points="356,170 382,162 369,145"
-                        fill="#F5A623"
-                      />
-                    </svg>
+                    <Image
+                      src="/images/how-it-works-arrow-left.png"
+                      alt=""
+                      width={1726}
+                      height={911}
+                      className="h-auto w-full"
+                    />
                   </div>
                 )}
 
-                {/* Arrow 2: Sweeps from under Card 2 to Card 3 book */}
+                {/* Sweeps from Card 2 down towards the Card 3 book */}
                 {index === 1 && (
                   <div
-                    className="pointer-events-none absolute -bottom-14 md:-bottom-18 lg:-bottom-20 left-0 w-full h-32 md:h-40 lg:h-44 z-30 hidden md:block overflow-visible"
+                    className="pointer-events-none absolute -bottom-10 left-[37%] z-30 hidden w-[180px] md:block lg:w-[215px]"
                     aria-hidden="true"
                   >
-                    <svg
-                      viewBox="0 0 1000 180"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-full h-full overflow-visible drop-shadow-sm"
-                    >
-                      <path
-                        d="M 420 25 C 450 85, 540 120, 620 160"
-                        stroke="#F5A623"
-                        strokeWidth="6"
-                        strokeLinecap="round"
-                      />
-                      <polygon
-                        points="637,170 611,162 624,145"
-                        fill="#F5A623"
-                      />
-                    </svg>
+                    <Image
+                      src="/images/how-it-works-arrow-right.png"
+                      alt=""
+                      width={1450}
+                      height={1085}
+                      className="h-auto w-full"
+                    />
                   </div>
                 )}
 
