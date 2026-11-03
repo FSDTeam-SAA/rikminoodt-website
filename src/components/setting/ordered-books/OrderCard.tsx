@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { Euro } from "lucide-react";
 import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export interface OrderDetails {
@@ -76,7 +77,10 @@ export default function OrderCard({ order, showTrackingButton, onTrackOrder, sho
           </div>
           <div className="flex justify-between items-center text-sm">
             <span className="text-gray-600 font-medium">{copy.totalAmount}</span>
-            <span className="text-gray-800 font-medium">{order.amount}</span>
+            <span className="inline-flex items-center gap-1 text-gray-800 font-medium">
+              <Euro className="size-4" strokeWidth={2.4} aria-hidden="true" />
+              {order.amount}
+            </span>
           </div>
         </div>
 

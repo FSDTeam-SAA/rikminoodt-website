@@ -39,7 +39,7 @@ const CreateMagicalBook = () => {
         <ol className="relative mt-10 grid gap-6 sm:grid-cols-3 sm:gap-6 md:gap-8 lg:mt-[58px] lg:gap-12">
           {steps.map((step, index) => (
             <li key={step.title} className="relative h-full">
-              <article className="group flex h-full min-h-[360px] flex-col items-center justify-between rounded-[28px] sm:rounded-[32px] bg-white px-6 pt-7 pb-6 text-center shadow-[0_4px_24px_rgba(110,80,60,0.06)] transition-all duration-300 hover:shadow-[0_12px_32px_rgba(110,80,60,0.1)] border border-[#F3ECE4]/80 sm:px-5 sm:pt-8 sm:pb-7 lg:min-h-[440px] lg:px-7 lg:pt-9 lg:pb-8">
+              <article className="group flex h-full min-h-[360px] flex-col items-center justify-between rounded-[28px] sm:rounded-[32px] bg-white px-6 pt-7 pb-4 text-center shadow-[0_4px_24px_rgba(110,80,60,0.06)] transition-all duration-300 hover:shadow-[0_12px_32px_rgba(110,80,60,0.1)] border border-[#F3ECE4]/80 sm:px-5 sm:pt-8 sm:pb-5 lg:min-h-[440px] lg:px-7 lg:pt-9 lg:pb-5">
                 <div className="flex w-full items-center justify-center">
                   <Image
                     src={step.image}
@@ -61,54 +61,39 @@ const CreateMagicalBook = () => {
                 </div>
 
                 {/* Numbered badge circle */}
-                <div className="mt-6 flex items-center justify-center pt-1 sm:mt-7">
-                  <span className="size-9 sm:size-10 rounded-full bg-[#F5A623] text-white font-sans font-bold text-base sm:text-lg flex items-center justify-center shadow-[0_2px_8px_rgba(245,166,35,0.35)] select-none">
+                <div className="mt-4 flex items-center justify-center sm:mt-5">
+                  <span className="size-8 sm:size-9 rounded-full bg-[#F5A623] text-white font-sans font-bold text-sm sm:text-base flex items-center justify-center shadow-[0_2px_8px_rgba(245,166,35,0.35)] select-none">
                     {index + 1}
                   </span>
                 </div>
               </article>
 
-              {/* Mobile vertical downward curved arrow */}
+              {/* Mobile connector to the next step */}
               {index < steps.length - 1 && (
                 <div className="my-2 flex h-12 items-center justify-center sm:hidden" aria-hidden="true">
-                  <svg viewBox="0 0 40 56" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-11 w-8">
-                    <path
-                      d="M 12 6 C 6 22, 10 36, 25 44"
-                      stroke="#F5A623"
-                      strokeWidth="4.5"
-                      strokeLinecap="round"
-                    />
-                    <path
-                      d="M 28 52 L 28 38 L 22 43 L 16 40 Z"
-                      fill="#F5A623"
-                    />
-                  </svg>
+                  <Image
+                    src="/images/arrwo.svg"
+                    alt=""
+                    width={100}
+                    height={60}
+                    className="h-11 w-16 rotate-90 object-contain"
+                  />
                 </div>
               )}
 
-              {/* Desktop curved arching arrow to next card */}
+              {/* Curved connector to the next card */}
               {index < steps.length - 1 && (
                 <div
                   aria-hidden="true"
                   className="pointer-events-none absolute -top-1 sm:-top-2 lg:-top-3 xl:-top-4 z-20 hidden sm:block w-16 md:w-20 lg:w-24 xl:w-28 left-[calc(100%+0.75rem)] md:left-[calc(100%+1rem)] lg:left-[calc(100%+1.5rem)] -translate-x-1/2"
                 >
-                  <svg
-                    viewBox="0 0 100 48"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-full h-auto overflow-visible drop-shadow-sm"
-                  >
-                    <path
-                      d="M 6 36 C 26 10, 64 8, 82 21"
-                      stroke="#F5A623"
-                      strokeWidth="5"
-                      strokeLinecap="round"
-                    />
-                    <path
-                      d="M 96 32 L 87 15 L 83 22 L 77 27 Z"
-                      fill="#F5A623"
-                    />
-                  </svg>
+                  <Image
+                    src="/images/arrwo.svg"
+                    alt=""
+                    width={100}
+                    height={60}
+                    className="h-auto w-full rotate-[5deg]"
+                  />
                 </div>
               )}
             </li>

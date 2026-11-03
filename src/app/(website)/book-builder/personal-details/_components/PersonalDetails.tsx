@@ -121,7 +121,16 @@ export default function PersonalDetails() {
     setCreatorName,
     setUserDetails,
   } = useBookBuilder();
-  const { bb, translateAge, translateTheme, translateMessage, translateIllustration, translateFont } = useBookBuilderTranslations();
+  const {
+    bb,
+    language,
+    translateAge,
+    translateTheme,
+    translateMessage,
+    translateIllustration,
+    translateFont,
+    translateSubject,
+  } = useBookBuilderTranslations();
 
   const { data: session, status: sessionStatus } = useSession();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -142,12 +151,12 @@ export default function PersonalDetails() {
     setErrorMessage("");
 
     if (!isValidCreatorName(localCreatorName)) {
-      setErrorMessage("Enter the creator name (2–100 characters).");
+      setErrorMessage(bb.creatorNameError);
       return;
     }
 
     if (!isLoggedIn) {
-      const guestDetailsError = getGuestDetailsValidationError(localUser);
+      const guestDetailsError = getGuestDetailsValidationError(localUser, language);
       if (guestDetailsError) {
         setErrorMessage(guestDetailsError);
         return;
@@ -210,14 +219,18 @@ export default function PersonalDetails() {
           <div className="mt-2 flex flex-wrap gap-1.5 sm:mt-3 sm:gap-3">
             <ChoiceChip choice={age} displayLabel={translateAge(age?.label)} />
             <ChoiceChip choice={theme} displayLabel={translateTheme(theme?.label)} />
-            <ChoiceChip choice={story} />
+            <ChoiceChip choice={story} displayLabel={translateSubject(story?.value || story?.label)} />
             <ChoiceChip choice={message} displayLabel={translateMessage(message?.label)} />
             <ChoiceChip choice={illustration} displayLabel={translateIllustration(illustration?.label)} />
             <ChoiceChip choice={font} displayLabel={translateFont(font?.label)} />
             <ChoiceChip
               choice={
                 selectedLanguage
-                  ? { label: selectedLanguage, image: "/images/flag.png", color: "#FFFBDF" }
+                  ? {
+                      label: bb.bookLanguages[selectedLanguage as keyof typeof bb.bookLanguages] || selectedLanguage,
+                      image: "/images/flag.png",
+                      color: "#FFFBDF",
+                    }
                   : undefined
               }
             />
@@ -225,17 +238,17 @@ export default function PersonalDetails() {
 
           <div className="mt-6 sm:mt-9">
             <h3 className="font-sans text-sm font-semibold text-[#1E1E1E] sm:text-lg lg:text-[28px]">
-              {bb?.yourPersonalDetails || "Your personal details"}
+              {bb.yourPersonalDetails}
             </h3>
             <p className="mt-1 font-sans text-[10px] text-[#66605F] sm:text-sm">
-              {bb?.creatorSubtitle || "Give the book a unique and personal touch by including the creator of the book."}
+              {bb.creatorSubtitle}
             </p>
           </div>
 
           <div className="mt-3 rounded-[7px] border border-[#F3A8B7] bg-white/20 p-2 sm:mt-5 sm:p-4">
             <FormField
-              label={bb?.creatorLabel || "Creator of the book"}
-              placeholder={bb?.creatorPlaceholder || "Enter the author’s name"}
+              label={bb.creatorLabel}
+              placeholder={bb.creatorPlaceholder}
               value={localCreatorName}
               onChange={(e) => setLocalCreatorName(e.target.value)}
             />
@@ -245,42 +258,42 @@ export default function PersonalDetails() {
             <>
               <div className="mt-5 sm:mt-7">
                 <h3 className="font-sans text-sm font-semibold text-[#1E1E1E] sm:text-lg lg:text-[28px]">
-                  {bb?.yourDetails || "Your details"}
+                  {bb.yourDetails}
                 </h3>
                 <p className="mt-1 font-sans text-[10px] text-[#66605F] sm:text-sm">
-                  {bb?.yourDetailsSubtitle || "Fill in your details to create an account and save your book."}
+                  {bb.yourDetailsSubtitle}
                 </p>
               </div>
               <div className="mt-3 space-y-4 rounded-[7px] border border-[#F3A8B7] bg-white/20 p-2 sm:mt-5 sm:space-y-5 sm:p-4">
                 <FormField
-                  label={bb?.name || "Name"}
-                  placeholder={bb?.namePlaceholder || "Enter your full name"}
+                  label={bb.name}
+                  placeholder={bb.namePlaceholder}
                   value={localUser.name}
                   onChange={(e) => setLocalUser((prev) => ({ ...prev, name: e.target.value }))}
                 />
                 <FormField
-                  label={bb?.country || "Country"}
-                  placeholder={bb?.countryPlaceholder || "United Kingdom"}
+                  label={bb.country}
+                  placeholder={bb.countryPlaceholder}
                   value={localUser.country}
                   onChange={(e) => setLocalUser((prev) => ({ ...prev, country: e.target.value }))}
                 />
                 <FormField
-                  label={bb?.email || "Email"}
-                  placeholder={bb?.emailPlaceholder || "you123@gmail.com"}
+                  label={bb.email}
+                  placeholder={bb.emailPlaceholder}
                   type="email"
                   value={localUser.email}
                   onChange={(e) => setLocalUser((prev) => ({ ...prev, email: e.target.value }))}
                 />
                 <FormField
-                  label={bb?.confirmEmail || "Confirm email"}
-                  placeholder={bb?.emailPlaceholder || "you123@gmail.com"}
+                  label={bb.confirmEmail}
+                  placeholder={bb.emailPlaceholder}
                   type="email"
                   value={localUser.confirmEmail}
                   onChange={(e) => setLocalUser((prev) => ({ ...prev, confirmEmail: e.target.value }))}
                 />
                 <FormField
-                  label={bb?.password || "Password (min 8 letters)"}
-                  placeholder={bb?.passwordPlaceholder || "Choose strong password"}
+                  label={bb.password}
+                  placeholder={bb.passwordPlaceholder}
                   type="password"
                   value={localUser.password}
                   onChange={(e) => setLocalUser((prev) => ({ ...prev, password: e.target.value }))}
@@ -294,7 +307,7 @@ export default function PersonalDetails() {
           )}
 
           <p className="mt-3 rounded-[5px] bg-[#FFF1C6] px-2 py-2 font-sans text-[8px] leading-[1.3] text-[#B78631] sm:mt-5 sm:text-[10px]">
-            {bb?.pricingNotice || "ⓘ Almost there. Your digital book costs €8.99. If you also order a hardcover book later, this amount is deducted from it."}
+            {bb.pricingNotice}
           </p>
           <div className="mt-4 flex justify-center sm:mt-6">
             <button

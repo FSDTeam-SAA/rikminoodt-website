@@ -4,12 +4,15 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   AlertCircle,
   BookOpen,
   CheckCircle2,
+  Download,
   Home,
   Loader2,
+  Truck,
   X,
 } from "lucide-react";
 import { getApiBaseUrl } from "@/config/api";
@@ -50,6 +53,7 @@ const paymentCopy: Record<PaymentLanguage, {
   creationComplete: string;
   creationCompleteDescription: string;
   goToGeneratedBook: string;
+  downloadBook: string;
   generationNeedsAttention: string;
   creatingMagicalBook: string;
   generationFailedDescription: string;
@@ -61,13 +65,13 @@ const paymentCopy: Record<PaymentLanguage, {
   emailPdfNotification: string;
 }> = {
   en: {
-    paymentSuccessful: "Payment successful", confirmingPayment: "Confirming your payment", confirmingDescription: "Please wait while we confirm your payment with the server.", bookReady: "Your personalised book is ready!", generationIssue: "Your payment is confirmed, but book generation encountered an issue.", creatingBook: "Your payment is confirmed. We’re creating your personalised storybook.", bookReference: "Book reference", viewBookStatus: "View book status", editAndRetry: "Edit Story & Retry", retryGeneration: "Retry Generation", changePhotoAndRetry: "Change Photo & Retry", creationComplete: "Book creation complete", creationCompleteDescription: "Your personalised book is ready to read whenever you are.", goToGeneratedBook: "Go to Generated Book", generationNeedsAttention: "Generation needs attention", creatingMagicalBook: "We're creating your magical book", generationFailedDescription: "Your payment is confirmed, but we couldn’t finish the book. You can try again.", generationDescription: "We’re writing and illustrating your story. This window will close once your book is ready.", waitingForPayment: "We’re waiting for payment confirmation before starting your book.", addingFinalTouches: "Adding the final magical touches...", thisMayTakeAMoment: "This may take a few minutes.", closeStatusHint: "You can close this window and check the status on this page later.", emailPdfNotification: "You'll receive an email as soon as the PDF is ready.",
+    paymentSuccessful: "Payment successful", confirmingPayment: "Confirming your payment", confirmingDescription: "Please wait while we confirm your payment with the server.", bookReady: "Your personalised book is ready!", generationIssue: "Your payment is confirmed, but book generation encountered an issue.", creatingBook: "Your payment is confirmed. We’re creating your personalised storybook.", bookReference: "Book reference", viewBookStatus: "View book status", editAndRetry: "Edit Story & Retry", retryGeneration: "Retry Generation", changePhotoAndRetry: "Change Photo & Retry", creationComplete: "Book creation complete", creationCompleteDescription: "Your personalised book is ready to read whenever you are.", goToGeneratedBook: "Go to My Book", downloadBook: "Download My Book", generationNeedsAttention: "Generation needs attention", creatingMagicalBook: "We're creating your magical book", generationFailedDescription: "Your payment is confirmed, but we couldn’t finish the book. You can try again.", generationDescription: "We’re writing and illustrating your story. This window will close once your book is ready.", waitingForPayment: "We’re waiting for payment confirmation before starting your book.", addingFinalTouches: "Adding the final magical touches...", thisMayTakeAMoment: "This may take a few minutes.", closeStatusHint: "You can close this window and check the status on this page later.", emailPdfNotification: "You'll receive an email as soon as the PDF is ready.",
   },
   nl: {
-    paymentSuccessful: "Betaling geslaagd", confirmingPayment: "Je betaling wordt bevestigd", confirmingDescription: "Even geduld terwijl we je betaling met de server bevestigen.", bookReady: "Je persoonlijke boek is klaar!", generationIssue: "Je betaling is bevestigd, maar er is een probleem opgetreden bij het maken van het boek.", creatingBook: "Je betaling is bevestigd. We maken jouw persoonlijke verhalenboek.", bookReference: "Boekreferentie", viewBookStatus: "Bekijk boekstatus", editAndRetry: "Verhaal bewerken en opnieuw proberen", retryGeneration: "Opnieuw proberen", changePhotoAndRetry: "Foto wijzigen en opnieuw proberen", creationComplete: "Boek maken voltooid", creationCompleteDescription: "Je persoonlijke boek is klaar om te lezen wanneer jij dat wilt.", goToGeneratedBook: "Naar je gemaakte boek", generationNeedsAttention: "Voor het maken is actie nodig", creatingMagicalBook: "We maken jouw magische boek", generationFailedDescription: "Je betaling is bevestigd, maar we konden het boek niet afmaken. Je kunt het opnieuw proberen.", generationDescription: "We schrijven en illustreren jouw verhaal. Dit venster sluit wanneer je boek klaar is.", waitingForPayment: "We wachten op de betalingsbevestiging voordat we met je boek beginnen.", addingFinalTouches: "De laatste magische details worden toegevoegd...", thisMayTakeAMoment: "Dit kan even duren.", closeStatusHint: "Je kunt dit venster sluiten en de status op deze pagina opnieuw openen.", emailPdfNotification: "Je ontvangt een e-mail zodra de PDF klaar is.",
+    paymentSuccessful: "Betaling geslaagd", confirmingPayment: "Je betaling wordt bevestigd", confirmingDescription: "Even geduld terwijl we je betaling met de server bevestigen.", bookReady: "Je persoonlijke boek is klaar!", generationIssue: "Je betaling is bevestigd, maar er is een probleem opgetreden bij het maken van het boek.", creatingBook: "Je betaling is bevestigd. We maken jouw persoonlijke verhalenboek.", bookReference: "Boekreferentie", viewBookStatus: "Bekijk boekstatus", editAndRetry: "Verhaal bewerken en opnieuw proberen", retryGeneration: "Opnieuw proberen", changePhotoAndRetry: "Foto wijzigen en opnieuw proberen", creationComplete: "Je boek is compleet!", creationCompleteDescription: "Je persoonlijke boek is klaar om te lezen wanneer jij dat wilt.", goToGeneratedBook: "Naar mijn boek", downloadBook: "Download mijn boek", generationNeedsAttention: "Voor het maken is actie nodig", creatingMagicalBook: "We maken jouw magische boek", generationFailedDescription: "Je betaling is bevestigd, maar we konden het boek niet afmaken. Je kunt het opnieuw proberen.", generationDescription: "We schrijven en illustreren jouw verhaal. Dit venster sluit wanneer je boek klaar is.", waitingForPayment: "We wachten op de betalingsbevestiging voordat we met je boek beginnen.", addingFinalTouches: "De laatste magische details worden toegevoegd...", thisMayTakeAMoment: "Dit kan even duren.", closeStatusHint: "Je kunt dit venster sluiten en de status op deze pagina opnieuw openen.", emailPdfNotification: "Je ontvangt een e-mail zodra de PDF klaar is.",
   },
   fr: {
-    paymentSuccessful: "Paiement réussi", confirmingPayment: "Confirmation de votre paiement", confirmingDescription: "Veuillez patienter pendant que nous confirmons votre paiement avec le serveur.", bookReady: "Votre livre personnalisé est prêt !", generationIssue: "Votre paiement est confirmé, mais un problème est survenu lors de la création du livre.", creatingBook: "Votre paiement est confirmé. Nous créons votre livre d’histoires personnalisé.", bookReference: "Référence du livre", viewBookStatus: "Voir le statut du livre", editAndRetry: "Modifier l’histoire et réessayer", retryGeneration: "Réessayer la création", changePhotoAndRetry: "Changer la photo et réessayer", creationComplete: "Création du livre terminée", creationCompleteDescription: "Votre livre personnalisé est prêt à être lu quand vous le souhaitez.", goToGeneratedBook: "Voir votre livre créé", generationNeedsAttention: "La création nécessite votre attention", creatingMagicalBook: "Nous créons votre livre magique", generationFailedDescription: "Votre paiement est confirmé, mais nous n’avons pas pu terminer le livre. Vous pouvez réessayer.", generationDescription: "Nous écrivons et illustrons votre histoire. Cette fenêtre se fermera lorsque votre livre sera prêt.", waitingForPayment: "Nous attendons la confirmation du paiement avant de commencer votre livre.", addingFinalTouches: "Ajout des dernières touches magiques...", thisMayTakeAMoment: "Cela peut prendre quelques minutes.", closeStatusHint: "Vous pouvez fermer cette fenêtre et vérifier le statut sur cette page plus tard.", emailPdfNotification: "Vous recevrez un e-mail dès que le PDF sera prêt.",
+    paymentSuccessful: "Paiement réussi", confirmingPayment: "Confirmation de votre paiement", confirmingDescription: "Veuillez patienter pendant que nous confirmons votre paiement avec le serveur.", bookReady: "Votre livre personnalisé est prêt !", generationIssue: "Votre paiement est confirmé, mais un problème est survenu lors de la création du livre.", creatingBook: "Votre paiement est confirmé. Nous créons votre livre d’histoires personnalisé.", bookReference: "Référence du livre", viewBookStatus: "Voir le statut du livre", editAndRetry: "Modifier l’histoire et réessayer", retryGeneration: "Réessayer la création", changePhotoAndRetry: "Changer la photo et réessayer", creationComplete: "Votre livre est terminé !", creationCompleteDescription: "Votre livre personnalisé est prêt à être lu quand vous le souhaitez.", goToGeneratedBook: "Voir mon livre", downloadBook: "Télécharger mon livre", generationNeedsAttention: "La création nécessite votre attention", creatingMagicalBook: "Nous créons votre livre magique", generationFailedDescription: "Votre paiement est confirmé, mais nous n’avons pas pu terminer le livre. Vous pouvez réessayer.", generationDescription: "Nous écrivons et illustrons votre histoire. Cette fenêtre se fermera lorsque votre livre sera prêt.", waitingForPayment: "Nous attendons la confirmation du paiement avant de commencer votre livre.", addingFinalTouches: "Ajout des dernières touches magiques...", thisMayTakeAMoment: "Cela peut prendre quelques minutes.", closeStatusHint: "Vous pouvez fermer cette fenêtre et vérifier le statut sur cette page plus tard.", emailPdfNotification: "Vous recevrez un e-mail dès que le PDF sera prêt.",
   },
 };
 
@@ -82,6 +86,7 @@ const hardcopyCopy = {
     orderTypeValue: "Gepersonaliseerd Hardcover Verhalenboek",
     paymentStatus: "Betalingsstatus:",
     paymentStatusValue: "Betaald • In voorbereiding voor druk",
+    deliveryNotice: "Je ontvangt een e-mail met de verzendstatus zodra je boek onderweg is.",
     viewOrderedBooks: "Bekijk bestelde boeken",
     returnHome: "Terug naar startpagina",
   },
@@ -95,6 +100,7 @@ const hardcopyCopy = {
     orderTypeValue: "Personalized Hardcover Storybook",
     paymentStatus: "Payment Status:",
     paymentStatusValue: "Paid • Processing for Print",
+    deliveryNotice: "You will receive an email with the shipping status as soon as your book is on its way.",
     viewOrderedBooks: "View Ordered Books",
     returnHome: "Return Home",
   },
@@ -108,6 +114,7 @@ const hardcopyCopy = {
     orderTypeValue: "Livre d'histoires personnalisé relié",
     paymentStatus: "Statut du paiement :",
     paymentStatusValue: "Payé • En cours de préparation pour impression",
+    deliveryNotice: "Vous recevrez un e-mail avec le statut de livraison dès que votre livre sera en route.",
     viewOrderedBooks: "Voir les livres commandés",
     returnHome: "Retour à l'accueil",
   },
@@ -125,68 +132,92 @@ function HardcopyPaymentSuccess({ sessionId }: { sessionId: string | null }) {
   }, []);
 
   return (
-    <main className="min-h-[75vh] bg-[#FEF6EC] px-4 pb-16 pt-[120px] sm:px-8 sm:pt-[150px] lg:pt-[190px]">
-      <section className="mx-auto max-w-xl rounded-3xl border border-[#f3dce2] bg-[#FEFAF4] p-6 text-center shadow-[0_12px_40px_rgba(80,40,50,0.08)] sm:p-10">
-        <div className="mx-auto flex size-20 items-center justify-center rounded-2xl bg-[#E6F7ED] text-[#18B56E] shadow-sm">
-          <CheckCircle2 size={40} />
-        </div>
+    <main className="flex min-h-[calc(100vh-116px)] items-center bg-[radial-gradient(circle_at_top,_#FFFDF9,_#FEF6EC_58%,_#F8EEF5)] px-3 py-10 sm:px-6 sm:py-12">
+      <section className="relative mx-auto w-full max-w-[820px] overflow-hidden rounded-[38px] border border-white/90 bg-[#FFFDFB] px-5 py-8 text-center shadow-[0_20px_55px_rgba(85,51,70,0.16)] sm:px-10 sm:py-10">
+        <ModalConfettiDecorations />
 
-        <div className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-[#E6F7ED] px-4 py-1 font-sans text-xs font-semibold text-[#18B56E]">
+        <div className="relative z-10">
+          <Image
+            src="/images/payment-success-check.png"
+            alt=""
+            width={1536}
+            height={1024}
+            priority
+            className="mx-auto -my-5 h-[106px] w-[145px] object-contain sm:h-[120px] sm:w-[165px]"
+          />
+
+          <div className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-[#E6F7ED] px-4 py-1.5 font-sans text-xs font-semibold text-[#18B56E] sm:text-sm">
           <span className="size-2 rounded-full bg-[#18B56E]" />
           <span>{copy.confirmedBadge}</span>
-        </div>
+          </div>
 
-        <h1 className="mt-4 font-crimson text-3xl font-bold text-[#1E1E1E] sm:text-4xl">
-          {copy.title}
-        </h1>
+          <h1 className="mt-4 font-sans text-[29px] font-bold leading-tight tracking-tight text-[#162035] sm:text-[39px]">
+            {copy.title}
+          </h1>
 
-        <p className="mx-auto mt-3 max-w-md font-sans text-sm leading-relaxed text-[#66605F]">
-          {copy.description}
-        </p>
+          <p className="mx-auto mt-2 max-w-[590px] font-sans text-sm leading-snug text-[#626477] sm:text-[18px]">
+            {copy.description}
+          </p>
 
-        {/* Order Details Card */}
-        <div className="mt-6 rounded-2xl border border-[#F0E5D9] bg-white p-5 text-left shadow-sm">
-          <h2 className="font-sans text-xs font-bold uppercase tracking-wider text-[#8A7982]">
-            {copy.orderInfo}
-          </h2>
-          <div className="mt-3 divide-y divide-[#F6EFE9] font-sans text-xs text-[#514256]">
-            {sessionId && (
-              <div className="flex flex-col gap-1 py-2 sm:flex-row sm:justify-between">
-                <span className="text-[#8A7982]">{copy.orderRef}</span>
-                <span className="break-all font-mono text-[11px] font-semibold text-[#1E1E1E]">
-                  {sessionId}
+          <Image
+            src="/images/payment-success-book-hero.png"
+            alt="A magical rocket rising from an open storybook"
+            width={1536}
+            height={1024}
+            priority
+            className="mx-auto my-3 h-[145px] w-full max-w-[360px] object-contain sm:my-4 sm:h-[165px] sm:max-w-[420px]"
+          />
+
+          <div className="mt-2 rounded-[22px] border border-[#F5D6E1] bg-white/90 px-5 py-4 text-left shadow-[0_3px_12px_rgba(97,55,76,0.04)] sm:px-7 sm:py-5">
+            <h2 className="font-sans text-sm font-bold uppercase tracking-wide text-[#542565] sm:text-base">
+              {copy.orderInfo}
+            </h2>
+            <div className="mt-2 divide-y divide-[#F3E6E8] font-sans text-xs text-[#514256] sm:text-sm">
+              {sessionId && (
+                <div className="grid gap-1 py-2.5 sm:grid-cols-[150px_minmax(0,1fr)] sm:items-center">
+                  <span className="font-medium text-[#697086]">{copy.orderRef}</span>
+                  <span className="break-all font-mono text-[11px] font-semibold text-[#26304A] sm:text-xs">
+                    {sessionId}
+                  </span>
+                </div>
+              )}
+              <div className="grid gap-1 py-2.5 sm:grid-cols-[150px_minmax(0,1fr)] sm:items-center">
+                <span className="font-medium text-[#697086]">{copy.orderType}</span>
+                <span className="font-semibold text-[#26304A] sm:text-right">{copy.orderTypeValue}</span>
+              </div>
+              <div className="grid gap-1 py-2.5 sm:grid-cols-[150px_minmax(0,1fr)] sm:items-center">
+                <span className="font-medium text-[#697086]">{copy.paymentStatus}</span>
+                <span className="inline-flex items-center gap-1 font-semibold text-[#18B56E] sm:justify-self-end">
+                  <span className="size-2 rounded-full bg-[#18B56E]" />
+                  {copy.paymentStatusValue}
                 </span>
               </div>
-            )}
-            <div className="flex justify-between py-2">
-              <span className="text-[#8A7982]">{copy.orderType}</span>
-              <span className="font-semibold text-[#1E1E1E]">{copy.orderTypeValue}</span>
-            </div>
-            <div className="flex justify-between py-2">
-              <span className="text-[#8A7982]">{copy.paymentStatus}</span>
-              <span className="inline-flex items-center gap-1 font-semibold text-[#18B56E]">
-                <span className="size-1.5 rounded-full bg-[#18B56E]" />
-                {copy.paymentStatusValue}
-              </span>
             </div>
           </div>
-        </div>
 
-        <div className="mt-7 flex flex-wrap items-center justify-center gap-4">
-          <Link
-            href="/setting/ordered-book"
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#E88DA0] px-6 font-sans text-sm font-semibold text-white transition hover:bg-[#DD7893]"
-          >
-            <BookOpen size={16} />
-            <span>{copy.viewOrderedBooks}</span>
-          </Link>
-          <Link
-            href="/"
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#E88DA0] bg-transparent px-6 font-sans text-sm font-semibold text-[#E88DA0] transition hover:bg-[#FDE9EE]"
-          >
-            <Home size={16} />
-            <span>{copy.returnHome}</span>
-          </Link>
+          <div className="mt-4 flex items-center justify-center gap-3 rounded-2xl bg-[#FFF4D8] px-4 py-3 text-left sm:px-7">
+            <Truck className="size-9 shrink-0 text-[#82349B] sm:size-10" strokeWidth={1.8} />
+            <span className="border-l border-[#C3A673] pl-3 font-sans text-sm font-semibold leading-snug text-[#5C2D74] sm:text-base">
+              {copy.deliveryNotice}
+            </span>
+          </div>
+
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 sm:px-11">
+            <Link
+              href="/setting/ordered-book"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#F03479] to-[#EA2870] px-6 font-sans text-base font-bold text-white shadow-[0_6px_14px_rgba(232,40,112,0.25)] transition hover:brightness-95"
+            >
+              <BookOpen className="size-5" />
+              <span>{copy.viewOrderedBooks}</span>
+            </Link>
+            <Link
+              href="/"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-full border-2 border-[#F03479] bg-white px-6 font-sans text-base font-bold text-[#E92D71] transition hover:bg-[#FFF0F4]"
+            >
+              <Home className="size-5" />
+              <span>{copy.returnHome}</span>
+            </Link>
+          </div>
         </div>
       </section>
     </main>
@@ -263,45 +294,45 @@ function ModalConfettiDecorations() {
       aria-hidden="true"
     >
       {/* Top Left Corner */}
-      <div className="absolute -left-6 -top-6 size-28 rounded-full bg-[#E2ECE6]" />
+      <div className="absolute -left-10 -top-14 size-40 rounded-full bg-[#E2ECE6] sm:size-44" />
       <svg
-        className="absolute left-11 top-10 size-4 rotate-12 text-[#6BA4D8]"
+        className="absolute left-28 top-16 size-5 rotate-12 text-[#6BA4D8]"
         viewBox="0 0 20 20"
         fill="currentColor"
       >
         <polygon points="10,0 20,20 0,20" />
       </svg>
       <svg
-        className="absolute left-5 top-16 size-5 text-[#FFB830]"
+        className="absolute left-10 top-28 size-7 text-[#FFB830]"
         viewBox="0 0 24 24"
         fill="currentColor"
       >
         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
       </svg>
-      <span className="absolute left-4 top-28 size-2 rounded-full bg-[#FF7A59]" />
-      <span className="absolute left-16 top-6 size-2 rounded-full bg-[#FFB830]" />
+      <span className="absolute left-6 top-44 size-2.5 rounded-full bg-[#FF7A59]" />
+      <span className="absolute left-44 top-8 size-2.5 rounded-full bg-[#FFB830]" />
 
       {/* Top Right Corner */}
-      <div className="absolute -right-6 -top-6 size-28 rounded-full bg-[#FDDCD8]" />
-      <span className="absolute right-16 top-14 size-2.5 rounded-full bg-[#70B984]" />
+      <div className="absolute -right-10 -top-14 size-40 rounded-full bg-[#FDDCD8] sm:size-44" />
+      <span className="absolute right-20 top-20 size-2.5 rounded-full bg-[#70B984]" />
       <svg
-        className="absolute right-7 top-20 size-4 -rotate-45 text-[#F58778]"
+        className="absolute right-9 top-28 size-5 -rotate-45 text-[#F58778]"
         viewBox="0 0 20 20"
         fill="currentColor"
       >
         <polygon points="10,0 20,20 0,20" />
       </svg>
-      <span className="absolute right-4 top-32 size-2 rounded-full bg-[#FFB830]" />
+      <span className="absolute right-7 top-48 size-2.5 rounded-full bg-[#FFB830]" />
 
       {/* Bottom Left Corner */}
-      <div className="absolute -bottom-6 -left-6 size-24 rounded-full bg-[#FCE3EB]" />
-      <span className="absolute bottom-24 left-4 size-2 rounded-full bg-[#70B984]" />
-      <span className="absolute bottom-16 left-5 size-2 rounded-full bg-[#FFB830]" />
+      <div className="absolute -bottom-10 -left-10 size-36 rounded-full bg-[#FCE3EB] sm:size-40" />
+      <span className="absolute bottom-32 left-6 size-2.5 rounded-full bg-[#70B984]" />
+      <span className="absolute bottom-20 left-8 size-2.5 rounded-full bg-[#FFB830]" />
 
       {/* Bottom Right Corner */}
-      <div className="absolute -bottom-8 -right-8 size-28 rounded-full bg-[#FDE8B3]" />
+      <div className="absolute -bottom-12 -right-12 size-40 rounded-full bg-[#FDE8B3] sm:size-44" />
       <svg
-        className="absolute bottom-2 right-2 h-16 w-16"
+        className="absolute bottom-1 right-2 h-24 w-24"
         viewBox="0 0 60 60"
         fill="none"
       >
@@ -313,7 +344,7 @@ function ModalConfettiDecorations() {
           strokeLinecap="round"
         />
       </svg>
-      <span className="absolute bottom-24 right-4 size-2 rounded-full bg-[#FF7A59]" />
+      <span className="absolute bottom-32 right-7 size-2.5 rounded-full bg-[#FF7A59]" />
     </div>
   );
 }
@@ -333,6 +364,7 @@ function BookGenerationPaymentSuccess({
   const [modalOpen, setModalOpen] = useState(true);
   const [error, setError] = useState("");
   const [retrying, setRetrying] = useState(false);
+  const [downloading, setDownloading] = useState(false);
   const [pollVersion, setPollVersion] = useState(0);
   const [generationProgress, setGenerationProgress] = useState(0);
   const generationStartedAtRef = useRef<number | null>(null);
@@ -424,9 +456,43 @@ function BookGenerationPaymentSuccess({
     router.push("/book-builder/InformationAboutCharacters");
   };
 
+  const downloadBook = async () => {
+    if (downloading) return;
+    setDownloading(true);
+    setError("");
+    try {
+      const token = localStorage.getItem("token") || session?.user?.accessToken;
+      if (!token) throw new Error("Please sign in to download your book.");
+
+      const response = await fetch(
+        `${getApiBaseUrl()}/books/${encodeURIComponent(bookId)}/download?refresh=${Date.now()}`,
+        { headers: { Authorization: `Bearer ${token}` }, cache: "no-store" },
+      );
+      if (!response.ok) {
+        const result = await response.json().catch(() => null);
+        throw new Error(result?.message || "Unable to prepare your PDF download.");
+      }
+
+      const pdfBlob = await response.blob();
+      const objectUrl = URL.createObjectURL(pdfBlob);
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.download = `${(book?.title || "personalized-storybook").replace(/[^a-zA-Z0-9_-]/g, "_")}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(objectUrl);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unable to prepare your PDF download.");
+    } finally {
+      setDownloading(false);
+    }
+  };
+
   const paid = Boolean(book?.paidAt);
   const completed = paid && book?.status === "COMPLETED";
   const failed = paid && book?.status === "FAILED";
+  const isGenerating = paid && !completed && !failed;
   const failureType = book?.failureType;
 
   // The API reports only the final book status. Simulate a 15-minute journey,
@@ -465,6 +531,85 @@ function BookGenerationPaymentSuccess({
 
     return () => window.clearInterval(timer);
   }, [paid, failed, completed]);
+
+  if (completed && !modalOpen) {
+    return (
+      <main className="flex items-center bg-[radial-gradient(circle_at_top,_#FFFDF9,_#FEF6EC_55%,_#F8EEF5)] px-3 py-6 sm:px-6 sm:py-9">
+        <section className="relative mx-auto w-full max-w-[680px] overflow-hidden rounded-[38px] border border-white/90 bg-[#FFFDFB] px-6 py-7 text-center shadow-[0_20px_55px_rgba(85,51,70,0.16)] sm:px-10 sm:py-8">
+          <ModalConfettiDecorations />
+
+          <div className="relative z-10">
+            <Image
+              src="/images/payment-success-check.png"
+              alt=""
+              width={1536}
+              height={1024}
+              priority
+              className="mx-auto -my-5 h-[114px] w-[150px] object-contain sm:h-[128px] sm:w-[170px]"
+            />
+
+            <h1 className="mt-4 font-sans text-[30px] font-bold leading-tight tracking-tight text-[#162035] sm:text-[38px]">
+              {copy.paymentSuccessful}!
+            </h1>
+            <p className="mt-1 font-sans text-[17px] font-medium text-[#626477] sm:text-[20px]">
+              {copy.bookReady}
+            </p>
+            <p className="mt-2 break-all font-sans text-xs font-medium text-[#697086] sm:text-sm">
+              {copy.bookReference}: {book?._id || bookId}
+            </p>
+
+            <Image
+              src="/images/payment-success-book-hero.png"
+              alt="A magical rocket rising from an open storybook"
+              width={1536}
+              height={1024}
+              priority
+              className="mx-auto my-3 h-[165px] w-full max-w-[390px] object-contain sm:my-4 sm:h-[185px] sm:max-w-[450px]"
+            />
+
+            <div className="rounded-[24px] border border-[#CBEBD9] bg-[#F3FCF5]/90 px-5 py-5 shadow-[0_3px_12px_rgba(42,140,91,0.05)] sm:px-9 sm:py-6">
+              <div className="flex items-center justify-center gap-3">
+                <span className="flex size-8 items-center justify-center rounded-full bg-[#2DC76B] text-white shadow-sm">
+                  <CheckCircle2 className="size-5" strokeWidth={3} />
+                </span>
+                <h2 className="font-sans text-[21px] font-bold text-[#162035] sm:text-[25px]">
+                  {copy.creationComplete}
+                </h2>
+              </div>
+              <p className="mx-auto mt-2 max-w-[490px] font-sans text-sm leading-relaxed text-[#626477] sm:text-[16px]">
+                {copy.creationCompleteDescription}
+              </p>
+
+              <div className="mx-auto mt-4 flex w-full max-w-[330px] flex-col gap-2.5">
+                <Link
+                  href={`/story-books/book-details/${book?._id || bookId}`}
+                  className="inline-flex h-11 items-center justify-center gap-3 rounded-full bg-gradient-to-r from-[#F03479] to-[#EA2870] px-6 font-sans text-base font-bold text-white shadow-[0_6px_14px_rgba(232,40,112,0.25)] transition hover:brightness-95 sm:h-12 sm:text-lg"
+                >
+                  <BookOpen className="size-5" />
+                  {copy.goToGeneratedBook}
+                </Link>
+                <button
+                  type="button"
+                  onClick={downloadBook}
+                  disabled={downloading}
+                  className="inline-flex h-11 items-center justify-center gap-3 rounded-full bg-gradient-to-r from-[#F03479] to-[#EA2870] px-6 font-sans text-base font-bold text-white shadow-[0_6px_14px_rgba(232,40,112,0.25)] transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60 sm:h-12 sm:text-lg"
+                >
+                  <Download className="size-5" />
+                  {downloading ? `${copy.downloadBook}…` : copy.downloadBook}
+                </button>
+              </div>
+
+              {error && (
+                <p role="alert" className="mt-3 font-sans text-xs text-[#B74760]">
+                  {formatGenerationError(error)}
+                </p>
+              )}
+            </div>
+          </div>
+        </section>
+      </main>
+    );
+  }
 
   return (
     <main className="flex min-h-[calc(100vh-80px)] items-center bg-[radial-gradient(circle_at_top,_#FFF9F1,_#FEF6EC_52%,_#F8EEF5)] px-4 py-8 sm:px-8 sm:py-12">
@@ -579,19 +724,19 @@ function BookGenerationPaymentSuccess({
       {/* Generation Status Modal - ONLY for Book Generation flow */}
       {modalOpen && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-[#2B2330]/50 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-[#514A52]/35 p-3 backdrop-blur-[2px] sm:p-6"
           role="dialog"
           aria-modal="true"
           aria-labelledby="generation-modal-title"
         >
-          <div className="relative w-full max-w-[450px] overflow-hidden rounded-[36px] border border-[#FBE5EC] bg-[#FFFDFB] p-6 pt-7 pb-7 text-center shadow-[0_24px_60px_rgba(60,30,50,0.22)] sm:p-8 sm:pt-9 sm:pb-8">
+          <div className="relative w-full max-w-[680px] overflow-hidden rounded-[38px] border border-white/90 bg-[#FFFDFB] px-6 py-8 text-center shadow-[0_24px_60px_rgba(60,30,50,0.22)] sm:px-12 sm:py-11">
             <ModalConfettiDecorations />
 
             <button
               type="button"
               aria-label="Close status"
               onClick={() => setModalOpen(false)}
-              className="absolute right-4 top-4 z-20 flex size-9 items-center justify-center rounded-full text-[#4B4650] transition hover:bg-[#FCE6EE] hover:text-[#252025] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0]"
+              className="absolute right-5 top-5 z-20 flex size-9 items-center justify-center rounded-full text-[#625B65] transition hover:bg-[#FCE6EE] hover:text-[#252025] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] sm:right-7 sm:top-7"
             >
               <X size={20} strokeWidth={2.2} />
             </button>
@@ -599,12 +744,12 @@ function BookGenerationPaymentSuccess({
             <div className="relative z-10 flex flex-col items-center">
               {/* Top Icon */}
               <div
-                className={`flex size-20 items-center justify-center rounded-[24px] sm:size-[84px] ${
+                className={`flex items-center justify-center rounded-[24px] ${
                   failed
-                    ? "bg-[#FFF0F2] text-[#B74760]"
+                    ? "size-20 bg-[#FFF0F2] text-[#B74760]"
                     : completed
-                      ? "bg-[#E6F7ED] text-[#18B56E]"
-                      : "bg-[#FFE4ED] shadow-sm"
+                      ? "size-20 bg-[#E6F7ED] text-[#18B56E]"
+                      : "size-24 rounded-[28px] bg-[#FFE4ED] shadow-sm sm:size-[116px]"
                 }`}
               >
                 {failed ? (
@@ -612,14 +757,18 @@ function BookGenerationPaymentSuccess({
                 ) : completed ? (
                   <CheckCircle2 size={36} />
                 ) : (
-                  <RocketIllustration className="h-14 w-12" />
+                  <RocketIllustration className="h-[68px] w-[58px] sm:h-[82px] sm:w-[68px]" />
                 )}
               </div>
 
               {/* Title */}
               <h2
                 id="generation-modal-title"
-                className="mt-5 font-sans text-2xl font-bold leading-tight tracking-tight text-[#162035] sm:text-[28px]"
+                className={`mt-6 font-sans font-bold leading-[1.12] tracking-tight text-[#162035] ${
+                  isGenerating
+                    ? "mx-auto max-w-[540px] text-[30px] sm:text-[40px]"
+                    : "text-2xl sm:text-[28px]"
+                }`}
               >
                 {failed
                   ? copy.generationNeedsAttention
@@ -631,7 +780,11 @@ function BookGenerationPaymentSuccess({
               </h2>
 
               {/* Subtitle */}
-              <p className="mt-2.5 max-w-[340px] font-sans text-sm leading-[1.5] text-[#5A5560] sm:text-[15px]">
+              <p className={`mx-auto mt-3 font-sans leading-[1.5] text-[#5A5560] ${
+                isGenerating
+                  ? "max-w-[530px] text-[16px] sm:text-[19px]"
+                  : "max-w-[340px] text-sm sm:text-[15px]"
+              }`}>
                 {failed
                   ? copy.generationFailedDescription
                   : completed
@@ -655,8 +808,14 @@ function BookGenerationPaymentSuccess({
               )}
 
               {paid && !failed && (
-                <div className="mt-5 w-full rounded-[22px] border border-[#FBD6E0] bg-white p-4 shadow-sm sm:p-5">
-                  <div className="flex items-center justify-between font-sans text-xs font-bold sm:text-[13px]">
+                <div className={`w-full border border-[#FBD6E0] bg-white shadow-[0_3px_10px_rgba(97,55,76,0.03)] ${
+                  isGenerating
+                    ? "mt-7 rounded-[22px] p-5 sm:px-6 sm:py-5"
+                    : "mt-5 rounded-[22px] p-4 sm:p-5"
+                }`}>
+                  <div className={`flex items-center justify-between font-sans font-bold ${
+                    isGenerating ? "text-[15px] sm:text-[18px]" : "text-xs sm:text-[13px]"
+                  }`}>
                     <span className="text-[#162035]">
                       {completed ? copy.creationComplete : copy.addingFinalTouches}
                     </span>
@@ -665,7 +824,9 @@ function BookGenerationPaymentSuccess({
                     </span>
                   </div>
                   <div
-                    className="mt-3 h-3 w-full overflow-hidden rounded-full bg-[#FCE3EB]"
+                    className={`w-full overflow-hidden rounded-full bg-[#FCE3EB] ${
+                      isGenerating ? "mt-4 h-4" : "mt-3 h-3"
+                    }`}
                     role="progressbar"
                     aria-label="Book generation progress"
                     aria-valuemin={0}
@@ -681,7 +842,9 @@ function BookGenerationPaymentSuccess({
                       style={{ width: `${Math.max(generationProgress, 5)}%` }}
                     />
                   </div>
-                  <p className="mt-3 font-sans text-xs font-normal text-[#756F7C]">
+                  <p className={`font-sans font-normal text-[#756F7C] ${
+                    isGenerating ? "mt-3 text-sm sm:text-[16px]" : "mt-3 text-xs"
+                  }`}>
                     {completed ? copy.creationCompleteDescription : copy.thisMayTakeAMoment}
                   </p>
                 </div>
@@ -738,14 +901,18 @@ function BookGenerationPaymentSuccess({
               )}
 
               {/* Hint text below card */}
-              <p className="mt-4 max-w-[320px] font-sans text-xs font-medium leading-relaxed text-[#5A5560] sm:text-[13px]">
+              <p className={`mx-auto max-w-[420px] font-sans font-medium leading-relaxed text-[#5A5560] ${
+                isGenerating ? "mt-5 text-sm sm:text-[16px]" : "mt-4 text-xs sm:text-[13px]"
+              }`}>
                 {copy.closeStatusHint}
               </p>
 
               {/* Email Pill Banner */}
-              <div className="mt-4 inline-flex items-center justify-center gap-2 rounded-full border border-[#FCDCE6] bg-[#FFEBF1] px-4 py-2 sm:px-5 sm:py-2.5">
+              <div className={`inline-flex items-center justify-center gap-2 rounded-full border border-[#FCDCE6] bg-[#FFEBF1] ${
+                isGenerating ? "mt-5 px-5 py-2.5 sm:px-7 sm:py-3" : "mt-4 px-4 py-2 sm:px-5 sm:py-2.5"
+              }`}>
                 <svg
-                  className="size-4 shrink-0 text-[#ED3875]"
+                  className={isGenerating ? "size-6 shrink-0 text-[#ED3875]" : "size-4 shrink-0 text-[#ED3875]"}
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -757,7 +924,9 @@ function BookGenerationPaymentSuccess({
                   <rect width="20" height="16" x="2" y="4" rx="2" />
                   <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                 </svg>
-                <span className="font-sans text-xs font-semibold text-[#162035] sm:text-[12.5px]">
+                <span className={`font-sans font-semibold text-[#162035] ${
+                  isGenerating ? "text-sm sm:text-[16px]" : "text-xs sm:text-[12.5px]"
+                }`}>
                   {copy.emailPdfNotification}
                 </span>
               </div>

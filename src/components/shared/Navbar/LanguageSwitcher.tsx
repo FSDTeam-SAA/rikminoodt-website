@@ -103,7 +103,7 @@ export default function LanguageSwitcher({ className = "", isMobile = false }: L
           />
         </div>
         <span className="font-fredoka text-sm font-semibold uppercase text-[#5a5358] transition-colors group-hover:text-[#e77f9a]">
-          {current.code.toUpperCase()}
+          {current.code === "nl" ? "DU" : current.code.toUpperCase()}
         </span>
         <ChevronDown
           size={14}

@@ -19,6 +19,9 @@ import {
 import { getApiBaseUrl } from "@/config/api";
 import { useLanguage } from "@/components/providers/LanguageProvider";
 import { getExploreStoryWelcomeText, getExploreStory } from "@/lib/explore-stories-data";
+import { ILLUSTRATION_MAP, MESSAGE_MAP, THEME_MAP } from "../../book-builder/_components/api-mappers";
+import { ALL_SUBJECTS, getLocalizedSubjectLabel } from "../../book-builder/_components/subject-options";
+import { useBookBuilderTranslations } from "../../book-builder/_components/useBookBuilderTranslations";
 
 const detailLabels = {
   en: { headingStory: "Story", headingBooks: "Personalised Children's Books", details: "Story Details", title: "Title", ages: "Ages", years: "years", characters: "Characters", theme: "Theme", subject: "Subject", message: "Message", illustration: "Illustration", language: "Language", creator: "Creator", story: "Story", read: "Read Story", download: "Download PDF", generating: "Generating PDF…", hardcopy: "Order Hardcopy", photos: "Photos used", characterPhoto: "Character photo", characterPhotos: "Character photos", artwork: "Story artwork", illustrationRole: "Story illustration" },
@@ -90,6 +93,31 @@ const photos = [
   },
 ];
 
+const getChoiceLabel = (value: string, map: Record<string, string>) =>
+  Object.entries(map).find(([, apiValue]) => apiValue === value)?.[0] || value;
+
+const ageChoiceLabels: Record<string, string> = {
+  "0-2": "0-2 Years",
+  "3-5": "3-5 Years",
+  "3-9": "5-9 Years",
+  "5-9": "5-9 Years",
+  "10+": "10+ Years",
+};
+
+const bookLanguageKeys: Record<string, "English" | "Dutch" | "French"> = {
+  ENGLISH: "English",
+  English: "English",
+  ENGELS: "English",
+  DUTCH: "Dutch",
+  Dutch: "Dutch",
+  NEDERLANDS: "Dutch",
+  Nederlands: "Dutch",
+  FRENCH: "French",
+  French: "French",
+  FRANÇAIS: "French",
+  Français: "French",
+};
+
 interface StoryCharacter {
   name?: string;
   animalName?: string;
@@ -133,6 +161,13 @@ interface FetchedBookData {
 const StoryDetails = ({ storyId }: { storyId: string }) => {
   const { data: session, status: sessionStatus } = useSession();
   const { language } = useLanguage();
+  const {
+    bb,
+    translateAge,
+    translateTheme,
+    translateMessage,
+    translateIllustration,
+  } = useBookBuilderTranslations();
   const labels = detailLabels[language];
   const staticExploreStory = getExploreStory(storyId, language);
   const hasStaticExploreStory = Boolean(staticExploreStory);
@@ -229,15 +264,31 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
   const activeBook = staticExploreBook || fetchedBook;
   const cover = activeBook?.coverImageUrl || (isMaxStory ? "/images/exp_c_1.jpg" : staticStory.cover);
   const coverTitle = activeBook?.title || (isMaxStory ? (language === "nl" ? "Max ziet de seizoenen: Herfstavonturen" : "Max Sees the Seasons: Autumn Adventures") : staticStory.title);
+  const localizeTheme = (value?: string) =>
+    value ? translateTheme(getChoiceLabel(value, THEME_MAP)) : "";
+  const localizeSubject = (value?: string) => {
+    if (!value) return "";
+    const subject = ALL_SUBJECTS.find((item) => item.value === value || item.label === value);
+    return subject ? getLocalizedSubjectLabel(subject, language) : value.replace(/_/g, " ");
+  };
+  const localizeMessage = (value?: string) =>
+    value ? translateMessage(getChoiceLabel(value, MESSAGE_MAP)) : "";
+  const localizeIllustration = (value?: string) =>
+    value ? translateIllustration(getChoiceLabel(value, ILLUSTRATION_MAP)) : "";
+  const localizeBookLanguage = (value?: string) => {
+    if (!value) return "";
+    const key = bookLanguageKeys[value];
+    return key ? bb?.bookLanguages?.[key] || key : value;
+  };
   const activeDetails = activeBook
     ? [
-        [labels.ages, `${activeBook.ageCategory || "3-5"} ${labels.years}`],
+        [labels.ages, translateAge(ageChoiceLabels[activeBook.ageCategory || "3-5"] || activeBook.ageCategory || "3-5")],
         [labels.characters, String(staticExploreStory?.characterCount || activeBook.characters?.length || 1)],
-        [labels.theme, activeBook.theme ? String(activeBook.theme).replace(/_/g, " ") : (language === "nl" ? "Avontuur" : "Adventure")],
-        ...(activeBook.subject ? [[labels.subject, String(activeBook.subject).replace(/_/g, " ")]] : []),
-        ...(activeBook.specialMessage ? [[labels.message, String(activeBook.specialMessage).replace(/_/g, " ")]] : []),
-        [labels.illustration, activeBook.illustrationStyle ? String(activeBook.illustrationStyle).replace(/_/g, " ") : "Animation 3D"],
-        [labels.language, activeBook.language || (language === "nl" ? "Nederlands" : language === "fr" ? "Français" : "English")],
+        [labels.theme, localizeTheme(activeBook.theme) || translateTheme("Adventure")],
+        ...(activeBook.subject ? [[labels.subject, localizeSubject(activeBook.subject)]] : []),
+        ...(activeBook.specialMessage ? [[labels.message, localizeMessage(activeBook.specialMessage)]] : []),
+        [labels.illustration, localizeIllustration(activeBook.illustrationStyle) || translateIllustration("3d Animation")],
+        [labels.language, localizeBookLanguage(activeBook.language) || localizeBookLanguage(language === "nl" ? "Dutch" : language === "fr" ? "French" : "English")],
         ...(activeBook.creatorName ? [[labels.creator, activeBook.creatorName]] : []),
       ]
     : staticStory.details;

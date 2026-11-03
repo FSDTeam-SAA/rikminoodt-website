@@ -378,7 +378,13 @@
     "confirmEmail": "Confirmer l'email",
     "password": "Mot de passe (min. 8 caractères)",
     "passwordPlaceholder": "Choisissez un mot de passe fort",
-    "pricingNotice": "ⓘ Presque terminé. Votre livre numérique coûte 8,99 €. Si vous commandez également un livre relié plus tard, ce montant en sera déduit.",
+    "creatorNameError": "Saisissez le nom du créateur (2–100 caractères).",
+    "bookLanguages": {
+      "English": "Anglais",
+      "Dutch": "Néerlandais",
+      "French": "Français"
+    },
+    "pricingNotice": "ⓘ Presque terminé. Votre livre numérique coûte 8,99 €.",
     "characters": "Personnages",
     "addCharacter": "Ajouter un personnage",
     "labels": {
