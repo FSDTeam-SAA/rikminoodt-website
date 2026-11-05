@@ -2,8 +2,6 @@
 
 import Image from "next/image";
 import { Star } from "lucide-react";
-import { useEffect, useState } from "react";
-import { getApiBaseUrl } from "@/config/api";
 import { useLanguage } from "@/components/providers/LanguageProvider";
 
 type Review = {
@@ -13,62 +11,41 @@ type Review = {
   photoUrl?: string;
   user?: { name?: string; username?: string; profileImage?: string };
   isPlaceholder?: boolean;
+  bookTitle?: string;
 };
 
-type ReviewSummary = { averageRating: number; totalReviews: number };
-
 const reviewColours = ["bg-[#f8dfe0]", "bg-[#dceef3]", "bg-[#fff0c8]", "bg-[#e8ddf2]", "bg-[#e2f1e4]"];
-const REVIEW_CARD_COUNT = 10;
+const clientBookTitles = [
+  "Emma's Boekerello Boek",
+  "Lucas' Boekerello Boek",
+  "Olivia en Noah's Boekerello Boek",
+  "Mila's Boekerello Boek",
+  "Finn's Boekerello Boek",
+  "Louise en Jules' Boekerello Boek",
+  "Arthur's Boekerello Boek",
+  "Ella's Boekerello Boek",
+  "Liam en Sofia's Boekerello Boek",
+  "Juliette's Boekerello Boek",
+  "Leon's Boekerello Boek",
+  "Marie en Louis' Boekerello Boek",
+  "Alice's Boekerello Boek",
+  "Matteo's Boekerello Boek",
+  "Victor en Rosanne's Boekerello Boek",
+] as const;
 
 const BookerelloReviews = () => {
   const { t } = useLanguage();
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [summary, setSummary] = useState<ReviewSummary | null>(null);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    const loadReviews = async () => {
-      try {
-        const apiBaseUrl = getApiBaseUrl();
-        const [reviewsResponse, summaryResponse] = await Promise.all([
-          fetch(`${apiBaseUrl}/reviews?limit=${REVIEW_CARD_COUNT}`, { signal: controller.signal, cache: "no-store" }),
-          fetch(`${apiBaseUrl}/reviews/summary`, { signal: controller.signal, cache: "no-store" }),
-        ]);
-        const reviewsPayload = await reviewsResponse.json().catch(() => null);
-        const summaryPayload = await summaryResponse.json().catch(() => null);
-        if (!controller.signal.aborted && reviewsResponse.ok) {
-          const apiReviews = reviewsPayload?.data?.reviews;
-          setReviews(Array.isArray(apiReviews) ? apiReviews.slice(0, REVIEW_CARD_COUNT) : []);
-        }
-        if (!controller.signal.aborted && summaryResponse.ok) setSummary(summaryPayload?.data ?? null);
-      } catch (error) {
-        if ((error as Error).name !== "AbortError") {
-          setReviews([]);
-          setSummary(null);
-        }
-      }
-    };
-    void loadReviews();
-    return () => controller.abort();
-  }, []);
-
-  const averageRating = summary?.averageRating ?? 4.8;
-  const totalReviews = summary?.totalReviews ?? reviews.length;
-  const ratingText = totalReviews
-    ? `${averageRating.toFixed(1)} · ${totalReviews} ${totalReviews === 1 ? t.reviews.reviewSingular : t.reviews.reviewPlural}`
-    : t.reviews.ratingText;
+  const averageRating = 4.8;
   const placeholderReviews: Review[] = t.reviews.placeholderReviews.map(({ name, comment }, index) => ({
     _id: `placeholder-review-${index + 1}`,
     rating: 5,
     comment,
-    photoUrl: "/images/book_reveiew.jpg",
+    photoUrl: `/images/rev_${index + 1}.jpeg`,
     user: { name, profileImage: "/images/book_customer.jpg" },
     isPlaceholder: true,
+    bookTitle: clientBookTitles[index],
   }));
-  const visibleReviews = [
-    ...reviews,
-    ...placeholderReviews.slice(0, Math.max(0, REVIEW_CARD_COUNT - reviews.length)),
-  ];
+  const visibleReviews = placeholderReviews;
 
   return (
     <section aria-labelledby="reviews-heading" className="py-14 sm:py-16 lg:mb-32 lg:pb-[25px] lg:pt-0">
@@ -80,7 +57,7 @@ const BookerelloReviews = () => {
             <span className="flex gap-1 text-[#f6aa16]" aria-hidden="true">
               {Array.from({ length: 5 }).map((_, index) => <Star key={index} size={18} fill={index < Math.round(averageRating) ? "currentColor" : "none"} strokeWidth={1.5} />)}
             </span>
-            <span className="text-xs text-[#607cb2] lg:text-sm">{ratingText}</span>
+            <span className="text-xs text-[#607cb2] lg:text-sm">{t.reviews.ratingText}</span>
           </div>
         </header>
 
@@ -93,14 +70,13 @@ const BookerelloReviews = () => {
                   <div className="relative overflow-hidden rounded-sm">
                     <Image src={review.photoUrl} alt={t.reviews.photoAlt.replace("{name}", reviewerName)} width={510} height={292} className="aspect-[1.747] w-full object-cover xl:h-[141px] xl:aspect-auto" />
                     {review.isPlaceholder && (
-                      <span className="absolute bottom-2 right-2 flex h-16 w-[182px] flex-col items-center justify-center rounded-2xl border border-[#efafda] bg-white/90 px-3 text-center shadow-sm xl:bottom-1 xl:right-1 xl:h-10 xl:w-[108px] xl:rounded-lg xl:px-1">
-                        <strong className="text-base leading-tight text-[#ed3a98] xl:text-[9px]">{t.reviews.bookLabelTitle}</strong>
-                        <strong className="mt-1 text-xs leading-tight text-[#7427d7] xl:mt-0.5 xl:text-[8px]">{t.reviews.bookLabelSubtitle}</strong>
+                      <span className="absolute bottom-2 right-2 flex min-h-16 w-[182px] items-center justify-center rounded-2xl border border-[#efafda] bg-white/90 px-3 py-1 text-center shadow-sm xl:bottom-1 xl:right-1 xl:min-h-10 xl:w-[108px] xl:rounded-lg xl:px-1">
+                        <strong className="line-clamp-2 text-xs leading-tight text-[#7427d7] xl:text-[8px]">{review.bookTitle}</strong>
                       </span>
                     )}
                   </div>
                 )}
-                <div className={`${review.photoUrl ? "mt-4 xl:mt-2" : ""} flex items-center gap-3 xl:gap-2`}>
+                <div className={`${review.photoUrl || review.isPlaceholder ? "mt-4 xl:mt-2" : ""} flex items-center gap-3 xl:gap-2`}>
                   {review.user?.profileImage ? <Image src={review.user.profileImage} alt="" width={56} height={56} className="size-11 rounded-full border-2 border-[#eb9bad] object-cover xl:size-7 xl:border-0" /> : <span className="flex size-11 items-center justify-center rounded-full border-2 border-[#eb9bad] bg-white/70 font-sans text-sm font-semibold text-[#A06676] xl:size-7 xl:border-0 xl:text-xs" aria-hidden="true">{reviewerName.slice(0, 1).toUpperCase()}</span>}
                   <span className="min-w-0 flex-1 truncate text-[clamp(1.25rem,2.25vw,2rem)] font-medium leading-none text-[#262224] xl:text-base xl:text-[#3f3a3e]">{reviewerName}</span>
                   <span className="flex shrink-0 gap-0.5 text-[#ffb30e] xl:text-[#f6aa16]" aria-label={t.reviews.starRatingAria.replace("{rating}", String(review.rating))}>{Array.from({ length: 5 }).map((_, starIndex) => <Star key={starIndex} size={18} fill={starIndex < review.rating ? "currentColor" : "none"} strokeWidth={1.5} className="xl:size-3" />)}</span>

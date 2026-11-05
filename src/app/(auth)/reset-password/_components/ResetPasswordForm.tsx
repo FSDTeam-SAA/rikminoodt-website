@@ -6,9 +6,13 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ArrowLeft, CheckCircle2, Eye, EyeOff, Loader2 } from "lucide-react";
 import { getApiBaseUrl } from "@/config/api";
+import AuthBrand from "../../_components/AuthBrand";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function ResetPasswordForm() {
   const router = useRouter();
+  const { t } = useLanguage();
+  const copy = t.auth.resetPassword;
   const searchParams = useSearchParams();
   const emailParam = searchParams.get("email");
 
@@ -35,17 +39,17 @@ export default function ResetPasswordForm() {
     setErrorMessage("");
 
     if (!newPassword || !confirmPassword) {
-      setErrorMessage("Please fill in both password fields.");
+      setErrorMessage(copy.missingPasswords);
       return;
     }
 
     if (newPassword.length < 6) {
-      setErrorMessage("Password must be at least 6 characters long.");
+      setErrorMessage(copy.passwordTooShort);
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setErrorMessage("Passwords do not match. Please verify.");
+      setErrorMessage(copy.passwordsDoNotMatch);
       return;
     }
 
@@ -61,7 +65,7 @@ export default function ResetPasswordForm() {
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data?.message || "Failed to reset password.");
+        throw new Error(data?.message || copy.failed);
       }
 
       setIsSuccess(true);
@@ -70,7 +74,7 @@ export default function ResetPasswordForm() {
       }, 2000);
     } catch (err: unknown) {
       setErrorMessage(
-        err instanceof Error ? err.message : "Failed to reset password. Please try again."
+        err instanceof Error ? err.message : copy.failed
       );
     } finally {
       setIsLoading(false);
@@ -85,7 +89,7 @@ export default function ResetPasswordForm() {
           <div className="relative aspect-[385/542] w-full max-w-[400px] rounded-xl bg-[#F5F1FF] sm:max-w-[440px] lg:max-w-none">
             <Image
               src="/images/auth_4.png"
-              alt="Boekerello Underwater Adventure"
+              alt={copy.artworkAlt}
               fill
               sizes="(max-width: 1024px) 90vw, 480px"
               priority
@@ -103,31 +107,19 @@ export default function ResetPasswordForm() {
               className="inline-flex items-center gap-2 font-sans text-xs text-[#2A2A2A] transition-colors hover:text-[#E88DA0]"
             >
               <ArrowLeft size={15} />
-              <span>Back to sign In</span>
+              <span>{t.auth.backToSignIn}</span>
             </Link>
           </div>
 
-          {/* Logo */}
-          <div className="mt-8 flex justify-center">
-            <Link href="/" aria-label="Boekerello Home">
-              <Image
-                src="/images/logo.png"
-                alt="Boekerello"
-                width={190}
-                height={55}
-                priority
-                className="h-auto w-[155px] sm:w-[180px]"
-              />
-            </Link>
-          </div>
+          <AuthBrand className="mt-8" />
 
           {/* Headings */}
           <div className="mt-7 text-center">
             <h1 className="font-crimson text-[30px] font-bold text-[#1E1E1E] sm:text-[34px]">
-              Reset Password?
+              {copy.title}
             </h1>
             <p className="mx-auto mt-2 max-w-[360px] font-sans text-sm leading-relaxed text-[#5A6578]">
-              Please enter a new password for your account. Use a strong password to keep your account secure.
+              {copy.description}
             </p>
           </div>
 
@@ -136,7 +128,7 @@ export default function ResetPasswordForm() {
             {/* New Password */}
             <div>
               <label className="mb-1.5 block font-sans text-sm font-medium text-[#252025]">
-                New Password
+                {copy.newPassword}
               </label>
               <div className="relative">
                 <input
@@ -156,7 +148,7 @@ export default function ResetPasswordForm() {
                   type="button"
                   onClick={() => setShowNewPassword(!showNewPassword)}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A0A8B4] transition hover:text-[#5A6578]"
-                  aria-label={showNewPassword ? "Hide password" : "Show password"}
+                  aria-label={showNewPassword ? copy.hidePassword : copy.showPassword}
                 >
                   {showNewPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -166,7 +158,7 @@ export default function ResetPasswordForm() {
             {/* Confirm Password */}
             <div>
               <label className="mb-1.5 block font-sans text-sm font-medium text-[#252025]">
-                Confirm Password
+                {copy.confirmPassword}
               </label>
               <div className="relative">
                 <input
@@ -186,7 +178,7 @@ export default function ResetPasswordForm() {
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A0A8B4] transition hover:text-[#5A6578]"
-                  aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                  aria-label={showConfirmPassword ? copy.hidePassword : copy.showPassword}
                 >
                   {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -196,7 +188,7 @@ export default function ResetPasswordForm() {
             {isSuccess && (
               <div className="flex items-center gap-2 rounded-[10px] bg-[#E6F7ED] p-3 text-xs font-medium text-[#18B56E]">
                 <CheckCircle2 size={16} />
-                <span>Password changed successfully! Redirecting to login...</span>
+                <span>{copy.success}</span>
               </div>
             )}
 
@@ -213,7 +205,7 @@ export default function ResetPasswordForm() {
               className="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#E88DA0] font-sans text-sm font-medium text-white shadow-[0_4px_14px_rgba(232,141,160,0.28)] transition hover:bg-[#DE778C] disabled:opacity-60"
             >
               {isLoading && <Loader2 size={16} className="animate-spin" />}
-              <span>{isLoading ? "Updating..." : "Change Password"}</span>
+              <span>{isLoading ? copy.updating : copy.submit}</span>
             </button>
           </form>
         </div>

@@ -6,9 +6,13 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
 import { ArrowLeft, Eye, EyeOff, Loader2 } from "lucide-react";
+import AuthBrand from "../../_components/AuthBrand";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function LoginForm() {
   const router = useRouter();
+  const { t } = useLanguage();
+  const copy = t.auth.login;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -31,7 +35,7 @@ export default function LoginForm() {
     setErrorMessage("");
 
     if (!email || !password) {
-      setErrorMessage("Please enter both email and password.");
+      setErrorMessage(copy.missingCredentials);
       return;
     }
 
@@ -77,7 +81,7 @@ export default function LoginForm() {
       router.refresh();
     } catch (err: unknown) {
       setErrorMessage(
-        err instanceof Error ? err.message : "Failed to log in. Please check your credentials."
+        err instanceof Error ? err.message : copy.failed
       );
     } finally {
       setIsLoading(false);
@@ -92,7 +96,7 @@ export default function LoginForm() {
           <div className="relative aspect-[385/542] w-full max-w-[400px] rounded-xl bg-[#F7FBEF] sm:max-w-[440px] lg:max-w-none">
             <Image
               src="/images/auth_1.png"
-              alt="Boekerello Space Adventure"
+              alt={copy.artworkAlt}
               fill
               sizes="(max-width: 1024px) 90vw, 480px"
               priority
@@ -110,31 +114,19 @@ export default function LoginForm() {
               className="inline-flex items-center gap-2 font-sans text-xs text-[#2A2A2A] transition-colors hover:text-[#E88DA0]"
             >
               <ArrowLeft size={15} />
-              <span>Back to sign In</span>
+              <span>{t.auth.backToSignIn}</span>
             </Link>
           </div>
 
-          {/* Logo */}
-          <div className="mt-6 flex justify-center sm:mt-7">
-            <Link href="/" aria-label="Boekerello Home">
-              <Image
-                src="/images/logo.png"
-                alt="Boekerello"
-                width={190}
-                height={55}
-                priority
-                className="h-auto w-[155px] sm:w-[180px]"
-              />
-            </Link>
-          </div>
+          <AuthBrand className="mt-6 sm:mt-7" />
 
           {/* Headings */}
           <div className="mt-6 text-center">
             <h1 className="font-crimson text-[30px] font-bold text-[#1E1E1E] sm:text-[34px]">
-              Welcome back
+              {copy.title}
             </h1>
             <p className="mx-auto mt-2 max-w-[360px] font-sans text-sm leading-relaxed text-[#5A6578]">
-              Please enter your email & password to access your account.
+              {copy.description}
             </p>
           </div>
 
@@ -143,11 +135,11 @@ export default function LoginForm() {
             {/* Email Field */}
             <div>
               <label className="mb-1.5 block font-sans text-sm font-medium text-[#252025]">
-                Email
+                {copy.email}
               </label>
               <input
                 type="email"
-                placeholder="Enter your email"
+                placeholder={copy.emailPlaceholder}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -158,7 +150,7 @@ export default function LoginForm() {
             {/* Password Field */}
             <div>
               <label className="mb-1.5 block font-sans text-sm font-medium text-[#252025]">
-                Password
+                {copy.password}
               </label>
               <div className="relative">
                 <input
@@ -178,7 +170,7 @@ export default function LoginForm() {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A0A8B4] transition hover:text-[#5A6578]"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-label={showPassword ? copy.hidePassword : copy.showPassword}
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -194,13 +186,13 @@ export default function LoginForm() {
                   onChange={(e) => setRememberMe(e.target.checked)}
                   className="size-3.5 rounded border-[#F3C5CF] text-[#E88DA0] focus:ring-[#E88DA0]"
                 />
-                <span className="font-sans text-xs text-[#5A6578]">Remember me</span>
+                <span className="font-sans text-xs text-[#5A6578]">{copy.rememberMe}</span>
               </label>
               <Link
                 href="/forgot-password"
                 className="font-sans text-xs font-normal text-[#E88DA0] transition hover:underline"
               >
-                Forgot Password
+                {copy.forgotPassword}
               </Link>
             </div>
 
@@ -217,17 +209,17 @@ export default function LoginForm() {
               className="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#E88DA0] font-sans text-sm font-medium text-white shadow-[0_4px_14px_rgba(232,141,160,0.28)] transition hover:bg-[#DE778C] disabled:opacity-60"
             >
               {isLoading && <Loader2 size={16} className="animate-spin" />}
-              <span>{isLoading ? "Signing in..." : "Log in"}</span>
+              <span>{isLoading ? copy.signingIn : copy.submit}</span>
             </button>
 
             {/* Footer */}
             <p className="pt-1.5 text-center font-sans text-xs text-[#5A6578]">
-              Don&apos;t have an account?{" "}
+              {copy.noAccount}{" "}
               <Link
                 href="/book-builder"
                 className="font-medium text-[#E88DA0] transition hover:underline"
               >
-                Create account
+                {copy.createAccount}
               </Link>
             </p>
           </form>

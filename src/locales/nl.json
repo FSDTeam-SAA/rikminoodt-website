@@ -18,6 +18,69 @@
     "cartAria": "Bekijk winkelwagen",
     "accountAria": "Open je account"
   },
+  "auth": {
+    "homeAria": "Boekerello home",
+    "backToSignIn": "Terug naar inloggen",
+    "login": {
+      "artworkAlt": "Boekerello ruimteavontuur",
+      "title": "Welkom terug",
+      "description": "Vul je e-mailadres en wachtwoord in om toegang te krijgen tot je account.",
+      "email": "E-mail",
+      "emailPlaceholder": "Vul je e-mailadres in",
+      "password": "Wachtwoord",
+      "showPassword": "Wachtwoord tonen",
+      "hidePassword": "Wachtwoord verbergen",
+      "rememberMe": "Onthoud mij",
+      "forgotPassword": "Wachtwoord vergeten?",
+      "signingIn": "Inloggen...",
+      "submit": "Inloggen",
+      "noAccount": "Nog geen account?",
+      "createAccount": "Account aanmaken",
+      "missingCredentials": "Vul zowel je e-mailadres als wachtwoord in.",
+      "failed": "Inloggen mislukt. Controleer je gegevens."
+    },
+    "forgotPassword": {
+      "artworkAlt": "Boekerello magisch avontuur",
+      "title": "Wachtwoord vergeten?",
+      "description": "Vul je e-mailadres in en we sturen je een code om je wachtwoord opnieuw in te stellen.",
+      "email": "E-mail",
+      "emailPlaceholder": "Vul je e-mailadres in",
+      "sending": "Code verzenden...",
+      "submit": "Doorgaan",
+      "missingEmail": "Vul je e-mailadres in.",
+      "failed": "Versturen van de resetcode is mislukt. Probeer het opnieuw."
+    },
+    "verifyEmail": {
+      "artworkAlt": "Boekerello verhalenboekavontuur",
+      "title": "Verifieer je e-mailadres",
+      "description": "We hebben een 6-cijferige code gestuurd naar",
+      "didNotReceive": "Niet ontvangen?",
+      "resending": "Opnieuw verzenden...",
+      "resend": "Code opnieuw verzenden",
+      "freshCodeSent": "Er is een nieuwe verificatiecode verzonden!",
+      "incompleteCode": "Vul alle 6 cijfers van de code in.",
+      "invalidCode": "Ongeldige verificatiecode.",
+      "failed": "Verifiëren van de code is mislukt. Probeer het opnieuw.",
+      "verifying": "Verifiëren...",
+      "submit": "Verifiëren"
+    },
+    "resetPassword": {
+      "artworkAlt": "Boekerello onderwateravontuur",
+      "title": "Wachtwoord opnieuw instellen?",
+      "description": "Vul een nieuw wachtwoord in voor je account. Gebruik een sterk wachtwoord om je account veilig te houden.",
+      "newPassword": "Nieuw wachtwoord",
+      "confirmPassword": "Wachtwoord bevestigen",
+      "showPassword": "Wachtwoord tonen",
+      "hidePassword": "Wachtwoord verbergen",
+      "missingPasswords": "Vul beide wachtwoordvelden in.",
+      "passwordTooShort": "Het wachtwoord moet minimaal 6 tekens lang zijn.",
+      "passwordsDoNotMatch": "Wachtwoorden komen niet overeen. Controleer ze.",
+      "failed": "Wachtwoord opnieuw instellen is mislukt. Probeer het opnieuw.",
+      "success": "Wachtwoord succesvol gewijzigd! Je wordt doorgestuurd naar inloggen...",
+      "updating": "Bijwerken...",
+      "submit": "Wachtwoord wijzigen"
+    }
+  },
   "hero": {
     "heading1": "Hun Verbeelding.",
     "heading2": "Hun Avontuur.",
@@ -92,16 +155,21 @@
     "bookLabelTitle": "Emma's",
     "bookLabelSubtitle": "Magische Avontuur",
     "placeholderReviews": [
-      { "name": "Thomas Vermeulen", "comment": "Mijn dochter is helemaal weg van dit boek! Ze wil het elke avond voor het slapengaan lezen." },
-      { "name": "Lotte De Smet", "comment": "Mijn kind de held van het verhaal zien worden, maakte dit een heel bijzonder cadeau voor ons gezin." },
-      { "name": "Pieter Van den Broeck", "comment": "De illustraties zijn prachtig en de persoonlijke details bezorgden ons vanaf de eerste pagina een glimlach." },
-      { "name": "Julie Peeters", "comment": "Een prachtig aandenken. Onze kleine was zo enthousiast om zijn naam in het avontuur te herkennen." },
-      { "name": "Matthias Verhaeghe", "comment": "Het hele bestelproces was eenvoudig en het afgewerkte boek voelt echt magisch aan." },
-      { "name": "Emma Vandenberghe", "comment": "Dit is snel ons favoriete verhaaltje voor het slapengaan geworden. We kunnen niet wachten om er nog een te maken." },
-      { "name": "Simon De Clercq", "comment": "Zo'n attent en origineel cadeau. De kwaliteit en persoonlijke accenten zijn prachtig." },
-      { "name": "Laura Van Acker", "comment": "Ons gezin genoot ervan om het samen te lezen. Het maakte het voorleesmoment extra bijzonder." },
-      { "name": "Nicolas Maes", "comment": "Het verhaal sprak perfect tot de verbeelding van ons kind. Dit is een boek dat we jarenlang zullen koesteren." },
-      { "name": "Sarah Dewaele", "comment": "Een prachtig gepersonaliseerd verhalenboek dat een grote glimlach op het gezicht van ons kind toverde." }
+      { "name": "Emma", "comment": "Een magisch boek dat deel is geworden van ons bedtijdritueel." },
+      { "name": "Lucas", "comment": "Het verhaal voelt heel persoonlijk en bezorgde ons hele gezin een glimlach." },
+      { "name": "Olivia & Noah", "comment": "Onze kinderen vonden het geweldig om zichzelf in hun eigen avontuur te ontdekken." },
+      { "name": "Mila", "comment": "Prachtige illustraties en een verhaal dat we keer op keer graag lezen." },
+      { "name": "Finn", "comment": "Een bijzonder aandenken waarin elk klein detail klopt." },
+      { "name": "Louise & Jules", "comment": "Een heerlijk gezamenlijk verhaal waar beide kinderen elke avond om vragen." },
+      { "name": "Arthur", "comment": "Zijn naam in het boek zien maakte van Arthur een echte held." },
+      { "name": "Ella", "comment": "De kwaliteit is prachtig en het boek voelt echt heel speciaal." },
+      { "name": "Liam & Sofia", "comment": "Een geweldig cadeau dat de kinderen een avontuur gaf om samen te delen." },
+      { "name": "Juliette", "comment": "Juliette was vanaf de eerste pagina betoverd." },
+      { "name": "Leon", "comment": "Een warm, fantasierijk verhaal dat we nog jaren zullen koesteren." },
+      { "name": "Marie & Louis", "comment": "Het was heel eenvoudig om een boek te maken dat echt voor hen gemaakt voelt." },
+      { "name": "Alice", "comment": "Alice laat dit boek graag zien aan iedereen die op bezoek komt." },
+      { "name": "Matteo", "comment": "Een prachtig gemaakt verhalenboek vol liefde." },
+      { "name": "Victor & Rosanne", "comment": "Een onvergetelijk familiecadeau met magische illustraties." }
     ]
   },
   "bookPreview": {
@@ -372,7 +440,7 @@
     "name": "Naam",
     "namePlaceholder": "Voer je volledige naam in",
     "country": "Land",
-    "countryPlaceholder": "Dutch",
+    "countryPlaceholder": "België",
     "email": "E-mail",
     "emailPlaceholder": "jouw123@gmail.com",
     "confirmEmail": "E-mail bevestigen",
@@ -381,10 +449,10 @@
     "creatorNameError": "Voer de naam van de maker in (2–100 tekens).",
     "bookLanguages": {
       "English": "Engels",
-      "Dutch": "Dutch",
+      "Dutch": "Nederlands",
       "French": "Frans"
     },
-    "pricingNotice": "ⓘ Bijna klaar. Jouw digitale boek kost €8.99.",
+    "pricingNotice": "ⓘ Bijna klaar. Jouw digitale boek kost €8.99",
     "characters": "Personages",
     "addCharacter": "Personage toevoegen",
     "labels": {

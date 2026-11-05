@@ -6,9 +6,13 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { getApiBaseUrl } from "@/config/api";
+import AuthBrand from "../../_components/AuthBrand";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function VerifyEmailForm() {
   const router = useRouter();
+  const { t } = useLanguage();
+  const copy = t.auth.verifyEmail;
   const searchParams = useSearchParams();
   const emailParam = searchParams.get("email");
 
@@ -71,9 +75,9 @@ export default function VerifyEmailForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-      setMessage("A fresh verification code has been sent!");
+      setMessage(copy.freshCodeSent);
     } catch {
-      setMessage("A fresh verification code has been sent!");
+      setMessage(copy.freshCodeSent);
     } finally {
       setIsResending(false);
     }
@@ -86,7 +90,7 @@ export default function VerifyEmailForm() {
 
     const code = otp.join("");
     if (code.length < 6) {
-      setErrorMessage("Please enter all 6 digits of the code.");
+      setErrorMessage(copy.incompleteCode);
       return;
     }
 
@@ -102,13 +106,13 @@ export default function VerifyEmailForm() {
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data?.message || "Invalid verification code.");
+        throw new Error(data?.message || copy.invalidCode);
       }
 
       router.push(`/reset-password?email=${encodeURIComponent(email)}`);
     } catch (err: unknown) {
       setErrorMessage(
-        err instanceof Error ? err.message : "Failed to verify code. Please try again."
+        err instanceof Error ? err.message : copy.failed
       );
     } finally {
       setIsLoading(false);
@@ -123,7 +127,7 @@ export default function VerifyEmailForm() {
           <div className="relative aspect-[385/542] w-full max-w-[400px] rounded-xl bg-[#FFF8ED] sm:max-w-[440px] lg:max-w-none">
             <Image
               src="/images/auth_3.png"
-              alt="Boekerello Storybook Adventure"
+              alt={copy.artworkAlt}
               fill
               sizes="(max-width: 1024px) 90vw, 480px"
               priority
@@ -141,31 +145,19 @@ export default function VerifyEmailForm() {
               className="inline-flex items-center gap-2 font-sans text-xs text-[#2A2A2A] transition-colors hover:text-[#E88DA0]"
             >
               <ArrowLeft size={15} />
-              <span>Back to sign In</span>
+              <span>{t.auth.backToSignIn}</span>
             </Link>
           </div>
 
-          {/* Logo */}
-          <div className="mt-8 flex justify-center">
-            <Link href="/" aria-label="Boekerello Home">
-              <Image
-                src="/images/logo.png"
-                alt="Boekerello"
-                width={190}
-                height={55}
-                priority
-                className="h-auto w-[155px] sm:w-[180px]"
-              />
-            </Link>
-          </div>
+          <AuthBrand className="mt-8" />
 
           {/* Headings */}
           <div className="mt-7 text-center">
             <h1 className="font-crimson text-[30px] font-bold text-[#1E1E1E] sm:text-[34px]">
-              Verify your email
+              {copy.title}
             </h1>
             <p className="mx-auto mt-2 max-w-[360px] font-sans text-sm leading-relaxed text-[#5A6578]">
-              we sent a 6-digit code to {email}
+              {copy.description} {email}
             </p>
           </div>
 
@@ -192,14 +184,14 @@ export default function VerifyEmailForm() {
 
             {/* Resend Code Prompt */}
             <div className="text-center font-sans text-xs text-[#5A6578]">
-              Didn&apos;t receive it ?{" "}
+              {copy.didNotReceive}{" "}
               <button
                 type="button"
                 onClick={handleResend}
                 disabled={isResending}
                 className="font-medium text-[#E88DA0] transition hover:underline disabled:opacity-60"
               >
-                {isResending ? "Resending..." : "Resend code"}
+                {isResending ? copy.resending : copy.resend}
               </button>
             </div>
 
@@ -222,7 +214,7 @@ export default function VerifyEmailForm() {
               className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#E88DA0] font-sans text-sm font-medium text-white shadow-[0_4px_14px_rgba(232,141,160,0.28)] transition hover:bg-[#DE778C] disabled:opacity-60"
             >
               {isLoading && <Loader2 size={16} className="animate-spin" />}
-              <span>{isLoading ? "Verifying..." : "Verify"}</span>
+              <span>{isLoading ? copy.verifying : copy.submit}</span>
             </button>
           </form>
         </div>

@@ -6,9 +6,13 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { getApiBaseUrl } from "@/config/api";
+import AuthBrand from "../../_components/AuthBrand";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function ForgotPasswordForm() {
   const router = useRouter();
+  const { t } = useLanguage();
+  const copy = t.auth.forgotPassword;
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -18,7 +22,7 @@ export default function ForgotPasswordForm() {
     setErrorMessage("");
 
     if (!email) {
-      setErrorMessage("Please enter your email address.");
+      setErrorMessage(copy.missingEmail);
       return;
     }
 
@@ -44,7 +48,7 @@ export default function ForgotPasswordForm() {
       router.push(`/verify-email?email=${encodeURIComponent(email)}`);
     } catch (err: unknown) {
       setErrorMessage(
-        err instanceof Error ? err.message : "Failed to send reset code. Please try again."
+        err instanceof Error ? err.message : copy.failed
       );
     } finally {
       setIsLoading(false);
@@ -59,7 +63,7 @@ export default function ForgotPasswordForm() {
           <div className="relative aspect-[385/542] w-full max-w-[400px] rounded-xl bg-[#FFF8ED] sm:max-w-[440px] lg:max-w-none">
             <Image
               src="/images/auth_2.png"
-              alt="Boekerello Magical Adventure"
+              alt={copy.artworkAlt}
               fill
               sizes="(max-width: 1024px) 90vw, 480px"
               priority
@@ -77,32 +81,20 @@ export default function ForgotPasswordForm() {
               className="inline-flex items-center gap-2 font-sans text-xs text-[#2A2A2A] transition-colors hover:text-[#E88DA0]"
             >
               <ArrowLeft size={15} />
-              <span>Back to sign In</span>
+              <span>{t.auth.backToSignIn}</span>
             </Link>
           </div>
 
 
-          {/* Logo */}
-          <div className="mt-8 flex justify-center">
-            <Link href="/" aria-label="Boekerello Home">
-              <Image
-                src="/images/logo.png"
-                alt="Boekerello"
-                width={190}
-                height={55}
-                priority
-                className="h-auto w-[155px] sm:w-[180px]"
-              />
-            </Link>
-          </div>
+          <AuthBrand className="mt-8" />
 
           {/* Headings */}
           <div className="mt-7 text-center">
             <h1 className="font-crimson text-[30px] font-bold text-[#1E1E1E] sm:text-[34px]">
-              Forgot Password?
+              {copy.title}
             </h1>
             <p className="mx-auto mt-2 max-w-[360px] font-sans text-sm leading-relaxed text-[#5A6578]">
-              Enter your email and we&apos;ll send you a code to reset your password
+              {copy.description}
             </p>
           </div>
 
@@ -111,11 +103,11 @@ export default function ForgotPasswordForm() {
             {/* Email Field */}
             <div>
               <label className="mb-1.5 block font-sans text-sm font-medium text-[#252025]">
-                Email
+                {copy.email}
               </label>
               <input
                 type="email"
-                placeholder="Enter your email"
+                placeholder={copy.emailPlaceholder}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -136,7 +128,7 @@ export default function ForgotPasswordForm() {
               className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#E88DA0] font-sans text-sm font-medium text-white shadow-[0_4px_14px_rgba(232,141,160,0.28)] transition hover:bg-[#DE778C] disabled:opacity-60"
             >
               {isLoading && <Loader2 size={16} className="animate-spin" />}
-              <span>{isLoading ? "Sending code..." : "Continue"}</span>
+              <span>{isLoading ? copy.sending : copy.submit}</span>
             </button>
           </form>
         </div>

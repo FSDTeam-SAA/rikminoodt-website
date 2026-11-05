@@ -585,6 +585,46 @@ export default function InformationAboutCharacters() {
   const [additionalCharacters, setAdditionalCharacters] = useState<AdditionalCharState[]>([]);
   const nextCharacterId = useRef(2);
 
+  // Validation text is translated at the time it is created. Recreate an
+  // already-visible error when the site's main language changes.
+  useEffect(() => {
+    setValidationError((currentError) => {
+      if (!currentError) return currentError;
+
+      const mainCharacterError = getCharacterValidationError(
+        {
+          type: characterType,
+          name,
+          gender: gender ?? undefined,
+          age: ageValue,
+          animalName,
+          animalSpecies,
+          objectName,
+        },
+        language,
+      );
+      if (mainCharacterError) {
+        return `${copy.character} 1: ${mainCharacterError}`;
+      }
+
+      const additionalCharacterIndex = additionalCharacters.findIndex(
+        (character) => getCharacterValidationError(character, language),
+      );
+      if (additionalCharacterIndex >= 0) {
+        const message = getCharacterValidationError(
+          additionalCharacters[additionalCharacterIndex],
+          language,
+        );
+        return `${copy.character} ${additionalCharacterIndex + 2}: ${message}`;
+      }
+
+      return "";
+    });
+    // This effect must only run when the UI language changes, not while a user
+    // is editing a field after attempting to continue.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [language]);
+
   const age = ages.find((item) => item.label === selectedAge);
   const theme = themes.find((item) => item.label === selectedTheme);
   const story = getStoryChoice(selectedStory, selectedTheme);
