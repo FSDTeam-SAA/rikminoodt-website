@@ -219,13 +219,19 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
     try {
       window.sessionStorage.removeItem(progressStorageKey);
       window.sessionStorage.removeItem("current_book_id");
+      window.sessionStorage.removeItem("retry_book_id");
     } catch {
       // ignore
     }
   };
 
   useEffect(() => {
-    const storedProgress = getStoredProgress();
+    // A saved wizard state is only valid when a user explicitly returns to
+    // edit/retry the same book. A normal new-book visit must start blank.
+    const isRetryFlow =
+      window.location.pathname === "/book-builder/InformationAboutCharacters" &&
+      Boolean(window.sessionStorage.getItem("retry_book_id"));
+    const storedProgress = isRetryFlow ? getStoredProgress() : null;
     if (storedProgress) {
       setSelectedAge(storedProgress.selectedAge);
       setSelectedTheme(storedProgress.selectedTheme);
@@ -235,6 +241,12 @@ export function BookBuilderProvider({ children }: { children: ReactNode }) {
       setSelectedFont(storedProgress.selectedFont);
       setSelectedLanguage(storedProgress.selectedLanguage);
       setSelectedVariant(storedProgress.selectedVariant);
+    } else if (!isRetryFlow) {
+      try {
+        window.sessionStorage.removeItem(progressStorageKey);
+      } catch {
+        // ignore unavailable browser storage
+      }
     }
 
     const selectedThemeFromHome = new URLSearchParams(window.location.search).get("theme");

@@ -25,7 +25,7 @@ import { useBookBuilderTranslations } from "../../book-builder/_components/useBo
 
 const detailLabels = {
   en: { headingStory: "Story", headingBooks: "Personalised Children's Books", details: "Story Details", title: "Title", ages: "Ages", years: "years", characters: "Characters", theme: "Theme", subject: "Subject", message: "Message", illustration: "Illustration", language: "Language", creator: "Creator", story: "Story", read: "Read Story", download: "Download PDF", generating: "Generating PDF…", hardcopy: "Order Hardcopy", photos: "Photos used", characterPhoto: "Character photo", characterPhotos: "Character photos", artwork: "Story artwork", illustrationRole: "Story illustration" },
-  nl: { headingStory: "Verhaal", headingBooks: "Gepersonaliseerde Kinderboeken", details: "Verhaaldetails", title: "Titel", ages: "Leeftijden", years: "jaar", characters: "Personages", theme: "Thema", subject: "Onderwerp", message: "Boodschap", illustration: "Illustratie", language: "Taal", creator: "Maker", story: "Verhaal", read: "Lees verhaal", download: "Download PDF", generating: "PDF wordt gemaakt…", hardcopy: "Bestel hardcover", photos: "Gebruikte foto's", characterPhoto: "Personagefoto", characterPhotos: "Personagefoto's", artwork: "Verhaalillustratie", illustrationRole: "Verhaalillustratie" },
+  nl: { headingStory: "Verhaal", headingBooks: "Gepersonaliseerde Kinderboeken", details: "Verhaaldetails", title: "Titel", ages: "Leeftijden", years: "jaar", characters: "Personages", theme: "Thema", subject: "Onderwerp", message: "Boodschap", illustration: "Illustratie", language: "Taal", creator: "Maker", story: "Verhaal", read: "Lees verhaal", download: "PDF downloaden", generating: "PDF wordt gemaakt…", hardcopy: "Bestel hardcover", photos: "Gebruikte foto's", characterPhoto: "Personagefoto", characterPhotos: "Personagefoto's", artwork: "Verhaalillustratie", illustrationRole: "Verhaalillustratie" },
   fr: { headingStory: "Histoire", headingBooks: "Livres Personnalisés pour Enfants", details: "Détails de l'histoire", title: "Titre", ages: "Âges", years: "ans", characters: "Personnages", theme: "Thème", subject: "Sujet", message: "Message", illustration: "Illustration", language: "Langue", creator: "Créateur", story: "Histoire", read: "Lire l'histoire", download: "Télécharger le PDF", generating: "Création du PDF…", hardcopy: "Commander un livre relié", photos: "Photos utilisées", characterPhoto: "Photo de personnage", characterPhotos: "Photos de personnages", artwork: "Illustration de l'histoire", illustrationRole: "Illustration de l'histoire" },
 } as const;
 
@@ -117,6 +117,12 @@ const bookLanguageKeys: Record<string, "English" | "Dutch" | "French"> = {
   FRANÇAIS: "French",
   Français: "French",
 };
+
+const maxStoryTitles = {
+  en: "Max Sees the Seasons: Autumn Adventures",
+  nl: "Max ziet de seizoenen: Herfstavonturen",
+  fr: "Max découvre les saisons : aventures d’automne",
+} as const;
 
 interface StoryCharacter {
   name?: string;
@@ -263,7 +269,7 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
   const isMaxStory = storyId === "max-sees-the-seasons";
   const activeBook = staticExploreBook || fetchedBook;
   const cover = activeBook?.coverImageUrl || (isMaxStory ? "/images/exp_c_1.jpg" : staticStory.cover);
-  const coverTitle = activeBook?.title || (isMaxStory ? (language === "nl" ? "Max ziet de seizoenen: Herfstavonturen" : "Max Sees the Seasons: Autumn Adventures") : staticStory.title);
+  const coverTitle = activeBook?.title || (isMaxStory ? maxStoryTitles[language] : staticStory.title);
   const localizeTheme = (value?: string) =>
     value ? translateTheme(getChoiceLabel(value, THEME_MAP)) : "";
   const localizeSubject = (value?: string) => {
