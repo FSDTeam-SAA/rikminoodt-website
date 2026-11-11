@@ -13,6 +13,12 @@ interface LanguageSwitcherProps {
   isMobile?: boolean;
 }
 
+const NATIVE_LANGUAGE_NAMES: Record<string, string> = {
+  nl: "Nederlands",
+  en: "English",
+  fr: "Français",
+};
+
 export default function LanguageSwitcher({ className = "", isMobile = false }: LanguageSwitcherProps) {
   const { language, setLanguage } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
@@ -20,6 +26,7 @@ export default function LanguageSwitcher({ className = "", isMobile = false }: L
 
   const current =
     SUPPORTED_LANGUAGES.find((item) => item.code === language) ?? SUPPORTED_LANGUAGES[0];
+  const currentDisplayName = NATIVE_LANGUAGE_NAMES[current.code] ?? current.label;
 
   // Close dropdown on outside click or Escape key
   useEffect(() => {
@@ -73,7 +80,7 @@ export default function LanguageSwitcher({ className = "", isMobile = false }: L
                     className="object-cover"
                   />
                 </div>
-                <span className="truncate">{item.label}</span>
+                <span className="truncate">{NATIVE_LANGUAGE_NAMES[item.code] ?? item.label}</span>
               </button>
             );
           })}
@@ -88,14 +95,14 @@ export default function LanguageSwitcher({ className = "", isMobile = false }: L
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
         className="group flex items-center gap-2 rounded-full border border-white/60 bg-white/70 px-2.5 py-1.5 shadow-[0_2px_8px_rgba(74,63,82,0.06)] backdrop-blur transition-all duration-200 hover:border-[#e88da0]/40 hover:bg-white hover:shadow-[0_4px_12px_rgba(232,141,160,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#926daf]"
-        aria-label={language === "nl" ? `Selecteer taal. Huidige: ${current.label}` : `Select language. Current: ${current.label}`}
+        aria-label={language === "nl" ? `Selecteer taal. Huidige: ${currentDisplayName}` : `Select language. Current: ${currentDisplayName}`}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
       >
         <div className="relative size-6 overflow-hidden rounded-full shadow-[0_1px_2px_rgba(0,0,0,0.15)] shrink-0">
           <Image
             src={current.flag}
-            alt={current.label}
+            alt={currentDisplayName}
             fill
             sizes="24px"
             priority
@@ -151,7 +158,7 @@ export default function LanguageSwitcher({ className = "", isMobile = false }: L
                       className="object-cover"
                     />
                   </div>
-                  <span>{item.label}</span>
+                  <span>{NATIVE_LANGUAGE_NAMES[item.code] ?? item.label}</span>
                 </div>
                 {isSelected && (
                   <Check size={16} strokeWidth={2.4} className="text-[#e77f9a]" />

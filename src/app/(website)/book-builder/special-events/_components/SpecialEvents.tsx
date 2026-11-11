@@ -105,7 +105,7 @@ function ChoiceChip({
 
 export default function SpecialEvents() {
   const router = useRouter();
-  const { bb, translateAge, translateTheme, translateMessage, translateIllustration, translateFont } = useBookBuilderTranslations();
+  const { bb, translateAge, translateTheme, translateMessage, translateIllustration, translateFont, translateBookLanguage, translateLabel } = useBookBuilderTranslations();
   const copy = useBookBuilderPageCopy();
   const {
     selectedAge,
@@ -346,7 +346,8 @@ export default function SpecialEvents() {
               href="/book-builder/choose-font"
             />
             <ChoiceChip
-              label="Language"
+              label={translateLabel("Language")}
+              displayLabel={translateBookLanguage(selectedLanguage)}
               choice={
                 selectedLanguage
                   ? {
@@ -368,44 +369,51 @@ export default function SpecialEvents() {
           </p>
 
           <div className="mt-7 max-w-[1120px] rounded-[10px] border border-[#F3A8B7] bg-white/20 p-3 sm:p-5">
-            <div className="grid items-center gap-2 sm:grid-cols-[1fr_auto_1fr]">
-              <span className="font-sans text-sm font-medium text-[#252025]">
-                {copy.specialLabel}
-              </span>
-              <div className="mx-auto flex w-fit items-center rounded-xl bg-[#FBE6EA] p-1.5 font-sans text-sm sm:text-base">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="max-w-2xl">
+                <span className="block font-sans text-sm font-semibold text-[#252025] sm:text-base">
+                  {copy.specialInstructionTitle}
+                </span>
+                <p className="mt-1 font-sans text-xs sm:text-sm italic leading-relaxed text-[#554f53]">
+                  {copy.specialInstructionExample}
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center gap-2 sm:shrink-0">
+                <div className="flex items-center rounded-xl bg-[#FBE6EA] p-1 font-sans text-sm sm:text-base">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      voiceModeRef.current = false;
+                      stopRecording();
+                      setLocalForewordMode("write");
+                    }}
+                    className={`inline-flex h-9 items-center gap-1.5 rounded-lg px-3.5 font-medium text-sm transition ${
+                      forewordMode === "write" ? "bg-[#E88DA0] text-white shadow-sm" : "text-[#252025] hover:text-[#E88DA0]"
+                    }`}
+                  >
+                    <PencilLine aria-hidden="true" size={16} /> {copy.write}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      voiceModeRef.current = true;
+                      setLocalForewordMode("voice");
+                    }}
+                    className={`inline-flex h-9 items-center gap-1.5 rounded-lg px-3.5 font-medium text-sm transition ${
+                      forewordMode === "voice" ? "bg-[#E88DA0] text-white shadow-sm" : "text-[#252025] hover:text-[#E88DA0]"
+                    }`}
+                  >
+                    <Mic aria-hidden="true" size={16} /> {copy.voice}
+                  </button>
+                </div>
                 <button
                   type="button"
-                  onClick={() => {
-                    voiceModeRef.current = false;
-                    stopRecording();
-                    setLocalForewordMode("write");
-                  }}
-                  className={`inline-flex h-10 items-center gap-2 rounded-xl px-4 transition ${
-                    forewordMode === "write" ? "bg-[#E88DA0] text-white shadow-sm" : "text-[#252025]"
-                  }`}
+                  onClick={handleAiHelp}
+                  className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#FBE6EA] px-4 font-sans text-sm font-medium text-[#A06676] transition hover:bg-[#F8D8DF] sm:text-base"
                 >
-                  <PencilLine aria-hidden="true" size={18} /> {copy.write}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    voiceModeRef.current = true;
-                    setLocalForewordMode("voice");
-                  }}
-                  className={`inline-flex h-10 items-center gap-2 rounded-xl px-4 transition ${
-                    forewordMode === "voice" ? "bg-[#E88DA0] text-white shadow-sm" : "text-[#252025]"
-                  }`}
-                >
-                  <Mic aria-hidden="true" size={18} /> {copy.voice}
+                  <Sparkles aria-hidden="true" size={18} /> {copy.aiHelp}
                 </button>
               </div>
-              <button
-                type="button"
-                onClick={handleAiHelp}
-                className="inline-flex h-11 items-center gap-2 justify-self-start rounded-xl bg-[#FBE6EA] px-5 font-sans text-sm text-[#A06676] transition hover:bg-[#F8D8DF] sm:justify-self-end sm:text-base"
-              >
-                <Sparkles aria-hidden="true" size={18} /> {copy.aiHelp}
-              </button>
             </div>
 
             <textarea

@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, Loader2 } from "lucide-react";
+import { CheckCircle2, Loader2, X } from "lucide-react";
 import Image from "next/image";
 import { useLanguage } from "@/components/providers/LanguageProvider";
+import { getApiBaseUrl } from "@/config/api";
 
 export default function ContactPage() {
   const { t } = useLanguage();
@@ -29,7 +30,7 @@ export default function ContactPage() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -47,14 +48,45 @@ export default function ContactPage() {
     }
 
     setLoading(true);
-    // Simulate sending message
-    setTimeout(() => {
-      setLoading(false);
-      setSubmitted(true);
+    try {
+      const apiBase = getApiBaseUrl();
+      const response = await fetch(`${apiBase}/contact`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullName: fullName.trim(),
+          name: fullName.trim(),
+          email: email.trim(),
+          message: message.trim(),
+        }),
+      });
+
+      const data = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        const errorMsg =
+          data?.message ||
+          (Array.isArray(data?.message) ? data.message.join(", ") : null) ||
+          "Failed to send your message. Please try again.";
+        throw new Error(errorMsg);
+      }
+
+      // Reset form and show success modal
       setFullName("");
       setEmail("");
       setMessage("");
-    }, 600);
+      setIsSuccessModalOpen(true);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Unable to send message right now. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -87,105 +119,137 @@ export default function ContactPage() {
 
       {/* Form Section */}
       <section className="container relative z-20 mx-auto -mt-[72px] px-4">
-        <div className="mx-auto max-w-[920px] rounded-[11px] border border-[#F3A8B7] bg-[#FFFDFC] p-3.5 shadow-[0_10px_35px_rgba(232,141,160,0.08)] sm:p-3.5">
-          {submitted ? (
-            <div className="py-10 text-center">
-              <div className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-[#E6F7ED] text-[#18B56E]">
-                <CheckCircle2 size={36} />
-              </div>
-              <h2 className="mt-4 font-crimson text-2xl font-bold text-[#1E1E1E] sm:text-3xl">
-                {contact.successTitle}
-              </h2>
-              <p className="mx-auto mt-2 max-w-md font-sans text-sm text-[#66605F]">
-                {contact.successMessage}
-              </p>
-              <button
-                type="button"
-                onClick={() => setSubmitted(false)}
-                className="mt-6 rounded-xl bg-[#E88DA0] px-8 py-2.5 font-sans text-sm font-semibold text-white transition hover:bg-[#DD7893]"
+        <div className="mx-auto max-w-[920px] rounded-[11px] border border-[#F3A8B7] bg-[#FFFDFC] p-3.5 shadow-[0_10px_35px_rgba(232,141,160,0.08)] sm:p-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div
+                role="alert"
+                className="rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700 sm:text-sm"
               >
-                {contact.sendAnother}
+                {error}
+              </div>
+            )}
+
+            {/* Full Name Field */}
+            <div>
+              <label className="mb-2 block font-sans text-sm font-semibold text-[#1E1E1E]">
+                {contact.fullName}
+              </label>
+              <input
+                type="text"
+                required
+                disabled={loading}
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                placeholder={contact.fullNamePlaceholder}
+                className="h-9 w-full rounded-[9px] border border-[#F3A8B7] bg-white px-2.5 font-sans text-sm text-[#1E1E1E] outline-none placeholder:text-[#BBB0B5] transition focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/20"
+              />
+            </div>
+
+            {/* Email Field */}
+            <div>
+              <label className="mb-2 block font-sans text-sm font-semibold text-[#1E1E1E]">
+                {contact.email}
+              </label>
+              <input
+                type="email"
+                required
+                disabled={loading}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder={contact.emailPlaceholder}
+                className="h-9 w-full rounded-[9px] border border-[#F3A8B7] bg-white px-2.5 font-sans text-sm text-[#1E1E1E] outline-none placeholder:text-[#BBB0B5] transition focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/20"
+              />
+            </div>
+
+            {/* Message Field */}
+            <div>
+              <label className="mb-2 block font-sans text-sm font-semibold text-[#1E1E1E]">
+                {contact.message}
+              </label>
+              <textarea
+                required
+                disabled={loading}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder={contact.messagePlaceholder}
+                className="min-h-[175px] w-full resize-none rounded-[9px] border border-[#F3A8B7] bg-white p-2.5 font-sans text-sm text-[#1E1E1E] outline-none placeholder:text-[#BBB0B5] transition focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/20"
+              />
+            </div>
+
+            {/* Submit Button */}
+            <div className="flex justify-center pt-2">
+              <button
+                type="submit"
+                disabled={loading}
+                className="flex h-[38px] min-w-[120px] items-center justify-center gap-2 rounded-[9px] bg-[#E88DA0] px-6 font-sans text-xs sm:text-sm font-semibold text-white shadow-sm transition hover:bg-[#DD7893] active:scale-[0.99] disabled:opacity-60"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" />
+                    <span>{contact.sending}</span>
+                  </>
+                ) : (
+                  <span>{contact.send}</span>
+                )}
               </button>
             </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {error && (
-                <div
-                  role="alert"
-                  className="rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700 sm:text-sm"
-                >
-                  {error}
-                </div>
-              )}
-
-              {/* Full Name Field */}
-              <div>
-                <label className="mb-2 block font-sans text-sm font-semibold text-[#1E1E1E]">
-                  {contact.fullName}
-                </label>
-                <input
-                  type="text"
-                  required
-                  disabled={loading}
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  placeholder={contact.fullNamePlaceholder}
-                  className="h-9 w-full rounded-[9px] border border-[#F3A8B7] bg-white px-2.5 font-sans text-sm text-[#1E1E1E] outline-none placeholder:text-[#BBB0B5] transition focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/20"
-                />
-              </div>
-
-              {/* Email Field */}
-              <div>
-                <label className="mb-2 block font-sans text-sm font-semibold text-[#1E1E1E]">
-                  {contact.email}
-                </label>
-                <input
-                  type="email"
-                  required
-                  disabled={loading}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder={contact.emailPlaceholder}
-                  className="h-9 w-full rounded-[9px] border border-[#F3A8B7] bg-white px-2.5 font-sans text-sm text-[#1E1E1E] outline-none placeholder:text-[#BBB0B5] transition focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/20"
-                />
-              </div>
-
-              {/* Message Field */}
-              <div>
-                <label className="mb-2 block font-sans text-sm font-semibold text-[#1E1E1E]">
-                  {contact.message}
-                </label>
-                <textarea
-                  required
-                  disabled={loading}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder={contact.messagePlaceholder}
-                  className="min-h-[175px] w-full resize-none rounded-[9px] border border-[#F3A8B7] bg-white p-2.5 font-sans text-sm text-[#1E1E1E] outline-none placeholder:text-[#BBB0B5] transition focus:border-[#E88DA0] focus:ring-2 focus:ring-[#E88DA0]/20"
-                />
-              </div>
-
-              {/* Submit Button */}
-              <div className="flex justify-center pt-0">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="flex h-[34px] min-w-[108px] items-center justify-center gap-2 rounded-[9px] bg-[#E88DA0] px-6 font-sans text-xs font-semibold text-white shadow-sm transition hover:bg-[#DD7893] disabled:opacity-60"
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 size={16} className="animate-spin" />
-                      <span>{contact.sending}</span>
-                    </>
-                  ) : (
-                    <span>{contact.send}</span>
-                  )}
-                </button>
-              </div>
-            </form>
-          )}
+          </form>
         </div>
       </section>
+
+      {/* Beautiful Success Modal */}
+      {isSuccessModalOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/45 backdrop-blur-xs transition-opacity"
+          onClick={() => setIsSuccessModalOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-[460px] rounded-2xl border border-[#F3A8B7] bg-white p-6 sm:p-8 text-center shadow-[0_20px_50px_rgba(232,141,160,0.2)] transition-all"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Top Close Button */}
+            <button
+              type="button"
+              onClick={() => setIsSuccessModalOpen(false)}
+              aria-label="Close"
+              className="absolute right-4 top-4 rounded-full p-1.5 text-gray-400 transition hover:bg-[#FFF0F3] hover:text-[#E88DA0]"
+            >
+              <X size={18} />
+            </button>
+
+            {/* Success Icon */}
+            <div className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#E6F7ED] to-[#CEF2DE] text-[#18B56E] shadow-xs">
+              <CheckCircle2 size={36} strokeWidth={2.3} />
+            </div>
+
+            {/* Title */}
+            <h2 className="mt-5 font-crimson text-2xl font-bold text-[#1E1E1E] sm:text-[28px]">
+              {contact.successTitle || "Message Sent!"}
+            </h2>
+
+            {/* Subtitle / Message */}
+            <p className="mx-auto mt-2.5 max-w-sm font-sans text-sm sm:text-base text-[#66605F] leading-relaxed">
+              {contact.successMessage ||
+                "Thank you for reaching out. We will get back to you shortly."}
+            </p>
+
+            {/* Action Button */}
+            <div className="mt-6 flex justify-center">
+              <button
+                type="button"
+                onClick={() => setIsSuccessModalOpen(false)}
+                className="inline-flex h-11 w-full max-w-[200px] items-center justify-center rounded-xl bg-[#E88DA0] px-6 font-sans text-sm font-semibold text-white shadow-sm transition hover:bg-[#DD7893] active:scale-[0.99]"
+              >
+                {contact.sendAnother || "OK, Close"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
+

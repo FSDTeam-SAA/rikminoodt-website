@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 import BookReaderModal from "./BookReaderModal";
 import InlineBookPreview from "./InlineBookPreview";
@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { getApiBaseUrl } from "@/config/api";
 import { useLanguage } from "@/components/providers/LanguageProvider";
-import { getExploreStoryWelcomeText, getExploreStory } from "@/lib/explore-stories-data";
+import { getExploreStory } from "@/lib/explore-stories-data";
 import { ILLUSTRATION_MAP, MESSAGE_MAP, THEME_MAP } from "../../book-builder/_components/api-mappers";
 import { ALL_SUBJECTS, getLocalizedSubjectLabel } from "../../book-builder/_components/subject-options";
 import { useBookBuilderTranslations } from "../../book-builder/_components/useBookBuilderTranslations";
@@ -189,11 +189,11 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
         creatorName: staticExploreStory.creatorName,
         illustrationStyle: staticExploreStory.illustrationStyle,
         language: language === "nl" ? "Dutch" : language === "fr" ? "French" : "English",
-        foreword: getExploreStoryWelcomeText(language),
+        foreword: "",
         backCoverText: staticExploreStory.finalText || staticExploreStory.specialMessage,
         pages: [
           { pageNumber: 1, kind: "cover", imageUrl: staticExploreStory.coverImageUrl, title: staticExploreStory.title },
-          { pageNumber: 2, kind: "welcome", text: getExploreStoryWelcomeText(language) },
+          { pageNumber: 2, kind: "welcome", text: "" },
           ...staticExploreStory.storyPages.map((page, index) => ({ pageNumber: index + 3, kind: "story", imageUrl: page.image, text: page.text, storyPageNumber: index + 1 })),
           { pageNumber: staticExploreStory.storyPages.length + 3, kind: "finalMessage", text: staticExploreStory.finalText || staticExploreStory.specialMessage, title: staticExploreStory.title },
         ],
@@ -240,7 +240,7 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
         const headers: Record<string, string> = { "Content-Type": "application/json" };
         if (token) headers["Authorization"] = `Bearer ${token}`;
 
-        const res = await fetch(`${apiBase}/books/${storyId}`, {
+        const res = await fetch(`${apiBase}/books/${encodeURIComponent(storyId)}?t=${Date.now()}`, {
           headers,
           cache: "no-store",
         });
@@ -250,7 +250,27 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
         }
         const json = await res.json();
         if (json?.data) {
-          setFetchedBook(json.data);
+          const bookData = json.data;
+          try {
+            if (typeof window !== "undefined" && storyId) {
+              const localCover = localStorage.getItem(`boekerello_cover_image_${storyId}`);
+              if (localCover) bookData.coverImageUrl = localCover;
+
+              const stored = localStorage.getItem(`boekerello_page_images_${storyId}`);
+              if (stored) {
+                const overrides: Record<number, string> = JSON.parse(stored);
+                if (Array.isArray(bookData.pages)) {
+                  bookData.pages = bookData.pages.map((p: { kind?: string; pageNumber?: number; imageUrl?: string; illustrationUrl?: string; image?: string; [key: string]: unknown }) => ({
+                    ...p,
+                    imageUrl: (p.kind === "cover" && localCover) ? localCover : (p.pageNumber && overrides[p.pageNumber] ? overrides[p.pageNumber] : p.imageUrl),
+                    illustrationUrl: (p.kind === "cover" && localCover) ? localCover : (p.pageNumber && overrides[p.pageNumber] ? overrides[p.pageNumber] : p.illustrationUrl),
+                    image: (p.kind === "cover" && localCover) ? localCover : (p.pageNumber && overrides[p.pageNumber] ? overrides[p.pageNumber] : p.image),
+                  }));
+                }
+              }
+            }
+          } catch {}
+          setFetchedBook(bookData);
         } else {
           setNotFound(true);
         }
@@ -268,7 +288,8 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
   const staticStory = staticDetailsByLang[language] || staticDetailsByLang.nl;
   const isMaxStory = storyId === "max-sees-the-seasons";
   const activeBook = staticExploreBook || fetchedBook;
-  const cover = activeBook?.coverImageUrl || (isMaxStory ? "/images/exp_c_1.jpg" : staticStory.cover);
+  const storedCover = typeof window !== "undefined" && storyId ? localStorage.getItem(`boekerello_cover_image_${storyId}`) : null;
+  const cover = storedCover || activeBook?.coverImageUrl || (isMaxStory ? "/images/exp_c_1.jpg" : staticStory.cover);
   const coverTitle = activeBook?.title || (isMaxStory ? maxStoryTitles[language] : staticStory.title);
   const localizeTheme = (value?: string) =>
     value ? translateTheme(getChoiceLabel(value, THEME_MAP)) : "";
@@ -323,20 +344,63 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
           { name: "Vrolijke reiziger!", role: "Familie", image: "/images/book_reveiew.jpg" },
         ] : photos);
 
-  const rawPages = activeBook?.pages && activeBook.pages.length > 0 ? activeBook.pages : [];
-  const previewPages =
-    rawPages.length > 0
-      ? rawPages.map((p, idx) => ({
-          pageNumber: p.pageNumber || idx + 1,
-          image: p.imageUrl || p.illustrationUrl || p.image || (p.kind === "cover" ? cover : undefined),
-          text: p.text || "",
-          kind: p.kind,
-          storyPageNumber: p.storyPageNumber,
-        }))
-      : [
-          { pageNumber: 1, image: cover, text: "", kind: "cover" },
-          { pageNumber: 2, image: "/images/story2.png", text: "", kind: "story" },
-        ];
+  const previewPages = useMemo(() => {
+    const rawPages = activeBook?.pages && activeBook.pages.length > 0 ? activeBook.pages : [];
+    let pageOverrides: Record<number, string> = {};
+    if (typeof window !== "undefined" && storyId) {
+      try {
+        const stored = localStorage.getItem(`boekerello_page_images_${storyId}`);
+        if (stored) pageOverrides = JSON.parse(stored);
+      } catch {}
+    }
+
+    if (rawPages.length === 0) {
+      return [
+        { pageNumber: 1, image: cover, text: "", kind: "cover" },
+        { pageNumber: 2, image: "/images/story2.png", text: "", kind: "story" },
+      ];
+    }
+
+    return rawPages.map((p, idx) => {
+      const pageNum = p.pageNumber || idx + 1;
+      const overriddenImage = pageOverrides[pageNum];
+
+      const isSampleDummy = (t?: string) => {
+        if (!t) return false;
+        const lower = t.toLowerCase();
+        return (
+          lower.includes("sample book") ||
+          lower.includes("voorbeeldboek") ||
+          lower.includes("livre témoin") ||
+          lower.includes("glimpse of what is possible")
+        );
+      };
+
+      let welcomeContent = p.text || "";
+      if (p.kind === "welcome") {
+        if (isSampleDummy(welcomeContent)) {
+          welcomeContent = "";
+        }
+        if (!welcomeContent && activeBook?.foreword && !isSampleDummy(activeBook.foreword)) {
+          welcomeContent = activeBook.foreword;
+        }
+      }
+
+      return {
+        pageNumber: pageNum,
+        image: (p.kind === "cover" && cover)
+          ? cover
+          : overriddenImage || p.imageUrl || p.illustrationUrl || p.image || (p.kind === "cover" ? cover : undefined),
+        text: (p.kind === "finalMessage" && activeBook?.backCoverText)
+          ? activeBook.backCoverText
+          : (p.kind === "welcome")
+          ? welcomeContent
+          : p.text || "",
+        kind: p.kind,
+        storyPageNumber: p.storyPageNumber,
+      };
+    });
+  }, [activeBook?.pages, cover, activeBook?.backCoverText, activeBook?.foreword, storyId]);
 
   const currentPreviewPage = previewPages[currentPageIndex] || previewPages[0];
 
@@ -387,7 +451,7 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
           body: JSON.stringify({
             title: staticExploreStory.title,
             creatorName: staticExploreStory.creatorName,
-            foreword: getExploreStoryWelcomeText(language),
+            foreword: "",
             finalText: staticExploreStory.finalText || staticExploreStory.specialMessage,
             storyPages: staticExploreStory.storyPages.map(({ text }) => ({ text })),
           }),
@@ -622,7 +686,7 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
         titlePosition={activeBook?.titlePosition}
         creatorName={activeBook?.creatorName}
         font={activeBook?.font}
-        pages={activeBook?.pages}
+        pages={previewPages}
         coverImage={cover}
         welcomeText={activeBook?.foreword}
         finalText={activeBook?.backCoverText}

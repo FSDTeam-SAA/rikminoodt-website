@@ -410,6 +410,71 @@
       "generating": "Generating",
       "completed": "Completed",
       "generationFailed": "Generation failed"
+    },
+    "editBook": {
+      "loadingBook": "Loading your book…",
+      "bookUnavailable": "This book is unavailable for editing.",
+      "backToGenerated": "Back to generated books",
+      "backToBook": "Back to your book",
+      "subtitle": "Edit your generated storybooks.",
+      "saveAndView": "Save and View Book",
+      "saving": "Saving…",
+      "tabs": {
+        "cover": "Cover",
+        "preface": "Preface",
+        "story": "Story",
+        "font": "Font"
+      },
+      "cover": {
+        "fallbackTitle": "Your storybook",
+        "editImage": "Edit Image",
+        "bookTitle": "Book title",
+        "titlePlaceholder": "Enter your Book title",
+        "positionOfTitle": "Position of the title",
+        "top": "Top",
+        "middle": "Middle",
+        "bottom": "Bottom",
+        "author": "Author",
+        "authorPlaceholder": "Enter your full name",
+        "textOnBack": "Text on the back",
+        "textOnBackHint": "A short introduction that makes readers curious.",
+        "textOnBackPlaceholder": "Lorem ipsum dolor sit amet..."
+      },
+      "preface": {
+        "title": "Preface",
+        "subtitle": "A personal message to the reader, before the story begins.",
+        "helpButton": "Help me with preface",
+        "placeholder": "Write a personal message for your reader..."
+      },
+      "story": {
+        "noPages": "There are no editable story pages in this book.",
+        "preface": "Preface",
+        "finalMessage": "Final message",
+        "page": "Page",
+        "previewPage": "Preview: Page",
+        "storyPage": "Story page",
+        "editImage": "Edit Image",
+        "pageTitlePlaceholder": "Page title (optional)",
+        "helpButton": "Help with the text",
+        "pageOrder": "Page Order"
+      },
+      "font": {
+        "title": "Font",
+        "subtitle": "Choose a font for your book.",
+        "exampleTitle": "Font Example",
+        "exampleSubtitle": "See how your title and story look in this font.",
+        "fallbackTitle": "Your storybook",
+        "fallbackSample": "Your story will appear here."
+      },
+      "errors": {
+        "chooseBook": "Choose a generated book before opening the editor.",
+        "signInToEdit": "Please sign in to edit your book.",
+        "signInToSave": "Please sign in again before saving your changes.",
+        "onlyCompleted": "Only completed books can be edited.",
+        "loadFailed": "Unable to load this book for editing.",
+        "pageNeedsText": "Page {page} needs text before it can be saved.",
+        "saveFailed": "Unable to save your book changes."
+      }
     }
   },
   "bookBuilder": {
@@ -461,7 +526,8 @@
       "Subject": "Subject",
       "Message": "Message",
       "Illustration": "Illustration",
-      "Font": "Font"
+      "Font": "Font",
+      "Language": "Language"
     },
     "ages": {
       "0-2 Years": "0-2 Years",
