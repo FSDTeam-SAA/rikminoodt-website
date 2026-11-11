@@ -42,6 +42,11 @@ export function useBookBuilderTranslations() {
     return option ? getLocalizedSubjectLabel(option, language) : subject;
   };
 
+  const translateBookLanguage = (bookLang?: string | null): string => {
+    if (!bookLang) return "";
+    return bb?.bookLanguages?.[bookLang as keyof typeof bb.bookLanguages] ?? bookLang;
+  };
+
   return {
     t,
     language,
@@ -53,6 +58,7 @@ export function useBookBuilderTranslations() {
     translateFont,
     translateLabel,
     translateSubject,
+    translateBookLanguage,
   };
 }
 

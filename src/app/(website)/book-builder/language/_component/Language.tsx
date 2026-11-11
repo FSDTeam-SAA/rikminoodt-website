@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Pencil } from "lucide-react";
@@ -74,6 +74,54 @@ const bookLanguageBySiteLanguage = {
   fr: "French",
 } as const;
 
+const variantLabels: Record<string, Record<string, Record<string, string>>> = {
+  en: {
+    Dutch: {
+      "Standard Dutch": "Standard Dutch",
+      "Belgian Dutch": "Belgian Dutch (Flemish)",
+    },
+    English: {
+      "Standard (British English)": "Standard (British English)",
+      "Standard (American English)": "Standard (American English)",
+      "Australian English": "Australian English",
+    },
+    French: {
+      "France French": "France French",
+      "Canadian French": "Canadian French",
+    },
+  },
+  nl: {
+    Dutch: {
+      "Standard Dutch": "Standaard Nederlands",
+      "Belgian Dutch": "Belgisch Nederlands (Vlaams)",
+    },
+    English: {
+      "Standard (British English)": "Standaard (Brits Engels)",
+      "Standard (American English)": "Standaard (Amerikaans Engels)",
+      "Australian English": "Australisch Engels",
+    },
+    French: {
+      "France French": "Frans (Frankrijk)",
+      "Canadian French": "Canadees Frans",
+    },
+  },
+  fr: {
+    Dutch: {
+      "Standard Dutch": "Néerlandais standard",
+      "Belgian Dutch": "Néerlandais de Belgique (Flamand)",
+    },
+    English: {
+      "Standard (British English)": "Standard (Anglais britannique)",
+      "Standard (American English)": "Standard (Anglais américain)",
+      "Australian English": "Anglais australien",
+    },
+    French: {
+      "France French": "Français de France",
+      "Canadian French": "Français canadien",
+    },
+  },
+};
+
 type Choice = { label: string; image: string; color?: string };
 
 function ChoiceChip({ choice, href, label, displayLabel, chooseLabel }: { choice: Choice | undefined; href: string; label: string; displayLabel?: string; chooseLabel: string }) {
@@ -102,19 +150,49 @@ function ChoiceChip({ choice, href, label, displayLabel, chooseLabel }: { choice
 }
 
 export default function Language() {
-  const { selectedAge, selectedTheme, selectedStory, selectedMessage, selectedIllustration, selectedFont, selectedLanguage, setSelectedLanguage, selectedVariant, setSelectedVariant } = useBookBuilder();
+  const {
+    selectedAge,
+    selectedTheme,
+    selectedStory,
+    selectedMessage,
+    selectedIllustration,
+    selectedFont,
+    selectedLanguage,
+    setSelectedLanguage,
+    selectedVariant,
+    setSelectedVariant,
+  } = useBookBuilder();
+
   const { bb, translateAge, translateTheme, translateMessage, translateIllustration, translateFont, translateLabel } = useBookBuilderTranslations();
   const { language: siteLanguage } = useLanguage();
-  const defaultLanguage = bookLanguageBySiteLanguage[siteLanguage];
+  const defaultLanguage = bookLanguageBySiteLanguage[siteLanguage] || "Dutch";
+
+  const prevSiteLanguageRef = useRef(siteLanguage);
 
   useEffect(() => {
-    setSelectedLanguage(defaultLanguage);
-    setSelectedVariant(variants[defaultLanguage][0]);
-  }, [defaultLanguage, setSelectedLanguage, setSelectedVariant]);
+    // If no language is selected yet, initialize with the current site language default
+    if (!selectedLanguage) {
+      setSelectedLanguage(defaultLanguage);
+      setSelectedVariant(variants[defaultLanguage][0]);
+      return;
+    }
+
+    // If site language changed, and current selectedLanguage matched the previous site default, update to new site default
+    const prevSite = prevSiteLanguageRef.current;
+    if (prevSite !== siteLanguage) {
+      const prevDefault = bookLanguageBySiteLanguage[prevSite as keyof typeof bookLanguageBySiteLanguage];
+      if (selectedLanguage === prevDefault) {
+        setSelectedLanguage(defaultLanguage);
+        setSelectedVariant(variants[defaultLanguage][0]);
+      }
+      prevSiteLanguageRef.current = siteLanguage;
+    }
+  }, [defaultLanguage, selectedLanguage, setSelectedLanguage, setSelectedVariant, siteLanguage]);
 
   const language = selectedLanguage && variants[selectedLanguage] ? selectedLanguage : defaultLanguage;
-  const availableVariants = variants[language];
+  const availableVariants = variants[language] || variants[defaultLanguage];
   const variant = selectedVariant && availableVariants.includes(selectedVariant) ? selectedVariant : availableVariants[0];
+
   const age = ages.find((item) => item.label === selectedAge);
   const theme = themes.find((item) => item.label === selectedTheme);
   const story = getStoryChoice(selectedStory, selectedTheme);
@@ -123,9 +201,20 @@ export default function Language() {
   const font = fonts.find((item) => item.label === selectedFont);
   const chooseLabel = bb?.choose ?? "Choose";
 
+  const getBookLanguageDisplay = (langKey: string) => {
+    return bb?.bookLanguages?.[langKey as keyof typeof bb.bookLanguages] || langKey;
+  };
+
+  const getVariantDisplay = (langKey: string, variantKey: string) => {
+    return variantLabels[siteLanguage]?.[langKey]?.[variantKey] || variantLabels.en[langKey]?.[variantKey] || variantKey;
+  };
+
   const changeLanguage = (nextLanguage: string) => {
     setSelectedLanguage(nextLanguage);
-    setSelectedVariant(variants[nextLanguage][0]);
+    const nextVariants = variants[nextLanguage] || [];
+    if (nextVariants.length > 0) {
+      setSelectedVariant(nextVariants[0]);
+    }
   };
 
   return (
@@ -168,17 +257,25 @@ export default function Language() {
                 if (value) changeLanguage(value);
               }}
             >
-              <SelectTrigger id="book-language" className="mt-3 h-10 w-full rounded-[8px] border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] focus-visible:border-[#E88DA0] focus-visible:ring-[#E88DA0]/25 sm:text-base">
-                <SelectValue />
+              <SelectTrigger id="book-language" className="mt-3 h-11 w-full rounded-xl border-[#F3A8B7] bg-[#FFFCFA] px-4 font-sans text-sm text-[#4B4650] focus-visible:border-[#E88DA0] focus-visible:ring-[#E88DA0]/25 sm:text-base">
+                <SelectValue placeholder={getBookLanguageDisplay(language)}>
+                  {getBookLanguageDisplay(language)}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent className="z-[100] border border-[#F3A8B7] bg-white text-[#4B4650] shadow-[0_10px_24px_rgba(91,69,78,0.16)]">
                 {Object.keys(variants).map((languageOption) => (
-                  <SelectItem className="cursor-pointer py-2 text-[#4B4650] focus:bg-[#FFF3F5] focus:text-[#4B4650]" key={languageOption} value={languageOption}>{languageOption}</SelectItem>
+                  <SelectItem
+                    className="cursor-pointer py-2.5 text-sm sm:text-base text-[#4B4650] focus:bg-[#FFF3F5] focus:text-[#4B4650]"
+                    key={languageOption}
+                    value={languageOption}
+                  >
+                    {getBookLanguageDisplay(languageOption)}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
 
-            <label className="mt-5 block font-sans text-sm font-medium text-[#252025] sm:text-base" htmlFor="book-variant">
+            <label className="mt-6 block font-sans text-sm font-medium text-[#252025] sm:text-base" htmlFor="book-variant">
               {bb?.regionalVariantLabel}
             </label>
             <Select
@@ -187,18 +284,33 @@ export default function Language() {
                 if (value) setSelectedVariant(value);
               }}
             >
-              <SelectTrigger id="book-variant" className="mt-3 h-10 w-full rounded-[8px] border-[#F3A8B7] bg-[#FFFCFA] px-3 font-sans text-sm text-[#4B4650] focus-visible:border-[#E88DA0] focus-visible:ring-[#E88DA0]/25 sm:text-base">
-                <SelectValue />
+              <SelectTrigger id="book-variant" className="mt-3 h-11 w-full rounded-xl border-[#F3A8B7] bg-[#FFFCFA] px-4 font-sans text-sm text-[#4B4650] focus-visible:border-[#E88DA0] focus-visible:ring-[#E88DA0]/25 sm:text-base">
+                <SelectValue placeholder={getVariantDisplay(language, variant)}>
+                  {getVariantDisplay(language, variant)}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent className="z-[100] border border-[#F3A8B7] bg-white text-[#4B4650] shadow-[0_10px_24px_rgba(91,69,78,0.16)]">
                 {availableVariants.map((variantOption) => (
-                  <SelectItem className="cursor-pointer py-2 text-[#4B4650] focus:bg-[#FFF3F5] focus:text-[#4B4650]" key={variantOption} value={variantOption}>{variantOption}</SelectItem>
+                  <SelectItem
+                    className="cursor-pointer py-2.5 text-sm sm:text-base text-[#4B4650] focus:bg-[#FFF3F5] focus:text-[#4B4650]"
+                    key={variantOption}
+                    value={variantOption}
+                  >
+                    {getVariantDisplay(language, variantOption)}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
 
-            <div className="mt-7 flex justify-center">
-              <Link onClick={() => { setSelectedLanguage(language); setSelectedVariant(variant); }} href="/book-builder/InformationAboutCharacters" className="inline-flex h-10 items-center rounded-xl bg-[#E88DA0] px-7 font-sans text-sm font-semibold text-white shadow-[0_5px_12px_rgba(232,141,160,0.25)] transition hover:bg-[#DD7893] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2">
+            <div className="mt-8 flex justify-center">
+              <Link
+                onClick={() => {
+                  setSelectedLanguage(language);
+                  setSelectedVariant(variant);
+                }}
+                href="/book-builder/InformationAboutCharacters"
+                className="inline-flex h-11 items-center rounded-xl bg-[#E88DA0] px-8 font-sans text-sm sm:text-base font-semibold text-white shadow-[0_5px_12px_rgba(232,141,160,0.25)] transition hover:bg-[#DD7893] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E88DA0] focus-visible:ring-offset-2 active:scale-[0.99]"
+              >
                 {bb?.nextStep || "Next Step"}
               </Link>
             </div>

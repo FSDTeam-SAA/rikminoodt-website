@@ -80,10 +80,25 @@ const InlineBookPreview = ({
     const welcomePage = pages.find((bookPage) => bookPage.kind === "welcome");
     const finalPage = pages.find((bookPage) => bookPage.kind === "finalMessage");
 
+    const isSampleDummy = (t?: string) => {
+      if (!t) return false;
+      const lower = t.toLowerCase();
+      return (
+        lower.includes("sample book") ||
+        lower.includes("voorbeeldboek") ||
+        lower.includes("livre témoin") ||
+        lower.includes("glimpse of what is possible")
+      );
+    };
+    const effectiveWelcomeText =
+      (!isSampleDummy(welcomeText) && welcomeText) ||
+      (!isSampleDummy(welcomePage?.text) && welcomePage?.text) ||
+      "";
+
     return [
       {
         kind: "cover",
-        image: coverPage?.image || coverImage || storyPages[0]?.image || "/images/story1.png",
+        image: coverImage || coverPage?.image || storyPages[0]?.image || "/images/story1.png",
         text: "",
         title: coverPage?.title || title,
         sourcePageNumber: hasSpecialPages ? (coverPage?.pageNumber || 1) : undefined,
@@ -91,8 +106,8 @@ const InlineBookPreview = ({
       {
         kind: "welcome",
         image: "",
-        text: welcomePage?.text || welcomeText || `Welcome to ${title}. This magical adventure was created especially for you.`,
-        sourcePageNumber: hasSpecialPages ? welcomePage?.pageNumber : undefined,
+        text: effectiveWelcomeText,
+        sourcePageNumber: hasSpecialPages ? (welcomePage?.pageNumber || 2) : undefined,
       },
       ...storyPages.flatMap((storyPage) => [
         storyPage,
@@ -101,7 +116,7 @@ const InlineBookPreview = ({
       {
         kind: "finalMessage",
         image: "",
-        text: finalPage?.text || finalText || "Thank you for sharing this magical adventure. May the story stay with you for years to come.",
+        text: finalText || finalPage?.text || "Thank you for sharing this magical adventure. May the story stay with you for years to come.",
         title: finalPage?.title || title,
         sourcePageNumber: hasSpecialPages ? finalPage?.pageNumber : undefined,
       },
