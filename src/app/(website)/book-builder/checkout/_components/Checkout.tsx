@@ -120,7 +120,7 @@ export default function Checkout() {
     userDetails,
     setCurrentBookId,
   } = useBookBuilder();
-  const { bb, translateAge, translateTheme, translateMessage, translateFont, translateSubject } = useBookBuilderTranslations();
+  const { bb, translateAge, translateTheme, translateMessage, translateFont, translateSubject, translateBookLanguage } = useBookBuilderTranslations();
   const copy = useBookBuilderPageCopy();
 
   const { data: session } = useSession();
@@ -318,6 +318,7 @@ export default function Checkout() {
           <ChoiceChip choice={message} displayLabel={translateMessage(message?.label)} />
           <ChoiceChip choice={font} displayLabel={translateFont(font?.label)} />
           <ChoiceChip
+            displayLabel={translateBookLanguage(selectedLanguage)}
             choice={
               selectedLanguage
                 ? {

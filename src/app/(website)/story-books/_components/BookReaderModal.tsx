@@ -92,26 +92,59 @@ const BookReaderModal = ({
   const bookFontFamily = getBookFontFamily(font);
   const suppliedPages = pages || [];
   const hasSpecialPages = suppliedPages.some((page) => page.kind);
+
+  let overrideCover: string | undefined;
+  let pageOverrides: Record<number, string> = {};
+  if (typeof window !== "undefined" && storyId) {
+    try {
+      const storedCover = localStorage.getItem(`boekerello_cover_image_${storyId}`);
+      if (storedCover) overrideCover = storedCover;
+      const storedPages = localStorage.getItem(`boekerello_page_images_${storyId}`);
+      if (storedPages) pageOverrides = JSON.parse(storedPages);
+    } catch {}
+  }
+  const effectiveCover = overrideCover || coverImage;
+
   const storyPages = (hasSpecialPages
     ? suppliedPages.filter((page) => page.kind === "story")
     : suppliedPages.length > 0
       ? suppliedPages
       : defaultStoryPages
-  ).map((page, index) => ({
-    kind: "storyImage" as const,
-    image: page.imageUrl || page.illustrationUrl || page.image || "/images/story1.png",
-    alt: page.alt || `Illustration for story page ${page.storyPageNumber || page.pageNumber || index + 1}`,
-    text: page.text || "",
-    storyIndex: index,
-    sourcePageNumber: page.pageNumber || page.storyPageNumber || index + 1,
-  }));
+  ).map((page, index) => {
+    const pageNum = page.pageNumber || page.storyPageNumber || index + 1;
+    const customImage = pageOverrides[pageNum];
+    return {
+      kind: "storyImage" as const,
+      image: customImage || page.imageUrl || page.illustrationUrl || page.image || "/images/story1.png",
+      alt: page.alt || `Illustration for story page ${page.storyPageNumber || page.pageNumber || index + 1}`,
+      text: page.text || "",
+      storyIndex: index,
+      sourcePageNumber: pageNum,
+    };
+  });
   const coverPage = suppliedPages.find((page) => page.kind === "cover");
   const welcomePage = suppliedPages.find((page) => page.kind === "welcome");
   const finalPage = suppliedPages.find((page) => page.kind === "finalMessage");
+
+  const isSampleDummy = (t?: string) => {
+    if (!t) return false;
+    const lower = t.toLowerCase();
+    return (
+      lower.includes("sample book") ||
+      lower.includes("voorbeeldboek") ||
+      lower.includes("livre témoin") ||
+      lower.includes("glimpse of what is possible")
+    );
+  };
+  const effectiveWelcomeText =
+    (!isSampleDummy(welcomeText) && welcomeText) ||
+    (!isSampleDummy(welcomePage?.text) && welcomePage?.text) ||
+    "";
+
   const activePages: ReaderBookPage[] = [
     {
       kind: "cover",
-      image: coverPage?.imageUrl || coverPage?.illustrationUrl || coverPage?.image || coverImage || storyPages[0]?.image || "/images/story1.png",
+      image: effectiveCover || coverPage?.imageUrl || coverPage?.illustrationUrl || coverPage?.image || storyPages[0]?.image || "/images/story1.png",
       alt: `Cover of ${displayTitle}`,
       text: "",
       title: displayTitle,
@@ -121,7 +154,7 @@ const BookReaderModal = ({
       kind: "welcome",
       image: "",
       alt: "",
-      text: welcomePage?.text || welcomeText || `Welcome to ${displayTitle}. This magical adventure was created especially for you.`,
+      text: effectiveWelcomeText,
       sourcePageNumber: hasSpecialPages ? welcomePage?.pageNumber : undefined,
     },
     ...storyPages.flatMap((storyPage) => [
@@ -132,7 +165,7 @@ const BookReaderModal = ({
       kind: "finalMessage",
       image: "",
       alt: "",
-      text: finalPage?.text || finalText || "Thank you for sharing this magical adventure. May the story stay with you for years to come.",
+      text: finalText || finalPage?.text || "Thank you for sharing this magical adventure. May the story stay with you for years to come.",
       title: finalPage?.title || displayTitle,
       sourcePageNumber: hasSpecialPages ? finalPage?.pageNumber : undefined,
     },

@@ -410,6 +410,71 @@
       "generating": "Wordt gemaakt",
       "completed": "Voltooid",
       "generationFailed": "Genereren mislukt"
+    },
+    "editBook": {
+      "loadingBook": "Je boek laden…",
+      "bookUnavailable": "Dit boek is niet beschikbaar om te bewerken.",
+      "backToGenerated": "Terug naar gegenereerde boeken",
+      "backToBook": "Terug naar je boek",
+      "subtitle": "Bewerk je gegenereerde verhalenboeken.",
+      "saveAndView": "Opslaan en Boek Bekijken",
+      "saving": "Opslaan…",
+      "tabs": {
+        "cover": "Omslag",
+        "preface": "Voorwoord",
+        "story": "Verhaal",
+        "font": "Lettertype"
+      },
+      "cover": {
+        "fallbackTitle": "Jouw verhalenboek",
+        "editImage": "Afbeelding bewerken",
+        "bookTitle": "Boektitel",
+        "titlePlaceholder": "Voer je boektitel in",
+        "positionOfTitle": "Positie van de titel",
+        "top": "Bovenaan",
+        "middle": "Midden",
+        "bottom": "Onderaan",
+        "author": "Auteur",
+        "authorPlaceholder": "Vul je volledige naam in",
+        "textOnBack": "Tekst op de achterkant",
+        "textOnBackHint": "Een korte introductie die lezers nieuwsgierig maakt.",
+        "textOnBackPlaceholder": "Lorem ipsum dolor sit amet..."
+      },
+      "preface": {
+        "title": "Voorwoord",
+        "subtitle": "Een persoonlijke boodschap aan de lezer, voordat het verhaal begint.",
+        "helpButton": "Help mij met voorwoord",
+        "placeholder": "Schrijf een persoonlijke boodschap voor je lezer..."
+      },
+      "story": {
+        "noPages": "Er zijn geen bewerkbare verhaalpagina's in dit boek.",
+        "preface": "Voorwoord",
+        "finalMessage": "Slotboodschap",
+        "page": "Pagina",
+        "previewPage": "Voorbeeld: Pagina",
+        "storyPage": "Verhaalpagina",
+        "editImage": "Afbeelding bewerken",
+        "pageTitlePlaceholder": "Paginatitel (optioneel)",
+        "helpButton": "Hulp bij de tekst",
+        "pageOrder": "Paginavolgorde"
+      },
+      "font": {
+        "title": "Lettertype",
+        "subtitle": "Kies een lettertype voor je boek.",
+        "exampleTitle": "Lettertype Voorbeeld",
+        "exampleSubtitle": "Bekijk hoe je titel en verhaal eruitzien in dit lettertype.",
+        "fallbackTitle": "Jouw verhalenboek",
+        "fallbackSample": "Jouw verhaal verschijnt hier."
+      },
+      "errors": {
+        "chooseBook": "Kies een gegenereerd boek voordat je de editor opent.",
+        "signInToEdit": "Meld je aan om je boek te bewerken.",
+        "signInToSave": "Meld je opnieuw aan voordat je wijzigingen opslaat.",
+        "onlyCompleted": "Alleen voltooide boeken kunnen worden bewerkt.",
+        "loadFailed": "Kan dit boek niet laden om te bewerken.",
+        "pageNeedsText": "Pagina {page} heeft tekst nodig voordat deze kan worden opgeslagen.",
+        "saveFailed": "Kan de wijzigingen in je boek niet opslaan."
+      }
     }
   },
   "bookBuilder": {
@@ -461,7 +526,8 @@
       "Subject": "Onderwerp",
       "Message": "Boodschap",
       "Illustration": "Illustratie",
-      "Font": "Lettertype"
+      "Font": "Lettertype",
+      "Language": "Taal"
     },
     "ages": {
       "0-2 Years": "0-2 Jaar",

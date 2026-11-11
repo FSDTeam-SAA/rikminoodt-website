@@ -549,7 +549,7 @@ export default function InformationAboutCharacters() {
     characters: storedCharacters,
     setCharacters,
   } = useBookBuilder();
-  const { bb, language, translateAge, translateTheme, translateMessage, translateIllustration, translateFont } = useBookBuilderTranslations();
+  const { bb, language, translateAge, translateTheme, translateMessage, translateIllustration, translateFont, translateBookLanguage, translateLabel } = useBookBuilderTranslations();
   const copy = useBookBuilderPageCopy();
   const genderItems = getGenderItems(copy);
 
@@ -830,7 +830,8 @@ export default function InformationAboutCharacters() {
               href="/book-builder/choose-font"
             />
             <ChoiceChip
-              label="Language"
+              label={translateLabel("Language")}
+              displayLabel={translateBookLanguage(selectedLanguage)}
               choice={
                 selectedLanguage
                   ? {

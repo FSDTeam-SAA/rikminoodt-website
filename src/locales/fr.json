@@ -410,6 +410,71 @@
       "generating": "Génération en cours",
       "completed": "Terminé",
       "generationFailed": "Échec de la génération"
+    },
+    "editBook": {
+      "loadingBook": "Chargement de votre livre…",
+      "bookUnavailable": "Ce livre n’est pas disponible pour modification.",
+      "backToGenerated": "Retour aux livres générés",
+      "backToBook": "Retour à votre livre",
+      "subtitle": "Modifiez vos livres d’histoires générés.",
+      "saveAndView": "Enregistrer et voir le livre",
+      "saving": "Enregistrement…",
+      "tabs": {
+        "cover": "Couverture",
+        "preface": "Préface",
+        "story": "Histoire",
+        "font": "Police"
+      },
+      "cover": {
+        "fallbackTitle": "Votre livre d’histoires",
+        "editImage": "Modifier l'image",
+        "bookTitle": "Titre du livre",
+        "titlePlaceholder": "Entrez le titre de votre livre",
+        "positionOfTitle": "Position du titre",
+        "top": "Haut",
+        "middle": "Milieu",
+        "bottom": "Bas",
+        "author": "Auteur",
+        "authorPlaceholder": "Entrez votre nom complet",
+        "textOnBack": "Texte au dos",
+        "textOnBackHint": "Une courte introduction qui rend les lecteurs curieux.",
+        "textOnBackPlaceholder": "Lorem ipsum dolor sit amet..."
+      },
+      "preface": {
+        "title": "Préface",
+        "subtitle": "Un message personnel au lecteur avant que l'histoire ne commence.",
+        "helpButton": "Aidez-moi avec la préface",
+        "placeholder": "Écrivez un message personnel pour votre lecteur..."
+      },
+      "story": {
+        "noPages": "Il n'y a aucune page d'histoire modifiable dans ce livre.",
+        "preface": "Préface",
+        "finalMessage": "Message final",
+        "page": "Page",
+        "previewPage": "Aperçu : Page",
+        "storyPage": "Page de l'histoire",
+        "editImage": "Modifier l'image",
+        "pageTitlePlaceholder": "Titre de la page (facultatif)",
+        "helpButton": "Aide pour le texte",
+        "pageOrder": "Ordre des pages"
+      },
+      "font": {
+        "title": "Police",
+        "subtitle": "Choisissez une police pour votre livre.",
+        "exampleTitle": "Exemple de police",
+        "exampleSubtitle": "Voyez à quoi ressemblent votre titre et votre histoire dans cette police.",
+        "fallbackTitle": "Votre livre d'histoires",
+        "fallbackSample": "Votre histoire apparaîtra ici."
+      },
+      "errors": {
+        "chooseBook": "Choisissez un livre généré avant d'ouvrir l'éditeur.",
+        "signInToEdit": "Veuillez vous connecter pour modifier votre livre.",
+        "signInToSave": "Veuillez vous reconnecter avant d'enregistrer vos modifications.",
+        "onlyCompleted": "Seuls les livres terminés peuvent être modifiés.",
+        "loadFailed": "Impossible de charger ce livre pour modification.",
+        "pageNeedsText": "La page {page} doit contenir du texte avant de pouvoir être enregistrée.",
+        "saveFailed": "Impossible d'enregistrer les modifications de votre livre."
+      }
     }
   },
   "bookBuilder": {
@@ -461,7 +526,8 @@
       "Subject": "Sujet",
       "Message": "Message",
       "Illustration": "Illustration",
-      "Font": "Police"
+      "Font": "Police",
+      "Language": "Langue"
     },
     "ages": {
       "0-2 Years": "0-2 Ans",
