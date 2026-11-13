@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { Pencil } from "lucide-react";
-import { useEffect, useRef, type ChangeEvent } from "react";
+import { Sparkles } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useLanguage } from "@/components/providers/LanguageProvider";
 
@@ -13,11 +13,20 @@ type CoverTabProps = {
   titlePosition: "Top" | "Middle" | "Bottom";
   creatorName: string;
   backCoverText: string;
-  onCoverImageChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onEditImage: () => void;
   onChange: (field: "title" | "titlePosition" | "creatorName" | "backCoverText", value: string) => void;
 };
 
-export default function CoverTab({ coverImageUrl, coverPreviewUrl, title, titlePosition, creatorName, backCoverText, onCoverImageChange, onChange }: CoverTabProps) {
+export default function CoverTab({
+  coverImageUrl,
+  coverPreviewUrl,
+  title,
+  titlePosition,
+  creatorName,
+  backCoverText,
+  onEditImage,
+  onChange,
+}: CoverTabProps) {
   const { t } = useLanguage();
   const coverT = t.settings?.editBook?.cover;
   const coverSrc = coverPreviewUrl || coverImageUrl;
@@ -43,11 +52,14 @@ export default function CoverTab({ coverImageUrl, coverPreviewUrl, title, titleP
             </div>
           )}
         </div>
-        <label className="flex cursor-pointer items-center gap-2 rounded-xl border border-[#E3859A] px-6 py-2 text-sm font-medium text-[#E3859A] transition-colors hover:bg-[#FFF0F2]">
+        <button
+          type="button"
+          onClick={onEditImage}
+          className="flex items-center gap-2 rounded-xl bg-[#E3859A] px-6 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#d67288] active:scale-[0.99]"
+        >
+          <Sparkles size={15} />
           <span>{coverT?.editImage || "Edit Image"}</span>
-          <Pencil size={14} />
-          <input type="file" accept="image/*" onChange={onCoverImageChange} className="sr-only" />
-        </label>
+        </button>
       </div>
 
       <div className="min-w-0 space-y-4 rounded-2xl border border-[#F4DDD2] bg-[#FFFCFA] p-4 sm:p-5">

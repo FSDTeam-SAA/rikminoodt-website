@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ChangeEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { ChevronLeft, Loader2 } from "lucide-react";
@@ -9,6 +9,7 @@ import CoverTab from "@/components/setting/book-editor/CoverTab";
 import PrefaceTab from "@/components/setting/book-editor/PrefaceTab";
 import StoryTab from "@/components/setting/book-editor/StoryTab";
 import FontTab from "@/components/setting/book-editor/FontTab";
+import EditImageModal from "@/components/setting/book-editor/EditImageModal";
 import type { BookCharacter, EditableBook, EditableBookPage } from "@/components/setting/book-editor/types";
 import { getApiBaseUrl } from "@/config/api";
 import { useLanguage } from "@/components/providers/LanguageProvider";
@@ -80,8 +81,8 @@ export default function BookEditorPage() {
   const [activeTab, setActiveTab] = useState<Tab>("cover");
   const [book, setBook] = useState<EditableBook | null>(null);
   const initialBookRef = useRef<EditableBook | null>(null);
-  const [coverImage, setCoverImage] = useState<File | null>(null);
   const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | null>(null);
+  const [isCoverImageModalOpen, setIsCoverImageModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -237,18 +238,25 @@ export default function BookEditorPage() {
     });
   };
 
-  const handleCoverImageChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-    if (coverPreviewUrl) URL.revokeObjectURL(coverPreviewUrl);
-    const preview = URL.createObjectURL(file);
-    setCoverImage(file);
-    setCoverPreviewUrl(preview);
-    setBook((current) => current ? {
-      ...current,
-      coverImageUrl: preview,
-      pages: current.pages.map((p) => p.kind === "cover" ? { ...p, imageUrl: preview } : p),
-    } : current);
+  const handleApplyCoverImage = (newImageUrl: string) => {
+    setCoverPreviewUrl(newImageUrl);
+    setBook((current) => {
+      if (!current) return current;
+      return {
+        ...current,
+        coverImageUrl: newImageUrl,
+        pages: current.pages.map((p) =>
+          p.kind === "cover" || p.pageNumber === 1
+            ? { ...p, imageUrl: newImageUrl }
+            : p
+        ),
+      };
+    });
+    if (typeof window !== "undefined" && bookId) {
+      try {
+        localStorage.setItem(`boekerello_cover_image_${bookId}`, newImageUrl);
+      } catch {}
+    }
     setError("");
   };
 
@@ -300,25 +308,8 @@ export default function BookEditorPage() {
       /* ignore storage errors */
     }
 
-    // 2. If a cover image file was chosen, upload to /api/upload to obtain a permanent URL for instant preview
-    if (coverImage) {
-      try {
-        const coverFormData = new FormData();
-        coverFormData.append("file", coverImage);
-        const coverUploadRes = await fetch("/api/upload", {
-          method: "POST",
-          body: coverFormData,
-        });
-        if (coverUploadRes.ok) {
-          const coverUploadJson = await coverUploadRes.json();
-          if (coverUploadJson?.url && typeof window !== "undefined" && bookId) {
-            localStorage.setItem(`boekerello_cover_image_${bookId}`, coverUploadJson.url);
-          }
-        }
-      } catch {
-        /* continue */
-      }
-    }
+    const effectiveCover = coverPreviewUrl || book.coverImageUrl;
+    const coverChanged = Boolean(effectiveCover && effectiveCover !== initialBook.coverImageUrl);
 
     const formData = new FormData();
     if (book.title !== initialBook.title) formData.append("title", book.title);
@@ -327,8 +318,8 @@ export default function BookEditorPage() {
     if (book.backCoverText !== initialBook.backCoverText) formData.append("backCoverText", book.backCoverText);
     if (book.foreword !== initialBook.foreword) formData.append("foreword", book.foreword);
     if (book.font !== initialBook.font) formData.append("font", book.font);
+    if (coverChanged && effectiveCover) formData.append("coverImageUrl", effectiveCover);
     if (changedPages.length) formData.append("pages", JSON.stringify(changedPages));
-    if (coverImage) formData.append("coverImage", coverImage);
 
     const hasChanges =
       book.title !== initialBook.title ||
@@ -338,7 +329,7 @@ export default function BookEditorPage() {
       book.foreword !== initialBook.foreword ||
       book.font !== initialBook.font ||
       changedPages.length > 0 ||
-      Boolean(coverImage);
+      coverChanged;
     if (!hasChanges) {
       router.push(detailsHref);
       return;
@@ -419,7 +410,7 @@ export default function BookEditorPage() {
                 titlePosition={book.titlePosition}
                 creatorName={book.creatorName}
                 backCoverText={book.backCoverText}
-                onCoverImageChange={handleCoverImageChange}
+                onEditImage={() => setIsCoverImageModalOpen(true)}
                 onChange={updateBook}
               />
             )}
@@ -471,6 +462,19 @@ export default function BookEditorPage() {
           </button>
         </div>
       </div>
+
+      <EditImageModal
+        isOpen={isCoverImageModalOpen}
+        onClose={() => setIsCoverImageModalOpen(false)}
+        isCover={true}
+        currentImageUrl={coverPreviewUrl || book.coverImageUrl}
+        title={book.title}
+        bookId={book._id}
+        pageText={book.title || book.foreword}
+        illustrationStyle={book.illustrationStyle}
+        characters={book.characters}
+        onApplyImage={handleApplyCoverImage}
+      />
     </div>
   );
 }
