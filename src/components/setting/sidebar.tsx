@@ -16,12 +16,18 @@ export default function Sidebar() {
   const { data: session } = useSession();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [userName, setUserName] = useState<string>(session?.user?.name || "Jack Khan");
-  const [userEmail, setUserEmail] = useState<string>(session?.user?.email || "jackkhan@gmail.com");
-  const [userAvatar, setUserAvatar] = useState<string>(session?.user?.profileImage || "https://github.com/shadcn.png");
+  const [userName, setUserName] = useState<string>(session?.user?.name || "");
+  const [userEmail, setUserEmail] = useState<string>(session?.user?.email || "");
+  const [userAvatar, setUserAvatar] = useState<string>(session?.user?.profileImage || "/images/book_customer.jpg");
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  useEffect(() => {
+    if (session?.user?.name) setUserName(session.user.name);
+    if (session?.user?.email) setUserEmail(session.user.email);
+    if (session?.user?.profileImage) setUserAvatar(session.user.profileImage);
+  }, [session?.user?.name, session?.user?.email, session?.user?.profileImage]);
 
   useEffect(() => {
     const token = session?.user?.accessToken || (typeof window !== "undefined" ? localStorage.getItem("token") : null);
@@ -140,8 +146,8 @@ export default function Sidebar() {
           />
         </div>
 
-        <h2 className="text-center font-sans text-[24px] font-semibold text-[#1E1E1E]">{userName}</h2>
-        <p className="mb-8 text-center font-sans text-[14px] font-normal text-[#444444]">{userEmail}</p>
+        <h2 className="text-center font-sans text-[24px] font-semibold text-[#1E1E1E]">{userName || session?.user?.name || "Boekerello Family"}</h2>
+        <p className="mb-8 text-center font-sans text-[14px] font-normal text-[#444444]">{userEmail || session?.user?.email || ""}</p>
 
         {/* Navigation Menu */}
         <div className="w-full flex flex-col gap-1">

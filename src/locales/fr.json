@@ -155,21 +155,21 @@
     "bookLabelTitle": "L'aventure",
     "bookLabelSubtitle": "magique d'Emma",
     "placeholderReviews": [
-      { "name": "Emma", "comment": "Un livre magique qui fait désormais partie de notre rituel du coucher." },
-      { "name": "Lucas", "comment": "L'histoire est si personnelle et a fait sourire toute notre famille." },
-      { "name": "Olivia & Noah", "comment": "Nos enfants ont adoré se découvrir dans leur propre aventure." },
-      { "name": "Mila", "comment": "De magnifiques illustrations et une histoire que nous aimons relire encore et encore." },
+      { "name": "Victor", "comment": "Un livre magique qui fait désormais partie de notre rituel du coucher." },
+      { "name": "Emma & Lucas", "comment": "L'histoire est si personnelle et a fait sourire toute notre famille." },
+      { "name": "Olivia", "comment": "Notre fille a adoré se découvrir dans sa propre aventure." },
+      { "name": "Matteo", "comment": "De magnifiques illustrations et une histoire que nous aimons relire encore et encore." },
+      { "name": "Sofia", "comment": "Un souvenir précieux plein d'aventures féeriques dans la forêt." },
+      { "name": "Louise", "comment": "Une merveilleuse histoire pour le coucher que Louise réclame tous les soirs." },
       { "name": "Finn", "comment": "Un souvenir précieux où chaque petit détail est parfait." },
-      { "name": "Louise & Jules", "comment": "Une belle histoire à partager que les deux enfants demandent chaque soir." },
-      { "name": "Arthur", "comment": "Voir son prénom dans le livre a fait d'Arthur un vrai héros." },
       { "name": "Ella", "comment": "La qualité est superbe et le livre est vraiment très spécial." },
       { "name": "Liam & Sofia", "comment": "Un cadeau merveilleux qui a offert aux enfants une aventure à partager." },
-      { "name": "Juliette", "comment": "Juliette a été enchantée dès la première page." },
+      { "name": "Noah", "comment": "Noah a été enchanté dès la toute première page de son expédition." },
+      { "name": "Marie & Max", "comment": "C'était tellement magique de voir Marie et notre chien Max ensemble dans une histoire !" },
       { "name": "Leon", "comment": "Une histoire chaleureuse et imaginative que nous chérirons pendant des années." },
-      { "name": "Marie & Louis", "comment": "Il était très simple de créer un livre qui semble fait juste pour eux." },
-      { "name": "Alice", "comment": "Alice montre ce livre à toutes les personnes qui nous rendent visite." },
-      { "name": "Matteo", "comment": "Un livre d'histoires magnifiquement réalisé et plein de tendresse." },
-      { "name": "Victor & Rosanne", "comment": "Un cadeau familial inoubliable avec des illustrations magiques." }
+      { "name": "Jules & Mila", "comment": "Une magnifique histoire de chasse au trésor que les deux enfants adorent." },
+      { "name": "Alice", "comment": "Alice s'endort chaque soir en écoutant son histoire personnalisée préférée." },
+      { "name": "Arthur", "comment": "Voir son prénom dans le livre a fait d'Arthur un vrai héros." }
     ]
   },
   "bookPreview": {

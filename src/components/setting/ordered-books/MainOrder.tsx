@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import OrderCard, { OrderDetails } from "./OrderCard";
@@ -39,6 +40,9 @@ const bgColors = ["bg-[#F0F8FF]", "bg-[#F5F0FF]"];
 
 export default function OrderedBooksPage() {
   const { data: session, status: sessionStatus } = useSession();
+  const searchParams = useSearchParams();
+  const orderIdParam = searchParams?.get("orderId") || searchParams?.get("order") || searchParams?.get("id");
+  const openedOrderIdRef = useRef<string | null>(null);
   const { t, language } = useLanguage();
   const copy = t.settings.orders;
   const [activeTab, setActiveTab] = useState<"ongoing" | "completed">("ongoing");
@@ -135,6 +139,49 @@ export default function OrderedBooksPage() {
       bgColor: bgColors[index % bgColors.length],
       rawStatus: o.status,
     }));
+
+  useEffect(() => {
+    if (!orderIdParam || orders.length === 0) return;
+    if (openedOrderIdRef.current === orderIdParam) return;
+
+    const target = orderIdParam.trim().toLowerCase();
+    const match =
+      ongoingOrders.find(
+        (o) =>
+          o.id.toLowerCase() === target ||
+          o.orderId.toLowerCase() === target ||
+          o.id.slice(-8).toLowerCase() === target ||
+          (target.length >= 6 && o.id.toLowerCase().endsWith(target))
+      ) ||
+      completedOrders.find(
+        (o) =>
+          o.id.toLowerCase() === target ||
+          o.orderId.toLowerCase() === target ||
+          o.id.slice(-8).toLowerCase() === target ||
+          (target.length >= 6 && o.id.toLowerCase().endsWith(target))
+      );
+
+    if (match) {
+      openedOrderIdRef.current = orderIdParam;
+      setTrackingOrder(match);
+      if (match.rawStatus === "DELIVERED") {
+        setActiveTab("completed");
+      } else {
+        setActiveTab("ongoing");
+      }
+    }
+  }, [orders, orderIdParam, ongoingOrders, completedOrders]);
+
+  const handleBackFromTracking = () => {
+    setTrackingOrder(null);
+    if (typeof window !== "undefined" && window.location.search) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("orderId");
+      url.searchParams.delete("order");
+      url.searchParams.delete("id");
+      window.history.replaceState({}, "", url.pathname + (url.search ? url.search : ""));
+    }
+  };
 
   return (
     <div className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
@@ -240,7 +287,7 @@ export default function OrderedBooksPage() {
         <div className="border rounded-2xl p-6 border-gray-100">
           <TrackingView
             order={trackingOrder}
-            onBack={() => setTrackingOrder(null)}
+            onBack={handleBackFromTracking}
           />
         </div>
       )}

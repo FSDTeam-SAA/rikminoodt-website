@@ -155,21 +155,21 @@
     "bookLabelTitle": "Emma's",
     "bookLabelSubtitle": "Magische Avontuur",
     "placeholderReviews": [
-      { "name": "Emma", "comment": "Een magisch boek dat deel is geworden van ons bedtijdritueel." },
-      { "name": "Lucas", "comment": "Het verhaal voelt heel persoonlijk en bezorgde ons hele gezin een glimlach." },
-      { "name": "Olivia & Noah", "comment": "Onze kinderen vonden het geweldig om zichzelf in hun eigen avontuur te ontdekken." },
-      { "name": "Mila", "comment": "Prachtige illustraties en een verhaal dat we keer op keer graag lezen." },
+      { "name": "Victor", "comment": "Een magisch boek dat deel is geworden van ons bedtijdritueel." },
+      { "name": "Emma & Lucas", "comment": "Het verhaal voelt heel persoonlijk en bezorgde ons hele gezin een glimlach." },
+      { "name": "Olivia", "comment": "Onze dochter vond het geweldig om zichzelf in haar eigen avontuur te ontdekken." },
+      { "name": "Matteo", "comment": "Prachtige illustraties en een verhaal dat we keer op keer graag lezen." },
+      { "name": "Sofia", "comment": "Een bijzonder aandenken met magische bosavonturen." },
+      { "name": "Louise", "comment": "Een prachtig verhaaltje voor het slapengaan waar Louise elke avond om vraagt." },
       { "name": "Finn", "comment": "Een bijzonder aandenken waarin elk klein detail klopt." },
-      { "name": "Louise & Jules", "comment": "Een heerlijk gezamenlijk verhaal waar beide kinderen elke avond om vragen." },
-      { "name": "Arthur", "comment": "Zijn naam in het boek zien maakte van Arthur een echte held." },
       { "name": "Ella", "comment": "De kwaliteit is prachtig en het boek voelt echt heel speciaal." },
       { "name": "Liam & Sofia", "comment": "Een geweldig cadeau dat de kinderen een avontuur gaf om samen te delen." },
-      { "name": "Juliette", "comment": "Juliette was vanaf de eerste pagina betoverd." },
+      { "name": "Noah", "comment": "Noah was betoverd vanaf de allereerste pagina van zijn expeditie." },
+      { "name": "Marie & Max", "comment": "Het was geweldig om Marie en onze hond Max samen in een verhaal te zien!" },
       { "name": "Leon", "comment": "Een warm, fantasierijk verhaal dat we nog jaren zullen koesteren." },
-      { "name": "Marie & Louis", "comment": "Het was heel eenvoudig om een boek te maken dat echt voor hen gemaakt voelt." },
-      { "name": "Alice", "comment": "Alice laat dit boek graag zien aan iedereen die op bezoek komt." },
-      { "name": "Matteo", "comment": "Een prachtig gemaakt verhalenboek vol liefde." },
-      { "name": "Victor & Rosanne", "comment": "Een onvergetelijk familiecadeau met magische illustraties." }
+      { "name": "Jules & Mila", "comment": "Een geweldig gedeeld schattenjacht-verhaal waar beide kinderen dol op zijn." },
+      { "name": "Alice", "comment": "Alice valt elke avond heerlijk in slaap terwijl we haar favoriete verhaaltje voorlezen." },
+      { "name": "Arthur", "comment": "Zijn naam in het boek zien maakte van Arthur een echte held." }
     ]
   },
   "bookPreview": {

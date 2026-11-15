@@ -1,15 +1,17 @@
 "use client";
 
-import { useEffect, useState, type ChangeEvent } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Sparkles, Upload, X, Check, Loader2, RefreshCw } from "lucide-react";
+import { Sparkles, X, Check, Loader2, RefreshCw, Palette } from "lucide-react";
 import type { BookCharacter } from "./types";
 
 type EditImageModalProps = {
   isOpen: boolean;
   onClose: () => void;
   currentImageUrl?: string;
-  pageNumber: number;
+  pageNumber?: number;
+  isCover?: boolean;
+  title?: string;
   bookId?: string;
   pageText?: string;
   illustrationStyle?: string;
@@ -17,11 +19,21 @@ type EditImageModalProps = {
   onApplyImage: (newImageUrl: string) => void;
 };
 
+const SUGGESTIONS = [
+  "Add warmer sunset lighting",
+  "Make the background more magical",
+  "Add smiling friendly animals",
+  "More vibrant colorful details",
+  "Softer fairytale atmosphere",
+];
+
 export default function EditImageModal({
   isOpen,
   onClose,
   currentImageUrl,
   pageNumber,
+  isCover = false,
+  title,
   bookId,
   pageText,
   illustrationStyle,
@@ -31,28 +43,27 @@ export default function EditImageModal({
   const [instruction, setInstruction] = useState("");
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadSuccess, setUploadSuccess] = useState(false);
-  const [activeTab, setActiveTab] = useState<"ai" | "upload">("upload");
   const [error, setError] = useState("");
 
-  // Reset state when modal opens or page changes
+  // Reset state whenever modal opens
   useEffect(() => {
     if (isOpen) {
       setPreviewImage(null);
       setError("");
       setInstruction("");
-      setIsUploading(false);
       setIsLoading(false);
-      setUploadSuccess(false);
     }
-  }, [isOpen, pageNumber]);
+  }, [isOpen, pageNumber, isCover]);
 
   if (!isOpen) return null;
 
   const handleRegenerate = async () => {
     if (!instruction.trim()) {
-      setError("Please describe what changes you want for this illustration.");
+      setError(
+        isCover
+          ? "Please describe how you would like the cover illustration to look."
+          : "Please describe what changes you want for this illustration."
+      );
       return;
     }
 
@@ -64,66 +75,26 @@ export default function EditImageModal({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          bookId,
-          pageNumber,
-          text: pageText,
+          bookId: bookId || "book-editor",
+          pageNumber: isCover ? 1 : (pageNumber || 1),
+          text: isCover ? (title || "Storybook cover") : (pageText || ""),
           instruction: instruction.trim(),
-          illustrationStyle,
-          characters,
+          illustrationStyle: illustrationStyle || "Watercolor",
+          characters: characters || [],
         }),
       });
 
       const result = await response.json();
       if (!response.ok || !result.success) {
-        throw new Error(result.error || "Unable to regenerate image right now.");
+        throw new Error(result.error || "Unable to generate image with AI right now.");
       }
 
       setPreviewImage(result.imageUrl);
-      onApplyImage(result.imageUrl);
     } catch (err: unknown) {
-      const error = err as { message?: string };
-      setError(error?.message || "Failed to regenerate image with AI.");
+      const e = err as { message?: string };
+      setError(e?.message || "Failed to generate image with AI. Please try again.");
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (!file.type.startsWith("image/")) {
-      setError("Please select a valid image file.");
-      return;
-    }
-
-    setIsUploading(true);
-    setError("");
-    setUploadSuccess(false);
-
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await res.json();
-      if (!res.ok || !data?.url) {
-        throw new Error(data?.error || "Failed to upload image. Please try again.");
-      }
-
-      setPreviewImage(data.url);
-      setUploadSuccess(true);
-      // Immediately apply the new image to the page!
-      onApplyImage(data.url);
-    } catch (err: unknown) {
-      const error = err as { message?: string };
-      setError(error?.message || "Failed to upload image.");
-    } finally {
-      setIsUploading(false);
     }
   };
 
@@ -135,17 +106,34 @@ export default function EditImageModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm animate-in fade-in">
-      <div className="relative flex max-h-[90vh] w-full max-w-xl sm:max-w-2xl flex-col rounded-2xl bg-white shadow-2xl overflow-hidden">
+    <div
+      role="dialog"
+      aria-modal="true"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-xs animate-in fade-in"
+      onClick={onClose}
+    >
+      <div
+        className="relative flex max-h-[92vh] w-full max-w-xl sm:max-w-2xl flex-col rounded-2xl bg-white shadow-2xl overflow-hidden border border-[#F3A8B7]/40"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-gray-100 bg-[#FFF7F9] px-6 py-4">
-          <div>
-            <h3 className="font-serif text-lg font-bold text-gray-900">
-              Edit Illustration (Page {pageNumber})
-            </h3>
-            <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
-              Upload a custom image or regenerate with AI by describing changes.
-            </p>
+        <div className="flex items-center justify-between border-b border-gray-100 bg-gradient-to-r from-[#FFF7F9] to-[#FFF0F4] px-6 py-4">
+          <div className="flex items-center gap-3">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#FDE6EC] to-[#FCD5E0] text-[#E3859A] shadow-xs">
+              <Sparkles size={20} />
+            </div>
+            <div>
+              <h3 className="font-serif text-lg font-bold text-gray-900">
+                {isCover
+                  ? "Regenerate Cover with AI"
+                  : `Regenerate Illustration (Page ${pageNumber ?? 1})`}
+              </h3>
+              <p className="text-xs sm:text-sm text-gray-500">
+                {isCover
+                  ? "Describe your ideal book cover and AI will generate a new illustration."
+                  : "Describe the changes you want and AI will redraw this page illustration."}
+              </p>
+            </div>
           </div>
           <button
             onClick={onClose}
@@ -156,111 +144,156 @@ export default function EditImageModal({
           </button>
         </div>
 
-        {/* Tab switch */}
-        <div className="flex border-b border-gray-100 bg-gray-50/50 px-6 pt-2">
-          <button
-            type="button"
-            onClick={() => setActiveTab("upload")}
-            className={`flex items-center gap-2 border-b-2 px-5 py-2.5 text-sm font-semibold transition-colors ${
-              activeTab === "upload"
-                ? "border-[#E3859A] text-[#E3859A]"
-                : "border-transparent text-gray-500 hover:text-gray-700"
-            }`}
-          >
-            <Upload size={16} />
-            <span>Upload Image</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab("ai")}
-            className={`flex items-center gap-2 border-b-2 px-5 py-2.5 text-sm font-semibold transition-colors ${
-              activeTab === "ai"
-                ? "border-[#E3859A] text-[#E3859A]"
-                : "border-transparent text-gray-500 hover:text-gray-700"
-            }`}
-          >
-            <Sparkles size={16} />
-            <span>Regenerate with AI</span>
-          </button>
-        </div>
-
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-4">
+        {/* Content Body */}
+        <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-5">
           {error && (
-            <div className="rounded-xl bg-red-50 p-3 text-xs text-red-600 border border-red-100">
+            <div
+              role="alert"
+              className="rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700 sm:text-sm"
+            >
               {error}
             </div>
           )}
 
-          {/* Image Preview Area */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 rounded-xl border border-dashed border-gray-200 bg-gray-50/60 p-4">
+          {/* Style indicator */}
+          <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-[#FFF9FA] border border-[#FAD7E0] px-4 py-2 text-xs sm:text-sm text-[#704652]">
+            <span className="flex items-center gap-1.5 font-medium">
+              <Palette size={15} className="text-[#E3859A]" />
+              <span>Art Style:</span>
+              <strong className="text-gray-900 font-semibold">
+                {illustrationStyle || "Watercolor"}
+              </strong>
+            </span>
+            {characters && characters.length > 0 && (
+              <span className="text-xs text-gray-500">
+                Characters:{" "}
+                {characters
+                  .map((c) => c.name || "Hero")
+                  .filter(Boolean)
+                  .join(", ")}
+              </span>
+            )}
+          </div>
+
+          {/* Side-by-side Image Previews */}
+          <div className="grid grid-cols-2 gap-4">
+            {/* Current Image */}
             <div className="flex flex-col items-center">
-              <span className="mb-1 text-[11px] font-medium text-gray-500">Current</span>
-              <div className="relative h-32 w-24 overflow-hidden rounded-lg bg-white shadow-sm border border-gray-100">
+              <span className="mb-1.5 text-xs font-semibold text-gray-600">
+                Current {isCover ? "Cover" : "Illustration"}
+              </span>
+              <div className="relative aspect-[3/4] w-full max-w-[200px] overflow-hidden rounded-xl bg-[#FFF7F9] shadow-md border border-gray-200">
                 {currentImageUrl ? (
-                  <Image src={currentImageUrl} alt="Current page" fill unoptimized className="object-contain p-1" />
+                  <Image
+                    src={currentImageUrl}
+                    alt="Current illustration"
+                    fill
+                    unoptimized
+                    className="object-contain p-2"
+                  />
                 ) : (
-                  <span className="flex h-full items-center justify-center text-xs text-gray-400">No Image</span>
+                  <span className="flex h-full items-center justify-center text-xs text-gray-400">
+                    No Image
+                  </span>
                 )}
               </div>
             </div>
 
-            {previewImage && (
-              <div className="flex flex-col items-center">
-                <span className="mb-1 text-[11px] font-semibold text-[#E3859A]">New Image Applied ✓</span>
-                <div className="relative h-32 w-24 overflow-hidden rounded-lg bg-white shadow-sm border-2 border-[#E3859A]">
-                  <Image src={previewImage} alt="New illustration" fill unoptimized className="object-contain p-1" />
-                </div>
+            {/* New AI Generated Image */}
+            <div className="flex flex-col items-center">
+              <span className="mb-1.5 flex items-center gap-1 text-xs font-semibold text-[#E3859A]">
+                {previewImage ? (
+                  <>
+                    <Check size={14} className="text-emerald-500" />
+                    <span className="text-emerald-600">New AI Image Ready</span>
+                  </>
+                ) : (
+                  <span>New AI Generated Image</span>
+                )}
+              </span>
+              <div
+                className={`relative aspect-[3/4] w-full max-w-[200px] overflow-hidden rounded-xl shadow-md transition-all ${
+                  previewImage
+                    ? "border-2 border-emerald-500 bg-emerald-50/20"
+                    : isLoading
+                    ? "border-2 border-dashed border-[#E3859A] bg-[#FFF0F4]/40 animate-pulse"
+                    : "border-2 border-dashed border-gray-200 bg-gray-50/70"
+                }`}
+              >
+                {previewImage ? (
+                  <Image
+                    src={previewImage}
+                    alt="New AI generated illustration"
+                    fill
+                    unoptimized
+                    className="object-contain p-2"
+                  />
+                ) : isLoading ? (
+                  <div className="flex h-full flex-col items-center justify-center p-3 text-center">
+                    <Loader2 size={24} className="animate-spin text-[#E3859A]" />
+                    <span className="mt-2 text-xs font-medium text-[#704652]">
+                      Generating with AI…
+                    </span>
+                    <span className="mt-0.5 text-[10px] text-gray-400">
+                      (~15-30s)
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex h-full flex-col items-center justify-center p-4 text-center">
+                    <Sparkles size={22} className="text-gray-300" />
+                    <span className="mt-2 text-xs text-gray-400">
+                      New illustration will appear here
+                    </span>
+                  </div>
+                )}
               </div>
-            )}
+            </div>
           </div>
 
-          {activeTab === "upload" ? (
-            <div>
-              <label className="mb-2 block text-sm font-semibold text-gray-800">
-                Choose an image from your computer:
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                disabled={isUploading}
-                onChange={handleFileUpload}
-                className="w-full text-sm text-gray-500 file:mr-4 file:rounded-xl file:border-0 file:bg-[#FFF0F2] file:px-4 file:py-2.5 file:text-sm file:font-semibold file:text-[#E3859A] hover:file:bg-[#ffe1e6] disabled:opacity-50 cursor-pointer"
-              />
-              {isUploading && (
-                <div className="mt-3 flex items-center gap-2 text-sm font-medium text-[#E3859A]">
-                  <Loader2 size={16} className="animate-spin" />
-                  <span>Uploading image to cloud…</span>
-                </div>
-              )}
-              {uploadSuccess && (
-                <div className="mt-3 flex items-center gap-2 text-sm font-semibold text-emerald-600">
-                  <Check size={16} />
-                  <span>Image uploaded and applied to page!</span>
-                </div>
-              )}
+          {/* Description / Prompt Textarea */}
+          <div>
+            <label className="mb-1.5 block text-sm font-semibold text-gray-800">
+              {isCover
+                ? "Describe what you want on the cover:"
+                : "Describe the changes for the new illustration:"}
+            </label>
+            <textarea
+              rows={3}
+              value={instruction}
+              onChange={(e) => setInstruction(e.target.value)}
+              placeholder={
+                isCover
+                  ? "e.g. A magical children's book cover with our main character discovering a glowing treasure chest under tall oak trees, joyful expression, fairytale look..."
+                  : "e.g. Change the background to a sunset beach, add cute smiling animals, make the trees taller and greener..."
+              }
+              className="w-full resize-none rounded-xl border border-[#F3A8B7] p-3 text-sm text-gray-800 placeholder-gray-400 focus:border-[#E3859A] focus:outline-none focus:ring-2 focus:ring-[#E3859A]/20"
+            />
+
+            {/* Quick Suggestion Chips */}
+            <div className="mt-2 flex flex-wrap items-center gap-1.5">
+              <span className="text-[11px] font-medium text-gray-400 mr-1">
+                Quick ideas:
+              </span>
+              {SUGGESTIONS.map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() =>
+                    setInstruction((prev) =>
+                      prev ? `${prev.trim()}, ${s.toLowerCase()}` : s
+                    )
+                  }
+                  className="rounded-lg border border-[#FAD7E0] bg-[#FFF9FA] px-2.5 py-1 text-[11px] font-medium text-[#704652] transition-colors hover:bg-[#FFEBF1] hover:border-[#F3A8B7]"
+                >
+                  + {s}
+                </button>
+              ))}
             </div>
-          ) : (
-            <div>
-              <label className="mb-2 block text-sm font-semibold text-gray-800">
-                Describe the changes for the new illustration:
-              </label>
-              <textarea
-                rows={3}
-                value={instruction}
-                onChange={(e) => setInstruction(e.target.value)}
-                placeholder="e.g. Change the background to a sunset, add friendly animals smiling, make the trees taller..."
-                className="w-full resize-none rounded-xl border border-[#F3A8B7] p-3.5 text-sm text-gray-800 placeholder-gray-400 focus:border-[#E3859A] focus:outline-none focus:ring-2 focus:ring-[#E3859A]/20"
-              />
-              <p className="mt-1.5 text-xs text-gray-400">
-                The AI will use your story text and style ({illustrationStyle || "Watercolor"}) to render the new picture.
-              </p>
-            </div>
-          )}
+          </div>
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between border-t border-gray-100 bg-gray-50/70 px-6 py-4">
+        <div className="flex items-center justify-between border-t border-gray-100 bg-gray-50/80 px-6 py-4">
           <button
             type="button"
             onClick={onClose}
@@ -269,36 +302,41 @@ export default function EditImageModal({
             Cancel
           </button>
 
-          <div className="flex items-center gap-3">
-            {activeTab === "ai" && (
-              <button
-                type="button"
-                disabled={isLoading}
-                onClick={() => void handleRegenerate()}
-                className="flex items-center gap-2 rounded-xl border border-[#E3859A] bg-white px-5 py-2.5 text-sm font-semibold text-[#E3859A] hover:bg-[#FFF0F2] disabled:opacity-50 transition-colors shadow-xs"
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 size={16} className="animate-spin" />
-                    <span>Generating Illustration…</span>
-                  </>
-                ) : (
-                  <>
-                    <RefreshCw size={16} />
-                    <span>Regenerate Image</span>
-                  </>
-                )}
-              </button>
-            )}
-
+          <div className="flex items-center gap-2.5">
             <button
               type="button"
-              onClick={handleApply}
-              className="flex items-center gap-2 rounded-xl bg-[#E3859A] px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#d67288] transition-colors"
+              disabled={isLoading}
+              onClick={() => void handleRegenerate()}
+              className="flex items-center gap-2 rounded-xl border border-[#E3859A] bg-white px-5 py-2.5 text-sm font-semibold text-[#E3859A] hover:bg-[#FFF0F2] disabled:opacity-50 transition-colors shadow-xs active:scale-[0.99]"
             >
-              <Check size={16} />
-              <span>{previewImage ? "Done & Keep Image" : "Close"}</span>
+              {isLoading ? (
+                <>
+                  <Loader2 size={16} className="animate-spin" />
+                  <span>Generating…</span>
+                </>
+              ) : previewImage ? (
+                <>
+                  <RefreshCw size={15} />
+                  <span>Regenerate Again</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles size={15} />
+                  <span>Generate with AI</span>
+                </>
+              )}
             </button>
+
+            {previewImage && (
+              <button
+                type="button"
+                onClick={handleApply}
+                className="flex items-center gap-2 rounded-xl bg-[#E3859A] px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#d67288] transition-colors active:scale-[0.99]"
+              >
+                <Check size={16} />
+                <span>Apply to Book</span>
+              </button>
+            )}
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 import BookReaderModal from "./BookReaderModal";
@@ -208,6 +209,10 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
   const [loading, setLoading] = useState(!isStaticStory);
   const [notFound, setNotFound] = useState(false);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
+
+  const searchParams = useSearchParams();
+  const shouldAutoDownload = searchParams?.get("download") === "true" || searchParams?.get("download") === "1";
+  const [autoDownloadTriggered, setAutoDownloadTriggered] = useState(false);
 
   useEffect(() => {
     if (!storyId || storyId === "max-sees-the-seasons" || storyId === "lisa-camping" || hasStaticExploreStory) return;
@@ -437,6 +442,17 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
       setDownloadingPdf(false);
     }
   };
+
+  useEffect(() => {
+    if (!shouldAutoDownload || autoDownloadTriggered || loading) return;
+    if (fetchedBook) {
+      setAutoDownloadTriggered(true);
+      void handleDownloadPdf();
+    } else if (isStaticStory) {
+      setAutoDownloadTriggered(true);
+      void handleSampleBookDownload();
+    }
+  }, [shouldAutoDownload, autoDownloadTriggered, loading, fetchedBook, isStaticStory]);
 
   const handleSampleBookDownload = async () => {
     if (!staticExploreStory || downloadingPdf) return;

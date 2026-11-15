@@ -19,21 +19,21 @@ type Review = {
 
 const reviewColours = ["bg-[#f8dfe0]", "bg-[#dceef3]", "bg-[#fff0c8]", "bg-[#e8ddf2]", "bg-[#e2f1e4]"];
 const clientBookTitles = [
-  "Emma's Boekerello Boek",
-  "Lucas' Boekerello Boek",
-  "Olivia en Noah's Boekerello Boek",
-  "Mila's Boekerello Boek",
+  "Victor's Boekerello Boek",
+  "Emma en Lucas' Boekerello Boek",
+  "Olivia's Boekerello Boek",
+  "Matteo's Boekerello Boek",
+  "Sofia's Boekerello Boek",
+  "Louise's Boekerello Boek",
   "Finn's Boekerello Boek",
-  "Louise en Jules' Boekerello Boek",
-  "Arthur's Boekerello Boek",
   "Ella's Boekerello Boek",
   "Liam en Sofia's Boekerello Boek",
-  "Juliette's Boekerello Boek",
+  "Noah's Boekerello Boek",
+  "Marie en Max' Boekerello Boek",
   "Leon's Boekerello Boek",
-  "Marie en Louis' Boekerello Boek",
+  "Jules en Mila's Boekerello Boek",
   "Alice's Boekerello Boek",
-  "Matteo's Boekerello Boek",
-  "Victor en Rosanne's Boekerello Boek",
+  "Arthur's Boekerello Boek",
 ] as const;
 
 const BookerelloReviews = () => {

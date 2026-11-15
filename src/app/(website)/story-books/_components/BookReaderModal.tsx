@@ -308,7 +308,7 @@ const BookReaderModal = ({
                           </p>
                           <div className="absolute bottom-[11%] left-[12%] text-left">
                             <p style={{ fontFamily: bookFontFamily }} className="text-[clamp(0.55rem,1.1vw,0.8rem)] text-[#302735]">{t.bookPreview.madeBy}</p>
-                            <span style={{ fontFamily: bookFontFamily }} className="mt-3 block border-b border-dashed border-[#514256] pb-1 text-[clamp(0.7rem,1.35vw,1rem)] font-semibold text-[#302735]">{creatorName || " "}</span>
+                            <span style={{ fontFamily: bookFontFamily }} className="mt-3 block min-w-[180px] border-b border-dashed border-[#514256] pb-1 text-center text-[clamp(0.7rem,1.35vw,1rem)] font-semibold text-[#302735]">{creatorName || " "}</span>
                           </div>
                         </>
                       ) : (
