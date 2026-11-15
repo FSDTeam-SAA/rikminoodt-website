@@ -155,21 +155,21 @@
     "bookLabelTitle": "Emma's",
     "bookLabelSubtitle": "Magical Adventure",
     "placeholderReviews": [
-      { "name": "Emma", "comment": "A magical book that has become part of our bedtime routine." },
-      { "name": "Lucas", "comment": "The story feels so personal and made our whole family smile." },
-      { "name": "Olivia & Noah", "comment": "Our children loved finding themselves in their very own adventure." },
-      { "name": "Mila", "comment": "Beautiful illustrations and a story we enjoy reading again and again." },
+      { "name": "Victor", "comment": "A magical book that has become part of our bedtime routine." },
+      { "name": "Emma & Lucas", "comment": "The story feels so personal and made our whole family smile." },
+      { "name": "Olivia", "comment": "Our daughter loved finding herself in her very own adventure." },
+      { "name": "Matteo", "comment": "Beautiful illustrations and a story we enjoy reading again and again." },
+      { "name": "Sofia", "comment": "Such a lovely keepsake with magical woodland adventures." },
+      { "name": "Louise", "comment": "A wonderful bedtime story that Louise asks for every night." },
       { "name": "Finn", "comment": "Such a thoughtful keepsake with every little detail just right." },
-      { "name": "Louise & Jules", "comment": "A wonderful shared story that both children ask for every night." },
-      { "name": "Arthur", "comment": "Seeing his name in the book made Arthur feel like a true hero." },
       { "name": "Ella", "comment": "The quality is lovely and the finished book feels truly special." },
       { "name": "Liam & Sofia", "comment": "A brilliant gift that gave our siblings an adventure to share." },
-      { "name": "Juliette", "comment": "Juliette was enchanted from the very first page." },
+      { "name": "Noah", "comment": "Noah was enchanted from the very first page of his expedition." },
+      { "name": "Marie & Max", "comment": "It was so wonderful to see Marie and our dog Max together in a story!" },
       { "name": "Leon", "comment": "A warm, imaginative story that we will treasure for years." },
-      { "name": "Marie & Louis", "comment": "It was so easy to create a book that feels made just for them." },
-      { "name": "Alice", "comment": "Alice keeps bringing this book to everyone who visits." },
-      { "name": "Matteo", "comment": "A beautifully made storybook with so much heart." },
-      { "name": "Victor & Rosanne", "comment": "A memorable family gift with magical illustrations throughout." }
+      { "name": "Jules & Mila", "comment": "A wonderful shared treasure hunt story that both children love." },
+      { "name": "Alice", "comment": "Alice falls asleep every evening listening to her favorite story." },
+      { "name": "Arthur", "comment": "Seeing his name in the book made Arthur feel like a true hero." }
     ]
   },
   "bookPreview": {
