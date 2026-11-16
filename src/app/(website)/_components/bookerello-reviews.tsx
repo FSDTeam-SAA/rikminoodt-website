@@ -44,7 +44,7 @@ const BookerelloReviews = () => {
     rating: 5,
     comment,
     photoUrl: `/images/rev_${index + 1}.jpeg`,
-    user: { name, profileImage: "/images/book_customer.jpg" },
+    user: { name, profileImage: `/images/review-avatars/avatar_${index + 1}.jpg` },
     isPlaceholder: true,
     bookTitle: clientBookTitles[index],
   }));
