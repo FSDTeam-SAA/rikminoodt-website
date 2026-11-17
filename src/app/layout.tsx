@@ -21,7 +21,7 @@ export default function RootLayout({
       <body>
         <NextAuthProvider>
           <LanguageProvider>
-            <Suspense fallback={children}>
+            <Suspense fallback={null}>
               <SmoothScrollProvider>
                 {children}
                 <ScrollToTopComponent />
