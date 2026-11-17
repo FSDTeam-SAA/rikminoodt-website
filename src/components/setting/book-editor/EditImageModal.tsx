@@ -81,6 +81,7 @@ export default function EditImageModal({
           instruction: instruction.trim(),
           illustrationStyle: illustrationStyle || "Watercolor",
           characters: characters || [],
+          currentImageUrl: currentImageUrl || undefined,
         }),
       });
 
