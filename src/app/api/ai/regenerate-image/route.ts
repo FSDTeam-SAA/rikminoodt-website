@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
       instruction = "Improve and enhance the illustration according to the story scene.",
       illustrationStyle = "Watercolor",
       characters = [],
+      currentImageUrl,
     } = body;
 
     const formattedChars = Array.isArray(characters) && characters.length > 0
@@ -45,6 +46,9 @@ export async function POST(req: NextRequest) {
       characters: formattedChars,
       illustrationStyle: String(illustrationStyle || "Watercolor"),
       instruction: String(instruction).trim(),
+      ...(typeof currentImageUrl === "string" && currentImageUrl.startsWith("http")
+        ? { currentImageUrl }
+        : {}),
     };
 
     const response = await fetch("https://ai.boekerello.com/ai/regenerate-image", {
