@@ -409,7 +409,17 @@
       "submitted": "Submitted",
       "generating": "Generating",
       "completed": "Completed",
-      "generationFailed": "Generation failed"
+      "generationFailed": "Generation failed",
+      "unpaidFailedTitle": "This book was not completed",
+      "unpaidFailedDescription": "No payment was taken for this book, so there is nothing to retry. You can create a new book instead.",
+      "unpaidFailedCreate": "Create a new book",
+      "unpaidFailedClose": "Close",
+      "pendingTitle": "Payment not completed",
+      "pendingDescription": "This book hasn't been paid for yet, so it hasn't been created. Complete the payment to start generating it.",
+      "pendingPay": "Complete payment",
+      "pendingRedirecting": "Redirecting…",
+      "pendingError": "Unable to restart checkout. Please try again.",
+      "pendingSignIn": "Please sign in to resume payment."
     },
     "editBook": {
       "loadingBook": "Loading your book…",

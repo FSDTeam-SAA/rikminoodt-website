@@ -409,7 +409,17 @@
       "submitted": "Ingediend",
       "generating": "Wordt gemaakt",
       "completed": "Voltooid",
-      "generationFailed": "Genereren mislukt"
+      "generationFailed": "Genereren mislukt",
+      "unpaidFailedTitle": "Dit boek is niet voltooid",
+      "unpaidFailedDescription": "Voor dit boek is niet betaald, dus er valt niets opnieuw te proberen. Je kunt in plaats daarvan een nieuw boek maken.",
+      "unpaidFailedCreate": "Nieuw boek maken",
+      "unpaidFailedClose": "Sluiten",
+      "pendingTitle": "Betaling niet voltooid",
+      "pendingDescription": "Dit boek is nog niet betaald en dus nog niet gemaakt. Rond de betaling af om het boek te laten maken.",
+      "pendingPay": "Betaling voltooien",
+      "pendingRedirecting": "Doorsturen…",
+      "pendingError": "Kan de betaling niet opnieuw starten. Probeer het opnieuw.",
+      "pendingSignIn": "Log in om de betaling te hervatten."
     },
     "editBook": {
       "loadingBook": "Je boek laden…",

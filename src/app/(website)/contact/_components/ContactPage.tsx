@@ -7,7 +7,7 @@ import { useLanguage } from "@/components/providers/LanguageProvider";
 import { getApiBaseUrl } from "@/config/api";
 
 export default function ContactPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const contact = t.contact || {
     title: "Contact Us",
     subheading: "Enter your details and send us a message, our team will get back to you soon.",
@@ -60,6 +60,7 @@ export default function ContactPage() {
           name: fullName.trim(),
           email: email.trim(),
           message: message.trim(),
+          language,
         }),
       });
 
