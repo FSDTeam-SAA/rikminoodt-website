@@ -69,33 +69,52 @@ export default function PricingPage() {
         <div className="pointer-events-none absolute -bottom-6 -left-8 size-72 rounded-full bg-[#E8DBFA]/30 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-6 -right-8 size-72 rounded-full bg-[#FCD8E2]/35 blur-3xl" />
 
-        {/* Floating star on left */}
-        <div className="pointer-events-none absolute -left-2 top-1/4 hidden lg:block xl:-left-6">
+        {/* Soft clouds in the bottom corners */}
+        <svg className="pointer-events-none absolute -bottom-4 left-0 hidden w-56 md:block lg:w-72" viewBox="0 0 300 120" fill="none" aria-hidden="true">
+          <path d="M0 120V86c0-18 14-32 32-32 4 0 8 1 11 2 6-22 26-38 50-38 26 0 48 18 53 42 4-2 9-3 14-3 20 0 36 16 36 36v27H0z" fill="#E6DAFB" opacity="0.75" />
+        </svg>
+        <svg className="pointer-events-none absolute -bottom-4 right-0 hidden w-56 md:block lg:w-72" viewBox="0 0 300 120" fill="none" aria-hidden="true">
+          <path d="M300 120V86c0-18-14-32-32-32-4 0-8 1-11 2-6-22-26-38-50-38-26 0-48 18-53 42-4-2-9-3-14-3-20 0-36 16-36 36v27h196z" fill="#FDE9A9" opacity="0.8" />
+          <path d="M300 120v-20c0-12-10-22-22-22-3 0-5 0-8 1-4-14-17-24-33-24-17 0-31 12-34 28-3-1-6-2-9-2-14 0-24 11-24 25v14h130z" fill="#FFD3E0" opacity="0.7" />
+        </svg>
+
+        {/* Stars - left side (big + small, as in the reference) */}
+        <div className="pointer-events-none absolute left-[5%] top-[22%] hidden lg:block">
           <svg width="34" height="34" viewBox="0 0 24 24" fill="#FBBF24" className="drop-shadow-[0_2px_6px_rgba(251,191,36,0.5)]">
             <path d="M12 2l2.8 6.6 7.2.6-5.4 4.8 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.2-.6L12 2z" />
           </svg>
         </div>
+        <div className="pointer-events-none absolute left-[9%] top-[42%] hidden lg:block">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#FBBF24" className="drop-shadow-[0_2px_4px_rgba(251,191,36,0.45)]">
+            <path d="M12 2l2.8 6.6 7.2.6-5.4 4.8 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.2-.6L12 2z" />
+          </svg>
+        </div>
 
-        {/* Floating dashed path and star on right */}
-        <div className="pointer-events-none absolute -right-2 top-1/4 hidden lg:block xl:-right-6">
-          <svg width="100" height="90" viewBox="0 0 100 90" fill="none" className="opacity-75">
-            <path d="M10 80 Q 55 10, 95 30" stroke="#7DD3FC" strokeWidth="2.5" strokeDasharray="4 4" />
-            <polygon points="95,22 97.5,29 105,29 99,33.5 101,41 95,36 89,41 91,33.5 85,29 92.5,29" fill="#FBBF24" />
+        {/* Stars + dashed path - right side */}
+        <div className="pointer-events-none absolute right-[7%] top-[16%] hidden lg:block">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#FBBF24" className="drop-shadow-[0_2px_4px_rgba(251,191,36,0.45)]">
+            <path d="M12 2l2.8 6.6 7.2.6-5.4 4.8 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.2-.6L12 2z" />
+          </svg>
+        </div>
+        <div className="pointer-events-none absolute right-[3%] top-[26%] hidden lg:block">
+          <svg width="110" height="100" viewBox="0 0 110 100" fill="none" className="opacity-80">
+            <path d="M12 92 Q 28 26, 104 20" stroke="#7DD3FC" strokeWidth="2" strokeDasharray="3 4" strokeLinecap="round" />
+            <polygon points="10,86 11.8,90.4 16.5,90.6 12.8,93.5 14,98 10,95.4 6,98 7.2,93.5 3.5,90.6 8.2,90.4" fill="#FBBF24" />
           </svg>
         </div>
 
         <div className="relative z-10 mx-auto grid max-w-[880px] grid-cols-1 items-stretch gap-6 md:grid-cols-2 md:gap-7">
           {/* Digital Storybook Card */}
-          <div className="flex flex-col justify-between rounded-[28px] border-2 border-[#D8C7F8] bg-white p-6 shadow-[0_12px_32px_rgba(45,30,80,0.06)] transition-all duration-200 hover:-translate-y-1 sm:p-7">
+          <div className="flex flex-col justify-between rounded-[28px] border border-[#E4D8FB] bg-[linear-gradient(160deg,#F6F1FF_0%,#FFFFFF_65%)] p-6 shadow-[0_12px_32px_rgba(45,30,80,0.08)] transition-all duration-200 hover:-translate-y-1 sm:p-7">
             <div>
               {/* Header with image on the left */}
               <div className="flex items-center gap-3.5 sm:gap-4">
-                <div className="relative size-20 shrink-0 sm:size-24">
+                <div className="relative size-24 shrink-0 sm:size-28">
                   <Image
                     src="/images/pricing_digital.png"
                     alt={pricing.digitalTitle}
                     fill
-                    sizes="100px"
+                    sizes="112px"
                     className="object-contain"
                     priority
                   />
@@ -113,7 +132,6 @@ export default function PricingPage() {
                 </div>
               </div>
 
-              {/* Features List */}
               <ul className="mt-6 space-y-2.5 sm:mt-7 sm:space-y-3">
                 {pricing.digitalFeatures.map((feature) => (
                   <li
@@ -142,7 +160,7 @@ export default function PricingPage() {
           </div>
 
           {/* Printed Storybook Card */}
-          <div className="relative flex flex-col justify-between rounded-[28px] border-2 border-[#FDC4D3] bg-white p-6 shadow-[0_12px_32px_rgba(230,27,91,0.06)] transition-all duration-200 hover:-translate-y-1 sm:p-7">
+          <div className="relative flex flex-col justify-between rounded-[28px] border border-[#FFD3E0] bg-[linear-gradient(160deg,#FFF0F5_0%,#FFFFFF_65%)] p-6 shadow-[0_12px_32px_rgba(230,27,91,0.08)] transition-all duration-200 hover:-translate-y-1 sm:p-7">
             {/* Most Popular Badge */}
             <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10">
               <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-[#FACC15] px-4 py-1 font-sans text-xs font-bold text-[#2A1E00] shadow-[0_2px_8px_rgba(250,204,21,0.35)]">
@@ -154,12 +172,12 @@ export default function PricingPage() {
             <div>
               {/* Header with image on the left */}
               <div className="flex items-center gap-3.5 sm:gap-4 pt-1 sm:pt-0">
-                <div className="relative size-20 shrink-0 sm:size-24">
+                <div className="relative size-24 shrink-0 sm:size-28">
                   <Image
                     src="/images/pricing_printed.png"
                     alt={pricing.printedTitle}
                     fill
-                    sizes="100px"
+                    sizes="112px"
                     className="object-contain"
                     priority
                   />
@@ -177,7 +195,6 @@ export default function PricingPage() {
                 </div>
               </div>
 
-              {/* Features List */}
               <ul className="mt-6 space-y-2.5 sm:mt-7 sm:space-y-3">
                 {pricing.printFeatures.map((feature) => (
                   <li

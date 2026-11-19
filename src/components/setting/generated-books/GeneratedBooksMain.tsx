@@ -14,6 +14,8 @@ type Book = {
   subject?: string;
   coverImageUrl?: string;
   status: string;
+  paidAt?: string | null;
+  stripeSessionId?: string | null;
 };
 
 export default function GeneratedBooksMain() {
@@ -111,6 +113,8 @@ export default function GeneratedBooksMain() {
               title={book.title || (book.subject ? book.subject.toLowerCase().replaceAll("_", " ") : copy.yourStorybook)}
               imageSrc={book.coverImageUrl}
               status={book.status}
+              paidAt={book.paidAt}
+              stripeSessionId={book.stripeSessionId}
             />
           ))}
         </div>

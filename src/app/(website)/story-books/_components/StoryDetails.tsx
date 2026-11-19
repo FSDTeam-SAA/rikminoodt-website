@@ -211,7 +211,12 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
   const searchParams = useSearchParams();
-  const shouldAutoDownload = searchParams?.get("download") === "true" || searchParams?.get("download") === "1";
+  const emailDownloadToken = searchParams?.get("dt") || "";
+  const shouldAutoDownload =
+    !emailDownloadToken &&
+    (searchParams?.get("download") === "true" || searchParams?.get("download") === "1");
+  const [emailDownloadStatus, setEmailDownloadStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
+  const [needsLogin, setNeedsLogin] = useState(false);
   const [autoDownloadTriggered, setAutoDownloadTriggered] = useState(false);
 
   useEffect(() => {
@@ -250,7 +255,11 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
           cache: "no-store",
         });
         if (!res.ok) {
-          setNotFound(true);
+          if (res.status === 401 || res.status === 403 || (!token && res.status === 404)) {
+            setNeedsLogin(true);
+          } else {
+            setNotFound(true);
+          }
           return;
         }
         const json = await res.json();
@@ -444,6 +453,35 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
   };
 
   useEffect(() => {
+    // One-click download from the "book ready" email: no login needed.
+    if (!emailDownloadToken || !storyId || emailDownloadStatus !== "idle") return;
+    setEmailDownloadStatus("loading");
+    (async () => {
+      try {
+        const response = await fetch(
+          `${getApiBaseUrl()}/books/${encodeURIComponent(storyId)}/download-link?token=${encodeURIComponent(emailDownloadToken)}`,
+          { cache: "no-store" },
+        );
+        if (!response.ok) throw new Error("download failed");
+        const pdfBlob = await response.blob();
+        const objectUrl = URL.createObjectURL(pdfBlob);
+        const disposition = response.headers.get("Content-Disposition") || "";
+        const match = disposition.match(/filename="?([^";]+)"?/i);
+        const link = document.createElement("a");
+        link.href = objectUrl;
+        link.download = match?.[1] || "personalized-storybook.pdf";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(objectUrl);
+        setEmailDownloadStatus("done");
+      } catch {
+        setEmailDownloadStatus("error");
+      }
+    })();
+  }, [emailDownloadToken, storyId, emailDownloadStatus]);
+
+  useEffect(() => {
     if (!shouldAutoDownload || autoDownloadTriggered || loading) return;
     if (fetchedBook) {
       setAutoDownloadTriggered(true);
@@ -494,6 +532,84 @@ const StoryDetails = ({ storyId }: { storyId: string }) => {
       setDownloadingPdf(false);
     }
   };
+
+  const accessCopy = ({
+    en: {
+      preparing: "Preparing your download…", preparingText: "Your book PDF will start downloading in a moment. This can take up to a minute.",
+      done: "Your download has started!", doneText: "Check your downloads folder. Didn't start?", retry: "Download again",
+      error: "We couldn't download your book", errorText: "This link may have expired. Please log in to download your book from your account.",
+      loginTitle: "Please log in to view your book", loginText: "Your book is safe. Log in to the account you used to create it to read or download it.",
+      login: "Log in", home: "Back to Home",
+    },
+    nl: {
+      preparing: "Je download wordt voorbereid…", preparingText: "De pdf van je boek wordt zo gedownload. Dit kan tot een minuut duren.",
+      done: "Je download is gestart!", doneText: "Controleer je downloadmap. Niet gestart?", retry: "Opnieuw downloaden",
+      error: "We konden je boek niet downloaden", errorText: "Deze link is mogelijk verlopen. Log in om je boek vanuit je account te downloaden.",
+      loginTitle: "Log in om je boek te bekijken", loginText: "Je boek is veilig. Log in met het account waarmee je het hebt gemaakt om het te lezen of te downloaden.",
+      login: "Inloggen", home: "Terug naar home",
+    },
+    fr: {
+      preparing: "Préparation du téléchargement…", preparingText: "Le PDF de votre livre va être téléchargé dans un instant. Cela peut prendre jusqu’à une minute.",
+      done: "Votre téléchargement a commencé !", doneText: "Vérifiez votre dossier de téléchargements. Rien ne s’est passé ?", retry: "Télécharger à nouveau",
+      error: "Nous n’avons pas pu télécharger votre livre", errorText: "Ce lien a peut-être expiré. Connectez-vous pour télécharger votre livre depuis votre compte.",
+      loginTitle: "Connectez-vous pour voir votre livre", loginText: "Votre livre est en sécurité. Connectez-vous avec le compte utilisé pour le créer afin de le lire ou le télécharger.",
+      login: "Se connecter", home: "Retour à l’accueil",
+    },
+  } as const)[language as "en" | "nl" | "fr"] || undefined;
+
+  if (accessCopy && emailDownloadToken) {
+    const isLoading = emailDownloadStatus === "idle" || emailDownloadStatus === "loading";
+    const isError = emailDownloadStatus === "error";
+    return (
+      <main className="min-h-[60vh] bg-[#FEFAF4] px-4 py-20 text-center">
+        <h1 className="font-crimson text-3xl font-bold text-[#1E1E1E]">
+          {isLoading ? accessCopy.preparing : isError ? accessCopy.error : accessCopy.done}
+        </h1>
+        <p className="mx-auto mt-2 max-w-md font-sans text-sm text-[#66605F]">
+          {isLoading ? accessCopy.preparingText : isError ? accessCopy.errorText : accessCopy.doneText}
+        </p>
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+          {emailDownloadStatus === "done" && (
+            <button
+              type="button"
+              onClick={() => setEmailDownloadStatus("idle")}
+              className="inline-flex rounded-xl bg-[#E88DA0] px-6 py-2.5 font-sans text-sm font-semibold text-white transition hover:bg-[#DD7893]"
+            >
+              {accessCopy.retry}
+            </button>
+          )}
+          {isError && (
+            <Link
+              href={`/login?redirect=${encodeURIComponent(`/story-books/book-details/${storyId}?download=true`)}`}
+              className="inline-flex rounded-xl bg-[#E88DA0] px-6 py-2.5 font-sans text-sm font-semibold text-white transition hover:bg-[#DD7893]"
+            >
+              {accessCopy.login}
+            </Link>
+          )}
+        </div>
+      </main>
+    );
+  }
+
+  if (accessCopy && needsLogin && !fetchedBook) {
+    return (
+      <main className="min-h-[60vh] bg-[#FEFAF4] px-4 py-20 text-center">
+        <h1 className="font-crimson text-3xl font-bold text-[#1E1E1E]">{accessCopy.loginTitle}</h1>
+        <p className="mx-auto mt-2 max-w-md font-sans text-sm text-[#66605F]">{accessCopy.loginText}</p>
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+          <Link
+            href={`/login?redirect=${encodeURIComponent(`/story-books/book-details/${storyId}?download=true`)}`}
+            className="inline-flex rounded-xl bg-[#E88DA0] px-6 py-2.5 font-sans text-sm font-semibold text-white transition hover:bg-[#DD7893]"
+          >
+            {accessCopy.login}
+          </Link>
+          <Link href="/" className="inline-flex rounded-xl border border-[#E88DA0] px-6 py-2.5 font-sans text-sm font-semibold text-[#E88DA0]">
+            {accessCopy.home}
+          </Link>
+        </div>
+      </main>
+    );
+  }
 
   if (!isStaticStory && (loading || !fetchedBook)) {
     if (notFound) {

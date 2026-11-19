@@ -409,7 +409,17 @@
       "submitted": "Envoyé",
       "generating": "Génération en cours",
       "completed": "Terminé",
-      "generationFailed": "Échec de la génération"
+      "generationFailed": "Échec de la génération",
+      "unpaidFailedTitle": "Ce livre n'a pas été terminé",
+      "unpaidFailedDescription": "Aucun paiement n'a été effectué pour ce livre, il n'y a donc rien à relancer. Vous pouvez créer un nouveau livre.",
+      "unpaidFailedCreate": "Créer un nouveau livre",
+      "unpaidFailedClose": "Fermer",
+      "pendingTitle": "Paiement non finalisé",
+      "pendingDescription": "Ce livre n'a pas encore été payé, il n'a donc pas été créé. Finalisez le paiement pour lancer sa création.",
+      "pendingPay": "Finaliser le paiement",
+      "pendingRedirecting": "Redirection…",
+      "pendingError": "Impossible de relancer le paiement. Veuillez réessayer.",
+      "pendingSignIn": "Connectez-vous pour reprendre le paiement."
     },
     "editBook": {
       "loadingBook": "Chargement de votre livre…",

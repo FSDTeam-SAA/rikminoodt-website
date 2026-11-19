@@ -1,4 +1,5 @@
 import Sidebar from "@/components/setting/sidebar"
+import SettingGate from "@/components/setting/SettingGate"
 
 export default function SettingLayout({
   children,
@@ -6,6 +7,7 @@ export default function SettingLayout({
   children: React.ReactNode
 }) {
   return (
+    <SettingGate>
     <div className="container mx-auto flex flex-col gap-6 py-10 md:flex-row md:items-start">
       {/* Bam pasher fixed Sidebar */}
       <aside className="w-full shrink-0 md:w-[280px]">
@@ -17,5 +19,6 @@ export default function SettingLayout({
         {children}
       </main>
     </div>
+    </SettingGate>
   )
 }

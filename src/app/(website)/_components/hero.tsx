@@ -10,7 +10,7 @@ const Hero = () => {
   return (
     <section
       aria-labelledby="hero-heading"
-      className="relative min-h-[100svh] overflow-hidden bg-[#f8eee8] bg-[url('/images/hero.png')] bg-cover bg-[position:62%_center] after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:z-[1] after:h-16 after:bg-gradient-to-b after:from-transparent after:to-[#FBF3EA] sm:bg-[position:60%_center] sm:after:h-24 lg:h-screen lg:bg-center lg:after:h-32"
+      className="relative min-h-[100svh] overflow-hidden bg-[#f8eee8] bg-[url('/images/hero.jpg')] bg-cover bg-[position:62%_center] after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:z-[1] after:h-16 after:bg-gradient-to-b after:from-transparent after:to-[#FBF3EA] sm:bg-[position:60%_center] sm:after:h-24 lg:h-screen lg:bg-center lg:after:h-32"
     >
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden lg:block">
         <Image

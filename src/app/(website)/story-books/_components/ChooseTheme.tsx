@@ -1,17 +1,18 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useLanguage } from "@/components/providers/LanguageProvider";
 
 const themeList = [
-  { key: "fairyTales" as const, image: "fairy_tales.png", color: "bg-[#FFE6D6]" },
-  { key: "adventure" as const, image: "adventure.png", color: "bg-[#E1F1FF]" },
-  { key: "activities" as const, image: "activities.png", color: "bg-[#FADDE1]" },
-  { key: "worlds" as const, image: "worlds.png", color: "bg-[#D7EDDE]" },
-  { key: "holidays" as const, image: "holidays.png", color: "bg-[#D7EDDE]" },
-  { key: "family" as const, image: "family.png", color: "bg-[#FADDE1]" },
-  { key: "educational" as const, image: "educational.png", color: "bg-[#FFE9D9]" },
-  { key: "feelings" as const, image: "feelings.png", color: "bg-[#E1F1FF]" },
+  { key: "fairyTales" as const, label: "Fairy Tales", image: "fairy_tales.png", color: "bg-[#FFE6D6]" },
+  { key: "adventure" as const, label: "Adventure", image: "adventure.png", color: "bg-[#E1F1FF]" },
+  { key: "activities" as const, label: "Activities", image: "activities.png", color: "bg-[#FADDE1]" },
+  { key: "worlds" as const, label: "Worlds", image: "worlds.png", color: "bg-[#D7EDDE]" },
+  { key: "holidays" as const, label: "Holidays", image: "holidays.png", color: "bg-[#D7EDDE]" },
+  { key: "family" as const, label: "Family", image: "family.png", color: "bg-[#FADDE1]" },
+  { key: "educational" as const, label: "Educational", image: "educational.png", color: "bg-[#FFE9D9]" },
+  { key: "feelings" as const, label: "Feelings", image: "feelings.png", color: "bg-[#E1F1FF]" },
 ];
 
 const ChooseTheme = () => {
@@ -33,7 +34,10 @@ const ChooseTheme = () => {
           {themeList.map((theme) => {
             const title = t.chooseTheme.themes[theme.key] ?? theme.key;
             return (
-              <article key={theme.key} className={`group flex min-h-[174px] flex-col items-center justify-between rounded-xl px-3 pb-4 pt-3 text-center transition-colors duration-300 hover:brightness-[0.97] sm:min-h-[195px] sm:px-4 sm:pb-5 sm:pt-4 ${theme.color}`}>
+              <Link
+                key={theme.key}
+                href={`/book-builder/choose-age?theme=${encodeURIComponent(theme.label)}`}
+                className={`group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#987fc5] focus-visible:ring-offset-4 flex min-h-[174px] flex-col items-center justify-between rounded-xl px-3 pb-4 pt-3 text-center transition-colors duration-300 hover:brightness-[0.97] sm:min-h-[195px] sm:px-4 sm:pb-5 sm:pt-4 ${theme.color}`}>
                 <Image
                   src={`/images/choose_your-theme/${theme.image}`}
                   alt=""
@@ -44,7 +48,7 @@ const ChooseTheme = () => {
                 <h3 className="mt-2 font-sans text-lg font-semibold leading-none text-[#1E1E1E] sm:text-xl">
                   {title}
                 </h3>
-              </article>
+              </Link>
             );
           })}
         </div>

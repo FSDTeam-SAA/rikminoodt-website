@@ -1,0 +1,1339 @@
+{
+ "nl": [
+  {
+   "type": "h1",
+   "text": "Privacybeleid Boekerello"
+  },
+  {
+   "type": "p",
+   "text": "Boekerello hecht veel belang aan de bescherming van uw persoonsgegevens. Dit privacybeleid licht toe welke persoonsgegevens wij verzamelen wanneer u de websites www.boekerello.com, www.bookerello.com en www.boekerello.be (hierna samen: de \"Website\") bezoekt, een account aanmaakt, een bestelling plaatst of contact met ons opneemt. U leest hier voor welke doeleinden en op welke rechtsgrond wij die gegevens verwerken, met wie wij ze delen, hoe lang wij ze bewaren en welke rechten u heeft."
+  },
+  {
+   "type": "p",
+   "text": "Dit privacybeleid is opgesteld overeenkomstig de Algemene Verordening Gegevensbescherming (Verordening (EU) 2016/679, hierna: de \"AVG\") en de Belgische wet van 30 juli 2018 betreffende de bescherming van natuurlijke personen met betrekking tot de verwerking van persoonsgegevens. Het vormt een aanvulling op onze algemene voorwaarden. Begrippen met een hoofdletter hebben de betekenis die de algemene voorwaarden eraan geven."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 1. Verwerkingsverantwoordelijke",
+   "id": "art-1",
+   "num": 1,
+   "label": "Verwerkingsverantwoordelijke"
+  },
+  {
+   "type": "p",
+   "text": "De verwerkingsverantwoordelijke voor uw persoonsgegevens is Rimino BV, die de Website uitbaat onder het merk Boekerello® (hierna: \"Boekerello\", \"wij\" of \"ons\")."
+  },
+  {
+   "type": "table",
+   "header": [
+    "Gegeven",
+    "Waarde"
+   ],
+   "rows": [
+    [
+     "Vennootschap",
+     "Rimino BV, besloten vennootschap naar Belgisch recht"
+    ],
+    [
+     "Zetel",
+     "Dorpsstraat 124, 9420 Erpe-Mere, België"
+    ],
+    [
+     "Ondernemingsnummer",
+     "0545.850.969, RPR Gent, afdeling Dendermonde"
+    ],
+    [
+     "Btw-nummer",
+     "BE 0545.850.969"
+    ],
+    [
+     "E-mail voor privacyvragen",
+     "info@boekerello.com"
+    ]
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 2. Welke persoonsgegevens wij verwerken",
+   "id": "art-2",
+   "num": 2,
+   "label": "Welke persoonsgegevens wij verwerken"
+  },
+  {
+   "type": "p",
+   "text": "2.1. **Gegevens die u zelf verstrekt:**"
+  },
+  {
+   "type": "ol",
+   "items": [
+    {
+     "text": "**account- en contactgegevens:** uw naam, e-mailadres en wachtwoord (versleuteld opgeslagen);"
+    },
+    {
+     "text": "**bestelgegevens:** uw Naam - en leveringsadres en de gegevens van uw bestelling;"
+    },
+    {
+     "text": "**personalisatiegegevens:** de naam of namen die in het boek verschijnen, de gekozen verhaalelementen en de instructies (prompts) die u invoert. Wij verzoeken u in de vrije tekstvelden geen gevoelige gegevens in te voeren, zoals gegevens over gezondheid, religie of afkomst;"
+    },
+    {
+     "text": "**geüploade foto's:** de foto's die u uploadt om de illustraties te personaliseren. Onze AI-systemen analyseren deze foto's om een illustratie te maken die op het personage lijkt;"
+    },
+    {
+     "text": "**verhaaltekst voor het Luisterboek:** bestelt u het Luisterboek, dan wordt de tekst van het verhaal, inclusief de namen die erin voorkomen, verwerkt door een text-to-speech-systeem om de audio-opname te maken;"
+    },
+    {
+     "text": "**communicatiegegevens:** de inhoud van uw berichten wanneer u ons per e-mail of via het contactformulier contacteert;"
+    },
+    {
+     "text": "**beoordelingen, foto's en video's** die u ons vrijwillig bezorgt (zie artikel 11)."
+    }
+   ]
+  },
+  {
+   "type": "p",
+   "text": "2.2. **Betaalgegevens.** Uw betaling wordt verwerkt door onze betaaldienstverlener Stripe. Wij hebben geen toegang tot uw volledige kaart- of rekeninggegevens en ontvangen enkel een bevestiging van de betaling en beperkte transactiegegevens."
+  },
+  {
+   "type": "p",
+   "text": "2.3. **Gegevens die automatisch worden verzameld.** Bij een bezoek aan de Website verzamelen wij, via cookies en vergelijkbare technologieën (zie artikel 7), technische gegevens (IP-adres, browsertype, besturingssysteem, apparaatgegevens) en gebruiksgegevens (bezochte pagina's, klikgedrag, duur van het bezoek)."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 3. Doeleinden en rechtsgronden",
+   "id": "art-3",
+   "num": 3,
+   "label": "Doeleinden en rechtsgronden"
+  },
+  {
+   "type": "p",
+   "text": "Wij verwerken uw persoonsgegevens uitsluitend voor de onderstaande doeleinden en op de vermelde rechtsgronden van artikel 6, lid 1 AVG:"
+  },
+  {
+   "type": "table",
+   "header": [
+    "Doeleinde",
+    "Rechtsgrond"
+   ],
+   "rows": [
+    [
+     "Aanmaken en beheren van uw account",
+     "Uitvoering van de overeenkomst (art. 6.1.b)"
+    ],
+    [
+     "Verwerken, produceren, leveren en factureren van uw bestelling, met inbegrip van de audio-opname van het Luisterboek",
+     "Uitvoering van de overeenkomst (art. 6.1.b)"
+    ],
+    [
+     "Gebruik van geüploade foto's en personalisatiegegevens om met AI het gepersonaliseerde boek te maken",
+     "Toestemming (art. 6.1.a)"
+    ],
+    [
+     "Bewaren en beschikbaar stellen van uw boekontwerp, Digitale Boek en audio-opname in uw account en via de QR-code",
+     "Uitvoering van de overeenkomst (art. 6.1.b)"
+    ],
+    [
+     "Klantendienst en servicegerichte e-mails (bestelbevestiging, verzendbericht)",
+     "Uitvoering van de overeenkomst (art. 6.1.b)"
+    ],
+    [
+     "Controle van ingevoerde inhoud op strijdigheid met de contentrichtlijnen (bijvoorbeeld beschermde personages of ongepaste inhoud)",
+     "Gerechtvaardigd belang (art. 6.1.f)"
+    ],
+    [
+     "Voorkomen van fraude en misbruik",
+     "Gerechtvaardigd belang (art. 6.1.f)"
+    ],
+    [
+     "Analyse van het websitegebruik en verbetering van onze producten en diensten",
+     "Toestemming voor niet-noodzakelijke cookies (art. 6.1.a); voor het overige gerechtvaardigd belang (art. 6.1.f)"
+    ],
+    [
+     "Gebruik van beoordelingen, foto's en video's van klanten",
+     "Gerechtvaardigd belang (art. 6.1.f)"
+    ],
+    [
+     "Naleving van boekhoudkundige en fiscale verplichtingen",
+     "Wettelijke verplichting (art. 6.1.c)"
+    ]
+   ]
+  },
+  {
+   "type": "p",
+   "text": "U geeft uw toestemming voor het gebruik van foto's en personalisatiegegevens bij het uploaden en bevestigen van uw keuzes. U kan deze toestemming op elk ogenblik intrekken, zonder dat dit afbreuk doet aan de rechtmatigheid van de verwerking vóór de intrekking. Na intrekking kunnen wij het betrokken Product niet langer maken of aanpassen."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 4. Ontvangers van uw persoonsgegevens",
+   "id": "art-4",
+   "num": 4,
+   "label": "Ontvangers van uw persoonsgegevens"
+  },
+  {
+   "type": "p",
+   "text": "4.1. Wij verkopen uw persoonsgegevens niet. Wij delen ze enkel met derden voor zover dat noodzakelijk is voor de uitvoering van onze diensten of wettelijk verplicht is. Met verwerkers sluiten wij een verwerkersovereenkomst overeenkomstig artikel 28 AVG. Een actuele lijst van onze verwerkers is op verzoek beschikbaar."
+  },
+  {
+   "type": "p",
+   "text": "4.2. Het gaat om de volgende categorieën van ontvangers:"
+  },
+  {
+   "type": "ol",
+   "items": [
+    {
+     "text": "**betaaldienstverlener (Stripe):** voor de veilige verwerking van uw betalingen;"
+    },
+    {
+     "text": "**drukkerijen en vervoerders:** voor de productie en levering van fysieke Producten;"
+    },
+    {
+     "text": "**hosting- en IT-dienstverleners:** voor de hosting van de Website en de opslag van gegevens, waaronder de beveiligde opslag van projectbestanden binnen de Europese Unie;"
+    },
+    {
+     "text": "**leveranciers van AI-technologie:** voor het genereren van teksten, illustraties en audio-opnames. Uw foto's, prompts en de verhaaltekst worden door hun systemen verwerkt om het bestelde Product te maken;"
+    },
+    {
+     "text": "**e-maildienstverleners:** voor het verzenden van servicegerichte e-mails;"
+    },
+    {
+     "text": "**analysediensten:** voor de analyse van het websitegebruik, voor zover u daarvoor toestemming gaf;"
+    },
+    {
+     "text": "**overheidsinstanties:** indien wij daartoe wettelijk verplicht zijn."
+    }
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 5. Doorgifte buiten de Europese Economische Ruimte",
+   "id": "art-5",
+   "num": 5,
+   "label": "Doorgifte buiten de Europese Economische Ruimte"
+  },
+  {
+   "type": "p",
+   "text": "Sommige leveranciers van AI-technologie en andere dienstverleners verwerken gegevens op servers buiten de Europese Economische Ruimte (EER), met name in de Verenigde Staten. Wij geven persoonsgegevens enkel door wanneer een passend beschermingsniveau gewaarborgd is, zoals via een adequaatheidsbesluit van de Europese Commissie (waaronder het EU-VS Data Privacy Framework) of via door de Europese Commissie goedgekeurde modelcontractbepalingen (Standard Contractual Clauses). Op verzoek bezorgen wij u meer informatie over deze waarborgen."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 6. Bewaartermijnen",
+   "id": "art-6",
+   "num": 6,
+   "label": "Bewaartermijnen"
+  },
+  {
+   "type": "p",
+   "text": "Wij bewaren uw persoonsgegevens niet langer dan noodzakelijk voor de doeleinden waarvoor ze verzameld werden, of zolang de wet dat vereist:"
+  },
+  {
+   "type": "table",
+   "header": [
+    "Gegevens",
+    "Bewaartermijn"
+   ],
+   "rows": [
+    [
+     "Accountgegevens",
+     "Zolang uw account actief is, of tot u om verwijdering verzoekt"
+    ],
+    [
+     "Foto's, boekontwerpen en Digitale Boeken (projectbestanden)",
+     "Zolang uw account bestaat, zodat u uw boeken kan downloaden en nabestellen. Wij kunnen de bewaring beëindigen na een kennisgeving van ten minste 3 maanden, overeenkomstig artikel 6.6 van de algemene voorwaarden"
+    ],
+    [
+     "Audio-opnames van het Luisterboek",
+     "Ten minste 1 jaar na aankoop, gedurende welke periode zij via de QR-code beschikbaar zijn"
+    ],
+    [
+     "Bestel- en factuurgegevens",
+     "10 jaar, overeenkomstig de Belgische boekhoudkundige en fiscale bewaarplicht"
+    ],
+    [
+     "Communicatiegegevens",
+     "Tot 2 jaar na de afhandeling van uw vraag of klacht"
+    ],
+    [
+     "Gegevens voor fraudepreventie (zoals IP-adressen)",
+     "Uiterlijk 12 maanden na vastlegging"
+    ],
+    [
+     "Beoordelingen, foto's en video's",
+     "Zolang wij ze gebruiken, of tot u bezwaar maakt"
+    ]
+   ]
+  },
+  {
+   "type": "p",
+   "text": "U kan uw projectbestanden op elk ogenblik definitief laten verwijderen door uw account te verwijderen. Daarmee worden ook uw foto's, boeken en audio-opnames gewist, met uitzondering van de gegevens die wij wettelijk moeten bewaren."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 7. Cookies en vergelijkbare technologieën",
+   "id": "art-7",
+   "num": 7,
+   "label": "Cookies en vergelijkbare technologieën"
+  },
+  {
+   "type": "p",
+   "text": "7.1. Cookies zijn kleine tekstbestanden die op uw toestel worden geplaatst wanneer u de Website bezoekt. Wij gebruiken cookies en vergelijkbare technologieën (zoals pixels en lokale opslag) van de volgende soorten:"
+  },
+  {
+   "type": "ol",
+   "items": [
+    {
+     "text": "**functionele (strikt noodzakelijke) cookies:** onmisbaar voor de werking van de Website, zoals om te navigeren, in te loggen en een bestelling te plaatsen. Hiervoor is geen toestemming vereist;"
+    },
+    {
+     "text": "**analytische cookies:** helpen ons te begrijpen hoe bezoekers de Website gebruiken, zodat wij die kunnen verbeteren. De gegevens worden waar mogelijk geanonimiseerd;"
+    },
+    {
+     "text": "**marketingcookies:** kunnen worden gebruikt om uw surfgedrag te volgen en u relevante advertenties te tonen op de Website of op websites van derden."
+    }
+   ]
+  },
+  {
+   "type": "p",
+   "text": "7.2. Analytische en marketingcookies plaatsen wij enkel na uw voorafgaande toestemming. Bij uw eerste bezoek vragen wij die toestemming via een cookiebanner. U kan uw keuze op elk ogenblik wijzigen of uw toestemming intrekken via de cookie-instellingen op de Website of via de instellingen van uw browser. Het uitschakelen van cookies kan de werking van de Website beïnvloeden."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 8. Beveiliging",
+   "id": "art-8",
+   "num": 8,
+   "label": "Beveiliging"
+  },
+  {
+   "type": "p",
+   "text": "8.1. Wij nemen passende technische en organisatorische maatregelen om uw persoonsgegevens te beschermen tegen verlies, misbruik, onbevoegde toegang, ongewenste openbaarmaking en ongeoorloofde wijziging. Deze maatregelen omvatten onder meer versleutelde gegevensoverdracht (SSL/TLS), beveiligde servers, toegangsbeheer en regelmatige beveiligingsupdates."
+  },
+  {
+   "type": "p",
+   "text": "8.2. Geen enkele overdracht via het internet is volledig veilig. Doet zich een inbreuk in verband met persoonsgegevens voor die waarschijnlijk een hoog risico voor uw rechten en vrijheden inhoudt, dan stellen wij u daarvan onverwijld in kennis, overeenkomstig de AVG."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 9. AI en het gebruik van foto's",
+   "id": "art-9",
+   "num": 9,
+   "label": "AI en het gebruik van foto's"
+  },
+  {
+   "type": "p",
+   "text": "9.1. Door foto's te uploaden, geeft u ons uitdrukkelijk toestemming om ze te verwerken met onze AI-systemen en die van onze zorgvuldig geselecteerde technologiepartners. Bestelt u het Luisterboek, dan geeft u eveneens toestemming voor de verwerking van de verhaaltekst door een text-to-speech-systeem. Deze verwerking gebeurt uitsluitend om het bestelde Product te maken."
+  },
+  {
+   "type": "p",
+   "text": "9.2. De verwerking van foto's dient enkel om een artistieke illustratie te maken. Wij passen geen gezichtsherkenning toe en gebruiken de foto's niet om personen te identificeren."
+  },
+  {
+   "type": "p",
+   "text": "9.3. Wij gebruiken uw foto's, prompts en verhaalteksten niet om AI-modellen te trainen en werken uitsluitend met technologiepartners die zich er contractueel toe verbinden dat evenmin te doen."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 10. Gegevens van kinderen",
+   "id": "art-10",
+   "num": 10,
+   "label": "Gegevens van kinderen"
+  },
+  {
+   "type": "p",
+   "text": "10.1. Onze Producten zijn bestemd voor kinderen, maar worden besteld door volwassenen. Wij verzamelen niet bewust persoonsgegevens rechtstreeks van kinderen."
+  },
+  {
+   "type": "p",
+   "text": "10.2. De persoonsgegevens van een kind, zoals de naam in het boek, de geüploade foto en de verhaaltekst van het Luisterboek, worden uitsluitend verwerkt voor de personalisatie van het Product, op basis van de gegevens en de toestemming van de volwassen Klant. Overeenkomstig artikel 9.1 van de algemene voorwaarden garandeert de Klant dat hij de ouder of voogd van het kind is of over hun toestemming beschikt."
+  },
+  {
+   "type": "p",
+   "text": "10.3. Vermoedt u dat wij zonder de vereiste toestemming persoonsgegevens van een kind verwerken, neem dan contact met ons op. Wij nemen dan onverwijld passende maatregelen, waaronder de verwijdering van die gegevens."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 11. Beoordelingen, foto's en video's van klanten",
+   "id": "art-11",
+   "num": 11,
+   "label": "Beoordelingen, foto's en video's van klanten"
+  },
+  {
+   "type": "p",
+   "text": "11.1. Na ontvangst van een fysiek Product kan u een beoordeling achterlaten, eventueel met een foto of korte video. Wij gebruiken dit materiaal om te tonen hoe onze Producten er in werkelijkheid uitzien: op de Website, op onze eigen pagina's op sociale media en in onze advertenties op die platformen. Het gebruiksrecht is geregeld in artikel 9.3 van de algemene voorwaarden. De rechtsgrond is ons gerechtvaardigd belang om een Product te tonen dat per exemplaar uniek is."
+  },
+  {
+   "type": "p",
+   "text": "11.2. Materiaal waarop een persoon herkenbaar in beeld is, gebruiken wij uitsluitend op de Website. Voor wij een foto buiten de Website gebruiken, verwijderen wij de locatiegegevens uit het bestand. Bij een beoordeling vermelden wij hoogstens uw voornaam."
+  },
+  {
+   "type": "p",
+   "text": "11.3. Wenst u niet langer dat wij uw materiaal buiten de Website gebruiken, laat het ons dan weten via info@boekerello.com; wij stoppen dan met dat gebruik. Advertenties die in de Europese Unie al werden vertoond, kunnen nog tot een jaar zichtbaar blijven in de openbare advertentiebibliotheek van het betrokken platform. Die kunnen wij niet verwijderen."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 12. Uw rechten",
+   "id": "art-12",
+   "num": 12,
+   "label": "Uw rechten"
+  },
+  {
+   "type": "p",
+   "text": "12.1. Overeenkomstig de AVG beschikt u over de volgende rechten:"
+  },
+  {
+   "type": "ol",
+   "items": [
+    {
+     "text": "**recht op inzage (art. 15 AVG):** u kan een overzicht en een kopie vragen van de persoonsgegevens die wij over u verwerken;"
+    },
+    {
+     "text": "**recht op rectificatie (art. 16 AVG):** u kan onjuiste of onvolledige gegevens laten verbeteren of aanvullen;"
+    },
+    {
+     "text": "**recht op gegevenswissing (art. 17 AVG):** u kan uw gegevens laten verwijderen, tenzij wij ze moeten bewaren op grond van een wettelijke verplichting of voor de instelling of verdediging van een rechtsvordering;"
+    },
+    {
+     "text": "**recht op beperking van de verwerking (art. 18 AVG):** u kan in bepaalde gevallen vragen de verwerking tijdelijk te beperken;"
+    },
+    {
+     "text": "**recht op overdraagbaarheid (art. 20 AVG):** u kan de gegevens die u ons verstrekte in een gestructureerde, gangbare en machineleesbare vorm ontvangen of laten overdragen aan een andere verwerkingsverantwoordelijke, voor zover de verwerking op toestemming of een overeenkomst berust en geautomatiseerd gebeurt;"
+    },
+    {
+     "text": "**recht van bezwaar (art. 21 AVG):** u kan bezwaar maken tegen een verwerking op grond van ons gerechtvaardigd belang, en u kan zich op elk ogenblik verzetten tegen verwerking voor direct marketing;"
+    },
+    {
+     "text": "**recht om toestemming in te trekken:** u kan een gegeven toestemming op elk ogenblik intrekken, zonder dat dit afbreuk doet aan de rechtmatigheid van de verwerking vóór de intrekking."
+    }
+   ]
+  },
+  {
+   "type": "p",
+   "text": "12.2. Wij nemen geen besluiten die uitsluitend gebaseerd zijn op geautomatiseerde verwerking, met inbegrip van profilering, en die rechtsgevolgen voor u hebben of u anderszins in aanmerkelijke mate treffen (art. 22 AVG). De controle van ingevoerde inhoud op strijdigheid met de contentrichtlijnen kan geautomatiseerd verlopen; u kan in dat geval steeds menselijke tussenkomst vragen."
+  },
+  {
+   "type": "p",
+   "text": "12.3. Wenst u een van deze rechten uit te oefenen, stuur dan een e-mail naar info@boekerello.com. Wij kunnen u vragen uw identiteit aan te tonen. Wij antwoorden zo spoedig mogelijk en uiterlijk binnen een maand na ontvangst van uw verzoek. Gelet op de complexiteit of het aantal verzoeken kan die termijn met twee maanden worden verlengd; wij brengen u daarvan binnen de eerste maand op de hoogte. Wij informeren de ontvangers aan wie uw gegevens werden verstrekt over elke rectificatie, wissing of beperking, tenzij dit onmogelijk blijkt of onevenredig veel inspanning vergt (art. 19 AVG)."
+  },
+  {
+   "type": "p",
+   "text": "12.4. Bent u van oordeel dat wij uw persoonsgegevens niet rechtmatig verwerken, dan kan u een klacht indienen bij de Gegevensbeschermingsautoriteit, Drukpersstraat 35, 1000 Brussel, contact@apd-gba.be, www.gegevensbeschermingsautoriteit.be. Wij stellen het op prijs als u ons eerst contacteert, zodat wij samen naar een oplossing kunnen zoeken."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 13. Wijzigingen van dit privacybeleid",
+   "id": "art-13",
+   "num": 13,
+   "label": "Wijzigingen van dit privacybeleid"
+  },
+  {
+   "type": "p",
+   "text": "Wij kunnen dit privacybeleid wijzigen. De meest recente versie wordt steeds op de Website gepubliceerd, met vermelding van de datum van de laatste wijziging. Bij wezenlijke wijzigingen die een belangrijke invloed hebben op uw rechten of op de wijze waarop wij uw gegevens verwerken, brengen wij u daarvan actief op de hoogte, bijvoorbeeld per e-mail of via een duidelijke melding op de Website."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 14. Contact",
+   "id": "art-14",
+   "num": 14,
+   "label": "Contact"
+  },
+  {
+   "type": "p",
+   "text": "Voor vragen over dit privacybeleid of over de verwerking van uw persoonsgegevens, of om uw rechten uit te oefenen, kan u contact opnemen met Rimino BV via info@boekerello.com of via het contactformulier op de Website."
+  },
+  {
+   "type": "p",
+   "text": "_Versie van 18 november 2026._"
+  }
+ ],
+ "en": [
+  {
+   "type": "h1",
+   "text": "Privacy Policy Boekerello"
+  },
+  {
+   "type": "p",
+   "text": "Boekerello attaches great importance to the protection of your personal data. This privacy policy explains which personal data we collect when you visit the websites www.boekerello.com, www.bookerello.com and www.boekerello.be (together, the \"Website\"), create an account, place an order or contact us. It sets out the purposes for which and the legal bases on which we process that data, with whom we share it, how long we keep it and what rights you have."
+  },
+  {
+   "type": "p",
+   "text": "This privacy policy has been drawn up in accordance with the General Data Protection Regulation (Regulation (EU) 2016/679, the \"GDPR\") and the Belgian Act of 30 July 2018 on the protection of natural persons with regard to the processing of personal data. It supplements our general terms and conditions. Capitalised terms have the meaning given to them in the general terms and conditions."
+  },
+  {
+   "type": "h2",
+   "text": "Article 1. Data controller",
+   "id": "art-1",
+   "num": 1,
+   "label": "Data controller"
+  },
+  {
+   "type": "p",
+   "text": "The controller of your personal data is Rimino BV, which operates the Website under the Boekerello® brand (\"Boekerello\", \"we\" or \"us\")."
+  },
+  {
+   "type": "table",
+   "header": [
+    "Item",
+    "Details"
+   ],
+   "rows": [
+    [
+     "Company",
+     "Rimino BV, private limited company under Belgian law"
+    ],
+    [
+     "Registered office",
+     "Dorpsstraat 124, 9420 Erpe-Mere, Belgium"
+    ],
+    [
+     "Company number",
+     "0545.850.969, Register of Legal Entities (RPR) Ghent, Dendermonde division"
+    ],
+    [
+     "VAT number",
+     "BE 0545.850.969"
+    ],
+    [
+     "Email for privacy enquiries",
+     "info@boekerello.com"
+    ]
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "Article 2. Personal data we process",
+   "id": "art-2",
+   "num": 2,
+   "label": "Personal data we process"
+  },
+  {
+   "type": "p",
+   "text": "2.1. **Data you provide to us:**"
+  },
+  {
+   "type": "ol",
+   "items": [
+    {
+     "text": "**account and contact data:** your name, email address and password (stored in encrypted form);"
+    },
+    {
+     "text": "**order data:** your name and delivery address and the details of your order;"
+    },
+    {
+     "text": "**personalisation data:** the name or names that appear in the book, the story elements chosen and the instructions (prompts) you enter. We ask you not to enter sensitive data in the free text fields, such as data concerning health, religion or ethnic origin;"
+    },
+    {
+     "text": "**uploaded photos:** the photos you upload to personalise the illustrations. Our AI systems analyse these photos to create an illustration resembling the character;"
+    },
+    {
+     "text": "**story text for the Audiobook:** if you order the Audiobook, the text of the story, including the names it contains, is processed by a text-to-speech system to create the audio recording;"
+    },
+    {
+     "text": "**communication data:** the content of your messages when you contact us by email or via the contact form;"
+    },
+    {
+     "text": "**reviews, photos and videos** that you voluntarily send us (see Article 11)."
+    }
+   ]
+  },
+  {
+   "type": "p",
+   "text": "2.2. **Payment data.** Your payment is processed by our payment service provider Stripe. We have no access to your full card or account details and only receive confirmation of payment and limited transaction data."
+  },
+  {
+   "type": "p",
+   "text": "2.3. **Data collected automatically.** When you visit the Website, we collect, through cookies and similar technologies (see Article 7), technical data (IP address, browser type, operating system, device data) and usage data (pages visited, click behaviour, duration of the visit)."
+  },
+  {
+   "type": "h2",
+   "text": "Article 3. Purposes and legal bases",
+   "id": "art-3",
+   "num": 3,
+   "label": "Purposes and legal bases"
+  },
+  {
+   "type": "p",
+   "text": "We process your personal data solely for the purposes below and on the legal bases stated under Article 6(1) GDPR:"
+  },
+  {
+   "type": "table",
+   "header": [
+    "Purpose",
+    "Legal basis"
+   ],
+   "rows": [
+    [
+     "Creating and managing your account",
+     "Performance of the contract (Art. 6(1)(b))"
+    ],
+    [
+     "Processing, producing, delivering and invoicing your order, including the audio recording of the Audiobook",
+     "Performance of the contract (Art. 6(1)(b))"
+    ],
+    [
+     "Using uploaded photos and personalisation data to create the personalised book with AI",
+     "Consent (Art. 6(1)(a))"
+    ],
+    [
+     "Storing and making available your book design, Digital Book and audio recording in your account and via the QR code",
+     "Performance of the contract (Art. 6(1)(b))"
+    ],
+    [
+     "Customer service and service emails (order confirmation, shipping notification)",
+     "Performance of the contract (Art. 6(1)(b))"
+    ],
+    [
+     "Checking entered content for breaches of the content guidelines (for example protected characters or inappropriate content)",
+     "Legitimate interest (Art. 6(1)(f))"
+    ],
+    [
+     "Preventing fraud and abuse",
+     "Legitimate interest (Art. 6(1)(f))"
+    ],
+    [
+     "Analysing Website use and improving our products and services",
+     "Consent for non-essential cookies (Art. 6(1)(a)); otherwise legitimate interest (Art. 6(1)(f))"
+    ],
+    [
+     "Use of customer reviews, photos and videos",
+     "Legitimate interest (Art. 6(1)(f))"
+    ],
+    [
+     "Compliance with accounting and tax obligations",
+     "Legal obligation (Art. 6(1)(c))"
+    ]
+   ]
+  },
+  {
+   "type": "p",
+   "text": "You give your consent to the use of photos and personalisation data when uploading and confirming your choices. You may withdraw this consent at any time, without affecting the lawfulness of processing before its withdrawal. After withdrawal, we can no longer create or edit the Product concerned."
+  },
+  {
+   "type": "h2",
+   "text": "Article 4. Recipients of your personal data",
+   "id": "art-4",
+   "num": 4,
+   "label": "Recipients of your personal data"
+  },
+  {
+   "type": "p",
+   "text": "4.1. We do not sell your personal data. We only share it with third parties insofar as this is necessary to provide our services or is required by law. We conclude a data processing agreement with processors in accordance with Article 28 GDPR. An up-to-date list of our processors is available on request."
+  },
+  {
+   "type": "p",
+   "text": "4.2. The following categories of recipients are involved:"
+  },
+  {
+   "type": "ol",
+   "items": [
+    {
+     "text": "**payment service provider (Stripe):** for the secure processing of your payments;"
+    },
+    {
+     "text": "**printers and carriers:** for the production and delivery of physical Products;"
+    },
+    {
+     "text": "**hosting and IT service providers:** for hosting the Website and storing data, including secure storage of project files within the European Union;"
+    },
+    {
+     "text": "**AI technology providers:** for generating text, illustrations and audio recordings. Your photos, prompts and the story text are processed by their systems to create the Product ordered;"
+    },
+    {
+     "text": "**email service providers:** for sending service emails;"
+    },
+    {
+     "text": "**analytics services:** for analysing Website use, insofar as you have consented to this;"
+    },
+    {
+     "text": "**public authorities:** where we are legally obliged to do so."
+    }
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "Article 5. Transfers outside the European Economic Area",
+   "id": "art-5",
+   "num": 5,
+   "label": "Transfers outside the European Economic Area"
+  },
+  {
+   "type": "p",
+   "text": "Some AI technology providers and other service providers process data on servers outside the European Economic Area (EEA), in particular in the United States. We only transfer personal data where an adequate level of protection is ensured, such as by means of an adequacy decision of the European Commission (including the EU-US Data Privacy Framework) or standard contractual clauses approved by the European Commission. We will provide you with further information on these safeguards on request."
+  },
+  {
+   "type": "h2",
+   "text": "Article 6. Retention periods",
+   "id": "art-6",
+   "num": 6,
+   "label": "Retention periods"
+  },
+  {
+   "type": "p",
+   "text": "We keep your personal data no longer than necessary for the purposes for which it was collected, or for as long as the law requires:"
+  },
+  {
+   "type": "table",
+   "header": [
+    "Data",
+    "Retention period"
+   ],
+   "rows": [
+    [
+     "Account data",
+     "For as long as your account is active, or until you request deletion"
+    ],
+    [
+     "Photos, book designs and Digital Books (project files)",
+     "For as long as your account exists, so that you can download and reorder your books. We may end storage after at least 3 months' notice, in accordance with Article 6.6 of the general terms and conditions"
+    ],
+    [
+     "Audiobook audio recordings",
+     "At least 1 year after purchase, during which period they are available via the QR code"
+    ],
+    [
+     "Order and invoice data",
+     "10 years, in accordance with Belgian accounting and tax retention obligations"
+    ],
+    [
+     "Communication data",
+     "Up to 2 years after your question or complaint has been dealt with"
+    ],
+    [
+     "Fraud prevention data (such as IP addresses)",
+     "No later than 12 months after recording"
+    ],
+    [
+     "Reviews, photos and videos",
+     "For as long as we use them, or until you object"
+    ]
+   ]
+  },
+  {
+   "type": "p",
+   "text": "You may have your project files permanently deleted at any time by deleting your account. This also erases your photos, books and audio recordings, with the exception of data we are legally required to retain."
+  },
+  {
+   "type": "h2",
+   "text": "Article 7. Cookies and similar technologies",
+   "id": "art-7",
+   "num": 7,
+   "label": "Cookies and similar technologies"
+  },
+  {
+   "type": "p",
+   "text": "7.1. Cookies are small text files placed on your device when you visit the Website. We use cookies and similar technologies (such as pixels and local storage) of the following types:"
+  },
+  {
+   "type": "ol",
+   "items": [
+    {
+     "text": "**functional (strictly necessary) cookies:** essential for the Website to work, for example to navigate, log in and place an order. No consent is required for these;"
+    },
+    {
+     "text": "**analytics cookies:** help us understand how visitors use the Website, so that we can improve it. The data is anonymised where possible;"
+    },
+    {
+     "text": "**marketing cookies:** may be used to track your browsing behaviour and show you relevant advertisements on the Website or on third-party websites."
+    }
+   ]
+  },
+  {
+   "type": "p",
+   "text": "7.2. We only place analytics and marketing cookies with your prior consent. On your first visit, we ask for that consent via a cookie banner. You can change your choice or withdraw your consent at any time via the cookie settings on the Website or via your browser settings. Disabling cookies may affect how the Website works."
+  },
+  {
+   "type": "h2",
+   "text": "Article 8. Security",
+   "id": "art-8",
+   "num": 8,
+   "label": "Security"
+  },
+  {
+   "type": "p",
+   "text": "8.1. We take appropriate technical and organisational measures to protect your personal data against loss, misuse, unauthorised access, unwanted disclosure and unauthorised alteration. These measures include encrypted data transfer (SSL/TLS), secure servers, access control and regular security updates."
+  },
+  {
+   "type": "p",
+   "text": "8.2. No transmission over the internet is completely secure. If a personal data breach occurs that is likely to result in a high risk to your rights and freedoms, we will notify you without undue delay, in accordance with the GDPR."
+  },
+  {
+   "type": "h2",
+   "text": "Article 9. AI and the use of photos",
+   "id": "art-9",
+   "num": 9,
+   "label": "AI and the use of photos"
+  },
+  {
+   "type": "p",
+   "text": "9.1. By uploading photos, you give us your express consent to process them using our AI systems and those of our carefully selected technology partners. If you order the Audiobook, you also consent to the processing of the story text by a text-to-speech system. This processing takes place solely to create the Product ordered."
+  },
+  {
+   "type": "p",
+   "text": "9.2. Photos are processed solely to create an artistic illustration. We do not use facial recognition and do not use the photos to identify individuals."
+  },
+  {
+   "type": "p",
+   "text": "9.3. We do not use your photos, prompts or story texts to train AI models, and we only work with technology partners who are contractually bound not to do so either."
+  },
+  {
+   "type": "h2",
+   "text": "Article 10. Children's data",
+   "id": "art-10",
+   "num": 10,
+   "label": "Children's data"
+  },
+  {
+   "type": "p",
+   "text": "10.1. Our Products are intended for children but are ordered by adults. We do not knowingly collect personal data directly from children."
+  },
+  {
+   "type": "p",
+   "text": "10.2. A child's personal data, such as the name in the book, the uploaded photo and the story text of the Audiobook, is processed solely to personalise the Product, on the basis of the data and consent provided by the adult Customer. In accordance with Article 9.1 of the general terms and conditions, the Customer warrants that they are the child's parent or guardian or have their consent."
+  },
+  {
+   "type": "p",
+   "text": "10.3. If you suspect that we are processing a child's personal data without the required consent, please contact us. We will then take appropriate measures without delay, including deleting that data."
+  },
+  {
+   "type": "h2",
+   "text": "Article 11. Customer reviews, photos and videos",
+   "id": "art-11",
+   "num": 11,
+   "label": "Customer reviews, photos and videos"
+  },
+  {
+   "type": "p",
+   "text": "11.1. After receiving a physical Product, you can leave a review, optionally with a photo or short video. We use this material to show what our Products look like in reality: on the Website, on our own social media pages and in our advertisements on those platforms. The right of use is governed by Article 9.3 of the general terms and conditions. The legal basis is our legitimate interest in showing a Product that is unique in each copy."
+  },
+  {
+   "type": "p",
+   "text": "11.2. Material in which a person is recognisable is used by us on the Website only. Before we use a photo outside the Website, we remove the location data from the file. For a review, we state no more than your first name."
+  },
+  {
+   "type": "p",
+   "text": "11.3. If you no longer want us to use your material outside the Website, let us know at info@boekerello.com and we will stop doing so. Advertisements already shown in the European Union may remain visible for up to a year in the platform's public ad library. We cannot remove these."
+  },
+  {
+   "type": "h2",
+   "text": "Article 12. Your rights",
+   "id": "art-12",
+   "num": 12,
+   "label": "Your rights"
+  },
+  {
+   "type": "p",
+   "text": "12.1. Under the GDPR, you have the following rights:"
+  },
+  {
+   "type": "ol",
+   "items": [
+    {
+     "text": "**right of access (Art. 15 GDPR):** you can request an overview and a copy of the personal data we process about you;"
+    },
+    {
+     "text": "**right to rectification (Art. 16 GDPR):** you can have inaccurate or incomplete data corrected or completed;"
+    },
+    {
+     "text": "**right to erasure (Art. 17 GDPR):** you can have your data deleted, unless we are required to keep it under a legal obligation or for the establishment or defence of legal claims;"
+    },
+    {
+     "text": "**right to restriction of processing (Art. 18 GDPR):** in certain cases, you can ask for processing to be temporarily restricted;"
+    },
+    {
+     "text": "**right to data portability (Art. 20 GDPR):** you can receive the data you provided to us in a structured, commonly used and machine-readable format, or have it transferred to another controller, insofar as the processing is based on consent or a contract and is carried out by automated means;"
+    },
+    {
+     "text": "**right to object (Art. 21 GDPR):** you can object to processing based on our legitimate interest, and you can object at any time to processing for direct marketing;"
+    },
+    {
+     "text": "**right to withdraw consent:** you can withdraw any consent given at any time, without affecting the lawfulness of processing before its withdrawal."
+    }
+   ]
+  },
+  {
+   "type": "p",
+   "text": "12.2. We do not take decisions based solely on automated processing, including profiling, that produce legal effects concerning you or similarly significantly affect you (Art. 22 GDPR). Checking entered content for breaches of the content guidelines may be automated; in that case you can always request human intervention."
+  },
+  {
+   "type": "p",
+   "text": "12.3. To exercise any of these rights, please send an email to info@boekerello.com. We may ask you to prove your identity. We will respond as soon as possible and no later than one month after receiving your request. Taking into account the complexity or number of requests, this period may be extended by two months; we will inform you of this within the first month. We will inform the recipients to whom your data has been disclosed of any rectification, erasure or restriction, unless this proves impossible or involves disproportionate effort (Art. 19 GDPR)."
+  },
+  {
+   "type": "p",
+   "text": "12.4. If you believe that we are not processing your personal data lawfully, you may lodge a complaint with the Belgian Data Protection Authority (Gegevensbeschermingsautoriteit), Rue de la Presse 35, 1000 Brussels, contact@apd-gba.be, www.dataprotectionauthority.be. We would appreciate it if you contacted us first, so that we can look for a solution together."
+  },
+  {
+   "type": "h2",
+   "text": "Article 13. Amendments to this privacy policy",
+   "id": "art-13",
+   "num": 13,
+   "label": "Amendments to this privacy policy"
+  },
+  {
+   "type": "p",
+   "text": "We may amend this privacy policy. The most recent version is always published on the Website, stating the date of the last amendment. In the event of material changes that significantly affect your rights or the way we process your data, we will actively inform you, for example by email or through a clear notice on the Website."
+  },
+  {
+   "type": "h2",
+   "text": "Article 14. Contact",
+   "id": "art-14",
+   "num": 14,
+   "label": "Contact"
+  },
+  {
+   "type": "p",
+   "text": "For questions about this privacy policy or the processing of your personal data, or to exercise your rights, you can contact Rimino BV at info@boekerello.com or via the contact form on the Website."
+  },
+  {
+   "type": "p",
+   "text": "This privacy policy was drawn up in Dutch. This English version is a translation; in the event of any discrepancy, the Dutch version prevails."
+  },
+  {
+   "type": "p",
+   "text": "_Version of 18 November 2026._"
+  }
+ ],
+ "fr": [
+  {
+   "type": "h1",
+   "text": "Politique de confidentialité Boekerello"
+  },
+  {
+   "type": "p",
+   "text": "Boekerello attache une grande importance à la protection de vos données à caractère personnel. La présente politique de confidentialité explique quelles données à caractère personnel nous collectons lorsque vous visitez les sites www.boekerello.com, www.bookerello.com et www.boekerello.be (ci-après ensemble : le « Site »), créez un compte, passez une commande ou nous contactez. Elle précise les finalités et les bases juridiques de ces traitements, les personnes avec qui nous partageons ces données, leur durée de conservation et les droits dont vous disposez."
+  },
+  {
+   "type": "p",
+   "text": "La présente politique de confidentialité est établie conformément au Règlement général sur la protection des données (Règlement (UE) 2016/679, ci-après : le « RGPD ») et à la loi belge du 30 juillet 2018 relative à la protection des personnes physiques à l'égard des traitements de données à caractère personnel. Elle complète nos conditions générales de vente. Les termes commençant par une majuscule ont la signification qui leur est donnée dans les conditions générales."
+  },
+  {
+   "type": "h2",
+   "text": "Article 1. Responsable du traitement",
+   "id": "art-1",
+   "num": 1,
+   "label": "Responsable du traitement"
+  },
+  {
+   "type": "p",
+   "text": "Le responsable du traitement de vos données à caractère personnel est Rimino BV, qui exploite le Site sous la marque Boekerello® (ci-après : « Boekerello », « nous » ou « notre »)."
+  },
+  {
+   "type": "table",
+   "header": [
+    "Donnée",
+    "Information"
+   ],
+   "rows": [
+    [
+     "Société",
+     "Rimino BV, société à responsabilité limitée de droit belge"
+    ],
+    [
+     "Siège",
+     "Dorpsstraat 124, 9420 Erpe-Mere, Belgique"
+    ],
+    [
+     "Numéro d'entreprise",
+     "0545.850.969, RPM Gand, division Termonde"
+    ],
+    [
+     "Numéro de TVA",
+     "BE 0545.850.969"
+    ],
+    [
+     "E-mail pour les questions relatives à la vie privée",
+     "info@boekerello.com"
+    ]
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "Article 2. Données à caractère personnel traitées",
+   "id": "art-2",
+   "num": 2,
+   "label": "Données à caractère personnel traitées"
+  },
+  {
+   "type": "p",
+   "text": "2.1. **Données que vous nous fournissez :**"
+  },
+  {
+   "type": "ol",
+   "items": [
+    {
+     "text": "**données de compte et de contact :** vos nom, adresse e-mail et mot de passe (conservé sous forme chiffrée) ;"
+    },
+    {
+     "text": "**données de commande :** vos nom et adresse de livraison ainsi que les données de votre commande ;"
+    },
+    {
+     "text": "**données de personnalisation :** le ou les noms figurant dans le livre, les éléments d'histoire choisis et les instructions (prompts) que vous saisissez. Nous vous demandons de ne pas saisir de données sensibles dans les champs de texte libre, telles que des données relatives à la santé, à la religion ou à l'origine ethnique ;"
+    },
+    {
+     "text": "**photos téléchargées :** les photos que vous téléchargez pour personnaliser les illustrations. Nos systèmes d'IA analysent ces photos afin de créer une illustration ressemblant au personnage ;"
+    },
+    {
+     "text": "**texte de l'histoire pour le Livre Audio :** si vous commandez le Livre Audio, le texte de l'histoire, y compris les noms qu'il contient, est traité par un système de synthèse vocale afin de créer l'enregistrement audio ;"
+    },
+    {
+     "text": "**données de communication :** le contenu de vos messages lorsque vous nous contactez par e-mail ou via le formulaire de contact ;"
+    },
+    {
+     "text": "**avis, photos et vidéos** que vous nous transmettez volontairement (voir article 11)."
+    }
+   ]
+  },
+  {
+   "type": "p",
+   "text": "2.2. **Données de paiement.** Votre paiement est traité par notre prestataire de services de paiement Stripe. Nous n'avons pas accès à vos données complètes de carte ou de compte et ne recevons qu'une confirmation du paiement et des données de transaction limitées."
+  },
+  {
+   "type": "p",
+   "text": "2.3. **Données collectées automatiquement.** Lors de votre visite sur le Site, nous collectons, au moyen de cookies et de technologies similaires (voir article 7), des données techniques (adresse IP, type de navigateur, système d'exploitation, données relatives à l'appareil) et des données d'utilisation (pages consultées, comportement de clic, durée de la visite)."
+  },
+  {
+   "type": "h2",
+   "text": "Article 3. Finalités et bases juridiques",
+   "id": "art-3",
+   "num": 3,
+   "label": "Finalités et bases juridiques"
+  },
+  {
+   "type": "p",
+   "text": "Nous traitons vos données à caractère personnel exclusivement pour les finalités ci-dessous et sur les bases juridiques indiquées de l'article 6, paragraphe 1, du RGPD :"
+  },
+  {
+   "type": "table",
+   "header": [
+    "Finalité",
+    "Base juridique"
+   ],
+   "rows": [
+    [
+     "Création et gestion de votre compte",
+     "Exécution du contrat (art. 6.1.b)"
+    ],
+    [
+     "Traitement, production, livraison et facturation de votre commande, y compris l'enregistrement audio du Livre Audio",
+     "Exécution du contrat (art. 6.1.b)"
+    ],
+    [
+     "Utilisation des photos téléchargées et des données de personnalisation pour créer le livre personnalisé au moyen de l'IA",
+     "Consentement (art. 6.1.a)"
+    ],
+    [
+     "Conservation et mise à disposition de la conception de votre livre, du Livre Numérique et de l'enregistrement audio dans votre compte et via le code QR",
+     "Exécution du contrat (art. 6.1.b)"
+    ],
+    [
+     "Service clientèle et e-mails de service (confirmation de commande, avis d'expédition)",
+     "Exécution du contrat (art. 6.1.b)"
+    ],
+    [
+     "Contrôle du contenu saisi au regard des règles relatives au contenu (par exemple personnages protégés ou contenu inapproprié)",
+     "Intérêt légitime (art. 6.1.f)"
+    ],
+    [
+     "Prévention de la fraude et des abus",
+     "Intérêt légitime (art. 6.1.f)"
+    ],
+    [
+     "Analyse de l'utilisation du Site et amélioration de nos produits et services",
+     "Consentement pour les cookies non essentiels (art. 6.1.a) ; pour le surplus, intérêt légitime (art. 6.1.f)"
+    ],
+    [
+     "Utilisation des avis, photos et vidéos des clients",
+     "Intérêt légitime (art. 6.1.f)"
+    ],
+    [
+     "Respect des obligations comptables et fiscales",
+     "Obligation légale (art. 6.1.c)"
+    ]
+   ]
+  },
+  {
+   "type": "p",
+   "text": "Vous donnez votre consentement à l'utilisation des photos et des données de personnalisation lors du téléchargement et de la confirmation de vos choix. Vous pouvez retirer ce consentement à tout moment, sans que cela porte atteinte à la licéité du traitement effectué avant ce retrait. Après le retrait, nous ne pouvons plus créer ni modifier le Produit concerné."
+  },
+  {
+   "type": "h2",
+   "text": "Article 4. Destinataires de vos données à caractère personnel",
+   "id": "art-4",
+   "num": 4,
+   "label": "Destinataires de vos données à caractère personnel"
+  },
+  {
+   "type": "p",
+   "text": "4.1. Nous ne vendons pas vos données à caractère personnel. Nous ne les partageons avec des tiers que dans la mesure nécessaire à la fourniture de nos services ou lorsque la loi l'exige. Nous concluons avec nos sous-traitants un contrat de sous-traitance conformément à l'article 28 du RGPD. Une liste actualisée de nos sous-traitants est disponible sur demande."
+  },
+  {
+   "type": "p",
+   "text": "4.2. Les catégories de destinataires sont les suivantes :"
+  },
+  {
+   "type": "ol",
+   "items": [
+    {
+     "text": "**prestataire de services de paiement (Stripe) :** pour le traitement sécurisé de vos paiements ;"
+    },
+    {
+     "text": "**imprimeurs et transporteurs :** pour la production et la livraison des Produits physiques ;"
+    },
+    {
+     "text": "**prestataires d'hébergement et de services informatiques :** pour l'hébergement du Site et le stockage des données, y compris le stockage sécurisé des fichiers de projet au sein de l'Union européenne ;"
+    },
+    {
+     "text": "**fournisseurs de technologies d'IA :** pour la génération de textes, d'illustrations et d'enregistrements audio. Vos photos, vos prompts et le texte de l'histoire sont traités par leurs systèmes afin de créer le Produit commandé ;"
+    },
+    {
+     "text": "**prestataires de services d'e-mail :** pour l'envoi des e-mails de service ;"
+    },
+    {
+     "text": "**services d'analyse :** pour l'analyse de l'utilisation du Site, dans la mesure où vous y avez consenti ;"
+    },
+    {
+     "text": "**autorités publiques :** lorsque la loi nous y oblige."
+    }
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "Article 5. Transferts en dehors de l'Espace économique européen",
+   "id": "art-5",
+   "num": 5,
+   "label": "Transferts en dehors de l'Espace économique européen"
+  },
+  {
+   "type": "p",
+   "text": "Certains fournisseurs de technologies d'IA et autres prestataires traitent des données sur des serveurs situés en dehors de l'Espace économique européen (EEE), notamment aux États-Unis. Nous ne transférons des données à caractère personnel que lorsqu'un niveau de protection adéquat est garanti, par exemple au moyen d'une décision d'adéquation de la Commission européenne (notamment le cadre de protection des données UE-États-Unis, ou Data Privacy Framework) ou de clauses contractuelles types approuvées par la Commission européenne. Sur demande, nous vous fournissons de plus amples informations sur ces garanties."
+  },
+  {
+   "type": "h2",
+   "text": "Article 6. Durées de conservation",
+   "id": "art-6",
+   "num": 6,
+   "label": "Durées de conservation"
+  },
+  {
+   "type": "p",
+   "text": "Nous ne conservons vos données à caractère personnel que pendant la durée nécessaire aux finalités pour lesquelles elles ont été collectées, ou pendant la durée exigée par la loi :"
+  },
+  {
+   "type": "table",
+   "header": [
+    "Données",
+    "Durée de conservation"
+   ],
+   "rows": [
+    [
+     "Données de compte",
+     "Aussi longtemps que votre compte est actif, ou jusqu'à ce que vous en demandiez la suppression"
+    ],
+    [
+     "Photos, conceptions de livres et Livres Numériques (fichiers de projet)",
+     "Aussi longtemps que votre compte existe, afin que vous puissiez télécharger et recommander vos livres. Nous pouvons mettre fin à la conservation moyennant un préavis d'au moins 3 mois, conformément à l'article 6.6 des conditions générales"
+    ],
+    [
+     "Enregistrements audio du Livre Audio",
+     "Au moins 1 an après l'achat, période pendant laquelle ils sont accessibles via le code QR"
+    ],
+    [
+     "Données de commande et de facturation",
+     "10 ans, conformément aux obligations comptables et fiscales belges de conservation"
+    ],
+    [
+     "Données de communication",
+     "Jusqu'à 2 ans après le traitement de votre question ou plainte"
+    ],
+    [
+     "Données de prévention de la fraude (telles que les adresses IP)",
+     "Au plus tard 12 mois après leur enregistrement"
+    ],
+    [
+     "Avis, photos et vidéos",
+     "Aussi longtemps que nous les utilisons, ou jusqu'à votre opposition"
+    ]
+   ]
+  },
+  {
+   "type": "p",
+   "text": "Vous pouvez à tout moment faire supprimer définitivement vos fichiers de projet en supprimant votre compte. Vos photos, livres et enregistrements audio sont alors également effacés, à l'exception des données que nous sommes légalement tenus de conserver."
+  },
+  {
+   "type": "h2",
+   "text": "Article 7. Cookies et technologies similaires",
+   "id": "art-7",
+   "num": 7,
+   "label": "Cookies et technologies similaires"
+  },
+  {
+   "type": "p",
+   "text": "7.1. Les cookies sont de petits fichiers texte déposés sur votre appareil lorsque vous visitez le Site. Nous utilisons des cookies et des technologies similaires (telles que des pixels et le stockage local) des types suivants :"
+  },
+  {
+   "type": "ol",
+   "items": [
+    {
+     "text": "**cookies fonctionnels (strictement nécessaires) :** indispensables au fonctionnement du Site, par exemple pour naviguer, vous connecter et passer une commande. Ils ne requièrent pas de consentement ;"
+    },
+    {
+     "text": "**cookies analytiques :** nous aident à comprendre comment les visiteurs utilisent le Site, afin de l'améliorer. Les données sont anonymisées dans la mesure du possible ;"
+    },
+    {
+     "text": "**cookies marketing :** peuvent être utilisés pour suivre votre comportement de navigation et vous montrer des publicités pertinentes sur le Site ou sur des sites de tiers."
+    }
+   ]
+  },
+  {
+   "type": "p",
+   "text": "7.2. Nous ne déposons de cookies analytiques et marketing qu'avec votre consentement préalable. Lors de votre première visite, nous sollicitons ce consentement au moyen d'un bandeau cookies. Vous pouvez à tout moment modifier votre choix ou retirer votre consentement via les paramètres de cookies du Site ou via les paramètres de votre navigateur. La désactivation des cookies peut affecter le fonctionnement du Site."
+  },
+  {
+   "type": "h2",
+   "text": "Article 8. Sécurité",
+   "id": "art-8",
+   "num": 8,
+   "label": "Sécurité"
+  },
+  {
+   "type": "p",
+   "text": "8.1. Nous prenons des mesures techniques et organisationnelles appropriées afin de protéger vos données à caractère personnel contre la perte, l'utilisation abusive, l'accès non autorisé, la divulgation non souhaitée et la modification non autorisée. Ces mesures comprennent notamment le chiffrement des transferts de données (SSL/TLS), des serveurs sécurisés, une gestion des accès et des mises à jour de sécurité régulières."
+  },
+  {
+   "type": "p",
+   "text": "8.2. Aucune transmission par internet n'est entièrement sécurisée. En cas de violation de données à caractère personnel susceptible d'engendrer un risque élevé pour vos droits et libertés, nous vous en informons dans les meilleurs délais, conformément au RGPD."
+  },
+  {
+   "type": "h2",
+   "text": "Article 9. IA et utilisation des photos",
+   "id": "art-9",
+   "num": 9,
+   "label": "IA et utilisation des photos"
+  },
+  {
+   "type": "p",
+   "text": "9.1. En téléchargeant des photos, vous nous donnez votre consentement exprès pour les traiter au moyen de nos systèmes d'IA et de ceux de nos partenaires technologiques soigneusement sélectionnés. Si vous commandez le Livre Audio, vous consentez également au traitement du texte de l'histoire par un système de synthèse vocale. Ce traitement a lieu exclusivement en vue de créer le Produit commandé."
+  },
+  {
+   "type": "p",
+   "text": "9.2. Le traitement des photos sert uniquement à créer une illustration artistique. Nous n'utilisons pas la reconnaissance faciale et n'utilisons pas les photos pour identifier des personnes."
+  },
+  {
+   "type": "p",
+   "text": "9.3. Nous n'utilisons pas vos photos, prompts ou textes d'histoire pour entraîner des modèles d'IA, et nous travaillons exclusivement avec des partenaires technologiques qui se sont contractuellement engagés à ne pas le faire non plus."
+  },
+  {
+   "type": "h2",
+   "text": "Article 10. Données des enfants",
+   "id": "art-10",
+   "num": 10,
+   "label": "Données des enfants"
+  },
+  {
+   "type": "p",
+   "text": "10.1. Nos Produits sont destinés aux enfants, mais sont commandés par des adultes. Nous ne collectons pas sciemment de données à caractère personnel directement auprès d'enfants."
+  },
+  {
+   "type": "p",
+   "text": "10.2. Les données à caractère personnel d'un enfant, telles que le nom figurant dans le livre, la photo téléchargée et le texte de l'histoire du Livre Audio, sont traitées exclusivement en vue de la personnalisation du Produit, sur la base des données et du consentement fournis par le Client adulte. Conformément à l'article 9.1 des conditions générales, le Client garantit qu'il est le parent ou le tuteur de l'enfant ou qu'il dispose de leur consentement."
+  },
+  {
+   "type": "p",
+   "text": "10.3. Si vous soupçonnez que nous traitons des données à caractère personnel d'un enfant sans le consentement requis, veuillez nous contacter. Nous prendrons alors sans délai les mesures appropriées, y compris la suppression de ces données."
+  },
+  {
+   "type": "h2",
+   "text": "Article 11. Avis, photos et vidéos des clients",
+   "id": "art-11",
+   "num": 11,
+   "label": "Avis, photos et vidéos des clients"
+  },
+  {
+   "type": "p",
+   "text": "11.1. Après réception d'un Produit physique, vous pouvez laisser un avis, éventuellement accompagné d'une photo ou d'une courte vidéo. Nous utilisons ce matériel pour montrer à quoi ressemblent réellement nos Produits : sur le Site, sur nos propres pages sur les réseaux sociaux et dans nos publicités sur ces plateformes. Le droit d'utilisation est régi par l'article 9.3 des conditions générales. La base juridique est notre intérêt légitime à montrer un Produit unique pour chaque exemplaire."
+  },
+  {
+   "type": "p",
+   "text": "11.2. Le matériel sur lequel une personne est reconnaissable n'est utilisé que sur le Site. Avant d'utiliser une photo en dehors du Site, nous supprimons les données de localisation du fichier. Pour un avis, nous mentionnons tout au plus votre prénom."
+  },
+  {
+   "type": "p",
+   "text": "11.3. Si vous ne souhaitez plus que nous utilisions votre matériel en dehors du Site, faites-le-nous savoir à l'adresse info@boekerello.com ; nous cesserons alors cette utilisation. Les publicités déjà diffusées dans l'Union européenne peuvent rester visibles jusqu'à un an dans la bibliothèque publicitaire publique de la plateforme concernée. Nous ne pouvons pas les supprimer."
+  },
+  {
+   "type": "h2",
+   "text": "Article 12. Vos droits",
+   "id": "art-12",
+   "num": 12,
+   "label": "Vos droits"
+  },
+  {
+   "type": "p",
+   "text": "12.1. Conformément au RGPD, vous disposez des droits suivants :"
+  },
+  {
+   "type": "ol",
+   "items": [
+    {
+     "text": "**droit d'accès (art. 15 RGPD) :** vous pouvez demander un aperçu et une copie des données à caractère personnel que nous traitons à votre sujet ;"
+    },
+    {
+     "text": "**droit de rectification (art. 16 RGPD) :** vous pouvez faire corriger ou compléter des données inexactes ou incomplètes ;"
+    },
+    {
+     "text": "**droit à l'effacement (art. 17 RGPD) :** vous pouvez faire supprimer vos données, sauf si nous sommes tenus de les conserver en vertu d'une obligation légale ou pour la constatation, l'exercice ou la défense de droits en justice ;"
+    },
+    {
+     "text": "**droit à la limitation du traitement (art. 18 RGPD) :** dans certains cas, vous pouvez demander la limitation temporaire du traitement ;"
+    },
+    {
+     "text": "**droit à la portabilité (art. 20 RGPD) :** vous pouvez recevoir les données que vous nous avez fournies dans un format structuré, couramment utilisé et lisible par machine, ou les faire transmettre à un autre responsable du traitement, dans la mesure où le traitement est fondé sur le consentement ou sur un contrat et est effectué à l'aide de procédés automatisés ;"
+    },
+    {
+     "text": "**droit d'opposition (art. 21 RGPD) :** vous pouvez vous opposer à un traitement fondé sur notre intérêt légitime, et vous pouvez vous opposer à tout moment au traitement à des fins de prospection ;"
+    },
+    {
+     "text": "**droit de retirer votre consentement :** vous pouvez retirer à tout moment un consentement donné, sans que cela porte atteinte à la licéité du traitement effectué avant ce retrait."
+    }
+   ]
+  },
+  {
+   "type": "p",
+   "text": "12.2. Nous ne prenons pas de décisions fondées exclusivement sur un traitement automatisé, y compris le profilage, produisant des effets juridiques à votre égard ou vous affectant de manière significative de façon similaire (art. 22 RGPD). Le contrôle du contenu saisi au regard des règles relatives au contenu peut être automatisé ; vous pouvez dans ce cas toujours demander une intervention humaine."
+  },
+  {
+   "type": "p",
+   "text": "12.3. Pour exercer l'un de ces droits, veuillez envoyer un e-mail à info@boekerello.com. Nous pouvons vous demander de justifier de votre identité. Nous répondons dans les meilleurs délais et au plus tard dans un délai d'un mois à compter de la réception de votre demande. Compte tenu de la complexité ou du nombre de demandes, ce délai peut être prolongé de deux mois ; nous vous en informons dans le premier mois. Nous informons les destinataires auxquels vos données ont été communiquées de toute rectification, de tout effacement ou de toute limitation, à moins que cela se révèle impossible ou exige des efforts disproportionnés (art. 19 RGPD)."
+  },
+  {
+   "type": "p",
+   "text": "12.4. Si vous estimez que nous ne traitons pas vos données à caractère personnel de manière licite, vous pouvez introduire une plainte auprès de l'Autorité de protection des données, rue de la Presse 35, 1000 Bruxelles, contact@apd-gba.be, www.autoriteprotectiondonnees.be. Nous vous saurions gré de nous contacter au préalable, afin que nous puissions rechercher ensemble une solution."
+  },
+  {
+   "type": "h2",
+   "text": "Article 13. Modifications de la présente politique",
+   "id": "art-13",
+   "num": 13,
+   "label": "Modifications de la présente politique"
+  },
+  {
+   "type": "p",
+   "text": "Nous pouvons modifier la présente politique de confidentialité. La version la plus récente est toujours publiée sur le Site, avec la date de la dernière modification. En cas de modifications substantielles ayant une incidence importante sur vos droits ou sur la manière dont nous traitons vos données, nous vous en informons activement, par exemple par e-mail ou au moyen d'un avis clair sur le Site."
+  },
+  {
+   "type": "h2",
+   "text": "Article 14. Contact",
+   "id": "art-14",
+   "num": 14,
+   "label": "Contact"
+  },
+  {
+   "type": "p",
+   "text": "Pour toute question relative à la présente politique de confidentialité ou au traitement de vos données à caractère personnel, ou pour exercer vos droits, vous pouvez contacter Rimino BV à l'adresse info@boekerello.com ou via le formulaire de contact du Site."
+  },
+  {
+   "type": "p",
+   "text": "La présente politique de confidentialité a été rédigée en néerlandais. La présente version française est une traduction ; en cas de divergence, la version néerlandaise prévaut."
+  },
+  {
+   "type": "p",
+   "text": "_Version du 18 novembre 2026._"
+  }
+ ]
+}

@@ -77,7 +77,15 @@ export default function LoginForm() {
         console.error("Session sync error:", e);
       }
 
-      router.push("/setting");
+      // Return to the page the visitor came from (e.g. an email link), only for same-site paths.
+      let nextPath = "/setting";
+      try {
+        const requested = new URLSearchParams(window.location.search).get("redirect");
+        if (requested && requested.startsWith("/") && !requested.startsWith("//") && !requested.startsWith("/\\")) {
+          nextPath = requested;
+        }
+      } catch {}
+      router.push(nextPath);
       router.refresh();
     } catch (err: unknown) {
       setErrorMessage(

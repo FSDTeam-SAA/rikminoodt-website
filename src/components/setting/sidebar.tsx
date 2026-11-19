@@ -146,7 +146,7 @@ export default function Sidebar() {
           />
         </div>
 
-        <h2 className="text-center font-sans text-[24px] font-semibold text-[#1E1E1E]">{userName || session?.user?.name || "Boekerello Family"}</h2>
+        <h2 className="text-center font-sans text-[24px] font-semibold text-[#1E1E1E]">{userName || session?.user?.name || ""}</h2>
         <p className="mb-8 text-center font-sans text-[14px] font-normal text-[#444444]">{userEmail || session?.user?.email || ""}</p>
 
         {/* Navigation Menu */}
