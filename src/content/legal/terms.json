@@ -1,0 +1,1406 @@
+{
+ "nl": [
+  {
+   "type": "h1",
+   "text": "Algemene voorwaarden Boekerello"
+  },
+  {
+   "type": "p",
+   "text": "Deze algemene verkoopsvoorwaarden (hierna: de \"Voorwaarden\") regelen de verkoop op afstand van producten via de websites www.boekerello.com, www.bookerello.com en www.boekerello.be (hierna samen: de \"Website\"). Door een bestelling te plaatsen, verklaart de Klant kennis te hebben genomen van deze Voorwaarden en deze zonder voorbehoud te aanvaarden. De Klant kan de Voorwaarden op elk ogenblik raadplegen, opslaan en afdrukken via de Website."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 1. Identiteit van de verkoper",
+   "id": "art-1",
+   "num": 1,
+   "label": "Identiteit van de verkoper"
+  },
+  {
+   "type": "p",
+   "text": "1.1. De Website wordt uitgebaat door Rimino BV, die als enige verkoper en contractpartij van de Klant optreedt (hierna: \"Boekerello\" of de \"Verkoper\")."
+  },
+  {
+   "type": "table",
+   "header": [
+    "Gegeven",
+    "Waarde"
+   ],
+   "rows": [
+    [
+     "Vennootschap",
+     "Rimino BV, besloten vennootschap naar Belgisch recht"
+    ],
+    [
+     "Merk en handelsnaam",
+     "Boekerello®"
+    ],
+    [
+     "Zetel",
+     "Dorpsstraat 124, 9420 Erpe-Mere, België"
+    ],
+    [
+     "Ondernemingsnummer",
+     "0545.850.969, RPR Gent, afdeling Dendermonde"
+    ],
+    [
+     "Btw-nummer",
+     "BE 0545.850.969"
+    ],
+    [
+     "E-mail",
+     "info@boekerello.com"
+    ],
+    [
+     "Website",
+     "www.boekerello.com"
+    ]
+   ]
+  },
+  {
+   "type": "p",
+   "text": "1.2. Boekerello® is een geregistreerd merk van Rimino BV."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 2. Definities",
+   "id": "art-2",
+   "num": 2,
+   "label": "Definities"
+  },
+  {
+   "type": "p",
+   "text": "In deze Voorwaarden hebben de volgende begrippen, telkens met een hoofdletter geschreven, de hierna vermelde betekenis:"
+  },
+  {
+   "type": "ol",
+   "items": [
+    {
+     "text": "**Klant:** iedere natuurlijke persoon die, voor doeleinden die buiten zijn handels-, bedrijfs-, ambachts- of beroepsactiviteit vallen, via de Website een bestelling plaatst;"
+    },
+    {
+     "text": "**Overeenkomst:** de overeenkomst op afstand die tussen de Klant en de Verkoper tot stand komt overeenkomstig artikel 4;"
+    },
+    {
+     "text": "**Producten:** alle goederen en digitale inhoud die via de Website worden aangeboden, waaronder:",
+     "children": [
+      {
+       "text": "**Gedrukt Boek:** een gepersonaliseerd kinderboek, gedrukt op basis van de keuzes en gegevens van de Klant;"
+      },
+      {
+       "text": "**Digitaal Boek:** een gepersonaliseerd boek in digitale vorm (onder meer als pdf-bestand of als geanimeerde versie), beschikbaar gesteld via het account van de Klant;"
+      },
+      {
+       "text": "**Luisterboek:** een facultatieve aanvulling bij het Gedrukte Boek, bestaande uit een bijkomende pagina met QR-code die toegang geeft tot een voorgelezen versie van het verhaal, ingesproken door een door artificiële intelligentie gegenereerde stem;"
+      },
+      {
+       "text": "**Overige Producten:** andere gepersonaliseerde producten, zoals kleurboeken, canvasdoeken, wenskaarten en verjaardagskalenders;"
+      }
+     ]
+    },
+    {
+     "text": "**Proefexemplaar:** het Digitale Boek, dat de Klant in zijn account kan nalezen en bewerken vóór de bestelling van een Gedrukt Boek;"
+    },
+    {
+     "text": "**AI:** generatieve artificiële intelligentie, die de Verkoper gebruikt bij de creatie van tekst, illustraties en audio van de Producten;"
+    },
+    {
+     "text": "**Schriftelijk:** op papier of per e-mail."
+    }
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 3. Toepassingsgebied",
+   "id": "art-3",
+   "num": 3,
+   "label": "Toepassingsgebied"
+  },
+  {
+   "type": "p",
+   "text": "3.1. Deze Voorwaarden zijn van toepassing op elk aanbod van de Verkoper en op elke Overeenkomst tussen de Verkoper en de Klant, met uitsluiting van eventuele voorwaarden van de Klant."
+  },
+  {
+   "type": "p",
+   "text": "3.2. Van deze Voorwaarden kan slechts worden afgeweken indien de Verkoper dit uitdrukkelijk en Schriftelijk heeft bevestigd."
+  },
+  {
+   "type": "p",
+   "text": "3.3. Plaatst een onderneming of een persoon die handelt binnen zijn beroepsactiviteit een bestelling, dan zijn deze Voorwaarden van overeenkomstige toepassing, met uitzondering van de bepalingen die uitsluitend strekken tot bescherming van consumenten."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 4. Aanbod en totstandkoming van de Overeenkomst",
+   "id": "art-4",
+   "num": 4,
+   "label": "Aanbod en totstandkoming van de Overeenkomst"
+  },
+  {
+   "type": "p",
+   "text": "4.1. Het aanbod op de Website is vrijblijvend. De Verkoper beschrijft de Producten zo nauwkeurig mogelijk. Kennelijke vergissingen of materiële fouten in het aanbod, zoals een kennelijk foutieve prijs, binden de Verkoper niet."
+  },
+  {
+   "type": "p",
+   "text": "4.2. De Overeenkomst komt tot stand op het ogenblik dat de Klant het bestelproces volledig heeft doorlopen, met inbegrip van de aanvaarding van deze Voorwaarden en de succesvolle betaling. Tot de definitieve bevestiging van de bestelling kan de Klant zijn gegevens en keuzes nakijken en corrigeren."
+  },
+  {
+   "type": "p",
+   "text": "4.3. De Verkoper bevestigt de bestelling per e-mail aan de Klant, samen met deze Voorwaarden, op een duurzame gegevensdrager."
+  },
+  {
+   "type": "p",
+   "text": "4.4. De Verkoper behoudt zich het recht voor een bestelling te weigeren of de Overeenkomst te ontbinden wanneer de door de Klant aangeleverde inhoud strijdig is met artikel 10, inbreuk maakt of dreigt te maken op rechten van derden, of wanneer er een redelijk vermoeden van fraude of misbruik bestaat. In dat geval betaalt de Verkoper de reeds ontvangen bedragen voor niet-geleverde Producten binnen 14 dagen terug, zonder dat de Verkoper tot enige verdere schadevergoeding gehouden is."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 5. Prijzen en betaling",
+   "id": "art-5",
+   "num": 5,
+   "label": "Prijzen en betaling"
+  },
+  {
+   "type": "p",
+   "text": "5.1. Alle prijzen worden uitgedrukt in euro en zijn inclusief btw en alle andere verplichte heffingen. Verzendkosten en de prijs van facultatieve aanvullingen, zoals het Luisterboek, worden afzonderlijk vermeld vóór de Klant zijn bestelling bevestigt. Het Luisterboek wordt aangeboden tegen een eenmalige prijs, zonder abonnement."
+  },
+  {
+   "type": "p",
+   "text": "5.2. De Verkoper kan zijn prijzen te allen tijde wijzigen. Prijswijzigingen hebben geen invloed op bestellingen die reeds werden bevestigd."
+  },
+  {
+   "type": "p",
+   "text": "5.3. De betaling gebeurt via de betaalmethoden die op de Website worden aangeboden en wordt verwerkt door de betaaldienstverlener Stripe. De Verkoper heeft geen toegang tot de volledige kaart- of rekeninggegevens van de Klant."
+  },
+  {
+   "type": "p",
+   "text": "5.4. De Verkoper vangt de uitvoering van de bestelling pas aan na ontvangst van de volledige betaling."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 6. Levering",
+   "id": "art-6",
+   "num": 6,
+   "label": "Levering"
+  },
+  {
+   "type": "p",
+   "text": "6.1. Gedrukte Boeken en Overige Producten worden geleverd op het adres dat de Klant bij de bestelling opgeeft. De Klant staat in voor de juistheid van dat adres. Bijkomende kosten die voortvloeien uit een onjuist of onvolledig adres zijn ten laste van de Klant."
+  },
+  {
+   "type": "p",
+   "text": "6.2. De vermelde productie- en levertermijn van gemiddeld 3 tot 10 werkdagen na de bestelling is indicatief. Tenzij anders overeengekomen, levert de Verkoper uiterlijk binnen 30 dagen na de totstandkoming van de Overeenkomst. Levert de Verkoper niet binnen die termijn, dan kan de Klant de Verkoper verzoeken alsnog binnen een passende bijkomende termijn te leveren. Gebeurt de levering ook binnen die bijkomende termijn niet, dan heeft de Klant het recht de Overeenkomst te ontbinden, waarna de Verkoper alle betaalde bedragen onverwijld terugbetaalt."
+  },
+  {
+   "type": "p",
+   "text": "6.3. Het Luisterboek wordt geleverd als onderdeel van het Gedrukte Boek, in de vorm van een bijkomende pagina met QR-code. Voor het beluisteren is een toestel met internetverbinding en QR-codelezer vereist."
+  },
+  {
+   "type": "p",
+   "text": "6.4. Het Digitale Boek wordt, doorgaans binnen enkele uren na de betaling en de voltooiing van het creatieproces, beschikbaar gesteld in het account van de Klant. De Klant wordt hiervan per e-mail op de hoogte gebracht."
+  },
+  {
+   "type": "p",
+   "text": "6.5. Het risico van verlies of beschadiging van fysieke Producten gaat over op de Klant op het ogenblik dat de Klant, of een door hem aangewezen derde die niet de vervoerder is, de Producten fysiek in bezit neemt."
+  },
+  {
+   "type": "p",
+   "text": "6.6. De bestanden van het boekontwerp blijven beschikbaar in het account van de Klant, zodat de Klant het Digitale Boek kan downloaden en Gedrukte Boeken kan nabestellen. De Verkoper verwijdert deze bestanden op verzoek van de Klant of bij de afsluiting van diens account. De Verkoper kan de bewaring beëindigen mits een voorafgaande kennisgeving aan de Klant van ten minste 3 maanden."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 7. Herroepingsrecht en annulering",
+   "id": "art-7",
+   "num": 7,
+   "label": "Herroepingsrecht en annulering"
+  },
+  {
+   "type": "p",
+   "text": "7.1. Overeenkomstig artikel VI.53, 3° van het Wetboek van economisch recht beschikt de Klant niet over een herroepingsrecht voor Gedrukte Boeken en Overige Producten, aangezien deze volgens de specificaties van de Klant worden vervaardigd en duidelijk voor hem persoonlijk bestemd zijn."
+  },
+  {
+   "type": "p",
+   "text": "7.2. Overeenkomstig artikel VI.53, 13° van het Wetboek van economisch recht beschikt de Klant niet over een herroepingsrecht voor het Digitale Boek, aangezien de levering ervan onmiddellijk na de betaling aanvangt. Bij het plaatsen van de bestelling verleent de Klant hiervoor zijn uitdrukkelijke voorafgaande toestemming en erkent hij dat hij daardoor zijn herroepingsrecht verliest. De Verkoper bevestigt deze toestemming en erkenning per e-mail."
+  },
+  {
+   "type": "p",
+   "text": "7.3. De Klant kan een bestelling kosteloos annuleren door de Verkoper Schriftelijk te contacteren, zolang de uitvoering ervan niet is aangevangen. Annulering is niet langer mogelijk:"
+  },
+  {
+   "type": "ol",
+   "items": [
+    {
+     "text": "voor een Digitaal Boek, zodra de AI met de creatie ervan is gestart;"
+    },
+    {
+     "text": "voor een Gedrukt Boek of Overig Product, zodra dit bij de drukker in productie is genomen;"
+    },
+    {
+     "text": "voor het Luisterboek, zodra het Gedrukte Boek in productie is genomen, aangezien de QR-code in het boek wordt gedrukt."
+    }
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 8. Conformiteit en wettelijke garantie",
+   "id": "art-8",
+   "num": 8,
+   "label": "Conformiteit en wettelijke garantie"
+  },
+  {
+   "type": "p",
+   "text": "8.1. De Klant erkent dat de Producten met behulp van AI worden gecreëerd en dat de illustraties een artistieke interpretatie vormen, geen fotografische weergave van de door de Klant aangeleverde foto's. De volgende kenmerken maken deel uit van de overeengekomen specificaties van de Producten en vormen geen gebrek aan overeenstemming:"
+  },
+  {
+   "type": "ol",
+   "items": [
+    {
+     "text": "geringe afwijkingen en stilistische keuzes van de AI in tekst of illustraties;"
+    },
+    {
+     "text": "illustraties die niet exact overeenstemmen met de aangeleverde foto's;"
+    },
+    {
+     "text": "kleurverschillen tussen de weergave op een beeldscherm en het gedrukte Product;"
+    },
+    {
+     "text": "geringe afwijkingen aan de randen van illustraties als gevolg van het snijproces bij professioneel drukwerk;"
+    },
+    {
+     "text": "geringe variaties in uitspraak, intonatie of accent van de door AI gegenereerde voorleesstem van het Luisterboek, die geen menselijke stem is."
+    }
+   ]
+  },
+  {
+   "type": "p",
+   "text": "De Klant aanvaardt deze kenmerken uitdrukkelijk en afzonderlijk bij het plaatsen van zijn bestelling."
+  },
+  {
+   "type": "p",
+   "text": "8.2. Het Digitale Boek geldt als Proefexemplaar. De Klant kan het in zijn account nalezen en bewerken, onder meer door teksten aan te passen en illustraties opnieuw te laten genereren. De Klant verbindt zich ertoe het Proefexemplaar zorgvuldig te controleren op fouten in tekst, namen, personalisatie en illustraties vóór hij een Gedrukt Boek bestelt. Fouten die reeds aanwezig waren in het Proefexemplaar op het ogenblik van de bestelling van het Gedrukte Boek, geven geen recht op vervanging, prijsvermindering of terugbetaling."
+  },
+  {
+   "type": "p",
+   "text": "8.3. Onverminderd het voorgaande geniet de Klant de wettelijke garantie voor gebreken aan de overeenstemming die bestaan bij de levering en zich manifesteren binnen een termijn van 2 jaar na de levering, overeenkomstig de artikelen 1649bis tot en met 1649novies van het oud Burgerlijk Wetboek en de wettelijke bepalingen inzake de levering van digitale inhoud."
+  },
+  {
+   "type": "p",
+   "text": "8.4. De Klant meldt een gebrek aan overeenstemming, zoals transportschade of een drukfout die niet in het Proefexemplaar aanwezig was, zo spoedig mogelijk en bij voorkeur binnen 14 dagen na de vaststelling ervan, en in elk geval uiterlijk binnen een termijn van 2 maanden na de vaststelling ervan, Schriftelijk aan de Verkoper, met een omschrijving van het gebrek en een foto. De Klant hoeft het Product niet terug te zenden, tenzij de Verkoper hierom verzoekt."
+  },
+  {
+   "type": "p",
+   "text": "8.5. Bij een gebrek aan overeenstemming levert de Verkoper kosteloos een vervangend Product, in voorkomend geval met inbegrip van het Luisterboek. Is vervanging onmogelijk, of gebeurt zij niet binnen een redelijke termijn of niet zonder ernstige overlast voor de Klant, dan heeft de Klant recht op een passende prijsvermindering of op ontbinding van de Overeenkomst met terugbetaling."
+  },
+  {
+   "type": "p",
+   "text": "8.6. Gelet op het gepersonaliseerde karakter van de Producten worden Producten zonder gebrek aan overeenstemming niet teruggenomen of terugbetaald. De wettelijke rechten van de Klant blijven onverminderd van toepassing."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 9. Door de Klant aangeleverde inhoud",
+   "id": "art-9",
+   "num": 9,
+   "label": "Door de Klant aangeleverde inhoud"
+  },
+  {
+   "type": "p",
+   "text": "9.1. De Klant is als enige verantwoordelijk voor de foto's, namen, teksten en instructies (prompts) die hij aanlevert of invoert voor de creatie van de Producten (hierna: de \"Inhoud\"). De Klant garandeert dat hij gerechtigd is deze Inhoud te gebruiken. Betreft de Inhoud de afbeelding of de naam van een minderjarige, dan garandeert de Klant dat hij diens ouder of voogd is, of over de toestemming van de ouders of voogd beschikt."
+  },
+  {
+   "type": "p",
+   "text": "9.2. De Klant garandeert dat de Inhoud geen inbreuk maakt op rechten van derden, waaronder auteursrechten (bijvoorbeeld op bekende personages), merkrechten en portretrechten, en niet strijdig is met de wet of de openbare orde. De Klant vrijwaart de Verkoper tegen alle aanspraken van derden, en vergoedt de schade en kosten die daaruit voortvloeien, voor zover deze het gevolg zijn van Inhoud die de Klant heeft aangeleverd."
+  },
+  {
+   "type": "p",
+   "text": "9.3. Bezorgt de Klant de Verkoper een beoordeling, foto of video, dan verleent hij de Verkoper kosteloos het recht dit materiaal te gebruiken op de Website, op de eigen pagina's van de Verkoper op sociale media en in advertenties op die platformen. De Verkoper mag teksten inkorten en beelden bijsnijden, zonder de inhoud van het beeld te wijzigen. Materiaal waarop een persoon herkenbaar is afgebeeld, gebruikt de Verkoper uitsluitend op de Website. Bij een beoordeling vermeldt de Verkoper hoogstens de voornaam van de Klant. De Klant kan het gebruik buiten de Website op elk ogenblik Schriftelijk beëindigen."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 10. Contentrichtlijnen",
+   "id": "art-10",
+   "num": 10,
+   "label": "Contentrichtlijnen"
+  },
+  {
+   "type": "p",
+   "text": "10.1. Het is de Klant uitdrukkelijk verboden foto's te uploaden of instructies aan de AI te geven die onwettig, bedreigend, beledigend, lasterlijk, obsceen of haatdragend zijn, of die inbreuk maken op rechten van derden. De Klant mag in het bijzonder geen opdracht geven tot het genereren van auteursrechtelijk beschermde personages of beschermde merklogo's."
+  },
+  {
+   "type": "p",
+   "text": "10.2. Bij een inbreuk op dit artikel kan de Verkoper de bestelling annuleren, het account van de Klant blokkeren en de geleden schade op de Klant verhalen. De Verkoper is niet verplicht de Inhoud voorafgaand te controleren."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 11. Intellectuele eigendom",
+   "id": "art-11",
+   "num": 11,
+   "label": "Intellectuele eigendom"
+  },
+  {
+   "type": "p",
+   "text": "11.1. Boekerello® is een geregistreerd merk van Rimino BV. Alle intellectuele eigendomsrechten op het merk, het logo, de Website, de software, de teksten en afbeeldingen (met uitzondering van de door de Klant aangeleverde Inhoud) en de onderliggende modellen en algoritmen behoren toe aan Rimino BV of aan haar licentiegevers. Elk gebruik zonder voorafgaande Schriftelijke toestemming van de Verkoper is verboden."
+  },
+  {
+   "type": "p",
+   "text": "11.2. Na volledige betaling verkrijgt de Klant een persoonlijke, niet-exclusieve en niet-overdraagbare licentie om het voor hem gepersonaliseerde Product te gebruiken voor privédoeleinden en niet-commerciële doeleinden. Het is de Klant niet toegestaan het Product te verveelvoudigen (behoudens een back-up van het Digitale Boek voor eigen gebruik), openbaar te maken, te verkopen of op enige andere wijze commercieel te exploiteren zonder voorafgaande Schriftelijke toestemming van de Verkoper."
+  },
+  {
+   "type": "p",
+   "text": "11.3. De audio-opname van het Luisterboek valt onder dezelfde licentie. Zij mag niet worden gekopieerd, verspreid of los van het Gedrukte Boek worden gebruikt."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 12. Aansprakelijkheid",
+   "id": "art-12",
+   "num": 12,
+   "label": "Aansprakelijkheid"
+  },
+  {
+   "type": "p",
+   "text": "12.1. De aansprakelijkheid van de Verkoper is beperkt tot de rechtstreekse schade en bedraagt in totaal ten hoogste de aankoopprijs van het Product waarop de aansprakelijkheid betrekking heeft. De Verkoper is niet aansprakelijk voor onrechtstreekse schade, zoals gevolgschade, gederfde winst of morele schade."
+  },
+  {
+   "type": "p",
+   "text": "12.2. De Verkoper is niet aansprakelijk voor geringe afwijkingen in kleur, kwaliteit of uitvoering, noch voor ontevredenheid over de artistieke interpretatie door de AI, voor zover het Product in grote lijnen overeenstemt met de keuzes en gegevens van de Klant."
+  },
+  {
+   "type": "p",
+   "text": "12.3. De audio van het Luisterboek blijft ten minste 1 jaar na de aankoop beschikbaar. De Verkoper is niet aansprakelijk voor tijdelijke onbeschikbaarheid als gevolg van technische storingen, internetproblemen of onderhoud. Na deze termijn wordt de beschikbaarheid niet langer gewaarborgd."
+  },
+  {
+   "type": "p",
+   "text": "12.4. De beperkingen van aansprakelijkheid in deze Voorwaarden gelden niet in geval van opzet of zware fout van de Verkoper of zijn aangestelden, bij schade door overlijden of lichamelijk letsel, bij het niet uitvoeren van een verbintenis die een van de voornaamste prestaties van de Overeenkomst vormt (behoudens overmacht), en evenmin voor zover dwingend recht, zoals de wettelijke garantie en de productaansprakelijkheid, zich tegen een beperking verzet."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 13. Bescherming van persoonsgegevens",
+   "id": "art-13",
+   "num": 13,
+   "label": "Bescherming van persoonsgegevens"
+  },
+  {
+   "type": "p",
+   "text": "De Verkoper verwerkt de persoonsgegevens van de Klant, en de gegevens van het kind dat in het Product voorkomt, in overeenstemming met de Algemene Verordening Gegevensbescherming (Verordening (EU) 2016/679) en de toepasselijke Belgische wetgeving. Foto's en namen worden uitsluitend gebruikt voor de creatie en levering van de bestelde Producten. Het privacybeleid op de Website bevat nadere informatie over de verwerkte gegevens, de bewaartermijnen en de rechten van de Klant."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 14. Overmacht",
+   "id": "art-14",
+   "num": 14,
+   "label": "Overmacht"
+  },
+  {
+   "type": "p",
+   "text": "14.1. De Verkoper is niet aansprakelijk voor de niet-nakoming of vertraagde nakoming van zijn verbintenissen wanneer deze het gevolg is van overmacht, met name een omstandigheid buiten de wil en de controle van de Verkoper, zoals een storing bij de drukker, de vervoerder of de betaaldienstverlener, een stroom- of internetonderbreking, een natuurramp of een pandemie."
+  },
+  {
+   "type": "p",
+   "text": "14.2. Duurt de overmacht langer dan 30 dagen, dan kan elk van de partijen de Overeenkomst Schriftelijk ontbinden, zonder schadevergoeding. De Verkoper betaalt in dat geval de reeds betaalde bedragen voor niet-geleverde Producten terug."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 15. Wijziging van de Voorwaarden",
+   "id": "art-15",
+   "num": 15,
+   "label": "Wijziging van de Voorwaarden"
+  },
+  {
+   "type": "p",
+   "text": "De Verkoper kan deze Voorwaarden te allen tijde wijzigen. De meest recente versie is steeds beschikbaar op de Website. Op een Overeenkomst zijn de Voorwaarden van toepassing die golden op het ogenblik van de totstandkoming ervan."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 16. Klachten",
+   "id": "art-16",
+   "num": 16,
+   "label": "Klachten"
+  },
+  {
+   "type": "p",
+   "text": "16.1. Vragen en klachten kunnen worden gericht aan info@boekerello.com of via het contactformulier op de Website."
+  },
+  {
+   "type": "p",
+   "text": "16.2. De Verkoper reageert inhoudelijk binnen 14 dagen na ontvangst van een klacht. Is dat niet mogelijk, dan deelt de Verkoper binnen die termijn mee wanneer de Klant een antwoord mag verwachten."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 17. Toepasselijk recht en geschillen",
+   "id": "art-17",
+   "num": 17,
+   "label": "Toepasselijk recht en geschillen"
+  },
+  {
+   "type": "p",
+   "text": "17.1. Op deze Voorwaarden en op elke Overeenkomst is uitsluitend het Belgisch recht van toepassing. Heeft de Klant zijn gewone verblijfplaats in een andere lidstaat van de Europese Unie, dan behoudt hij de bescherming van de dwingende bepalingen van het recht van die lidstaat."
+  },
+  {
+   "type": "p",
+   "text": "17.2. Partijen streven ernaar elk geschil in der minne te regelen. Leidt een klacht niet tot een oplossing, dan kan de Klant zich kosteloos wenden tot de Consumentenombudsdienst, North Gate, Koning Albert II-laan 8 bus 1, 1000 Brussel, www.consumentenombudsdienst.be."
+  },
+  {
+   "type": "p",
+   "text": "17.3. De Klant kan een vordering instellen bij de bevoegde rechtbank van zijn woonplaats of van de zetel van de Verkoper. De Verkoper kan een vordering tegen de Klant uitsluitend instellen bij de bevoegde rechtbank van de woonplaats van de Klant."
+  },
+  {
+   "type": "h2",
+   "text": "Artikel 18. Slotbepalingen",
+   "id": "art-18",
+   "num": 18,
+   "label": "Slotbepalingen"
+  },
+  {
+   "type": "p",
+   "text": "18.1. Is een bepaling van deze Voorwaarden nietig of niet afdwingbaar, dan blijven de overige bepalingen onverminderd van kracht. De betrokken bepaling wordt vervangen door een geldige bepaling die de oorspronkelijke bedoeling zo dicht mogelijk benadert."
+  },
+  {
+   "type": "p",
+   "text": "18.2. Laat de Verkoper na een recht uit deze Voorwaarden uit te oefenen, dan houdt dit geen afstand van dat recht in."
+  },
+  {
+   "type": "p",
+   "text": "18.3. De elektronische gegevens van de Verkoper, zoals bestelbevestigingen en e-mails, gelden als bewijs van de Overeenkomst en de uitvoering ervan, behoudens tegenbewijs door de Klant."
+  },
+  {
+   "type": "p",
+   "text": "18.4. Deze Voorwaarden zijn opgesteld in het Nederlands. Bij vertalingen heeft de Nederlandse versie voorrang."
+  },
+  {
+   "type": "p",
+   "text": "_Versie van 18 november 2026._"
+  }
+ ],
+ "en": [
+  {
+   "type": "h1",
+   "text": "General Terms and Conditions Boekerello"
+  },
+  {
+   "type": "p",
+   "text": "These general terms and conditions of sale (the \"Terms\") govern the distance sale of products through the websites www.boekerello.com, www.bookerello.com and www.boekerello.be (together, the \"Website\"). By placing an order, the Customer confirms that they have read these Terms and accepts them without reservation. The Customer may consult, save and print the Terms at any time via the Website."
+  },
+  {
+   "type": "h2",
+   "text": "Article 1. Identity of the seller",
+   "id": "art-1",
+   "num": 1,
+   "label": "Identity of the seller"
+  },
+  {
+   "type": "p",
+   "text": "1.1. The Website is operated by Rimino BV, which acts as the sole seller and contracting party of the Customer (\"Boekerello\" or the \"Seller\")."
+  },
+  {
+   "type": "table",
+   "header": [
+    "Item",
+    "Details"
+   ],
+   "rows": [
+    [
+     "Company",
+     "Rimino BV, private limited company under Belgian law"
+    ],
+    [
+     "Trade mark and trade name",
+     "Boekerello®"
+    ],
+    [
+     "Registered office",
+     "Dorpsstraat 124, 9420 Erpe-Mere, Belgium"
+    ],
+    [
+     "Company number",
+     "0545.850.969, Register of Legal Entities (RPR) Ghent, Dendermonde division"
+    ],
+    [
+     "VAT number",
+     "BE 0545.850.969"
+    ],
+    [
+     "Email",
+     "info@boekerello.com"
+    ],
+    [
+     "Website",
+     "www.boekerello.com"
+    ]
+   ]
+  },
+  {
+   "type": "p",
+   "text": "1.2. Boekerello® is a registered trade mark of Rimino BV."
+  },
+  {
+   "type": "h2",
+   "text": "Article 2. Definitions",
+   "id": "art-2",
+   "num": 2,
+   "label": "Definitions"
+  },
+  {
+   "type": "p",
+   "text": "In these Terms, the following capitalised terms have the meanings set out below:"
+  },
+  {
+   "type": "ol",
+   "items": [
+    {
+     "text": "**Customer:** any natural person who places an order via the Website for purposes outside their trade, business, craft or profession;"
+    },
+    {
+     "text": "**Agreement:** the distance contract concluded between the Customer and the Seller in accordance with Article 4;"
+    },
+    {
+     "text": "**Products:** all goods and digital content offered via the Website, including:",
+     "children": [
+      {
+       "text": "**Printed Book:** a personalised children's book, printed on the basis of the Customer's choices and data;"
+      },
+      {
+       "text": "**Digital Book:** a personalised book in digital form (including as a PDF file or an animated version), made available in the Customer's account;"
+      },
+      {
+       "text": "**Audiobook:** an optional add-on to the Printed Book, consisting of an additional page with a QR code giving access to a narrated version of the story, read by a voice generated by artificial intelligence;"
+      },
+      {
+       "text": "**Other Products:** other personalised products, such as colouring books, canvas prints, greeting cards and birthday calendars;"
+      }
+     ]
+    },
+    {
+     "text": "**Proof:** the Digital Book, which the Customer can review and edit in their account before ordering a Printed Book;"
+    },
+    {
+     "text": "**AI:** generative artificial intelligence, used by the Seller to create the text, illustrations and audio of the Products;"
+    },
+    {
+     "text": "**In Writing:** on paper or by email."
+    }
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "Article 3. Scope",
+   "id": "art-3",
+   "num": 3,
+   "label": "Scope"
+  },
+  {
+   "type": "p",
+   "text": "3.1. These Terms apply to every offer made by the Seller and to every Agreement between the Seller and the Customer, to the exclusion of any terms and conditions of the Customer."
+  },
+  {
+   "type": "p",
+   "text": "3.2. These Terms may only be departed from if the Seller has expressly confirmed this In Writing."
+  },
+  {
+   "type": "p",
+   "text": "3.3. Where an order is placed by a business or by a person acting within the scope of their professional activity, these Terms apply mutatis mutandis, with the exception of provisions intended solely to protect consumers."
+  },
+  {
+   "type": "h2",
+   "text": "Article 4. Offer and formation of the Agreement",
+   "id": "art-4",
+   "num": 4,
+   "label": "Offer and formation of the Agreement"
+  },
+  {
+   "type": "p",
+   "text": "4.1. The offer on the Website is without obligation. The Seller describes the Products as accurately as possible. Obvious mistakes or clerical errors in the offer, such as a manifestly incorrect price, are not binding on the Seller."
+  },
+  {
+   "type": "p",
+   "text": "4.2. The Agreement is concluded when the Customer has fully completed the ordering process, including acceptance of these Terms and successful payment. Until the order is finally confirmed, the Customer can review and correct their data and choices."
+  },
+  {
+   "type": "p",
+   "text": "4.3. The Seller confirms the order to the Customer by email, together with these Terms, on a durable medium."
+  },
+  {
+   "type": "p",
+   "text": "4.4. The Seller reserves the right to refuse an order or to terminate the Agreement where the content supplied by the Customer breaches Article 10, infringes or threatens to infringe third-party rights, or where there is a reasonable suspicion of fraud or abuse. In that case, the Seller will refund any amounts already received for Products not delivered within 14 days, without being liable for any further compensation."
+  },
+  {
+   "type": "h2",
+   "text": "Article 5. Prices and payment",
+   "id": "art-5",
+   "num": 5,
+   "label": "Prices and payment"
+  },
+  {
+   "type": "p",
+   "text": "5.1. All prices are stated in euros and include VAT and all other mandatory levies. Shipping costs and the price of optional add-ons, such as the Audiobook, are shown separately before the Customer confirms the order. The Audiobook is offered at a one-off price, with no subscription."
+  },
+  {
+   "type": "p",
+   "text": "5.2. The Seller may change its prices at any time. Price changes do not affect orders that have already been confirmed."
+  },
+  {
+   "type": "p",
+   "text": "5.3. Payment is made using the payment methods offered on the Website and is processed by the payment service provider Stripe. The Seller has no access to the Customer's full card or account details."
+  },
+  {
+   "type": "p",
+   "text": "5.4. The Seller only begins processing the order once full payment has been received."
+  },
+  {
+   "type": "h2",
+   "text": "Article 6. Delivery",
+   "id": "art-6",
+   "num": 6,
+   "label": "Delivery"
+  },
+  {
+   "type": "p",
+   "text": "6.1. Printed Books and Other Products are delivered to the address provided by the Customer when ordering. The Customer is responsible for the accuracy of that address. Any additional costs arising from an incorrect or incomplete address are borne by the Customer."
+  },
+  {
+   "type": "p",
+   "text": "6.2. The stated production and delivery time of an average of 3 to 10 working days after ordering is indicative. Unless otherwise agreed, the Seller will deliver no later than 30 days after the Agreement is concluded. If the Seller fails to deliver within that period, the Customer may ask the Seller to deliver within an appropriate additional period. If delivery does not take place within that additional period either, the Customer is entitled to terminate the Agreement, after which the Seller will refund all amounts paid without undue delay."
+  },
+  {
+   "type": "p",
+   "text": "6.3. The Audiobook is delivered as part of the Printed Book, in the form of an additional page with a QR code. Listening requires a device with an internet connection and a QR code reader."
+  },
+  {
+   "type": "p",
+   "text": "6.4. The Digital Book is made available in the Customer's account, usually within a few hours of payment and completion of the creation process. The Customer is notified of this by email."
+  },
+  {
+   "type": "p",
+   "text": "6.5. The risk of loss of or damage to physical Products passes to the Customer when the Customer, or a third party designated by the Customer other than the carrier, takes physical possession of the Products."
+  },
+  {
+   "type": "p",
+   "text": "6.6. The files of the book design remain available in the Customer's account, allowing the Customer to download the Digital Book and reorder Printed Books. The Seller deletes these files at the Customer's request or when the Customer closes their account. The Seller may end storage subject to at least 3 months' prior notice to the Customer."
+  },
+  {
+   "type": "h2",
+   "text": "Article 7. Right of withdrawal and cancellation",
+   "id": "art-7",
+   "num": 7,
+   "label": "Right of withdrawal and cancellation"
+  },
+  {
+   "type": "p",
+   "text": "7.1. In accordance with Article VI.53, 3° of the Belgian Code of Economic Law, the Customer has no right of withdrawal for Printed Books and Other Products, as these are made to the Customer's specifications and are clearly personalised."
+  },
+  {
+   "type": "p",
+   "text": "7.2. In accordance with Article VI.53, 13° of the Belgian Code of Economic Law, the Customer has no right of withdrawal for the Digital Book, as its supply begins immediately after payment. When placing the order, the Customer gives their express prior consent to this and acknowledges that they thereby lose their right of withdrawal. The Seller confirms this consent and acknowledgement by email."
+  },
+  {
+   "type": "p",
+   "text": "7.3. The Customer may cancel an order free of charge by contacting the Seller In Writing, provided that processing has not yet begun. Cancellation is no longer possible:"
+  },
+  {
+   "type": "ol",
+   "items": [
+    {
+     "text": "for a Digital Book, once the AI has started creating it;"
+    },
+    {
+     "text": "for a Printed Book or Other Product, once it has gone into production at the printer;"
+    },
+    {
+     "text": "for the Audiobook, once the Printed Book has gone into production, as the QR code is printed in the book."
+    }
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "Article 8. Conformity and legal guarantee",
+   "id": "art-8",
+   "num": 8,
+   "label": "Conformity and legal guarantee"
+  },
+  {
+   "type": "p",
+   "text": "8.1. The Customer acknowledges that the Products are created using AI and that the illustrations are an artistic interpretation, not a photographic reproduction of the photos supplied by the Customer. The following characteristics form part of the agreed specifications of the Products and do not constitute a lack of conformity:"
+  },
+  {
+   "type": "ol",
+   "items": [
+    {
+     "text": "minor deviations and stylistic choices made by the AI in text or illustrations;"
+    },
+    {
+     "text": "illustrations that do not exactly match the photos supplied;"
+    },
+    {
+     "text": "colour differences between the on-screen display and the printed Product;"
+    },
+    {
+     "text": "minor deviations at the edges of illustrations resulting from the trimming process in professional printing;"
+    },
+    {
+     "text": "minor variations in pronunciation, intonation or accent of the AI-generated narrator voice of the Audiobook, which is not a human voice."
+    }
+   ]
+  },
+  {
+   "type": "p",
+   "text": "The Customer expressly and separately accepts these characteristics when placing their order."
+  },
+  {
+   "type": "p",
+   "text": "8.2. The Digital Book serves as the Proof. The Customer can review and edit it in their account, including by changing text and having illustrations regenerated. The Customer undertakes to check the Proof carefully for errors in text, names, personalisation and illustrations before ordering a Printed Book. Errors already present in the Proof when the Printed Book was ordered do not entitle the Customer to replacement, a price reduction or a refund."
+  },
+  {
+   "type": "p",
+   "text": "8.3. Without prejudice to the foregoing, the Customer benefits from the legal guarantee for any lack of conformity existing at the time of delivery and becoming apparent within 2 years of delivery, in accordance with Articles 1649bis to 1649novies of the former Belgian Civil Code and the statutory provisions on the supply of digital content."
+  },
+  {
+   "type": "p",
+   "text": "8.4. The Customer must notify the Seller In Writing of any lack of conformity, such as transport damage or a printing error not present in the Proof, as soon as possible and preferably within 14 days of discovering it, and in any event no later than 2 months after discovering it, with a description of the defect and a photo. The Customer does not need to return the Product unless the Seller requests this."
+  },
+  {
+   "type": "p",
+   "text": "8.5. In the event of a lack of conformity, the Seller will supply a replacement Product free of charge, including the Audiobook where applicable. If replacement is impossible, or is not carried out within a reasonable period or without significant inconvenience to the Customer, the Customer is entitled to an appropriate price reduction or to terminate the Agreement and receive a refund."
+  },
+  {
+   "type": "p",
+   "text": "8.6. Given the personalised nature of the Products, Products without a lack of conformity cannot be taken back or refunded. The Customer's statutory rights remain unaffected."
+  },
+  {
+   "type": "h2",
+   "text": "Article 9. Content supplied by the Customer",
+   "id": "art-9",
+   "num": 9,
+   "label": "Content supplied by the Customer"
+  },
+  {
+   "type": "p",
+   "text": "9.1. The Customer is solely responsible for the photos, names, texts and instructions (prompts) they supply or enter for the creation of the Products (the \"Content\"). The Customer warrants that they are entitled to use this Content. Where the Content concerns the image or name of a minor, the Customer warrants that they are the minor's parent or guardian, or have the consent of the parents or guardian."
+  },
+  {
+   "type": "p",
+   "text": "9.2. The Customer warrants that the Content does not infringe any third-party rights, including copyright (for example in well-known characters), trade mark rights and image rights, and does not breach the law or public order. The Customer indemnifies the Seller against all third-party claims, and compensates the resulting damage and costs, insofar as these result from Content supplied by the Customer."
+  },
+  {
+   "type": "p",
+   "text": "9.3. If the Customer sends the Seller a review, photo or video, the Customer grants the Seller, free of charge, the right to use this material on the Website, on the Seller's own social media pages and in advertisements on those platforms. The Seller may shorten text and crop images, without altering the content of the image. Material in which a person is recognisable is used by the Seller on the Website only. For a review, the Seller states no more than the Customer's first name. The Customer may end any use outside the Website at any time by notifying the Seller In Writing."
+  },
+  {
+   "type": "h2",
+   "text": "Article 10. Content guidelines",
+   "id": "art-10",
+   "num": 10,
+   "label": "Content guidelines"
+  },
+  {
+   "type": "p",
+   "text": "10.1. The Customer is expressly prohibited from uploading photos or giving instructions to the AI that are unlawful, threatening, offensive, defamatory, obscene or hateful, or that infringe third-party rights. In particular, the Customer may not instruct the AI to generate copyright-protected characters or protected trade mark logos."
+  },
+  {
+   "type": "p",
+   "text": "10.2. In the event of a breach of this Article, the Seller may cancel the order, block the Customer's account and recover any damage suffered from the Customer. The Seller is under no obligation to check Content in advance."
+  },
+  {
+   "type": "h2",
+   "text": "Article 11. Intellectual property",
+   "id": "art-11",
+   "num": 11,
+   "label": "Intellectual property"
+  },
+  {
+   "type": "p",
+   "text": "11.1. Boekerello® is a registered trade mark of Rimino BV. All intellectual property rights in the trade mark, the logo, the Website, the software, the texts and images (excluding Content supplied by the Customer) and the underlying models and algorithms belong to Rimino BV or its licensors. Any use without the Seller's prior written consent is prohibited."
+  },
+  {
+   "type": "p",
+   "text": "11.2. Upon full payment, the Customer obtains a personal, non-exclusive and non-transferable licence to use the Product personalised for them for private, non-commercial purposes. The Customer may not reproduce the Product (other than a back-up of the Digital Book for personal use), make it public, sell it or exploit it commercially in any other way without the Seller's prior written consent."
+  },
+  {
+   "type": "p",
+   "text": "11.3. The audio recording of the Audiobook is subject to the same licence. It may not be copied, distributed or used separately from the Printed Book."
+  },
+  {
+   "type": "h2",
+   "text": "Article 12. Liability",
+   "id": "art-12",
+   "num": 12,
+   "label": "Liability"
+  },
+  {
+   "type": "p",
+   "text": "12.1. The Seller's liability is limited to direct damage and shall in total not exceed the purchase price of the Product to which the liability relates. The Seller is not liable for indirect damage, such as consequential loss, loss of profit or non-material damage."
+  },
+  {
+   "type": "p",
+   "text": "12.2. The Seller is not liable for minor deviations in colour, quality or finish, nor for dissatisfaction with the artistic interpretation by the AI, provided that the Product broadly corresponds to the Customer's choices and data."
+  },
+  {
+   "type": "p",
+   "text": "12.3. The audio of the Audiobook remains available for at least 1 year after purchase. The Seller is not liable for temporary unavailability due to technical faults, internet problems or maintenance. After this period, availability is no longer guaranteed."
+  },
+  {
+   "type": "p",
+   "text": "12.4. The limitations of liability in these Terms do not apply in the event of wilful misconduct or gross negligence on the part of the Seller or its agents, in the event of death or personal injury, in the event of failure to perform an obligation that constitutes one of the main performances under the Agreement (save in the case of force majeure), nor to the extent that mandatory law, such as the legal guarantee and product liability, precludes such a limitation."
+  },
+  {
+   "type": "h2",
+   "text": "Article 13. Data protection",
+   "id": "art-13",
+   "num": 13,
+   "label": "Data protection"
+  },
+  {
+   "type": "p",
+   "text": "The Seller processes the personal data of the Customer, and the data of the child featured in the Product, in accordance with the General Data Protection Regulation (Regulation (EU) 2016/679) and applicable Belgian legislation. Photos and names are used solely for the creation and delivery of the Products ordered. The privacy policy on the Website contains further information on the data processed, the retention periods and the Customer's rights."
+  },
+  {
+   "type": "h2",
+   "text": "Article 14. Force majeure",
+   "id": "art-14",
+   "num": 14,
+   "label": "Force majeure"
+  },
+  {
+   "type": "p",
+   "text": "14.1. The Seller is not liable for any failure or delay in performing its obligations where this results from force majeure, meaning a circumstance beyond the Seller's will and control, such as a disruption at the printer, the carrier or the payment service provider, a power or internet outage, a natural disaster or a pandemic."
+  },
+  {
+   "type": "p",
+   "text": "14.2. If the force majeure lasts longer than 30 days, either party may terminate the Agreement In Writing, without compensation. In that case, the Seller will refund any amounts already paid for Products not delivered."
+  },
+  {
+   "type": "h2",
+   "text": "Article 15. Amendments to the Terms",
+   "id": "art-15",
+   "num": 15,
+   "label": "Amendments to the Terms"
+  },
+  {
+   "type": "p",
+   "text": "The Seller may amend these Terms at any time. The most recent version is always available on the Website. An Agreement is governed by the Terms in force at the time it was concluded."
+  },
+  {
+   "type": "h2",
+   "text": "Article 16. Complaints",
+   "id": "art-16",
+   "num": 16,
+   "label": "Complaints"
+  },
+  {
+   "type": "p",
+   "text": "16.1. Questions and complaints may be sent to info@boekerello.com or via the contact form on the Website."
+  },
+  {
+   "type": "p",
+   "text": "16.2. The Seller will respond substantively within 14 days of receiving a complaint. If this is not possible, the Seller will inform the Customer within that period when a response can be expected."
+  },
+  {
+   "type": "h2",
+   "text": "Article 17. Governing law and disputes",
+   "id": "art-17",
+   "num": 17,
+   "label": "Governing law and disputes"
+  },
+  {
+   "type": "p",
+   "text": "17.1. These Terms and every Agreement are governed exclusively by Belgian law. If the Customer is habitually resident in another Member State of the European Union, they retain the protection of the mandatory provisions of the law of that Member State."
+  },
+  {
+   "type": "p",
+   "text": "17.2. The parties will endeavour to settle any dispute amicably. If a complaint does not lead to a solution, the Customer may contact the Consumer Mediation Service (Consumentenombudsdienst) free of charge at North Gate, Boulevard du Roi Albert II 8 box 1, 1000 Brussels, www.consumentenombudsdienst.be."
+  },
+  {
+   "type": "p",
+   "text": "17.3. The Customer may bring proceedings before the competent court of their place of residence or of the Seller's registered office. The Seller may only bring proceedings against the Customer before the competent court of the Customer's place of residence."
+  },
+  {
+   "type": "h2",
+   "text": "Article 18. Final provisions",
+   "id": "art-18",
+   "num": 18,
+   "label": "Final provisions"
+  },
+  {
+   "type": "p",
+   "text": "18.1. If any provision of these Terms is void or unenforceable, the remaining provisions remain in full force. The provision concerned will be replaced by a valid provision that comes as close as possible to the original intention."
+  },
+  {
+   "type": "p",
+   "text": "18.2. Failure by the Seller to exercise any right under these Terms does not constitute a waiver of that right."
+  },
+  {
+   "type": "p",
+   "text": "18.3. The Seller's electronic records, such as order confirmations and emails, serve as evidence of the Agreement and its performance, unless the Customer proves otherwise."
+  },
+  {
+   "type": "p",
+   "text": "18.4. These Terms were drawn up in Dutch. This English version is a translation; in the event of any discrepancy, the Dutch version prevails."
+  },
+  {
+   "type": "p",
+   "text": "_Version of 18 November 2026._"
+  }
+ ],
+ "fr": [
+  {
+   "type": "h1",
+   "text": "Conditions générales de vente Boekerello"
+  },
+  {
+   "type": "p",
+   "text": "Les présentes conditions générales de vente (ci-après : les « Conditions ») régissent la vente à distance de produits par l'intermédiaire des sites www.boekerello.com, www.bookerello.com et www.boekerello.be (ci-après ensemble : le « Site »). En passant commande, le Client déclare avoir pris connaissance des présentes Conditions et les accepter sans réserve. Le Client peut à tout moment consulter, enregistrer et imprimer les Conditions via le Site."
+  },
+  {
+   "type": "h2",
+   "text": "Article 1. Identité du vendeur",
+   "id": "art-1",
+   "num": 1,
+   "label": "Identité du vendeur"
+  },
+  {
+   "type": "p",
+   "text": "1.1. Le Site est exploité par Rimino BV, qui agit en tant que seul vendeur et cocontractant du Client (ci-après : « Boekerello » ou le « Vendeur »)."
+  },
+  {
+   "type": "table",
+   "header": [
+    "Donnée",
+    "Information"
+   ],
+   "rows": [
+    [
+     "Société",
+     "Rimino BV, société à responsabilité limitée de droit belge"
+    ],
+    [
+     "Marque et nom commercial",
+     "Boekerello®"
+    ],
+    [
+     "Siège",
+     "Dorpsstraat 124, 9420 Erpe-Mere, Belgique"
+    ],
+    [
+     "Numéro d'entreprise",
+     "0545.850.969, RPM Gand, division Termonde"
+    ],
+    [
+     "Numéro de TVA",
+     "BE 0545.850.969"
+    ],
+    [
+     "E-mail",
+     "info@boekerello.com"
+    ],
+    [
+     "Site web",
+     "www.boekerello.com"
+    ]
+   ]
+  },
+  {
+   "type": "p",
+   "text": "1.2. Boekerello® est une marque enregistrée de Rimino BV."
+  },
+  {
+   "type": "h2",
+   "text": "Article 2. Définitions",
+   "id": "art-2",
+   "num": 2,
+   "label": "Définitions"
+  },
+  {
+   "type": "p",
+   "text": "Dans les présentes Conditions, les termes suivants, toujours écrits avec une majuscule, ont la signification indiquée ci-dessous :"
+  },
+  {
+   "type": "ol",
+   "items": [
+    {
+     "text": "**Client :** toute personne physique qui passe commande via le Site à des fins qui n'entrent pas dans le cadre de son activité commerciale, industrielle, artisanale ou libérale ;"
+    },
+    {
+     "text": "**Contrat :** le contrat à distance conclu entre le Client et le Vendeur conformément à l'article 4 ;"
+    },
+    {
+     "text": "**Produits :** l'ensemble des biens et contenus numériques proposés via le Site, notamment :",
+     "children": [
+      {
+       "text": "**Livre Imprimé :** un livre pour enfants personnalisé, imprimé sur la base des choix et des données du Client ;"
+      },
+      {
+       "text": "**Livre Numérique :** un livre personnalisé sous forme numérique (notamment sous forme de fichier PDF ou de version animée), mis à disposition dans le compte du Client ;"
+      },
+      {
+       "text": "**Livre Audio :** un complément facultatif au Livre Imprimé, consistant en une page supplémentaire munie d'un code QR donnant accès à une version lue de l'histoire, narrée par une voix générée par intelligence artificielle ;"
+      },
+      {
+       "text": "**Autres Produits :** d'autres produits personnalisés, tels que des livres de coloriage, des toiles, des cartes de vœux et des calendriers d'anniversaire ;"
+      }
+     ]
+    },
+    {
+     "text": "**Épreuve :** le Livre Numérique, que le Client peut relire et modifier dans son compte avant de commander un Livre Imprimé ;"
+    },
+    {
+     "text": "**IA :** l'intelligence artificielle générative utilisée par le Vendeur pour créer le texte, les illustrations et l'audio des Produits ;"
+    },
+    {
+     "text": "**Par Écrit :** sur papier ou par e-mail."
+    }
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "Article 3. Champ d'application",
+   "id": "art-3",
+   "num": 3,
+   "label": "Champ d'application"
+  },
+  {
+   "type": "p",
+   "text": "3.1. Les présentes Conditions s'appliquent à toute offre du Vendeur et à tout Contrat entre le Vendeur et le Client, à l'exclusion de toutes conditions du Client."
+  },
+  {
+   "type": "p",
+   "text": "3.2. Il ne peut être dérogé aux présentes Conditions que si le Vendeur l'a expressément confirmé Par Écrit."
+  },
+  {
+   "type": "p",
+   "text": "3.3. Lorsqu'une commande est passée par une entreprise ou par une personne agissant dans le cadre de son activité professionnelle, les présentes Conditions s'appliquent par analogie, à l'exception des dispositions visant exclusivement à protéger les consommateurs."
+  },
+  {
+   "type": "h2",
+   "text": "Article 4. Offre et formation du Contrat",
+   "id": "art-4",
+   "num": 4,
+   "label": "Offre et formation du Contrat"
+  },
+  {
+   "type": "p",
+   "text": "4.1. L'offre figurant sur le Site est sans engagement. Le Vendeur décrit les Produits aussi précisément que possible. Les erreurs manifestes ou matérielles dans l'offre, telles qu'un prix manifestement erroné, n'engagent pas le Vendeur."
+  },
+  {
+   "type": "p",
+   "text": "4.2. Le Contrat est conclu au moment où le Client a entièrement finalisé le processus de commande, y compris l'acceptation des présentes Conditions et le paiement réussi. Jusqu'à la confirmation définitive de la commande, le Client peut vérifier et corriger ses données et ses choix."
+  },
+  {
+   "type": "p",
+   "text": "4.3. Le Vendeur confirme la commande au Client par e-mail, accompagnée des présentes Conditions, sur un support durable."
+  },
+  {
+   "type": "p",
+   "text": "4.4. Le Vendeur se réserve le droit de refuser une commande ou de résoudre le Contrat lorsque le contenu fourni par le Client est contraire à l'article 10, porte ou risque de porter atteinte aux droits de tiers, ou en cas de soupçon raisonnable de fraude ou d'abus. Dans ce cas, le Vendeur rembourse dans les 14 jours les montants déjà perçus pour les Produits non livrés, sans être tenu à aucune autre indemnité."
+  },
+  {
+   "type": "h2",
+   "text": "Article 5. Prix et paiement",
+   "id": "art-5",
+   "num": 5,
+   "label": "Prix et paiement"
+  },
+  {
+   "type": "p",
+   "text": "5.1. Tous les prix sont exprimés en euros et s'entendent TVA et toutes autres taxes obligatoires comprises. Les frais d'envoi et le prix des compléments facultatifs, tels que le Livre Audio, sont indiqués séparément avant que le Client ne confirme sa commande. Le Livre Audio est proposé à un prix unique, sans abonnement."
+  },
+  {
+   "type": "p",
+   "text": "5.2. Le Vendeur peut modifier ses prix à tout moment. Les modifications de prix n'ont aucune incidence sur les commandes déjà confirmées."
+  },
+  {
+   "type": "p",
+   "text": "5.3. Le paiement s'effectue au moyen des modes de paiement proposés sur le Site et est traité par le prestataire de services de paiement Stripe. Le Vendeur n'a pas accès aux données complètes de carte ou de compte du Client."
+  },
+  {
+   "type": "p",
+   "text": "5.4. Le Vendeur n'entame l'exécution de la commande qu'après réception du paiement intégral."
+  },
+  {
+   "type": "h2",
+   "text": "Article 6. Livraison",
+   "id": "art-6",
+   "num": 6,
+   "label": "Livraison"
+  },
+  {
+   "type": "p",
+   "text": "6.1. Les Livres Imprimés et les Autres Produits sont livrés à l'adresse indiquée par le Client lors de la commande. Le Client est responsable de l'exactitude de cette adresse. Les frais supplémentaires résultant d'une adresse inexacte ou incomplète sont à la charge du Client."
+  },
+  {
+   "type": "p",
+   "text": "6.2. Le délai de production et de livraison indiqué, en moyenne de 3 à 10 jours ouvrables après la commande, est indicatif. Sauf convention contraire, le Vendeur livre au plus tard dans les 30 jours suivant la conclusion du Contrat. À défaut de livraison dans ce délai, le Client peut enjoindre au Vendeur d'effectuer la livraison dans un délai supplémentaire adapté. Si la livraison n'a pas lieu dans ce délai supplémentaire, le Client a le droit de résoudre le Contrat, après quoi le Vendeur rembourse sans délai toutes les sommes payées."
+  },
+  {
+   "type": "p",
+   "text": "6.3. Le Livre Audio est livré en tant que partie intégrante du Livre Imprimé, sous la forme d'une page supplémentaire munie d'un code QR. L'écoute nécessite un appareil disposant d'une connexion internet et d'un lecteur de code QR."
+  },
+  {
+   "type": "p",
+   "text": "6.4. Le Livre Numérique est mis à disposition dans le compte du Client, généralement dans les quelques heures suivant le paiement et l'achèvement du processus de création. Le Client en est informé par e-mail."
+  },
+  {
+   "type": "p",
+   "text": "6.5. Le risque de perte ou d'endommagement des Produits physiques est transféré au Client au moment où le Client, ou un tiers désigné par lui autre que le transporteur, prend physiquement possession des Produits."
+  },
+  {
+   "type": "p",
+   "text": "6.6. Les fichiers de la conception du livre restent disponibles dans le compte du Client, afin de permettre au Client de télécharger le Livre Numérique et de commander à nouveau des Livres Imprimés. Le Vendeur supprime ces fichiers à la demande du Client ou lors de la clôture de son compte. Le Vendeur peut mettre fin à la conservation moyennant un préavis d'au moins 3 mois adressé au Client."
+  },
+  {
+   "type": "h2",
+   "text": "Article 7. Droit de rétractation et annulation",
+   "id": "art-7",
+   "num": 7,
+   "label": "Droit de rétractation et annulation"
+  },
+  {
+   "type": "p",
+   "text": "7.1. Conformément à l'article VI.53, 3° du Code de droit économique, le Client ne dispose pas d'un droit de rétractation pour les Livres Imprimés et les Autres Produits, ceux-ci étant confectionnés selon les spécifications du Client et nettement personnalisés."
+  },
+  {
+   "type": "p",
+   "text": "7.2. Conformément à l'article VI.53, 13° du Code de droit économique, le Client ne dispose pas d'un droit de rétractation pour le Livre Numérique, sa fourniture commençant immédiatement après le paiement. Lors de la commande, le Client donne son consentement préalable exprès à cet effet et reconnaît perdre ainsi son droit de rétractation. Le Vendeur confirme ce consentement et cette reconnaissance par e-mail."
+  },
+  {
+   "type": "p",
+   "text": "7.3. Le Client peut annuler une commande sans frais en contactant le Vendeur Par Écrit, tant que son exécution n'a pas commencé. L'annulation n'est plus possible :"
+  },
+  {
+   "type": "ol",
+   "items": [
+    {
+     "text": "pour un Livre Numérique, dès que l'IA a commencé sa création ;"
+    },
+    {
+     "text": "pour un Livre Imprimé ou un Autre Produit, dès que celui-ci a été mis en production chez l'imprimeur ;"
+    },
+    {
+     "text": "pour le Livre Audio, dès que le Livre Imprimé a été mis en production, le code QR étant imprimé dans le livre."
+    }
+   ]
+  },
+  {
+   "type": "h2",
+   "text": "Article 8. Conformité et garantie légale",
+   "id": "art-8",
+   "num": 8,
+   "label": "Conformité et garantie légale"
+  },
+  {
+   "type": "p",
+   "text": "8.1. Le Client reconnaît que les Produits sont créés à l'aide de l'IA et que les illustrations constituent une interprétation artistique, et non une reproduction photographique des photos fournies par le Client. Les caractéristiques suivantes font partie des spécifications convenues des Produits et ne constituent pas un défaut de conformité :"
+  },
+  {
+   "type": "ol",
+   "items": [
+    {
+     "text": "de légers écarts et choix stylistiques de l'IA dans le texte ou les illustrations ;"
+    },
+    {
+     "text": "des illustrations qui ne correspondent pas exactement aux photos fournies ;"
+    },
+    {
+     "text": "des différences de couleur entre l'affichage à l'écran et le Produit imprimé ;"
+    },
+    {
+     "text": "de légers écarts sur les bords des illustrations résultant de la découpe en impression professionnelle ;"
+    },
+    {
+     "text": "de légères variations de prononciation, d'intonation ou d'accent de la voix de narration du Livre Audio, générée par l'IA, qui n'est pas une voix humaine."
+    }
+   ]
+  },
+  {
+   "type": "p",
+   "text": "Le Client accepte expressément et séparément ces caractéristiques lors de la passation de sa commande."
+  },
+  {
+   "type": "p",
+   "text": "8.2. Le Livre Numérique tient lieu d'Épreuve. Le Client peut le relire et le modifier dans son compte, notamment en adaptant les textes et en faisant régénérer les illustrations. Le Client s'engage à vérifier soigneusement l'Épreuve quant aux erreurs dans le texte, les noms, la personnalisation et les illustrations avant de commander un Livre Imprimé. Les erreurs déjà présentes dans l'Épreuve au moment de la commande du Livre Imprimé ne donnent droit ni à un remplacement, ni à une réduction de prix, ni à un remboursement."
+  },
+  {
+   "type": "p",
+   "text": "8.3. Sans préjudice de ce qui précède, le Client bénéficie de la garantie légale pour tout défaut de conformité existant lors de la livraison et se manifestant dans un délai de 2 ans à compter de la livraison, conformément aux articles 1649bis à 1649novies de l'ancien Code civil et aux dispositions légales relatives à la fourniture de contenus numériques."
+  },
+  {
+   "type": "p",
+   "text": "8.4. Le Client notifie Par Écrit au Vendeur tout défaut de conformité, tel qu'un dommage de transport ou une erreur d'impression absente de l'Épreuve, dans les meilleurs délais et de préférence dans les 14 jours suivant sa constatation, et en tout état de cause au plus tard dans un délai de 2 mois à compter de sa constatation, en joignant une description du défaut et une photo. Le Client n'est pas tenu de renvoyer le Produit, sauf si le Vendeur le lui demande."
+  },
+  {
+   "type": "p",
+   "text": "8.5. En cas de défaut de conformité, le Vendeur fournit gratuitement un Produit de remplacement, y compris le Livre Audio le cas échéant. Si le remplacement est impossible, ou s'il n'est pas effectué dans un délai raisonnable ou sans inconvénient majeur pour le Client, celui-ci a droit à une réduction de prix appropriée ou à la résolution du Contrat avec remboursement."
+  },
+  {
+   "type": "p",
+   "text": "8.6. Compte tenu du caractère personnalisé des Produits, les Produits ne présentant aucun défaut de conformité ne sont ni repris ni remboursés. Les droits légaux du Client restent intégralement applicables."
+  },
+  {
+   "type": "h2",
+   "text": "Article 9. Contenu fourni par le Client",
+   "id": "art-9",
+   "num": 9,
+   "label": "Contenu fourni par le Client"
+  },
+  {
+   "type": "p",
+   "text": "9.1. Le Client est seul responsable des photos, noms, textes et instructions (prompts) qu'il fournit ou saisit pour la création des Produits (ci-après : le « Contenu »). Le Client garantit qu'il est autorisé à utiliser ce Contenu. Lorsque le Contenu concerne l'image ou le nom d'un mineur, le Client garantit qu'il en est le parent ou le tuteur, ou qu'il dispose du consentement des parents ou du tuteur."
+  },
+  {
+   "type": "p",
+   "text": "9.2. Le Client garantit que le Contenu ne porte atteinte à aucun droit de tiers, notamment aux droits d'auteur (par exemple sur des personnages connus), aux droits de marque et au droit à l'image, et n'est contraire ni à la loi ni à l'ordre public. Le Client garantit le Vendeur contre toute réclamation de tiers et indemnise le dommage et les frais qui en résultent, dans la mesure où ceux-ci découlent du Contenu fourni par le Client."
+  },
+  {
+   "type": "p",
+   "text": "9.3. Lorsque le Client transmet au Vendeur un avis, une photo ou une vidéo, il concède gratuitement au Vendeur le droit d'utiliser ce matériel sur le Site, sur les pages propres du Vendeur sur les réseaux sociaux et dans des publicités sur ces plateformes. Le Vendeur peut raccourcir les textes et recadrer les images, sans modifier le contenu de l'image. Le matériel sur lequel une personne est reconnaissable n'est utilisé par le Vendeur que sur le Site. Pour un avis, le Vendeur mentionne tout au plus le prénom du Client. Le Client peut à tout moment mettre fin à l'utilisation en dehors du Site en le notifiant Par Écrit."
+  },
+  {
+   "type": "h2",
+   "text": "Article 10. Règles relatives au contenu",
+   "id": "art-10",
+   "num": 10,
+   "label": "Règles relatives au contenu"
+  },
+  {
+   "type": "p",
+   "text": "10.1. Il est expressément interdit au Client de télécharger des photos ou de donner à l'IA des instructions illégales, menaçantes, injurieuses, diffamatoires, obscènes ou haineuses, ou portant atteinte aux droits de tiers. Le Client ne peut en particulier pas demander la génération de personnages protégés par le droit d'auteur ou de logos de marques protégées."
+  },
+  {
+   "type": "p",
+   "text": "10.2. En cas de violation du présent article, le Vendeur peut annuler la commande, bloquer le compte du Client et récupérer auprès du Client le dommage subi. Le Vendeur n'est pas tenu de contrôler le Contenu au préalable."
+  },
+  {
+   "type": "h2",
+   "text": "Article 11. Propriété intellectuelle",
+   "id": "art-11",
+   "num": 11,
+   "label": "Propriété intellectuelle"
+  },
+  {
+   "type": "p",
+   "text": "11.1. Boekerello® est une marque enregistrée de Rimino BV. Tous les droits de propriété intellectuelle sur la marque, le logo, le Site, les logiciels, les textes et les images (à l'exception du Contenu fourni par le Client) ainsi que sur les modèles et algorithmes sous-jacents appartiennent à Rimino BV ou à ses concédants de licence. Toute utilisation sans l'autorisation écrite préalable du Vendeur est interdite."
+  },
+  {
+   "type": "p",
+   "text": "11.2. Après paiement intégral, le Client obtient une licence personnelle, non exclusive et non cessible d'utiliser le Produit personnalisé à son intention à des fins privées et non commerciales. Il est interdit au Client de reproduire le Produit (sauf une copie de sauvegarde du Livre Numérique pour son usage personnel), de le rendre public, de le vendre ou de l'exploiter commercialement de toute autre manière sans l'autorisation écrite préalable du Vendeur."
+  },
+  {
+   "type": "p",
+   "text": "11.3. L'enregistrement audio du Livre Audio est soumis à la même licence. Il ne peut être ni copié, ni diffusé, ni utilisé séparément du Livre Imprimé."
+  },
+  {
+   "type": "h2",
+   "text": "Article 12. Responsabilité",
+   "id": "art-12",
+   "num": 12,
+   "label": "Responsabilité"
+  },
+  {
+   "type": "p",
+   "text": "12.1. La responsabilité du Vendeur est limitée au dommage direct et ne peut excéder au total le prix d'achat du Produit auquel la responsabilité se rapporte. Le Vendeur n'est pas responsable des dommages indirects, tels que le dommage consécutif, le manque à gagner ou le dommage moral."
+  },
+  {
+   "type": "p",
+   "text": "12.2. Le Vendeur n'est pas responsable de légers écarts de couleur, de qualité ou de finition, ni d'une insatisfaction quant à l'interprétation artistique de l'IA, pour autant que le Produit corresponde dans les grandes lignes aux choix et aux données du Client."
+  },
+  {
+   "type": "p",
+   "text": "12.3. L'audio du Livre Audio reste disponible pendant au moins 1 an après l'achat. Le Vendeur n'est pas responsable d'une indisponibilité temporaire due à des pannes techniques, des problèmes internet ou des opérations de maintenance. Au-delà de ce délai, la disponibilité n'est plus garantie."
+  },
+  {
+   "type": "p",
+   "text": "12.4. Les limitations de responsabilité prévues dans les présentes Conditions ne s'appliquent pas en cas de dol ou de faute lourde du Vendeur ou de ses préposés, en cas de décès ou de dommage corporel, en cas d'inexécution d'une obligation constituant l'une des prestations principales du Contrat (sauf cas de force majeure), ni dans la mesure où le droit impératif, tel que la garantie légale et la responsabilité du fait des produits, s'oppose à une telle limitation."
+  },
+  {
+   "type": "h2",
+   "text": "Article 13. Protection des données à caractère personnel",
+   "id": "art-13",
+   "num": 13,
+   "label": "Protection des données à caractère personnel"
+  },
+  {
+   "type": "p",
+   "text": "Le Vendeur traite les données à caractère personnel du Client, ainsi que les données de l'enfant figurant dans le Produit, conformément au Règlement général sur la protection des données (Règlement (UE) 2016/679) et à la législation belge applicable. Les photos et les noms sont utilisés exclusivement pour la création et la livraison des Produits commandés. La politique de confidentialité disponible sur le Site contient de plus amples informations sur les données traitées, les durées de conservation et les droits du Client."
+  },
+  {
+   "type": "h2",
+   "text": "Article 14. Force majeure",
+   "id": "art-14",
+   "num": 14,
+   "label": "Force majeure"
+  },
+  {
+   "type": "p",
+   "text": "14.1. Le Vendeur n'est pas responsable de l'inexécution ou de l'exécution tardive de ses obligations lorsque celle-ci résulte d'un cas de force majeure, à savoir une circonstance indépendante de la volonté et du contrôle du Vendeur, telle qu'une perturbation chez l'imprimeur, le transporteur ou le prestataire de services de paiement, une coupure de courant ou d'internet, une catastrophe naturelle ou une pandémie."
+  },
+  {
+   "type": "p",
+   "text": "14.2. Si la force majeure dure plus de 30 jours, chacune des parties peut résoudre le Contrat Par Écrit, sans indemnité. Dans ce cas, le Vendeur rembourse les montants déjà payés pour les Produits non livrés."
+  },
+  {
+   "type": "h2",
+   "text": "Article 15. Modification des Conditions",
+   "id": "art-15",
+   "num": 15,
+   "label": "Modification des Conditions"
+  },
+  {
+   "type": "p",
+   "text": "Le Vendeur peut modifier les présentes Conditions à tout moment. La version la plus récente est toujours disponible sur le Site. Un Contrat est régi par les Conditions en vigueur au moment de sa conclusion."
+  },
+  {
+   "type": "h2",
+   "text": "Article 16. Plaintes",
+   "id": "art-16",
+   "num": 16,
+   "label": "Plaintes"
+  },
+  {
+   "type": "p",
+   "text": "16.1. Les questions et plaintes peuvent être adressées à info@boekerello.com ou via le formulaire de contact du Site."
+  },
+  {
+   "type": "p",
+   "text": "16.2. Le Vendeur répond sur le fond dans les 14 jours suivant la réception d'une plainte. Si cela n'est pas possible, le Vendeur informe le Client, dans ce même délai, du moment où il peut attendre une réponse."
+  },
+  {
+   "type": "h2",
+   "text": "Article 17. Droit applicable et litiges",
+   "id": "art-17",
+   "num": 17,
+   "label": "Droit applicable et litiges"
+  },
+  {
+   "type": "p",
+   "text": "17.1. Les présentes Conditions et tout Contrat sont exclusivement régis par le droit belge. Si le Client a sa résidence habituelle dans un autre État membre de l'Union européenne, il conserve la protection des dispositions impératives du droit de cet État membre."
+  },
+  {
+   "type": "p",
+   "text": "17.2. Les parties s'efforcent de régler tout litige à l'amiable. Si une plainte n'aboutit pas à une solution, le Client peut s'adresser gratuitement au Service de Médiation pour le Consommateur, North Gate, boulevard du Roi Albert II 8 boîte 1, 1000 Bruxelles, www.mediationconsommateur.be."
+  },
+  {
+   "type": "p",
+   "text": "17.3. Le Client peut introduire une action devant le tribunal compétent de son domicile ou du siège du Vendeur. Le Vendeur ne peut introduire une action contre le Client que devant le tribunal compétent du domicile du Client."
+  },
+  {
+   "type": "h2",
+   "text": "Article 18. Dispositions finales",
+   "id": "art-18",
+   "num": 18,
+   "label": "Dispositions finales"
+  },
+  {
+   "type": "p",
+   "text": "18.1. Si une disposition des présentes Conditions est nulle ou inapplicable, les autres dispositions restent pleinement en vigueur. La disposition concernée est remplacée par une disposition valable se rapprochant le plus possible de l'intention initiale."
+  },
+  {
+   "type": "p",
+   "text": "18.2. Le fait que le Vendeur n'exerce pas un droit découlant des présentes Conditions n'emporte pas renonciation à ce droit."
+  },
+  {
+   "type": "p",
+   "text": "18.3. Les données électroniques du Vendeur, telles que les confirmations de commande et les e-mails, font foi du Contrat et de son exécution, sauf preuve contraire apportée par le Client."
+  },
+  {
+   "type": "p",
+   "text": "18.4. Les présentes Conditions ont été rédigées en néerlandais. La présente version française est une traduction ; en cas de divergence, la version néerlandaise prévaut."
+  },
+  {
+   "type": "p",
+   "text": "_Version du 18 novembre 2026._"
+  }
+ ]
+}

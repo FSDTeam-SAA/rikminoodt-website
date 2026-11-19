@@ -4,6 +4,7 @@ import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
 import ScrollToTopComponent from "@/components/providers/ScrollToTop";
 import { LanguageProvider } from "@/components/providers/LanguageProvider";
 import NextAuthProvider from "@/components/providers/NextAuthProvider";
+import CookieBanner from "@/components/cookies/CookieBanner";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
@@ -27,6 +28,7 @@ export default function RootLayout({
                 <ScrollToTopComponent />
               </SmoothScrollProvider>
             </Suspense>
+            <CookieBanner />
           </LanguageProvider>
         </NextAuthProvider>
       </body>
