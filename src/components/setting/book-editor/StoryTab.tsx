@@ -36,6 +36,7 @@ export default function StoryTab({
 }: StoryTabProps) {
   const { t } = useLanguage();
   const storyT = t.settings?.editBook?.story;
+  const storyX = (t.settings?.editBook?.storyExtra ?? {}) as Record<string, string>;
   const editablePages = pages.filter((page) => page.kind !== "cover");
   const [selectedPageNumber, setSelectedPageNumber] = useState<number | null>(editablePages[0]?.pageNumber ?? null);
   const pageListRef = useRef<HTMLDivElement>(null);
@@ -154,8 +155,8 @@ export default function StoryTab({
             </div>
             <p className="mt-1 text-xs text-gray-500">
               {selectedPage.kind === "welcome"
-                ? "A personal message to the reader before the story begins."
-                : "A concluding message thanking the reader on the back of the book."}
+                ? (storyX.prefaceDesc || "A personal message to the reader before the story begins.")
+                : (storyX.finalDesc || "A concluding message thanking the reader on the back of the book.")}
             </p>
           </div>
 
@@ -165,8 +166,8 @@ export default function StoryTab({
               onChange={(event) => onChange(selectedPage.pageNumber, "text", event.target.value)}
               placeholder={
                 selectedPage.kind === "welcome"
-                  ? "Write your personal preface message here..."
-                  : "Write your final concluding message here..."
+                  ? (storyX.prefacePlaceholder || "Write your personal preface message here...")
+                  : (storyX.finalPlaceholder || "Write your final concluding message here...")
               }
               className="h-64 w-full resize-none rounded-xl border border-[#F3A8B7] bg-white px-5 py-4 text-sm leading-relaxed text-gray-700 focus:border-[#E3859A] focus:outline-none focus:ring-1 focus:ring-[#E3859A] md:h-auto md:flex-1"
             />

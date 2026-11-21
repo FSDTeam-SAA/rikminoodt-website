@@ -26,17 +26,17 @@ const hardcopyCopy = {
   en: {
     shippingHint: "Select a country to see the shipping fee",
     name: "Full Name", namePlaceholder: "e.g. Jane Doe", selectCountry: "Select a country", subtotal: "Books:", shippingFee: "Shipping:", countries: { Belgium: "Belgium", France: "France", Netherlands: "Netherlands", UK: "United Kingdom" },
-    close: "Close modal", title: "Order Hardcopy Book", subtitle: "Have your personalised premium hardcover storybook delivered to your address.", edition: "Hardcover Edition", copy: "copy", quantity: "Quantity", shipping: "Shipping Address", line1: "Address Line 1", line2: "Address Line 2 (Optional)", city: "City", state: "State / Province", zip: "Postal / Zip Code", country: "Country", countryValue: "Netherlands", line1Placeholder: "e.g. 123 Main Street", line2Placeholder: "Apartment, suite, unit, etc.", cityPlaceholder: "e.g. Amsterdam", statePlaceholder: "e.g. North Holland", zipPlaceholder: "e.g. 1012AB", countryPlaceholder: "e.g. Netherlands", total: "Total Amount:", preparing: "Preparing Checkout…", checkout: "Continue to Checkout", requiredAddress: "Please fill in all required shipping address fields.", signIn: "Please sign in to order a hardcopy book.", checkoutError: "Checkout error occurred", checkoutFailed: "Failed to create checkout session.", checkoutUrlMissing: "No checkout URL returned from server.", decrease: "Decrease quantity", increase: "Increase quantity",
+    close: "Close modal", title: "Order Hardcopy Book", subtitle: "Have your personalised premium hardcover storybook delivered to your address.", edition: "Hardcover Edition", copy: "copy", quantity: "Quantity", shipping: "Shipping Address", line1: "Address Line 1", line2: "Address Line 2 (Optional)", city: "City", state: "State / Province (Optional)", zip: "Postal / Zip Code", country: "Country", countryValue: "Netherlands", line1Placeholder: "e.g. 123 Main Street", line2Placeholder: "Apartment, suite, unit, etc.", cityPlaceholder: "e.g. Amsterdam", statePlaceholder: "e.g. North Holland", zipPlaceholder: "e.g. 1012AB", countryPlaceholder: "e.g. Netherlands", total: "Total Amount:", preparing: "Preparing Checkout…", checkout: "Continue to Checkout", requiredAddress: "Please fill in all required shipping address fields.", signIn: "Please sign in to order a hardcopy book.", checkoutError: "Checkout error occurred", checkoutFailed: "Failed to create checkout session.", checkoutUrlMissing: "No checkout URL returned from server.", decrease: "Decrease quantity", increase: "Increase quantity",
   },
   nl: {
     shippingHint: "Kies een land om de verzendkosten te zien",
     name: "Volledige naam", namePlaceholder: "bijv. Jan Jansen", selectCountry: "Kies een land", subtotal: "Boeken:", shippingFee: "Verzendkosten:", countries: { Belgium: "België", France: "Frankrijk", Netherlands: "Nederland", UK: "Verenigd Koninkrijk" },
-    close: "Modal sluiten", title: "Bestel een hardcover boek", subtitle: "Laat jouw persoonlijke premium hardcover verhalenboek bij je thuis bezorgen.", edition: "Hardcover editie", copy: "exemplaar", quantity: "Aantal", shipping: "Verzendadres", line1: "Adresregel 1", line2: "Adresregel 2 (optioneel)", city: "Plaats", state: "Provincie", zip: "Postcode", country: "Land", countryValue: "Dutch", line1Placeholder: "bijv. Hoofdstraat 123", line2Placeholder: "Appartement, verdieping, unit, enz.", cityPlaceholder: "bijv. Amsterdam", statePlaceholder: "bijv. Noord-Holland", zipPlaceholder: "bijv. 1012AB", countryPlaceholder: "bijv. Dutch", total: "Totaalbedrag:", preparing: "Betaling voorbereiden…", checkout: "Doorgaan naar betalen", requiredAddress: "Vul alle verplichte velden van het verzendadres in.", signIn: "Log in om een hardcover boek te bestellen.", checkoutError: "Er is een fout opgetreden bij het afrekenen", checkoutFailed: "Kan geen betaalsessie maken.", checkoutUrlMissing: "Geen betaallink ontvangen.", decrease: "Aantal verlagen", increase: "Aantal verhogen",
+    close: "Modal sluiten", title: "Bestel een hardcover boek", subtitle: "Laat jouw persoonlijke premium hardcover verhalenboek bij je thuis bezorgen.", edition: "Hardcover editie", copy: "exemplaar", quantity: "Aantal", shipping: "Verzendadres", line1: "Adresregel 1", line2: "Adresregel 2 (optioneel)", city: "Plaats", state: "Provincie (optioneel)", zip: "Postcode", country: "Land", countryValue: "Dutch", line1Placeholder: "bijv. Hoofdstraat 123", line2Placeholder: "Appartement, verdieping, unit, enz.", cityPlaceholder: "bijv. Amsterdam", statePlaceholder: "bijv. Noord-Holland", zipPlaceholder: "bijv. 1012AB", countryPlaceholder: "bijv. Dutch", total: "Totaalbedrag:", preparing: "Betaling voorbereiden…", checkout: "Doorgaan naar betalen", requiredAddress: "Vul alle verplichte velden van het verzendadres in.", signIn: "Log in om een hardcover boek te bestellen.", checkoutError: "Er is een fout opgetreden bij het afrekenen", checkoutFailed: "Kan geen betaalsessie maken.", checkoutUrlMissing: "Geen betaallink ontvangen.", decrease: "Aantal verlagen", increase: "Aantal verhogen",
   },
   fr: {
     shippingHint: "Choisissez un pays pour voir les frais de livraison",
     name: "Nom complet", namePlaceholder: "ex. Jeanne Dupont", selectCountry: "Choisir un pays", subtotal: "Livres :", shippingFee: "Livraison :", countries: { Belgium: "Belgique", France: "France", Netherlands: "Pays-Bas", UK: "Royaume-Uni" },
-    close: "Fermer la fenêtre", title: "Commander un livre relié", subtitle: "Recevez votre livre d'histoires relié personnalisé premium à votre adresse.", edition: "Édition reliée", copy: "exemplaire", quantity: "Quantité", shipping: "Adresse de livraison", line1: "Adresse ligne 1", line2: "Adresse ligne 2 (facultatif)", city: "Ville", state: "Région / province", zip: "Code postal", country: "Pays", countryValue: "France", line1Placeholder: "ex. 123 rue Principale", line2Placeholder: "Appartement, étage, unité, etc.", cityPlaceholder: "ex. Amsterdam", statePlaceholder: "ex. Hollande-Septentrionale", zipPlaceholder: "ex. 1012AB", countryPlaceholder: "ex. France", total: "Montant total :", preparing: "Préparation du paiement…", checkout: "Passer au paiement", requiredAddress: "Remplissez tous les champs obligatoires de l'adresse de livraison.", signIn: "Connectez-vous pour commander un livre relié.", checkoutError: "Une erreur est survenue lors du paiement", checkoutFailed: "Impossible de créer la session de paiement.", checkoutUrlMissing: "Aucun lien de paiement reçu.", decrease: "Diminuer la quantité", increase: "Augmenter la quantité",
+    close: "Fermer la fenêtre", title: "Commander un livre relié", subtitle: "Recevez votre livre d'histoires relié personnalisé premium à votre adresse.", edition: "Édition reliée", copy: "exemplaire", quantity: "Quantité", shipping: "Adresse de livraison", line1: "Adresse ligne 1", line2: "Adresse ligne 2 (facultatif)", city: "Ville", state: "Région / province (facultatif)", zip: "Code postal", country: "Pays", countryValue: "France", line1Placeholder: "ex. 123 rue Principale", line2Placeholder: "Appartement, étage, unité, etc.", cityPlaceholder: "ex. Amsterdam", statePlaceholder: "ex. Hollande-Septentrionale", zipPlaceholder: "ex. 1012AB", countryPlaceholder: "ex. France", total: "Montant total :", preparing: "Préparation du paiement…", checkout: "Passer au paiement", requiredAddress: "Remplissez tous les champs obligatoires de l'adresse de livraison.", signIn: "Connectez-vous pour commander un livre relié.", checkoutError: "Une erreur est survenue lors du paiement", checkoutFailed: "Impossible de créer la session de paiement.", checkoutUrlMissing: "Aucun lien de paiement reçu.", decrease: "Diminuer la quantité", increase: "Augmenter la quantité",
   },
 } as const;
 
@@ -87,7 +87,7 @@ export default function OrderHardcopyModal({
     e.preventDefault();
     setError("");
 
-    if (!name.trim() || !SHIPPING_COUNTRIES.includes(country as ShippingCountry) || !line1.trim() || !city.trim() || !state.trim() || !zip.trim() || !country.trim()) {
+    if (!name.trim() || !SHIPPING_COUNTRIES.includes(country as ShippingCountry) || !line1.trim() || !city.trim() || !zip.trim() || !country.trim()) {
       setError(copy.requiredAddress);
       return;
     }
@@ -135,7 +135,7 @@ export default function OrderHardcopyModal({
           line1: line1.trim(),
           ...(line2.trim() ? { line2: line2.trim() } : {}),
           city: city.trim(),
-          state: state.trim(),
+          ...(state.trim() ? { state: state.trim() } : {}),
           zip: zip.trim(),
           country: country.trim(),
         },
@@ -288,8 +288,8 @@ export default function OrderHardcopyModal({
                 <input type="text" required disabled={loading} value={city} onChange={(e) => setCity(e.target.value)} placeholder={copy.cityPlaceholder} className={inputCls} />
               </div>
               <div>
-                <label className={labelCls}>{copy.state} <span className="text-red-500">*</span></label>
-                <input type="text" required disabled={loading} value={state} onChange={(e) => setState(e.target.value)} placeholder={copy.statePlaceholder} className={inputCls} />
+                <label className={labelCls}>{copy.state}</label>
+                <input type="text" disabled={loading} value={state} onChange={(e) => setState(e.target.value)} placeholder={copy.statePlaceholder} className={inputCls} />
               </div>
             </div>
 

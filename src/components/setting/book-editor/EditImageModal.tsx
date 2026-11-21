@@ -1,8 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { getApiBaseUrl } from "@/config/api";
 import Image from "next/image";
 import { Sparkles, X, Check, Loader2, RefreshCw, Palette } from "lucide-react";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import type { BookCharacter } from "./types";
 
 type EditImageModalProps = {
@@ -40,6 +43,13 @@ export default function EditImageModal({
   characters,
   onApplyImage,
 }: EditImageModalProps) {
+  const { t } = useLanguage();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const ie = (t.settings?.editBook?.imageEdit ?? {}) as Record<string, any>;
+  const im = (t.settings?.editBook?.imageEditMore ?? {}) as Record<string, string>;
+  const suggestions: string[] = ie.suggestions ?? SUGGESTIONS;
+  const { data: session } = useSession();
+  const [editStatus, setEditStatus] = useState<{ remaining: number; limit: number } | null>(null);
   const [instruction, setInstruction] = useState("");
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -55,22 +65,95 @@ export default function EditImageModal({
     }
   }, [isOpen, pageNumber, isCover]);
 
+  const getToken = () => {
+    try {
+      return session?.user?.accessToken || localStorage.getItem("token") || "";
+    } catch {
+      return session?.user?.accessToken || "";
+    }
+  };
+
+  // Show how many AI image edits are left for this book
+  useEffect(() => {
+    if (!isOpen || !bookId || bookId === "book-editor") return;
+    const token = getToken();
+    if (!token) return;
+    let cancelled = false;
+    fetch(`${getApiBaseUrl()}/books/${encodeURIComponent(bookId)}/image-edits`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => {
+        if (!cancelled && j?.data) setEditStatus({ remaining: j.data.remaining, limit: j.data.limit });
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, bookId, session?.user?.accessToken]);
+
   if (!isOpen) return null;
+
+  const limitReached = editStatus !== null && editStatus.remaining <= 0;
+  const limitMessage = (im.limitReached || "You have used all {limit} image edits for this book.").replace(
+    "{limit}",
+    String(editStatus?.limit ?? ""),
+  );
+
+  const releaseEdit = async (token: string) => {
+    try {
+      const r = await fetch(`${getApiBaseUrl()}/books/${encodeURIComponent(bookId as string)}/image-edits/release`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const j = r.ok ? await r.json() : null;
+      if (j?.data) setEditStatus({ remaining: j.data.remaining, limit: j.data.limit });
+    } catch {
+      /* ignore */
+    }
+  };
 
   const handleRegenerate = async () => {
     if (!instruction.trim()) {
       setError(
         isCover
-          ? "Please describe how you would like the cover illustration to look."
-          : "Please describe what changes you want for this illustration."
+          ? (ie.errorCover || "Please describe how you would like the cover illustration to look.")
+          : (ie.errorPage || "Please describe what changes you want for this illustration.")
       );
       return;
     }
+
+    const hasBook = Boolean(bookId) && bookId !== "book-editor";
+    const token = getToken();
+    let reserved = false;
 
     setIsLoading(true);
     setError("");
 
     try {
+      if (hasBook) {
+        const reserveRes = await fetch(`${getApiBaseUrl()}/books/${encodeURIComponent(bookId as string)}/image-edits/reserve`, {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const reserveJson = await reserveRes.json().catch(() => null);
+        if (reserveRes.status === 403) {
+          setEditStatus({ remaining: 0, limit: reserveJson?.limit ?? editStatus?.limit ?? 4 });
+          throw new Error(
+            (im.limitReached || "You have used all {limit} image edits for this book.").replace(
+              "{limit}",
+              String(reserveJson?.limit ?? editStatus?.limit ?? 4),
+            ),
+          );
+        }
+        if (!reserveRes.ok) {
+          throw new Error(reserveJson?.message || ie.errorGeneric || "Unable to generate image with AI right now.");
+        }
+        reserved = true;
+        if (reserveJson?.data) setEditStatus({ remaining: reserveJson.data.remaining, limit: reserveJson.data.limit });
+      }
+
       const response = await fetch("/api/ai/regenerate-image", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -92,6 +175,7 @@ export default function EditImageModal({
 
       setPreviewImage(result.imageUrl);
     } catch (err: unknown) {
+      if (reserved) await releaseEdit(token);
       const e = err as { message?: string };
       setError(e?.message || "Failed to generate image with AI. Please try again.");
     } finally {
@@ -126,13 +210,13 @@ export default function EditImageModal({
             <div>
               <h3 className="font-serif text-lg font-bold text-gray-900">
                 {isCover
-                  ? "Regenerate Cover with AI"
-                  : `Regenerate Illustration (Page ${pageNumber ?? 1})`}
+                  ? (ie.coverTitle || "Regenerate Cover with AI")
+                  : (ie.pageTitle || "Regenerate Illustration (Page {n})").replace("{n}", String(pageNumber ?? 1))}
               </h3>
               <p className="text-xs sm:text-sm text-gray-500">
                 {isCover
-                  ? "Describe your ideal book cover and AI will generate a new illustration."
-                  : "Describe the changes you want and AI will redraw this page illustration."}
+                  ? (ie.coverDesc || "Describe your ideal book cover and AI will generate a new illustration.")
+                  : (ie.pageDesc || "Describe the changes you want and AI will redraw this page illustration.")}
               </p>
             </div>
           </div>
@@ -160,16 +244,16 @@ export default function EditImageModal({
           <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-[#FFF9FA] border border-[#FAD7E0] px-4 py-2 text-xs sm:text-sm text-[#704652]">
             <span className="flex items-center gap-1.5 font-medium">
               <Palette size={15} className="text-[#E3859A]" />
-              <span>Art Style:</span>
+              <span>{im.artStyle || "Art Style:"}</span>
               <strong className="text-gray-900 font-semibold">
                 {illustrationStyle || "Watercolor"}
               </strong>
             </span>
             {characters && characters.length > 0 && (
               <span className="text-xs text-gray-500">
-                Characters:{" "}
+                {im.characters || "Characters:"}{" "}
                 {characters
-                  .map((c) => c.name || "Hero")
+                  .map((c) => c.name || im.hero || "Hero")
                   .filter(Boolean)
                   .join(", ")}
               </span>
@@ -181,20 +265,20 @@ export default function EditImageModal({
             {/* Current Image */}
             <div className="flex flex-col items-center">
               <span className="mb-1.5 text-xs font-semibold text-gray-600">
-                Current {isCover ? "Cover" : "Illustration"}
+                {isCover ? (ie.currentCover || "Current Cover") : (ie.currentIllustration || "Current Illustration")}
               </span>
               <div className="relative aspect-[3/4] w-full max-w-[200px] overflow-hidden rounded-xl bg-[#FFF7F9] shadow-md border border-gray-200">
                 {currentImageUrl ? (
                   <Image
                     src={currentImageUrl}
-                    alt="Current illustration"
+                    alt={im.altCurrent || "Current illustration"}
                     fill
                     unoptimized
                     className="object-contain p-2"
                   />
                 ) : (
                   <span className="flex h-full items-center justify-center text-xs text-gray-400">
-                    No Image
+                    {im.noImage || "No Image"}
                   </span>
                 )}
               </div>
@@ -206,10 +290,10 @@ export default function EditImageModal({
                 {previewImage ? (
                   <>
                     <Check size={14} className="text-emerald-500" />
-                    <span className="text-emerald-600">New AI Image Ready</span>
+                    <span className="text-emerald-600">{ie.newReady || "New AI Image Ready"}</span>
                   </>
                 ) : (
-                  <span>New AI Generated Image</span>
+                  <span>{ie.newImage || "New AI Generated Image"}</span>
                 )}
               </span>
               <div
@@ -224,7 +308,7 @@ export default function EditImageModal({
                 {previewImage ? (
                   <Image
                     src={previewImage}
-                    alt="New AI generated illustration"
+                    alt={im.altNew || "New AI generated illustration"}
                     fill
                     unoptimized
                     className="object-contain p-2"
@@ -233,7 +317,7 @@ export default function EditImageModal({
                   <div className="flex h-full flex-col items-center justify-center p-3 text-center">
                     <Loader2 size={24} className="animate-spin text-[#E3859A]" />
                     <span className="mt-2 text-xs font-medium text-[#704652]">
-                      Generating with AI…
+                      {im.generatingAi || "Generating with AI…"}
                     </span>
                     <span className="mt-0.5 text-[10px] text-gray-400">
                       (~15-30s)
@@ -243,7 +327,7 @@ export default function EditImageModal({
                   <div className="flex h-full flex-col items-center justify-center p-4 text-center">
                     <Sparkles size={22} className="text-gray-300" />
                     <span className="mt-2 text-xs text-gray-400">
-                      New illustration will appear here
+                      {im.newHere || "New illustration will appear here"}
                     </span>
                   </div>
                 )}
@@ -255,8 +339,8 @@ export default function EditImageModal({
           <div>
             <label className="mb-1.5 block text-sm font-semibold text-gray-800">
               {isCover
-                ? "Describe what you want on the cover:"
-                : "Describe the changes for the new illustration:"}
+                ? (ie.coverPrompt || "Describe what you want on the cover:")
+                : (ie.pagePrompt || "Describe the changes for the new illustration:")}
             </label>
             <textarea
               rows={3}
@@ -264,18 +348,28 @@ export default function EditImageModal({
               onChange={(e) => setInstruction(e.target.value)}
               placeholder={
                 isCover
-                  ? "e.g. A magical children's book cover with our main character discovering a glowing treasure chest under tall oak trees, joyful expression, fairytale look..."
-                  : "e.g. Change the background to a sunset beach, add cute smiling animals, make the trees taller and greener..."
+                  ? (im.coverExample || "e.g. A magical children's book cover with our main character discovering a glowing treasure chest under tall oak trees, joyful expression, fairytale look...")
+                  : (im.pageExample || "e.g. Change the background to a sunset beach, add cute smiling animals, make the trees taller and greener...")
               }
               className="w-full resize-none rounded-xl border border-[#F3A8B7] p-3 text-sm text-gray-800 placeholder-gray-400 focus:border-[#E3859A] focus:outline-none focus:ring-2 focus:ring-[#E3859A]/20"
             />
 
+            {editStatus && (
+              <p className={`mt-2 text-xs font-medium ${limitReached ? "text-red-500" : "text-gray-500"}`}>
+                {limitReached
+                  ? limitMessage
+                  : (im.editsLeft || "Image edits left for this book: {remaining} of {limit}")
+                      .replace("{remaining}", String(editStatus.remaining))
+                      .replace("{limit}", String(editStatus.limit))}
+              </p>
+            )}
+
             {/* Quick Suggestion Chips */}
             <div className="mt-2 flex flex-wrap items-center gap-1.5">
               <span className="text-[11px] font-medium text-gray-400 mr-1">
-                Quick ideas:
+                {im.quickIdeas || "Quick ideas:"}
               </span>
-              {SUGGESTIONS.map((s) => (
+              {suggestions.map((s) => (
                 <button
                   key={s}
                   type="button"
@@ -300,30 +394,30 @@ export default function EditImageModal({
             onClick={onClose}
             className="rounded-xl px-5 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-200/60 transition-colors"
           >
-            Cancel
+            {im.cancel || "Cancel"}
           </button>
 
           <div className="flex items-center gap-2.5">
             <button
               type="button"
-              disabled={isLoading}
+              disabled={isLoading || limitReached}
               onClick={() => void handleRegenerate()}
               className="flex items-center gap-2 rounded-xl border border-[#E3859A] bg-white px-5 py-2.5 text-sm font-semibold text-[#E3859A] hover:bg-[#FFF0F2] disabled:opacity-50 transition-colors shadow-xs active:scale-[0.99]"
             >
               {isLoading ? (
                 <>
                   <Loader2 size={16} className="animate-spin" />
-                  <span>Generating…</span>
+                  <span>{ie.generating || "Generating…"}</span>
                 </>
               ) : previewImage ? (
                 <>
                   <RefreshCw size={15} />
-                  <span>Regenerate Again</span>
+                  <span>{ie.regenerate || "Regenerate Again"}</span>
                 </>
               ) : (
                 <>
                   <Sparkles size={15} />
-                  <span>Generate with AI</span>
+                  <span>{ie.generate || "Generate with AI"}</span>
                 </>
               )}
             </button>
@@ -335,7 +429,7 @@ export default function EditImageModal({
                 className="flex items-center gap-2 rounded-xl bg-[#E3859A] px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#d67288] transition-colors active:scale-[0.99]"
               >
                 <Check size={16} />
-                <span>Apply to Book</span>
+                <span>{ie.apply || "Apply to Book"}</span>
               </button>
             )}
           </div>
