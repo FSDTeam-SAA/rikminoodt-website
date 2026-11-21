@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Sparkles, X, Check, Loader2 } from "lucide-react";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import type { BookCharacter } from "./types";
 
 type TextAiHelpModalProps = {
@@ -33,6 +34,9 @@ export default function TextAiHelpModal({
   characters,
   isPreface = false,
 }: TextAiHelpModalProps) {
+  const { t } = useLanguage();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const a = (t.settings?.editBook?.aiHelp ?? {}) as Record<string, any>;
   const [instruction, setInstruction] = useState("");
   const [suggestedText, setSuggestedText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -40,18 +44,9 @@ export default function TextAiHelpModal({
 
   if (!isOpen) return null;
 
-  const presets = isPreface
-    ? [
-        "Warm & heartfelt dedication",
-        "Encouraging words of love",
-        "Short & sweet personal message",
-      ]
-    : [
-        "More adventurous & exciting",
-        "Gentle & soothing for bedtime",
-        "Simple words for younger kids",
-        "Poetic & playful rhyming",
-      ];
+  const presets: string[] = (isPreface ? a.prefacePresets : a.storyPresets) ?? (isPreface
+    ? ["Warm & heartfelt dedication", "Encouraging words of love", "Short & sweet personal message"]
+    : ["More adventurous & exciting", "Gentle & soothing for bedtime", "Simple words for younger kids", "Poetic & playful rhyming"]);
 
   const handleGenerate = async (customInstruction?: string) => {
     setIsLoading(true);
@@ -66,7 +61,7 @@ export default function TextAiHelpModal({
           bookId,
           pageNumber,
           text: currentText,
-          instruction: activeInstruction || (isPreface ? "Make it a warm and touching personal dedication" : "Rewrite the text to be engaging and magical for children"),
+          instruction: activeInstruction || (isPreface ? (a.defaultPrefaceInstruction || "Make it a warm and touching personal dedication") : (a.defaultStoryInstruction || "Rewrite the text to be engaging and magical for children")),
           language,
           ageCategory,
           theme,
@@ -78,13 +73,13 @@ export default function TextAiHelpModal({
 
       const result = await response.json();
       if (!response.ok || !result.success) {
-        throw new Error(result.error || "Unable to rewrite text at this moment.");
+        throw new Error(result.error || a.errorRewrite || "Unable to rewrite text at this moment.");
       }
 
       setSuggestedText(result.text);
     } catch (err: unknown) {
       const error = err as { message?: string };
-      setError(error?.message || "Failed to generate AI rewrite. Please try again.");
+      setError(error?.message || a.errorGenerate || "Failed to generate AI rewrite. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -108,18 +103,18 @@ export default function TextAiHelpModal({
             </div>
             <div>
               <h3 className="font-serif text-lg sm:text-xl font-bold text-gray-900">
-                {isPreface ? "AI Preface Assistant" : `AI Story Help ${pageNumber ? `(Page ${pageNumber})` : ""}`}
+                {isPreface ? (a.prefaceTitle || "AI Preface Assistant") : `${a.storyTitle || "AI Story Help"} ${pageNumber ? `(${a.pageWord || "Page"} ${pageNumber})` : ""}`}
               </h3>
               <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
                 {isPreface
-                  ? "Craft a beautiful, heartwarming dedication message."
-                  : "Polish, enrich, or rewrite your story text with AI."}
+                  ? (a.prefaceSubtitle || "Craft a beautiful, heartwarming dedication message.")
+                  : (a.storySubtitle || "Polish, enrich, or rewrite your story text with AI.")}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            aria-label="Close modal"
+            aria-label={a.close || "Close modal"}
             className="rounded-xl p-2 text-gray-400 hover:bg-white hover:text-gray-600 transition-colors shadow-xs"
           >
             <X size={20} />
@@ -137,23 +132,23 @@ export default function TextAiHelpModal({
           {/* Current text preview */}
           <div>
             <label className="mb-2 block text-sm font-semibold text-gray-800">
-              Current Text
+              {a.currentText || "Current Text"}
             </label>
             <div className="max-h-36 overflow-y-auto rounded-xl border border-[#F4DDD2] bg-[#FFFAF8] p-4 text-sm sm:text-base leading-relaxed text-gray-700 whitespace-pre-line">
-              {currentText || <span className="italic text-gray-400">No text written yet.</span>}
+              {currentText || <span className="italic text-gray-400">{a.noText || "No text written yet."}</span>}
             </div>
           </div>
 
           {/* AI Guidance / Instructions */}
           <div>
             <label className="mb-2 block text-sm font-semibold text-gray-800">
-              How would you like to improve it? (Optional)
+              {a.improveLabel || "How would you like to improve it? (Optional)"}
             </label>
             <input
               type="text"
               value={instruction}
               onChange={(e) => setInstruction(e.target.value)}
-              placeholder="e.g. Make it more exciting, add playful rhymes..."
+              placeholder={a.placeholder || "e.g. Make it more exciting, add playful rhymes..."}
               className="h-11 w-full rounded-xl border border-[#F3A8B7] px-4 text-sm sm:text-base text-gray-800 placeholder-gray-400 focus:border-[#E3859A] focus:outline-none focus:ring-2 focus:ring-[#E3859A]/20"
             />
             {/* Quick preset chips */}
@@ -179,10 +174,10 @@ export default function TextAiHelpModal({
             <div className="rounded-2xl border-2 border-[#F3A8B7] bg-[#FFF9FA] p-5 shadow-sm">
               <div className="mb-2.5 flex items-center justify-between">
                 <span className="flex items-center gap-1.5 text-sm font-bold text-[#E3859A]">
-                  <Sparkles size={16} /> AI Suggestion
+                  <Sparkles size={16} /> {a.suggestion || "AI Suggestion"}
                 </span>
                 <span className="rounded-full border border-pink-200 bg-white px-2.5 py-0.5 text-xs font-medium text-[#E3859A]">
-                  You can edit below before applying
+                  {a.editHint || "You can edit below before applying"}
                 </span>
               </div>
               <textarea
@@ -202,7 +197,7 @@ export default function TextAiHelpModal({
             onClick={onClose}
             className="rounded-xl px-5 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-200/60 transition-colors"
           >
-            Cancel
+            {a.cancel || "Cancel"}
           </button>
 
           <div className="flex items-center gap-3">
@@ -215,12 +210,12 @@ export default function TextAiHelpModal({
               {isLoading ? (
                 <>
                   <Loader2 size={16} className="animate-spin" />
-                  <span>Rewriting with AI…</span>
+                  <span>{a.rewriting || "Rewriting with AI…"}</span>
                 </>
               ) : (
                 <>
                   <Sparkles size={16} />
-                  <span>{suggestedText ? "Try Another Version" : "Rewrite with AI"}</span>
+                  <span>{suggestedText ? (a.tryAnother || "Try Another Version") : (a.rewrite || "Rewrite with AI")}</span>
                 </>
               )}
             </button>
@@ -232,7 +227,7 @@ export default function TextAiHelpModal({
                 className="flex items-center gap-2 rounded-xl bg-[#E3859A] px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#d67288] transition-colors"
               >
                 <Check size={16} />
-                <span>Apply to {isPreface ? "Preface" : "Page"}</span>
+                <span>{isPreface ? (a.applyPreface || "Apply to Preface") : (a.applyPage || "Apply to Page")}</span>
               </button>
             )}
           </div>

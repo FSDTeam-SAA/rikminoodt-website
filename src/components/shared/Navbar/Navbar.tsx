@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LogOut, Menu, Settings, ShoppingCart, X } from "lucide-react";
+import { BookOpen, LogOut, Menu, Package, Settings, ShoppingCart, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSession, signOut } from "next-auth/react";
 import LanguageSwitcher from "./LanguageSwitcher";
@@ -217,6 +217,22 @@ const Navbar = () => {
                 <DropdownMenuSeparator className="my-1 bg-[#876d7c]/15" />
 
                 <DropdownMenuItem
+                  onClick={() => router.push("/setting/generated-books")}
+                  className="flex cursor-pointer items-center gap-2.5 rounded-xl px-2.5 py-2 text-sm font-medium text-[#5d5059] transition-colors hover:bg-[#FFF0F3] hover:text-[#e77f9a]"
+                >
+                  <BookOpen size={16} strokeWidth={1.8} className="text-[#876d7c]" />
+                  <span>{t.settings?.generatedBooks}</span>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem
+                  onClick={() => router.push("/setting/ordered-book")}
+                  className="flex cursor-pointer items-center gap-2.5 rounded-xl px-2.5 py-2 text-sm font-medium text-[#5d5059] transition-colors hover:bg-[#FFF0F3] hover:text-[#e77f9a]"
+                >
+                  <Package size={16} strokeWidth={1.8} className="text-[#876d7c]" />
+                  <span>{t.settings?.orderedBooks}</span>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem
                   onClick={() => router.push("/setting")}
                   className="flex cursor-pointer items-center gap-2.5 rounded-xl px-2.5 py-2 text-sm font-medium text-[#5d5059] transition-colors hover:bg-[#FFF0F3] hover:text-[#e77f9a]"
                 >
@@ -303,6 +319,26 @@ const Navbar = () => {
                   sideOffset={6}
                   className="z-[110] min-w-[190px] overflow-hidden rounded-2xl border border-[#F3A8B7]/60 bg-white/95 p-1.5 shadow-xl backdrop-blur-md"
                 >
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      router.push("/setting/generated-books");
+                    }}
+                    className="flex cursor-pointer items-center gap-2.5 rounded-xl px-2.5 py-2 text-sm font-medium text-[#5d5059] hover:bg-[#FFF0F3] hover:text-[#e77f9a]"
+                  >
+                    <BookOpen size={16} strokeWidth={1.8} className="text-[#876d7c]" />
+                    <span>{t.settings?.generatedBooks}</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      router.push("/setting/ordered-book");
+                    }}
+                    className="flex cursor-pointer items-center gap-2.5 rounded-xl px-2.5 py-2 text-sm font-medium text-[#5d5059] hover:bg-[#FFF0F3] hover:text-[#e77f9a]"
+                  >
+                    <Package size={16} strokeWidth={1.8} className="text-[#876d7c]" />
+                    <span>{t.settings?.orderedBooks}</span>
+                  </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => {
                       setIsMenuOpen(false);

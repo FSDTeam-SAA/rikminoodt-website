@@ -450,6 +450,95 @@
         "textOnBackHint": "Une courte introduction qui rend les lecteurs curieux.",
         "textOnBackPlaceholder": "Lorem ipsum dolor sit amet..."
       },
+      "aiHelp": {
+        "prefaceTitle": "Assistant IA pour la préface",
+        "storyTitle": "Aide IA pour l'histoire",
+        "pageWord": "Page",
+        "prefaceSubtitle": "Rédigez une belle dédicace pleine de tendresse.",
+        "storySubtitle": "Peaufinez, enrichissez ou réécrivez votre texte avec l'IA.",
+        "currentText": "Texte actuel",
+        "noText": "Aucun texte écrit pour le moment.",
+        "improveLabel": "Comment souhaitez-vous l'améliorer ? (Facultatif)",
+        "placeholder": "ex. Rends-le plus captivant, ajoute des rimes ludiques...",
+        "prefacePresets": [
+          "Dédicace chaleureuse et sincère",
+          "Mots d'amour encourageants",
+          "Message personnel court et doux"
+        ],
+        "storyPresets": [
+          "Plus d'aventure et de suspense",
+          "Doux et apaisant pour le coucher",
+          "Mots simples pour les plus jeunes",
+          "Poétique, joueur et rimé"
+        ],
+        "suggestion": "Suggestion IA",
+        "editHint": "Vous pouvez modifier ci-dessous avant d'appliquer",
+        "cancel": "Annuler",
+        "rewriting": "Réécriture par l'IA…",
+        "tryAnother": "Essayer une autre version",
+        "rewrite": "Réécrire avec l'IA",
+        "applyPreface": "Appliquer à la préface",
+        "applyPage": "Appliquer à la page",
+        "close": "Fermer la fenêtre",
+        "defaultPrefaceInstruction": "Fais-en une dédicace personnelle chaleureuse et touchante",
+        "defaultStoryInstruction": "Réécris le texte pour qu'il soit captivant et magique pour les enfants",
+        "errorRewrite": "Impossible de réécrire le texte pour le moment.",
+        "errorGenerate": "Échec de la réécriture par l'IA. Veuillez réessayer."
+      },
+      "storyExtra": {
+        "prefaceDesc": "Un message personnel au lecteur avant que l'histoire ne commence.",
+        "finalDesc": "Un message de conclusion remerciant le lecteur, au dos du livre.",
+        "prefacePlaceholder": "Écrivez ici votre message de préface personnel...",
+        "finalPlaceholder": "Écrivez ici votre message de conclusion..."
+      },
+      "imageEditMore": {
+        "artStyle": "Style artistique :",
+        "characters": "Personnages :",
+        "noImage": "Aucune image",
+        "generatingAi": "Génération par l'IA…",
+        "newHere": "La nouvelle illustration apparaîtra ici",
+        "coverExample": "ex. Une couverture magique de livre pour enfants avec notre héros découvrant un coffre au trésor lumineux sous de grands chênes, expression joyeuse, ambiance de conte de fées...",
+        "pageExample": "ex. Change l'arrière-plan en plage au coucher du soleil, ajoute de mignons animaux souriants, rends les arbres plus grands et plus verts...",
+        "quickIdeas": "Idées rapides :",
+        "cancel": "Annuler",
+        "hero": "Héros",
+        "altCurrent": "Illustration actuelle",
+        "altNew": "Nouvelle illustration générée par l'IA",
+        "editsLeft": "Modifications d'image restantes pour ce livre : {remaining} sur {limit}",
+        "limitReached": "Vous avez utilisé les {limit} modifications d'image de ce livre."
+      },
+      "imageEdit": {
+        "coverTitle": "Régénérer la couverture avec l'IA",
+        "pageTitle": "Régénérer l'illustration (Page {n})",
+        "coverDesc": "Décrivez la couverture idéale et l'IA créera une nouvelle illustration.",
+        "pageDesc": "Décrivez les changements souhaités et l'IA redessinera cette illustration.",
+        "currentCover": "Couverture actuelle",
+        "currentIllustration": "Illustration actuelle",
+        "newReady": "Nouvelle image IA prête",
+        "newImage": "Nouvelle image générée par l'IA",
+        "coverPrompt": "Décrivez ce que vous voulez sur la couverture :",
+        "pagePrompt": "Décrivez les changements pour la nouvelle illustration :",
+        "generating": "Génération…",
+        "regenerate": "Régénérer",
+        "generate": "Générer avec l'IA",
+        "apply": "Appliquer au livre",
+        "errorCover": "Décrivez l'aspect souhaité pour la couverture.",
+        "errorPage": "Décrivez les changements souhaités pour cette illustration.",
+        "suggestions": [
+          "Ajouter une lumière de coucher de soleil plus chaude",
+          "Rendre l'arrière-plan plus magique",
+          "Ajouter des animaux souriants et amicaux",
+          "Des détails plus vifs et colorés",
+          "Une atmosphère de conte de fées plus douce"
+        ]
+      },
+      "pageOrderExtra": {
+        "cancel": "Annuler",
+        "emptyPage": "Page vide",
+        "moveUp": "Monter",
+        "moveDown": "Descendre",
+        "apply": "Appliquer l'ordre des pages"
+      },
       "preface": {
         "title": "Préface",
         "subtitle": "Un message personnel au lecteur avant que l'histoire ne commence.",
