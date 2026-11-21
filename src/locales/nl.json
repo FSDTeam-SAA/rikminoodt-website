@@ -450,6 +450,95 @@
         "textOnBackHint": "Een korte introductie die lezers nieuwsgierig maakt.",
         "textOnBackPlaceholder": "Lorem ipsum dolor sit amet..."
       },
+      "aiHelp": {
+        "prefaceTitle": "AI Voorwoord-assistent",
+        "storyTitle": "AI Verhaalhulp",
+        "pageWord": "Pagina",
+        "prefaceSubtitle": "Maak een mooie, hartverwarmende opdracht.",
+        "storySubtitle": "Verfijn, verrijk of herschrijf je verhaaltekst met AI.",
+        "currentText": "Huidige tekst",
+        "noText": "Nog geen tekst geschreven.",
+        "improveLabel": "Hoe wil je de tekst verbeteren? (Optioneel)",
+        "placeholder": "bijv. Maak het spannender, voeg speelse rijmpjes toe...",
+        "prefacePresets": [
+          "Warme, hartelijke opdracht",
+          "Bemoedigende woorden vol liefde",
+          "Korte, lieve persoonlijke boodschap"
+        ],
+        "storyPresets": [
+          "Avontuurlijker en spannender",
+          "Zacht en rustgevend voor het slapengaan",
+          "Eenvoudige woorden voor jongere kinderen",
+          "Poëtisch en speels rijmend"
+        ],
+        "suggestion": "AI-suggestie",
+        "editHint": "Je kunt hieronder nog aanpassen voordat je toepast",
+        "cancel": "Annuleren",
+        "rewriting": "Herschrijven met AI…",
+        "tryAnother": "Probeer een andere versie",
+        "rewrite": "Herschrijven met AI",
+        "applyPreface": "Toepassen op voorwoord",
+        "applyPage": "Toepassen op pagina",
+        "close": "Venster sluiten",
+        "defaultPrefaceInstruction": "Maak er een warme en ontroerende persoonlijke opdracht van",
+        "defaultStoryInstruction": "Herschrijf de tekst zodat die boeiend en magisch is voor kinderen",
+        "errorRewrite": "De tekst kan op dit moment niet worden herschreven.",
+        "errorGenerate": "AI-herschrijving mislukt. Probeer het opnieuw."
+      },
+      "storyExtra": {
+        "prefaceDesc": "Een persoonlijke boodschap aan de lezer, voordat het verhaal begint.",
+        "finalDesc": "Een afsluitende boodschap om de lezer te bedanken, op de achterkant van het boek.",
+        "prefacePlaceholder": "Schrijf hier je persoonlijke voorwoord...",
+        "finalPlaceholder": "Schrijf hier je afsluitende boodschap..."
+      },
+      "imageEditMore": {
+        "artStyle": "Tekenstijl:",
+        "characters": "Personages:",
+        "noImage": "Geen afbeelding",
+        "generatingAi": "Genereren met AI…",
+        "newHere": "De nieuwe illustratie verschijnt hier",
+        "coverExample": "bijv. Een magische kinderboekcover met ons hoofdpersonage dat een gloeiende schatkist ontdekt onder hoge eiken, vrolijke uitdrukking, sprookjesachtige sfeer...",
+        "pageExample": "bijv. Verander de achtergrond in een strand bij zonsondergang, voeg lieve lachende dieren toe, maak de bomen hoger en groener...",
+        "quickIdeas": "Snelle ideeën:",
+        "cancel": "Annuleren",
+        "hero": "Held",
+        "altCurrent": "Huidige illustratie",
+        "altNew": "Nieuwe door AI gegenereerde illustratie",
+        "editsLeft": "Resterende afbeeldingsbewerkingen voor dit boek: {remaining} van {limit}",
+        "limitReached": "Je hebt alle {limit} afbeeldingsbewerkingen voor dit boek gebruikt."
+      },
+      "imageEdit": {
+        "coverTitle": "Cover opnieuw genereren met AI",
+        "pageTitle": "Illustratie opnieuw genereren (Pagina {n})",
+        "coverDesc": "Beschrijf je ideale boekcover en AI maakt een nieuwe illustratie.",
+        "pageDesc": "Beschrijf de gewenste wijzigingen en AI tekent deze illustratie opnieuw.",
+        "currentCover": "Huidige cover",
+        "currentIllustration": "Huidige illustratie",
+        "newReady": "Nieuwe AI-afbeelding klaar",
+        "newImage": "Nieuwe AI-afbeelding",
+        "coverPrompt": "Beschrijf wat je op de cover wilt:",
+        "pagePrompt": "Beschrijf de wijzigingen voor de nieuwe illustratie:",
+        "generating": "Genereren…",
+        "regenerate": "Opnieuw genereren",
+        "generate": "Genereren met AI",
+        "apply": "Toepassen op boek",
+        "errorCover": "Beschrijf hoe je de coverillustratie wilt hebben.",
+        "errorPage": "Beschrijf welke wijzigingen je wilt voor deze illustratie.",
+        "suggestions": [
+          "Voeg warmer zonsonderganglicht toe",
+          "Maak de achtergrond magischer",
+          "Voeg lachende, vriendelijke dieren toe",
+          "Meer levendige, kleurrijke details",
+          "Zachtere sprookjessfeer"
+        ]
+      },
+      "pageOrderExtra": {
+        "cancel": "Annuleren",
+        "emptyPage": "Lege pagina",
+        "moveUp": "Omhoog",
+        "moveDown": "Omlaag",
+        "apply": "Paginavolgorde toepassen"
+      },
       "preface": {
         "title": "Voorwoord",
         "subtitle": "Een persoonlijke boodschap aan de lezer, voordat het verhaal begint.",

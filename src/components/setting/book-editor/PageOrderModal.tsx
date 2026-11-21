@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import Image from "next/image";
 import { ArrowDown, ArrowUp, Check, X, GripVertical } from "lucide-react";
 import type { EditableBookPage } from "./types";
@@ -19,6 +20,8 @@ export default function PageOrderModal({
   onApplyOrder,
 }: PageOrderModalProps) {
   // Only reorder story spreads (keep welcome/preface and finalMessage locked if needed, or reorder all editable)
+  const { t } = useLanguage();
+  const po = (t.settings?.editBook?.pageOrderExtra ?? {}) as Record<string, string>;
   const [orderedPages, setOrderedPages] = useState<EditableBookPage[]>(() => [...pages]);
 
   if (!isOpen) return null;
@@ -110,7 +113,7 @@ export default function PageOrderModal({
                       )}
                     </div>
                     <p className="truncate text-xs text-gray-500 max-w-xs mt-0.5">
-                      {page.text || "Empty page"}
+                      {page.text || po.emptyPage || "Empty page"}
                     </p>
                   </div>
                 </div>
@@ -122,7 +125,7 @@ export default function PageOrderModal({
                     disabled={isFirst}
                     onClick={() => movePage(index, "up")}
                     className="flex h-7 w-7 items-center justify-center rounded-lg border border-gray-200 text-gray-600 hover:bg-[#FFF0F2] hover:text-[#E3859A] disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-gray-600 transition-colors"
-                    title="Move up"
+                    title={po.moveUp || "Move up"}
                   >
                     <ArrowUp size={14} />
                   </button>
@@ -131,7 +134,7 @@ export default function PageOrderModal({
                     disabled={isLast}
                     onClick={() => movePage(index, "down")}
                     className="flex h-7 w-7 items-center justify-center rounded-lg border border-gray-200 text-gray-600 hover:bg-[#FFF0F2] hover:text-[#E3859A] disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-gray-600 transition-colors"
-                    title="Move down"
+                    title={po.moveDown || "Move down"}
                   >
                     <ArrowDown size={14} />
                   </button>
@@ -148,7 +151,7 @@ export default function PageOrderModal({
             onClick={onClose}
             className="rounded-xl px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-100 transition-colors"
           >
-            Cancel
+            {po.cancel || "Cancel"}
           </button>
           <button
             type="button"
@@ -156,7 +159,7 @@ export default function PageOrderModal({
             className="flex items-center gap-1.5 rounded-xl bg-[#E3859A] px-5 py-2 text-xs font-semibold text-white shadow-sm hover:bg-[#d67288] transition-colors"
           >
             <Check size={14} />
-            <span>Apply Page Order</span>
+            <span>{po.apply || "Apply Page Order"}</span>
           </button>
         </div>
       </div>
