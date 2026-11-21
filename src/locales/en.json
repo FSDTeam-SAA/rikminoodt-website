@@ -450,6 +450,95 @@
         "textOnBackHint": "A short introduction that makes readers curious.",
         "textOnBackPlaceholder": "Lorem ipsum dolor sit amet..."
       },
+      "aiHelp": {
+        "prefaceTitle": "AI Preface Assistant",
+        "storyTitle": "AI Story Help",
+        "pageWord": "Page",
+        "prefaceSubtitle": "Craft a beautiful, heartwarming dedication message.",
+        "storySubtitle": "Polish, enrich, or rewrite your story text with AI.",
+        "currentText": "Current Text",
+        "noText": "No text written yet.",
+        "improveLabel": "How would you like to improve it? (Optional)",
+        "placeholder": "e.g. Make it more exciting, add playful rhymes...",
+        "prefacePresets": [
+          "Warm & heartfelt dedication",
+          "Encouraging words of love",
+          "Short & sweet personal message"
+        ],
+        "storyPresets": [
+          "More adventurous & exciting",
+          "Gentle & soothing for bedtime",
+          "Simple words for younger kids",
+          "Poetic & playful rhyming"
+        ],
+        "suggestion": "AI Suggestion",
+        "editHint": "You can edit below before applying",
+        "cancel": "Cancel",
+        "rewriting": "Rewriting with AI…",
+        "tryAnother": "Try Another Version",
+        "rewrite": "Rewrite with AI",
+        "applyPreface": "Apply to Preface",
+        "applyPage": "Apply to Page",
+        "close": "Close modal",
+        "defaultPrefaceInstruction": "Make it a warm and touching personal dedication",
+        "defaultStoryInstruction": "Rewrite the text to be engaging and magical for children",
+        "errorRewrite": "Unable to rewrite text at this moment.",
+        "errorGenerate": "Failed to generate AI rewrite. Please try again."
+      },
+      "storyExtra": {
+        "prefaceDesc": "A personal message to the reader before the story begins.",
+        "finalDesc": "A concluding message thanking the reader on the back of the book.",
+        "prefacePlaceholder": "Write your personal preface message here...",
+        "finalPlaceholder": "Write your final concluding message here..."
+      },
+      "imageEditMore": {
+        "artStyle": "Art Style:",
+        "characters": "Characters:",
+        "noImage": "No Image",
+        "generatingAi": "Generating with AI…",
+        "newHere": "New illustration will appear here",
+        "coverExample": "e.g. A magical children's book cover with our main character discovering a glowing treasure chest under tall oak trees, joyful expression, fairytale look...",
+        "pageExample": "e.g. Change the background to a sunset beach, add cute smiling animals, make the trees taller and greener...",
+        "quickIdeas": "Quick ideas:",
+        "cancel": "Cancel",
+        "hero": "Hero",
+        "altCurrent": "Current illustration",
+        "altNew": "New AI generated illustration",
+        "editsLeft": "Image edits left for this book: {remaining} of {limit}",
+        "limitReached": "You have used all {limit} image edits for this book."
+      },
+      "imageEdit": {
+        "coverTitle": "Regenerate Cover with AI",
+        "pageTitle": "Regenerate Illustration (Page {n})",
+        "coverDesc": "Describe your ideal book cover and AI will generate a new illustration.",
+        "pageDesc": "Describe the changes you want and AI will redraw this page illustration.",
+        "currentCover": "Current Cover",
+        "currentIllustration": "Current Illustration",
+        "newReady": "New AI Image Ready",
+        "newImage": "New AI Generated Image",
+        "coverPrompt": "Describe what you want on the cover:",
+        "pagePrompt": "Describe the changes for the new illustration:",
+        "generating": "Generating…",
+        "regenerate": "Regenerate Again",
+        "generate": "Generate with AI",
+        "apply": "Apply to Book",
+        "errorCover": "Please describe how you would like the cover illustration to look.",
+        "errorPage": "Please describe what changes you want for this illustration.",
+        "suggestions": [
+          "Add warmer sunset lighting",
+          "Make the background more magical",
+          "Add smiling friendly animals",
+          "More vibrant colorful details",
+          "Softer fairytale atmosphere"
+        ]
+      },
+      "pageOrderExtra": {
+        "cancel": "Cancel",
+        "emptyPage": "Empty page",
+        "moveUp": "Move up",
+        "moveDown": "Move down",
+        "apply": "Apply Page Order"
+      },
       "preface": {
         "title": "Preface",
         "subtitle": "A personal message to the reader, before the story begins.",

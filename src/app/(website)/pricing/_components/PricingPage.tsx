@@ -38,20 +38,7 @@ export default function PricingPage() {
   return (
     <main className="min-h-screen bg-white pb-20">
       {/* Hero Banner Section */}
-      <section className="relative flex h-[50svh] min-h-[360px] w-full items-center justify-center overflow-hidden pt-16 text-center sm:min-h-[420px] sm:pt-20 lg:min-h-[460px]">
-        {/* Background Image Banner */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/cont_pri_img.png"
-            alt="Hero background"
-            fill
-            priority
-            className="object-cover object-center opacity-70"
-          />
-          {/* Subtle gradient overlay to smoothly transition to page background */}
-          <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-white/10 to-white/70" />
-        </div>
-
+      <section className="relative w-full overflow-hidden pb-2 pt-40 text-center sm:pt-[200px] lg:pt-[220px]">
         {/* Hero Content */}
         <div className="container relative z-10 mx-auto px-4">
           <h1 className="font-crimson text-[40px] font-bold leading-none text-[#1E1E1E] sm:text-[48px] lg:text-[54px]">
