@@ -101,19 +101,6 @@ export default function EditImageModal({
     String(editStatus?.limit ?? ""),
   );
 
-  const releaseEdit = async (token: string) => {
-    try {
-      const r = await fetch(`${getApiBaseUrl()}/books/${encodeURIComponent(bookId as string)}/image-edits/release`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const j = r.ok ? await r.json() : null;
-      if (j?.data) setEditStatus({ remaining: j.data.remaining, limit: j.data.limit });
-    } catch {
-      /* ignore */
-    }
-  };
-
   const handleRegenerate = async () => {
     if (!instruction.trim()) {
       setError(
@@ -125,57 +112,67 @@ export default function EditImageModal({
     }
 
     const hasBook = Boolean(bookId) && bookId !== "book-editor";
+    if (!hasBook) {
+      setError(ie.errorGeneric || "Unable to generate image with AI right now.");
+      return;
+    }
     const token = getToken();
-    let reserved = false;
 
     setIsLoading(true);
     setError("");
 
     try {
-      if (hasBook) {
-        const reserveRes = await fetch(`${getApiBaseUrl()}/books/${encodeURIComponent(bookId as string)}/image-edits/reserve`, {
+      // One server call: the backend checks the per-book limit, generates the
+      // image, and gives the edit back if generation fails.
+      const response = await fetch(
+        `${getApiBaseUrl()}/books/${encodeURIComponent(bookId as string)}/image-edits/regenerate`,
+        {
           method: "POST",
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const reserveJson = await reserveRes.json().catch(() => null);
-        if (reserveRes.status === 403) {
-          setEditStatus({ remaining: 0, limit: reserveJson?.limit ?? editStatus?.limit ?? 4 });
-          throw new Error(
-            (im.limitReached || "You have used all {limit} image edits for this book.").replace(
-              "{limit}",
-              String(reserveJson?.limit ?? editStatus?.limit ?? 4),
-            ),
-          );
-        }
-        if (!reserveRes.ok) {
-          throw new Error(reserveJson?.message || ie.errorGeneric || "Unable to generate image with AI right now.");
-        }
-        reserved = true;
-        if (reserveJson?.data) setEditStatus({ remaining: reserveJson.data.remaining, limit: reserveJson.data.limit });
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+          body: JSON.stringify({
+            pageNumber: isCover ? 1 : (pageNumber || 1),
+            text: isCover ? (title || "Storybook cover") : (pageText || ""),
+            instruction: instruction.trim(),
+            illustrationStyle: illustrationStyle || "Watercolor",
+            characters: characters || [],
+            currentImageUrl: currentImageUrl || undefined,
+          }),
+        },
+      );
+
+      const result = await response.json().catch(() => null);
+
+      if (response.status === 403) {
+        const limit = result?.limit ?? editStatus?.limit ?? 4;
+        setEditStatus({ remaining: 0, limit });
+        throw new Error(
+          (im.limitReached || "You have used all {limit} image edits for this book.").replace(
+            "{limit}",
+            String(limit),
+          ),
+        );
+      }
+      if (!response.ok || !result?.data?.imageUrl) {
+        throw new Error(
+          (typeof result?.message === "string" && result.message) ||
+            "Unable to generate image with AI right now.",
+        );
       }
 
-      const response = await fetch("/api/ai/regenerate-image", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          bookId: bookId || "book-editor",
-          pageNumber: isCover ? 1 : (pageNumber || 1),
-          text: isCover ? (title || "Storybook cover") : (pageText || ""),
-          instruction: instruction.trim(),
-          illustrationStyle: illustrationStyle || "Watercolor",
-          characters: characters || [],
-          currentImageUrl: currentImageUrl || undefined,
-        }),
-      });
-
-      const result = await response.json();
-      if (!response.ok || !result.success) {
-        throw new Error(result.error || "Unable to generate image with AI right now.");
+      setPreviewImage(result.data.imageUrl);
+      if (typeof result.data.remaining === "number") {
+        setEditStatus({ remaining: result.data.remaining, limit: result.data.limit });
       }
-
-      setPreviewImage(result.imageUrl);
     } catch (err: unknown) {
-      if (reserved) await releaseEdit(token);
+      // The backend already gave the edit back on failure; just refresh the counter.
+      fetch(`${getApiBaseUrl()}/books/${encodeURIComponent(bookId as string)}/image-edits`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((j) => {
+          if (j?.data) setEditStatus({ remaining: j.data.remaining, limit: j.data.limit });
+        })
+        .catch(() => undefined);
       const e = err as { message?: string };
       setError(e?.message || "Failed to generate image with AI. Please try again.");
     } finally {
