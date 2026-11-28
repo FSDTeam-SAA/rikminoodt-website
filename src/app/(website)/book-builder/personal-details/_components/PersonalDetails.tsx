@@ -1,5 +1,6 @@
 "use client";
 
+import { getBookLanguageFlag } from "@/lib/book-language-flag";
 import Image from "next/image";
 import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -228,7 +229,7 @@ export default function PersonalDetails() {
                 selectedLanguage
                   ? {
                       label: bb.bookLanguages[selectedLanguage as keyof typeof bb.bookLanguages] || selectedLanguage,
-                      image: "/images/flag.png",
+                      image: getBookLanguageFlag(selectedLanguage),
                       color: "#FFFBDF",
                     }
                   : undefined

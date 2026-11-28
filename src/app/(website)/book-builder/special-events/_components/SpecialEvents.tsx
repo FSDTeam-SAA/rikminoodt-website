@@ -1,5 +1,6 @@
 "use client";
 
+import { getBookLanguageFlag } from "@/lib/book-language-flag";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -352,7 +353,7 @@ export default function SpecialEvents() {
                 selectedLanguage
                   ? {
                       label: selectedLanguage,
-                      image: "/images/flag.png",
+                      image: getBookLanguageFlag(selectedLanguage),
                       color: "#FFFBDF",
                     }
                   : undefined

@@ -16,6 +16,9 @@ interface OrderHardcopyModalProps {
 }
 
 const HARDCOPY_PRICE_PER_COPY = 34.6;
+const GIFT_BOX_PRICE = 7.85;
+// Replace these files in /public/images/gift-box with the real gift box photos.
+const GIFT_BOX_IMAGES = ["/images/gift-box/gift-box-1.svg", "/images/gift-box/gift-box-2.svg", "/images/gift-box/gift-box-3.svg"];
 
 // Display-only: the server calculates the real shipping fee from the country.
 const SHIPPING_FEES = { Belgium: 3.5, France: 5.5, Netherlands: 3.5, UK: 5.5 } as const;
@@ -26,16 +29,19 @@ const hardcopyCopy = {
   en: {
     shippingHint: "Select a country to see the shipping fee",
     name: "Full Name", namePlaceholder: "e.g. Jane Doe", selectCountry: "Select a country", subtotal: "Books:", shippingFee: "Shipping:", countries: { Belgium: "Belgium", France: "France", Netherlands: "Netherlands", UK: "United Kingdom" },
+    giftBoxOption: "Option: Beautiful gift box", giftBoxExample: "example", giftBoxPopupTitle: "Beautiful gift box", closeExample: "Close example", giftBoxFee: "Gift box:",
     close: "Close modal", title: "Order Hardcopy Book", subtitle: "Have your personalised premium hardcover storybook delivered to your address.", edition: "Hardcover Edition", copy: "copy", quantity: "Quantity", shipping: "Shipping Address", line1: "Address Line 1", line2: "Address Line 2 (Optional)", city: "City", state: "State / Province (Optional)", zip: "Postal / Zip Code", country: "Country", countryValue: "Netherlands", line1Placeholder: "e.g. 123 Main Street", line2Placeholder: "Apartment, suite, unit, etc.", cityPlaceholder: "e.g. Amsterdam", statePlaceholder: "e.g. North Holland", zipPlaceholder: "e.g. 1012AB", countryPlaceholder: "e.g. Netherlands", total: "Total Amount:", preparing: "Preparing Checkout…", checkout: "Continue to Checkout", requiredAddress: "Please fill in all required shipping address fields.", signIn: "Please sign in to order a hardcopy book.", checkoutError: "Checkout error occurred", checkoutFailed: "Failed to create checkout session.", checkoutUrlMissing: "No checkout URL returned from server.", decrease: "Decrease quantity", increase: "Increase quantity",
   },
   nl: {
     shippingHint: "Kies een land om de verzendkosten te zien",
     name: "Volledige naam", namePlaceholder: "bijv. Jan Jansen", selectCountry: "Kies een land", subtotal: "Boeken:", shippingFee: "Verzendkosten:", countries: { Belgium: "België", France: "Frankrijk", Netherlands: "Nederland", UK: "Verenigd Koninkrijk" },
+    giftBoxOption: "Optie: Mooie geschenkenbox", giftBoxExample: "voorbeeld", giftBoxPopupTitle: "Mooie geschenkenbox", closeExample: "Voorbeeld sluiten", giftBoxFee: "Geschenkendoos:",
     close: "Modal sluiten", title: "Bestel een hardcover boek", subtitle: "Laat jouw persoonlijke premium hardcover verhalenboek bij je thuis bezorgen.", edition: "Hardcover editie", copy: "exemplaar", quantity: "Aantal", shipping: "Verzendadres", line1: "Adresregel 1", line2: "Adresregel 2 (optioneel)", city: "Plaats", state: "Provincie (optioneel)", zip: "Postcode", country: "Land", countryValue: "Dutch", line1Placeholder: "bijv. Hoofdstraat 123", line2Placeholder: "Appartement, verdieping, unit, enz.", cityPlaceholder: "bijv. Amsterdam", statePlaceholder: "bijv. Noord-Holland", zipPlaceholder: "bijv. 1012AB", countryPlaceholder: "bijv. Dutch", total: "Totaalbedrag:", preparing: "Betaling voorbereiden…", checkout: "Doorgaan naar betalen", requiredAddress: "Vul alle verplichte velden van het verzendadres in.", signIn: "Log in om een hardcover boek te bestellen.", checkoutError: "Er is een fout opgetreden bij het afrekenen", checkoutFailed: "Kan geen betaalsessie maken.", checkoutUrlMissing: "Geen betaallink ontvangen.", decrease: "Aantal verlagen", increase: "Aantal verhogen",
   },
   fr: {
     shippingHint: "Choisissez un pays pour voir les frais de livraison",
     name: "Nom complet", namePlaceholder: "ex. Jeanne Dupont", selectCountry: "Choisir un pays", subtotal: "Livres :", shippingFee: "Livraison :", countries: { Belgium: "Belgique", France: "France", Netherlands: "Pays-Bas", UK: "Royaume-Uni" },
+    giftBoxOption: "Option : Belle boîte cadeau", giftBoxExample: "exemple", giftBoxPopupTitle: "Belle boîte cadeau", closeExample: "Fermer l’exemple", giftBoxFee: "Boîte cadeau :",
     close: "Fermer la fenêtre", title: "Commander un livre relié", subtitle: "Recevez votre livre d'histoires relié personnalisé premium à votre adresse.", edition: "Édition reliée", copy: "exemplaire", quantity: "Quantité", shipping: "Adresse de livraison", line1: "Adresse ligne 1", line2: "Adresse ligne 2 (facultatif)", city: "Ville", state: "Région / province (facultatif)", zip: "Code postal", country: "Pays", countryValue: "France", line1Placeholder: "ex. 123 rue Principale", line2Placeholder: "Appartement, étage, unité, etc.", cityPlaceholder: "ex. Amsterdam", statePlaceholder: "ex. Hollande-Septentrionale", zipPlaceholder: "ex. 1012AB", countryPlaceholder: "ex. France", total: "Montant total :", preparing: "Préparation du paiement…", checkout: "Passer au paiement", requiredAddress: "Remplissez tous les champs obligatoires de l'adresse de livraison.", signIn: "Connectez-vous pour commander un livre relié.", checkoutError: "Une erreur est survenue lors du paiement", checkoutFailed: "Impossible de créer la session de paiement.", checkoutUrlMissing: "Aucun lien de paiement reçu.", decrease: "Diminuer la quantité", increase: "Augmenter la quantité",
   },
 } as const;
@@ -58,6 +64,8 @@ export default function OrderHardcopyModal({
   const [zip, setZip] = useState("");
   const [name, setName] = useState("");
   const [country, setCountry] = useState("");
+  const [giftBox, setGiftBox] = useState(false);
+  const [showGiftBoxExample, setShowGiftBoxExample] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -70,7 +78,11 @@ export default function OrderHardcopyModal({
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && !loading) {
-        onClose();
+        if (showGiftBoxExample) {
+          setShowGiftBoxExample(false);
+        } else {
+          onClose();
+        }
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -79,7 +91,7 @@ export default function OrderHardcopyModal({
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isOpen, loading, onClose]);
+  }, [isOpen, loading, onClose, showGiftBoxExample]);
 
   if (!isOpen) return null;
 
@@ -130,6 +142,7 @@ export default function OrderHardcopyModal({
       const payload = {
         bookId,
         quantity,
+        giftBox,
         shippingAddress: {
           name: name.trim(),
           line1: line1.trim(),
@@ -175,7 +188,8 @@ export default function OrderHardcopyModal({
   const countryKey = SHIPPING_COUNTRIES.includes(country as ShippingCountry) ? (country as ShippingCountry) : null;
   const booksPrice = quantity * HARDCOPY_PRICE_PER_COPY;
   const shippingPrice = countryKey ? SHIPPING_FEES[countryKey] : null;
-  const totalPrice = (booksPrice + (shippingPrice ?? 0)).toFixed(2);
+  const giftBoxPrice = giftBox ? GIFT_BOX_PRICE * quantity : 0;
+  const totalPrice = (booksPrice + (shippingPrice ?? 0) + giftBoxPrice).toFixed(2);
 
   const inputCls =
     "w-full rounded-xl border border-[#F3A8B7] bg-white px-3.5 py-2.5 font-sans text-xs text-gray-700 outline-none placeholder:text-gray-400 focus:border-[#E88DA0] focus:ring-1 focus:ring-[#E88DA0]/25 sm:text-sm";
@@ -309,6 +323,59 @@ export default function OrderHardcopyModal({
               </div>
             </div>
 
+            {/* Optional gift box */}
+            <div className="relative">
+              {showGiftBoxExample && (
+                <div
+                  role="dialog"
+                  aria-label={copy.giftBoxPopupTitle}
+                  className="absolute bottom-full left-1/2 z-30 mb-3 w-full max-w-sm -translate-x-1/2 rounded-2xl border border-[#F3A8B7] bg-white p-3 shadow-[0_12px_32px_rgba(60,30,50,0.22)]"
+                >
+                  <div className="mb-2 flex items-center justify-between">
+                    <h5 className="font-crimson text-base font-bold text-[#51274A]">✨ {copy.giftBoxPopupTitle} ✨</h5>
+                    <button
+                      type="button"
+                      onClick={() => setShowGiftBoxExample(false)}
+                      aria-label={copy.closeExample}
+                      className="flex size-7 items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    {GIFT_BOX_IMAGES.map((src) => (
+                      <div key={src} className="relative aspect-square overflow-hidden rounded-lg bg-[#FFF1F4]">
+                        <Image src={src} alt={copy.giftBoxPopupTitle} fill unoptimized className="object-cover" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <div className="flex items-center gap-3 rounded-xl border border-[#F3A8B7]/60 bg-[#FFF1F4] px-4 py-3 font-sans text-xs text-[#444444] sm:text-sm">
+                <input
+                  id="gift-box-option"
+                  type="checkbox"
+                  disabled={loading}
+                  checked={giftBox}
+                  onChange={(e) => setGiftBox(e.target.checked)}
+                  className="size-4 shrink-0 cursor-pointer accent-[#E88DA0]"
+                />
+                <span>
+                  <label htmlFor="gift-box-option" className="cursor-pointer">{copy.giftBoxOption}</label>{" "}
+                  (
+                  <button
+                    type="button"
+                    onClick={() => setShowGiftBoxExample((v) => !v)}
+                    aria-expanded={showGiftBoxExample}
+                    className="font-medium text-[#E88DA0] underline underline-offset-2 hover:text-[#DD7893]"
+                  >
+                    {copy.giftBoxExample}
+                  </button>
+                  ) - €{GIFT_BOX_PRICE.toFixed(2).replace(".", ",")}
+                </span>
+              </div>
+            </div>
+
             {/* Price breakdown */}
             <div className="mt-4 rounded-xl bg-[#FBF3EA] p-3 text-sm">
               <div className="flex items-center justify-between font-sans text-xs text-[#66605F] sm:text-sm">
@@ -323,6 +390,12 @@ export default function OrderHardcopyModal({
                   <span>€{shippingPrice.toFixed(2)}</span>
                 )}
               </div>
+              {giftBox && (
+                <div className="mt-1 flex items-center justify-between font-sans text-xs text-[#66605F] sm:text-sm">
+                  <span>{copy.giftBoxFee}</span>
+                  <span>€{giftBoxPrice.toFixed(2)}</span>
+                </div>
+              )}
               <div className="mt-2 flex items-center justify-between border-t border-[#EBDCCB] pt-2">
                 <span className="font-sans font-medium text-[#514256]">{copy.total}</span>
                 <span className="inline-flex items-center gap-1 font-crimson text-xl font-bold text-[#E88DA0]">
